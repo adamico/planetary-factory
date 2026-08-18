@@ -80,3 +80,6 @@ command_history.txt
 emi.json
 supportercache.json
 TrashSlotSaveState.json
+
+# CurseForge instance metadata (contains local paths)
+minecraftinstance.json
