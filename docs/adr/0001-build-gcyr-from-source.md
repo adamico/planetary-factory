@@ -8,8 +8,8 @@ The released `gcyr-1.21.1-0.2.4.jar` (Sep 2024) is the newest published 1.21.1 b
 permanently incompatible with GTCEu 7.x: its `@GTAddon` annotation carries no `value`, so
 `AddonFinder.getInstances` NPEs, GregTech fails construction, and the whole pack dies during mod
 loading. We anchor on GTCEu 7.x and build GCyR ourselves from the upstream `1.21.1` branch, where
-the port to the 7.x API — including `@GTAddon(GCYR.MOD_ID)` — is already done but has never been
-released.
+the port to the 7.x API — including `@GTAddon(GCYR.MOD_ID)` — has been carried far enough to
+compile but has never been released or confirmed working.
 
 ## Considered Options
 
@@ -29,8 +29,29 @@ released.
 
 We become the de facto maintainer of our own GCyR build: updates are a rebase and rebuild, not a
 CurseForge click. An issue should be opened upstream requesting a 1.21.1 release, which would
-retire this decision. Two risks remain unverified until a build is attempted — the branch pins
-`gtceu 7.1.0-SNAPSHOT` against our installed 7.0.2, and it pins ldlib `1.0.35.a` while the pack
-ships ldlib2 `2.2.35`. Building requires a JDK 21 toolchain, which this machine does not currently
-have. Redistribution of the pack requires checking GCyR's licence, since the jar is not a
-published artifact.
+retire this decision.
+
+The branch's own history set expectations: its last two commits are "It builds? Yes. It crashes at
+launch? Yes." followed by "Remove kjs, fix gcyr" (both 2025-09-04), and none of the eighteen public
+forks has advanced it past that point.
+
+**Outcome: this worked.** The build succeeds and the pack launches. Two `build.gradle` changes were
+needed and no source changes at all; they live in our fork at `adamico/gcyr`, branch `1.21.1`,
+commit `3434a0a`. GregTech now constructs, and the resulting jar references 124 gtceu classes with
+none missing from 7.0.2 — against 133 referenced and 20 missing for the published release. The jar
+is installed as `mods/gcyr-1.21.1-0.2.4+gt7.0.2-src.jar`; the broken release is parked in
+`mods/.replaced/`, outside the mods scan.
+
+One residue of "Remove kjs, fix gcyr": the jar still ships a `kubejs.plugins.txt` naming
+`GCYRKubeJSPlugin`, a class the commit deleted, so KubeJS logs a `ClassNotFoundException` and
+continues without any gcyr bindings. Non-fatal, but it matters for a pack scripted end to end in
+KubeJS. Tracked separately.
+
+Two risks flagged at the time of writing have since been cleared. `gtceu 7.1.0-SNAPSHOT` does
+resolve from `maven.gtceu.com`, but we pin the build to `7.0.2` instead so it matches the jar
+actually installed in the pack. The apparent ldlib mismatch was not one: gtceu 7.0.2's own POM
+declares `com.lowdragmc.ldlib:ldlib-neoforge-1.21.1:1.0.35.a`, exactly what the branch pins — the
+`ldlib2-…-2.2.35-all.jar` in `mods/` is the same library under its runtime versioning.
+
+GCyR is LGPL-3.0, so redistributing our own build inside the pack is permitted provided it stays
+LGPL and the source remains available. Our fork is at `adamico/gcyr`, which satisfies that.

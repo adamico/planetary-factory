@@ -83,3 +83,6 @@ TrashSlotSaveState.json
 
 # CurseForge instance metadata (contains local paths)
 minecraftinstance.json
+
+# Drive stubs, not content
+docs/scratch/
