@@ -100,6 +100,12 @@ list, above GCyR — the same reason `kubejs/data` overrides mod data at all.
 So the stock bodies are removed by a zipped datapack in `kubejs/data/` whose `pack.mcmeta` filters
 namespace `gcyr`, path `gcyr/planets/...`. No fork change and no new mod.
 
+The zip is needed **only** for the filter. Everything this slice adds — the planet JSONs, dimensions,
+dimension types, noise settings and biomes — goes in as loose JSON under `kubejs/data/<namespace>/`,
+which `KubeFileResourcePack` serves directly. The synthetic metadata is why the loose folder cannot
+also carry the filter: `GeneratedData.PACK_META` is built from a `pack` object holding only
+`pack_format` and the description "KubeJS Pack", with no room for a `filter` key.
+
 Worth confirming on the first launch rather than assuming: vanilla applies a pack's filter only to
 packs below it in the list, so the zip must sort above GCyR's mod pack specifically. The planet
 selection menu shows the answer immediately.
