@@ -1,9 +1,11 @@
 {
   "planetaryfactory.milky_way": "Via Lactea",
   "planetaryfactory.solar_system": "Sol",
+  "planetaryfactory.shattered_system": "Abyssus",
   "level.planetaryfactory.overworld": "Terra",
   "level.planetaryfactory.vulcanus": "Ignus",
   "level.planetaryfactory.fulgora": "Electro",
   "level.planetaryfactory.gleba": "Sapros",
-  "level.planetaryfactory.aquilo": "Gelida"
+  "level.planetaryfactory.aquilo": "Gelida",
+  "level.planetaryfactory.shattered_planet": "Atlantis"
 }

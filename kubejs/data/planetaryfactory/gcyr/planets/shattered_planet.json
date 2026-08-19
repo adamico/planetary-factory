@@ -1,0 +1,15 @@
+{
+  "translation": "level.planetaryfactory.shattered_planet",
+  "galaxy": "planetaryfactory:milky_way",
+  "solar_system": "planetaryfactory:shattered_system",
+  "world": "planetaryfactory:shattered_planet",
+  "orbit_world": "planetaryfactory:shattered_planet_orbit",
+  "rocket_tier": 4,
+  "gravity": 0.1,
+  "has_atmosphere": false,
+  "days_in_year": 2000,
+  "temperature": 3,
+  "solar_power": 0,
+  "has_oxygen": false,
+  "button_color": 4620980
+}

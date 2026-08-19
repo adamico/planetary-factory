@@ -1,0 +1,8 @@
+{
+  "galaxy": "planetaryfactory:milky_way",
+  "solar_system": "planetaryfactory:shattered_system",
+  "sun": "gcyr:textures/sky/sunmenu.png",
+  "sun_scale": 20,
+  "button_color": 4281545523,
+  "ring_color": 3355508403
+}
