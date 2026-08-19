@@ -10,9 +10,10 @@ This document describes intended design. Decisions that are hard to reverse are 
 ## 1. Core Technology Stack
 
 - **Create** — Mechanical logistics: bulk transport, item filtering, schedule-based rail networks.
-- **GregTech CEu Modern (GT:M) 7.0.2** — Resource generation and processing. Chunk-aligned ore
+- **GregTech CEu Modern (GT:M) 7.0.2** — Resource generation and custom multiblock machines. Chunk-aligned ore
   veins, bedrock fluid and ore extraction, multiblocks, and the machine and recipe-type registries
   the pack extends.
+- **Mekanism** - normal resource processing, spacesuit via MekaSuit
 - **Gregicality Rocketry (GCyR)** — Rockets, planets, orbit dimensions, space stations, satellites,
   oxygen and temperature systems. Built from source against GTCEu 7.0.2 (ADR-0001); the released
   jar is permanently incompatible. Stellaris is a disabled fallback, not part of the design
@@ -25,8 +26,9 @@ This document describes intended design. Decisions that are hard to reverse are 
 
 ## 2. The Solar System
 
-Seven destinations. Internal identifiers use Factorio's names; the names players see are Latin and
-Greek, supplied by lang files only (ADR-0004).
+Six bodies, seven destinations — Terra Orbit is not a planet in its own right but Terra's orbit,
+as every body here has one. Internal identifiers use Factorio's names; the names players see are
+Latin and Greek, supplied by lang files only (ADR-0004).
 
 | Display name | ID | Dimension | Thematic puzzle | Core mechanics |
 | --- | --- | --- | --- | --- |
@@ -170,8 +172,7 @@ is the substrate; exporting it to alien worlds would cost work for a less distin
 ### Emission elsewhere
 
 Other planets accumulate emission but do not raid. Each converts it into a planet-appropriate
-consequence — accelerated spoilage on Sapros, equipment or thermal stress on Ignus and Gelida —
-so that emission has teeth everywhere while each planet keeps its own identity. Specific
+consequence so that emission has teeth everywhere while each planet keeps its own identity. Specific
 consequences are open.
 
 ### Dormant Siege
@@ -209,9 +210,12 @@ GCyR ships four satellite types, all adopted:
 
 Specs are cut per slice from this document, in this order:
 
-1. **Planet definitions** — seven bodies, IDs, lang files. Blocks the space stack.
-2. **Personal Assembler** — plus the cross-mod recipe audit. Largely independent.
-3. **Emission** — per-chunk scoring, decay, diffusion.
-4. **Overseer loop** — Command Center, Cryo-Pod, Dormant Siege. Depends on Emission and Sapros.
-5. **Cargo terminals** — Launch/Receiving/Drop Hatch as GT machines, plus the Flight timer model.
-6. **Vanguard Kit** — arrival intercept, beachhead paste, Gateway Flag.
+1. **Planet definitions** — six bodies, IDs, lang files. Blocks the space stack.
+2. **Ore gen** - planet specific ore generation
+3. **Resource unification** - using AlmostUnified
+4. **Tech and recipe gating** - using kubejs
+5. **Personal Assembler** — plus the cross-mod recipe audit. Largely independent.
+6. **Emission** — per-chunk scoring, decay, diffusion.
+7. **Overseer loop** — Command Center, Cryo-Pod, Dormant Siege. Depends on Emission and Sapros.
+8. **Cargo terminals** — Launch/Receiving/Drop Hatch as GT machines, plus the Flight timer model.
+9. **Vanguard Kit** — arrival intercept, beachhead paste, Gateway Flag.
