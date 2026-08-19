@@ -119,7 +119,7 @@ The item produced from Sapros organics that deploys into an Overseer.
 _Avoid_: villager egg, pod
 
 **Dormant Siege**:
-The state of an unloaded outpost whose accumulated pollution has crossed the raid threshold; its production halts and the raid instantiates only when a player arrives.
+The state of an unloaded outpost whose accumulated Emission has crossed the raid threshold; its production halts and the raid instantiates only when a player arrives.
 _Avoid_: pending raid, queued attack
 
 ### Orbit
