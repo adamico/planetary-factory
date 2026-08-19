@@ -86,3 +86,17 @@ minecraftinstance.json
 
 # Drive stubs, not content
 docs/scratch/
+
+# Per-user client preferences, not pack behaviour
+config/InventoryHUD/
+config/justzoom/
+config/runelic.json
+
+# Profiler output, regenerated per run
+config/spark/
+config/observable.json
+observable_announce
+
+# Per-save state, keyed by world/player UUID
+gtceu/prospection_cache/
+config/chunky/tasks/
