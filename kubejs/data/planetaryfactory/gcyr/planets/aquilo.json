@@ -1,0 +1,15 @@
+{
+  "translation": "level.planetaryfactory.aquilo",
+  "galaxy": "planetaryfactory:milky_way",
+  "solar_system": "planetaryfactory:solar_system",
+  "world": "planetaryfactory:aquilo",
+  "orbit_world": "planetaryfactory:aquilo_orbit",
+  "rocket_tier": 3,
+  "gravity": 7.0,
+  "has_atmosphere": false,
+  "days_in_year": 600,
+  "temperature": 120,
+  "solar_power": 4,
+  "has_oxygen": false,
+  "button_color": 7385055
+}

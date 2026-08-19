@@ -1,0 +1,15 @@
+{
+  "translation": "level.planetaryfactory.fulgora",
+  "galaxy": "planetaryfactory:milky_way",
+  "solar_system": "planetaryfactory:solar_system",
+  "world": "planetaryfactory:fulgora",
+  "orbit_world": "planetaryfactory:fulgora_orbit",
+  "rocket_tier": 2,
+  "gravity": 9.0,
+  "has_atmosphere": true,
+  "days_in_year": 200,
+  "temperature": 340,
+  "solar_power": 25,
+  "has_oxygen": false,
+  "button_color": 10233268
+}

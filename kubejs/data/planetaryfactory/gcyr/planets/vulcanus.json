@@ -1,0 +1,15 @@
+{
+  "translation": "level.planetaryfactory.vulcanus",
+  "galaxy": "planetaryfactory:milky_way",
+  "solar_system": "planetaryfactory:solar_system",
+  "world": "planetaryfactory:vulcanus",
+  "orbit_world": "planetaryfactory:vulcanus_orbit",
+  "rocket_tier": 2,
+  "gravity": 10.5,
+  "has_atmosphere": true,
+  "days_in_year": 300,
+  "temperature": 700,
+  "solar_power": 20,
+  "has_oxygen": false,
+  "button_color": 13458478
+}

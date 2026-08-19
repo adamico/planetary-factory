@@ -1,5 +1,9 @@
 {
   "planetaryfactory.milky_way": "Via Lactea",
   "planetaryfactory.solar_system": "Sol",
-  "level.planetaryfactory.overworld": "Terra"
+  "level.planetaryfactory.overworld": "Terra",
+  "level.planetaryfactory.vulcanus": "Ignus",
+  "level.planetaryfactory.fulgora": "Electro",
+  "level.planetaryfactory.gleba": "Sapros",
+  "level.planetaryfactory.aquilo": "Gelida"
 }

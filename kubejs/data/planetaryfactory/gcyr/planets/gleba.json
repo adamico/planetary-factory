@@ -1,0 +1,15 @@
+{
+  "translation": "level.planetaryfactory.gleba",
+  "galaxy": "planetaryfactory:milky_way",
+  "solar_system": "planetaryfactory:solar_system",
+  "world": "planetaryfactory:gleba",
+  "orbit_world": "planetaryfactory:gleba_orbit",
+  "rocket_tier": 3,
+  "gravity": 8.0,
+  "has_atmosphere": true,
+  "days_in_year": 400,
+  "temperature": 305,
+  "solar_power": 11,
+  "has_oxygen": false,
+  "button_color": 5926956
+}
