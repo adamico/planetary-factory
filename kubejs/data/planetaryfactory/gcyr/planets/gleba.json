@@ -5,11 +5,11 @@
   "world": "planetaryfactory:gleba",
   "orbit_world": "planetaryfactory:gleba_orbit",
   "rocket_tier": 3,
-  "gravity": 8.0,
+  "gravity": 19.6,
   "has_atmosphere": true,
-  "days_in_year": 400,
+  "days_in_year": 700,
   "temperature": 305,
-  "solar_power": 11,
+  "solar_power": 7,
   "has_oxygen": false,
   "button_color": 5926956
 }

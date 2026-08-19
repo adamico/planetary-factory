@@ -5,11 +5,11 @@
   "world": "planetaryfactory:vulcanus",
   "orbit_world": "planetaryfactory:vulcanus_orbit",
   "rocket_tier": 2,
-  "gravity": 10.5,
+  "gravity": 39.2,
   "has_atmosphere": true,
-  "days_in_year": 300,
+  "days_in_year": 400,
   "temperature": 700,
-  "solar_power": 20,
+  "solar_power": 52,
   "has_oxygen": false,
   "button_color": 13458478
 }

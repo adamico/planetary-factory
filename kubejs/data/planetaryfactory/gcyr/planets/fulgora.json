@@ -5,11 +5,11 @@
   "world": "planetaryfactory:fulgora",
   "orbit_world": "planetaryfactory:fulgora_orbit",
   "rocket_tier": 2,
-  "gravity": 9.0,
+  "gravity": 7.8,
   "has_atmosphere": true,
-  "days_in_year": 200,
+  "days_in_year": 500,
   "temperature": 340,
-  "solar_power": 25,
+  "solar_power": 3,
   "has_oxygen": false,
   "button_color": 10233268
 }
