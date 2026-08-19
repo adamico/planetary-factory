@@ -48,18 +48,28 @@ the graph is enough to price it.
 `rocket_tier` gates entry independently: `RocketEntity` refuses launch when the rocket's part tier
 is below the destination's (`RocketEntity.java:422`).
 
-## What is hard-coded, and therefore needs the fork
+## What GCyR hard-codes, and why it does not bind us
 
-Three Java-side lists enumerate GCyR's four stock bodies. None blocks defining a planet; together
-they block **GregTech ore generation and ore blocks** on a new one.
+Three Java-side lists enumerate GCyR's four stock bodies, and together they are what lets GregTech
+generate ore on a body:
 
 1. `common/worldgen/GCYRWorldGenLayers.java:15-18` — one `SimpleWorldGenLayer` per dimension,
-   binding a stone block and a dimension `ResourceKey`. GT ore veins target a worldgen layer, so a
-   new body gets no GT veins without a new entry here.
+   binding a stone block and a dimension `ResourceKey`. GT ore veins target a worldgen layer.
 2. `common/data/GCYRDimensionMarkers.java:20-31` — a marker block and a GTCEu `DimensionMarker` per
    body, used to show which dimension a vein belongs to.
-3. `GCYRGTAddon.java:44-50` — `TagPrefix.oreTagPrefix` per body (`mars`, `venus`, `mercury`), the
-   per-body ore block variants, with matching lang in `data/lang/LangHandler.java:12-14`.
+3. `GCYRGTAddon.java:44-50` — `TagPrefix.oreTagPrefix` per body, the per-body ore block variants,
+   with matching lang in `data/lang/LangHandler.java:12-14`.
+
+GCyR writes these in Java because it is a mod. **The pack does not have to** — GTCEu 7.0.2 exposes
+all three registries to KubeJS, verified against `mods/gtceu-1.21.1-7.0.2.jar`:
+
+| Registry | KubeJS entry point |
+| --- | --- |
+| Worldgen layer | `GTCEuStartupEvents.WORLD_GEN_LAYERS` → `WorldGenLayerKubeEvent.create(name, builder)`, builder taking `targets(...)` and `dimensions([...])` |
+| Dimension marker | `GTRegistries.DIMENSION_MARKER_REGISTRY`, registered through `BuilderTypeRegistry.addDefault` in `GTKubeJSPlugin` with `DimensionMarkerBuilder` (`iconSupplier`, `tier`, `overrideName`) |
+| Ore tag prefix | `integration/kjs/builders/prefix/OreTagPrefixBuilder` and `TagPrefixBuilder` |
+
+So giving a new body GT ore generation is startup-script work in this repo, not a fork change.
 
 ## Removing the stock bodies
 
@@ -67,13 +77,15 @@ they block **GregTech ore generation and ore blocks** on a new one.
 at the same path, but cannot delete the entry. It does dedupe by dimension — a later planet whose
 `world` matches an earlier one evicts it (`PlanetData.java:60`) — but the stock ID survives in the
 menu either way. Since ADR-0004 fixes our IDs to Factorio names, overriding the stock files in place
-is not an option, so deleting the four stock planet and dimension JSONs belongs in the fork, which
-ADR-0001 already commits us to maintaining.
+is not an option. The dedupe in `apply` does evict an earlier planet sharing a `world`
+(`PlanetData.java:60`), but it iterates a `HashMap` in unspecified order, so it is not something to
+rely on. Deleting the stock planet and dimension JSONs therefore belongs in the fork, which ADR-0001
+already commits us to maintaining.
 
 ## Consequence for the pack
 
 Defining Ignus, Electro, Sapros, Gelida and Atlantis — their planet entries, dimensions, worldgen,
 skies, solar system, rocket tiers, fuel costs and display names — is datapack and resource pack work
-in this repo. The fork is needed for exactly two things: dropping the stock bodies, and giving each
-new body a worldgen layer, a dimension marker and an ore tag prefix so GregTech can generate ore
-there.
+in this repo, and giving them GregTech ore generation is KubeJS startup-script work. The fork is
+needed for exactly one thing: dropping the stock bodies, which the planet loader offers no way to
+remove.
