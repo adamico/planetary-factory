@@ -87,7 +87,12 @@ minecraftinstance.json
 # Drive stubs, not content
 docs/scratch/
 
-# Per-user client preferences, not pack behaviour
+# Client configuration is per-user, never pack behaviour. Scripts under
+# kubejs/client_scripts/ are code, not configuration, and stay tracked.
+**/*client*.toml
+**/*client*.snbt
+**/*client*.json
+**/*client*.properties
 config/InventoryHUD/
 config/justzoom/
 config/runelic.json
