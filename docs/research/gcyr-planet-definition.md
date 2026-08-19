@@ -73,19 +73,31 @@ So giving a new body GT ore generation is startup-script work in this repo, not 
 
 ## Removing the stock bodies
 
-`PlanetData.apply` has no remove directive: a datapack can override `gcyr:luna` by shipping a file
-at the same path, but cannot delete the entry. It does dedupe by dimension — a later planet whose
-`world` matches an earlier one evicts it (`PlanetData.java:60`) — but the stock ID survives in the
-menu either way. Since ADR-0004 fixes our IDs to Factorio names, overriding the stock files in place
-is not an option. The dedupe in `apply` does evict an earlier planet sharing a `world`
-(`PlanetData.java:60`), but it iterates a `HashMap` in unspecified order, so it is not something to
-rely on. Deleting the stock planet and dimension JSONs therefore belongs in the fork, which ADR-0001
-already commits us to maintaining.
+`PlanetData.apply` has no remove directive, and a datapack that ships a file at the stock path only
+overrides its content — the ID survives. The loader does dedupe by dimension, evicting an earlier
+planet whose `world` matches a later one (`PlanetData.java:60`), but it iterates a `HashMap` in
+unspecified order, so it is not a mechanism to rely on. ADR-0004 fixes our IDs to Factorio names,
+which rules out repurposing the stock files in place.
+
+Vanilla does offer real deletion: the `filter` section of a pack's `pack.mcmeta` blocks matching
+files from lower-priority packs at the `ResourceManager` level, and `PlanetData` reads through the
+resource manager like any other loader, so a filtered `gcyr/planets/luna.json` never reaches it.
+
+The obstacle is that this pack has nowhere to put such a filter:
+
+- KubeJS's `kubejs/data` layer cannot carry one. `VirtualResourcePack.getMetadataSection` returns
+  `null` unconditionally, so the virtual pack exposes no metadata sections at all.
+- No global-datapack mod (OpenLoader or equivalent) is installed, so a filter pack would have to sit
+  in each world's `datapacks/` directory, which does not travel with the pack.
+
+That leaves three workable routes: add a global-packs mod, ship a per-world datapack, or delete the
+stock planet and dimension JSONs in the fork ADR-0001 already commits us to maintaining. The fork is
+the cheapest of the three and adds no dependency.
 
 ## Consequence for the pack
 
 Defining Ignus, Electro, Sapros, Gelida and Atlantis — their planet entries, dimensions, worldgen,
 skies, solar system, rocket tiers, fuel costs and display names — is datapack and resource pack work
-in this repo, and giving them GregTech ore generation is KubeJS startup-script work. The fork is
-needed for exactly one thing: dropping the stock bodies, which the planet loader offers no way to
-remove.
+in this repo, and giving them GregTech ore generation is KubeJS startup-script work. Dropping the stock
+bodies is the one job with no in-repo route, for want of a datapack layer that can carry a
+`pack.mcmeta` filter; doing it in the fork is the cheapest of the three options above.
