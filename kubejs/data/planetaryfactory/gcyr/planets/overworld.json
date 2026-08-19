@@ -1,0 +1,15 @@
+{
+  "translation": "level.planetaryfactory.overworld",
+  "galaxy": "planetaryfactory:milky_way",
+  "solar_system": "planetaryfactory:solar_system",
+  "world": "minecraft:overworld",
+  "orbit_world": "gcyr:overworld_orbit",
+  "rocket_tier": 1,
+  "gravity": 9.806,
+  "has_atmosphere": true,
+  "days_in_year": 365,
+  "temperature": 293,
+  "solar_power": 13,
+  "has_oxygen": true,
+  "button_color": 893717
+}
