@@ -1,0 +1,38 @@
+{
+  "pack": {
+    "pack_format": 48,
+    "description": "PlanetaryFactory: removes GCyR's stock bodies"
+  },
+  "filter": {
+    "block": [
+      {
+        "namespace": "gcyr",
+        "path": "gcyr/planets/.*"
+      },
+      {
+        "namespace": "gcyr",
+        "path": "dimension/luna.*"
+      },
+      {
+        "namespace": "gcyr",
+        "path": "dimension/mars.*"
+      },
+      {
+        "namespace": "gcyr",
+        "path": "dimension/mercury.*"
+      },
+      {
+        "namespace": "gcyr",
+        "path": "dimension_type/luna.*"
+      },
+      {
+        "namespace": "gcyr",
+        "path": "dimension_type/mars.*"
+      },
+      {
+        "namespace": "gcyr",
+        "path": "dimension_type/mercury.*"
+      }
+    ]
+  }
+}

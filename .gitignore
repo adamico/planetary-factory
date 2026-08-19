@@ -11,6 +11,8 @@
 **/*.exe
 **/*.jar
 **/*.zip
+# ...except the filter pack, which is pack content and must ship.
+!kubejs/data/*.zip
 backups
 classes
 crash-reports
