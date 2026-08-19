@@ -45,7 +45,17 @@ is installed as `mods/gcyr-1.21.1-0.2.4+gt7.0.2-src.jar`; the broken release is 
 One residue of "Remove kjs, fix gcyr": the jar still ships a `kubejs.plugins.txt` naming
 `GCYRKubeJSPlugin`, a class the commit deleted, so KubeJS logs a `ClassNotFoundException` and
 continues without any gcyr bindings. Non-fatal, but it matters for a pack scripted end to end in
-KubeJS. Tracked separately.
+KubeJS. Tracked separately as issue #1; the file is now stripped from the installed jar, so the
+exception is gone, though the bindings themselves still need writing.
+
+**Amended after world-creation testing.** "The pack launches" was as far as this went at the time,
+and launching turned out not to mean working: world creation still failed, for reasons unrelated to
+the build. Two further defects had to be fixed before the pack reached a world. The pack's KubeJS
+was 2101.7.2-build.368 while GTCEu 7.0.2 compiles against 2101.7.1-build.181, which moved
+`ServerEvents` between packages — GT's recipe generation died on `NoClassDefFoundError`, so KubeJS
+is now downgraded and `kubejs-create` removed, its only 1.21.1 build requiring 7.2+. And GTCEu
+discards its own registrations whenever an addon is loaded, which is ADR-0003. Neither is a
+consequence of building GCyR from source; both were waiting behind the launch crash.
 
 Two risks flagged at the time of writing have since been cleared. `gtceu 7.1.0-SNAPSHOT` does
 resolve from `maven.gtceu.com`, but we pin the build to `7.0.2` instead so it matches the jar
