@@ -9,47 +9,60 @@ planets, and KubeJS binds them into a stationary, automation-first loop.
 
 ### Places
 
-**Nauvis**:
-The Overworld. The starter loop where basic extraction, first automation and the first rockets happen.
-_Avoid_: Overworld, home planet, spawn
+**Terra**:
+The Overworld. The starter loop where basic extraction, first automation and the first rockets happen. The only body where Illager raids occur. Internal ID `overworld`.
+_Avoid_: Overworld, home planet, spawn, Nauvis
 
-**Nauvis Orbit**:
-The void dimension above Nauvis, reached by rocket, where asteroid chunks are harvested into Space Science.
-_Avoid_: space, the void, orbital dimension
+**Terra Orbit**:
+GCyR's orbit dimension above Terra, reached by rocket, where asteroid chunks are harvested into Space Science and the first Platform is established. Internal ID `overworld_orbit`.
+_Avoid_: space, the void, orbital dimension, Nauvis Orbit
 
-**Vulcanus**:
-The Venus-like planet. Thermal and fluid processing; heavy metals and byproduct management.
-_Avoid_: the lava planet, Venus
+**Ignus**:
+The volcanic planet. Thermal and fluid processing; heavy metals and byproduct management. Internal ID `vulcanus`.
+_Avoid_: the lava planet, Venus, Vulcanus
 
-**Fulgora**:
-The Mars-like planet. Has no natural ores; all material comes from recycling generated ruins.
-_Avoid_: the scrap planet, Mars
+**Electro**:
+The recycling planet. Has no natural ores; all material comes from recycling generated ruins. Internal ID `fulgora`.
+_Avoid_: the scrap planet, Mars, Fulgora
 
-**Gleba**:
-The organics planet. Agricultural automation under spoilage time limits.
-_Avoid_: the swamp, Glacio
+**Sapros**:
+The organics planet. Agricultural automation under spoilage time limits; sole source of Cryo-Pods. Internal ID `gleba`.
+_Avoid_: the swamp, Glacio, Gleba
+
+**Gelida**:
+The ice planet. Cryogenics and heat management — fluids freeze without active heating. Internal ID `aquilo`.
+_Avoid_: Aquilo, Glacio, the ice world
+
+**Atlantis**:
+The orbit-only endgame destination, reachable only once a Platform is established in its orbit. Its mechanics are deliberately undefined. Internal ID `shattered_planet`.
+_Avoid_: the shattered planet, Fragmenta
+
+**Display name**:
+The Latin or Greek name a player sees, supplied by lang files only. Every body has one, and it is never the identifier.
+_Avoid_: label, alias
+
+**Internal ID**:
+The Factorio-derived identifier a body is registered under, never shown to players.
+_Avoid_: registry name, dimension key
 
 **Platform**:
-A player-built structure in a void dimension, expanded from a delivered starter kit, that mines and processes asteroids and can later carry the player between planets.
-_Avoid_: space station, orbital base, ship
+A GCyR space station: a player-expanded orbital factory that mines and processes asteroids. Static — it never travels.
+_Avoid_: space station, orbital base, ship, vessel
 
 ### Establishing a presence
 
 **Orbital Starter Kit**:
-The item crafted on Nauvis and launched to orbit; on arrival it becomes the foundational Platform.
+GCyR's station package item, crafted on Terra and launched to orbit, where GCyR's own station creation builds the foundational Platform.
 _Avoid_: platform kit, station seed
 
 **Vanguard Kit**:
-The item carried by an uncrewed rocket to a virgin planet, which deploys a landing platform and Receiving Terminal so the player can arrive safely.
+The item carried by an uncrewed rocket to a virgin planet, which deploys a minimal beachhead — platform floor and Receiving Terminal — so the player has somewhere to stand on arrival. It supplies no oxygen and no return trip.
 _Avoid_: beachhead kit, lander, drop kit
 
 **Gateway Flag**:
 The global marker recording that a planet has a deployed landing platform and is therefore safe to travel to.
 _Avoid_: unlock, planet flag, safe flag
 
-**Navigation Computer**:
-The multiblock that verifies a Platform's thrusters and defences and a destination's Gateway Flag before permitting a journey.
-_Avoid_: nav computer, flight controller
 
 ### Moving things
 
@@ -74,19 +87,27 @@ An in-progress journey — cargo or passenger — held as data with a remaining 
 _Avoid_: shipment, trip, transit
 
 **Simulation Handoff**:
-The transition of a fully automated Platform from a physically built factory to a background throughput calculation.
+The deferred transition of a fully automated Platform from a physically built factory to a background throughput calculation. A contingency held in reserve against measured TPS cost, not a system currently being built.
 _Avoid_: abstraction, going virtual
 
 ### Making things
 
 **Personal Assembler**:
-The item that replaces vanilla 2x2 and 3x3 handcrafting, turning a hand-craft into a queued request that completes after a duration.
+The portable device, with its own recipe type, that turns a bootstrap-tier craft into a queued request completing after a duration. It supplements the crafting grid rather than replacing it, and covers only the components of the first machines.
 _Avoid_: crafting table, hand crafter, personal crafter
+
+**Gated recipe**:
+A recipe whose type routes it away from the crafting grid to a machine or the Personal Assembler. Gating is a recipe-authoring choice, not a scripted restriction.
+_Avoid_: locked recipe, blocked recipe
 
 ### Hazards
 
+**Emission**:
+The per-chunk score accumulated from the EU/t draw of running GT machines, which decays over time and spreads to neighbouring chunks. It is the pack's own construct — GTCEu has no pollution system.
+_Avoid_: pollution, smog, contamination
+
 **Overseer**:
-The stationary villager that anchors an outpost and that raiding Illagers path toward. Manufactured from Gleba organics, not bred or recruited.
+The stationary villager that anchors an outpost and that raiding Illagers path toward. Manufactured from Sapros organics, not bred or recruited.
 _Avoid_: villager, anchor, guard
 
 **Command Center**:
@@ -94,9 +115,19 @@ The block an Overseer is deployed onto; it powers the outpost and halts it if it
 _Avoid_: core block, outpost controller
 
 **Cryo-Pod**:
-The item produced from Gleba organics that deploys into an Overseer.
+The item produced from Sapros organics that deploys into an Overseer.
 _Avoid_: villager egg, pod
 
 **Dormant Siege**:
 The state of an unloaded outpost whose accumulated pollution has crossed the raid threshold; its production halts and the raid instantiates only when a player arrives.
 _Avoid_: pending raid, queued attack
+
+### Orbit
+
+**Ore Finder Satellite**:
+The orbital scanner that reveals ore veins, superseding surface vein indicators as a mid-game upgrade rather than replacing them.
+_Avoid_: scanner, prospector
+
+**Dyson Swarm**:
+The late-game orbital power infrastructure.
+_Avoid_: solar swarm, dyson sphere

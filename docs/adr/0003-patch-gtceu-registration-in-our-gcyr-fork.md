@@ -30,6 +30,11 @@ state it would have had if it had never been frozen.
   end: it treats one symptom, and KubeJS cannot register recipe serializers or recipe types at all.
   It also only ever worked on KubeJS 2101.7.2 — on 2101.7.1-build.181, the build GTCEu 7.0.2 needs,
   `StartupEvents.registry('sound_event', ...)` is a silent no-op that logs no error.
+
+  Note that "KubeJS cannot register recipe types" is true of KubeJS's own registry API only.
+  GTCEu's KubeJS plugin ships `integration/kjs/builders/recipetype/` and
+  `integration/kjs/builders/machine/`, so a custom GT recipe type and machine *are* scriptable
+  — which is what the Personal Assembler and the cargo terminals now depend on.
 - **Drop GCyR.** Removing it makes the pack work immediately, because nothing then fills the queue.
   Rejected: every planet in the design depends on GCyR, and the defect would return with any other
   GT addon.
