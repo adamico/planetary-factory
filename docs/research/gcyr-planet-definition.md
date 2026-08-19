@@ -79,25 +79,35 @@ planet whose `world` matches a later one (`PlanetData.java:60`), but it iterates
 unspecified order, so it is not a mechanism to rely on. ADR-0004 fixes our IDs to Factorio names,
 which rules out repurposing the stock files in place.
 
-Vanilla does offer real deletion: the `filter` section of a pack's `pack.mcmeta` blocks matching
-files from lower-priority packs at the `ResourceManager` level, and `PlanetData` reads through the
-resource manager like any other loader, so a filtered `gcyr/planets/luna.json` never reaches it.
+Real deletion comes from the `filter` section of a pack's `pack.mcmeta`, which blocks matching files
+in lower-priority packs at the `ResourceManager` level. `PlanetData` reads through the resource
+manager like any other loader, so a filtered `gcyr/planets/luna.json` never reaches it.
 
-The obstacle is that this pack has nowhere to put such a filter:
+The pack can carry such a filter, but only in one place. KubeJS serves `kubejs/data` through three
+different pack implementations, and they do not behave alike:
 
-- KubeJS's `kubejs/data` layer cannot carry one. `VirtualResourcePack.getMetadataSection` returns
-  `null` unconditionally, so the virtual pack exposes no metadata sections at all.
-- No global-datapack mod (OpenLoader or equivalent) is installed, so a filter pack would have to sit
-  in each world's `datapacks/` directory, which does not travel with the pack.
+| Pack | Class | Reads a real `pack.mcmeta`? |
+| --- | --- | --- |
+| Generated data | `VirtualDataPack` / `VirtualResourcePack` | No — `getMetadataSection` returns `null` unconditionally |
+| The `kubejs/data` folder | `KubeFileResourcePack` | No — `getRootResource("pack.mcmeta")` returns the hardcoded `GeneratedData.PACK_META` |
+| **A `.zip` in `kubejs/data`** | vanilla `FilePackResources` | **Yes** — the zip's own `pack.mcmeta`, filter section included |
 
-That leaves three workable routes: add a global-packs mod, ship a per-world datapack, or delete the
-stock planet and dimension JSONs in the fork ADR-0001 already commits us to maintaining. The fork is
-the cheapest of the three and adds no dependency.
+`ServerScriptManager` calls `KubeFileResourcePack.scanAndLoad(KubeJSPaths.DATA, packs)`, which walks
+`kubejs/data` for `.zip` files and wraps each in a vanilla `FilePackResources`
+(`KubeFileResourcePack.scanAndLoad`). Those packs are placed in the after-mods region of the pack
+list, above GCyR — the same reason `kubejs/data` overrides mod data at all.
+
+So the stock bodies are removed by a zipped datapack in `kubejs/data/` whose `pack.mcmeta` filters
+namespace `gcyr`, path `gcyr/planets/...`. No fork change and no new mod.
+
+Worth confirming on the first launch rather than assuming: vanilla applies a pack's filter only to
+packs below it in the list, so the zip must sort above GCyR's mod pack specifically. The planet
+selection menu shows the answer immediately.
 
 ## Consequence for the pack
 
 Defining Ignus, Electro, Sapros, Gelida and Atlantis — their planet entries, dimensions, worldgen,
 skies, solar system, rocket tiers, fuel costs and display names — is datapack and resource pack work
 in this repo, and giving them GregTech ore generation is KubeJS startup-script work. Dropping the stock
-bodies is the one job with no in-repo route, for want of a datapack layer that can carry a
-`pack.mcmeta` filter; doing it in the fork is the cheapest of the three options above.
+bodies is a zipped datapack in `kubejs/data/` carrying a `pack.mcmeta` filter. Nothing in this slice
+needs a change to the fork.
