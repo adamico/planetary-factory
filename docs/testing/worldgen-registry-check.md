@@ -34,7 +34,17 @@ Every field is optional except `dimension`. For each named vein the check assert
 loaded, that its `dimension_filter` includes the body's dimension, that it names the expected
 layer, that its weight is the expected one, and — the failure a codec cannot catch — that the
 layer it names actually covers that dimension. `forbidden_ore_veins` asserts the reverse: that
-a vein does *not* reach this body. Bedrock ore deposits are checked for presence, dimension,
+a vein does *not* reach this body.
+
+An `ore_veins` object that is **present but empty** means something stronger than "no veins
+to check": it asserts the body is barren, and the check walks the *entire* loaded vein
+registry and fails if any vein at all reaches that dimension. That is the form a barren body
+needs, because a list of forbidden veins goes stale the moment another ticket adds one.
+`dimension_filter` is a required field on GregTech's ore vein codec, so a vein reaches a body
+only by naming it — there is no unfiltered vein that silently reaches everywhere. Electro
+uses this; see ADR-0009.
+
+Bedrock ore deposits are checked for presence, dimension,
 material set, and a depleted yield above zero; bedrock fluid deposits for presence,
 dimension, the fluid they hold, and the same non-zero floor, with
 `forbidden_bedrock_fluids` as their reverse.

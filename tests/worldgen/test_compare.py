@@ -20,6 +20,7 @@ spec.loader.exec_module(worldgen_check)
 compare = worldgen_check.compare
 
 IGNUS = "planetaryfactory:vulcanus"
+ELECTRO = "planetaryfactory:fulgora"
 
 EXPECTED = {
     "bodies": {
@@ -33,7 +34,14 @@ EXPECTED = {
                                                       "depleted_yield_at_least": 1}},
             "forbidden_ore_veins": ["gtceu:iron"],
             "forbidden_bedrock_fluids": ["gtceu:oil_deposit"],
-        }
+        },
+        # A body asserted barren: the empty object is the assertion, not an omission.
+        "electro": {
+            "dimension": ELECTRO,
+            "ore_veins": {},
+            "bedrock_ores": {"planetaryfactory:electro_scrap_deposit": {
+                "materials": ["planetaryfactory:scrap"], "depleted_yield_at_least": 1}},
+        },
     }
 }
 
@@ -44,9 +52,14 @@ GOOD = {
         "gtceu:iron": {"weight": 160, "layer": "stone",
                        "dimensions": ["minecraft:overworld"]},
     },
-    "bedrock_ores": {"planetaryfactory:ignus_tungsten_deposit": {
-        "materials": [{"material": "gtceu:tungsten", "weight": 5}],
-        "depleted_yield": 6, "dimensions": [IGNUS]}},
+    "bedrock_ores": {
+        "planetaryfactory:ignus_tungsten_deposit": {
+            "materials": [{"material": "gtceu:tungsten", "weight": 5}],
+            "depleted_yield": 6, "dimensions": [IGNUS]},
+        "planetaryfactory:electro_scrap_deposit": {
+            "materials": [{"material": "planetaryfactory:scrap", "weight": 1}],
+            "depleted_yield": 12, "dimensions": [ELECTRO]},
+    },
     "bedrock_fluids": {
         "gtceu:lava_deposit": {"fluid": "minecraft:lava", "depleted_yield": 30,
                                "weight": 65, "dimensions": [IGNUS]},
@@ -88,6 +101,18 @@ CASES = [
     ("a bedrock fluid still reaching the wrong dimension fails",
      mutate(lambda d: d["bedrock_fluids"]["gtceu:oil_deposit"]["dimensions"]
             .append(IGNUS)), 1),
+    # A barren body's emptiness is the assertion, and it has to hold against veins
+    # nobody thought to forbid — including ones added to the pack years from now.
+    ("any vein reaching a body asserted barren fails",
+     mutate(lambda d: d["ore_veins"]["gtceu:iron"]["dimensions"].append(ELECTRO)), 1),
+    ("a vein this pack adds later, reaching a barren body, fails",
+     mutate(lambda d: d["ore_veins"].__setitem__(
+         "planetaryfactory:electro_scrap", {"weight": 80, "layer": "electro_rock",
+                                            "dimensions": [ELECTRO]})), 1),
+    ("a barren body with veins elsewhere in the registry passes",
+     mutate(lambda d: d["ore_veins"].__setitem__(
+         "planetaryfactory:ignus_sulfur", {"weight": 100, "layer": "ignus_rock",
+                                           "dimensions": [IGNUS]})), 0),
 ]
 
 

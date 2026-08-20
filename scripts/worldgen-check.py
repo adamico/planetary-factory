@@ -113,6 +113,18 @@ def compare(dump, expected):
     for body, spec in expected["bodies"].items():
         dimension = spec["dimension"]
 
+        # An `ore_veins` object that is present but empty is not "nothing to check".
+        # It is the assertion that the body carries no veins whatsoever, which is a
+        # claim about the whole registry rather than about any named vein — the only
+        # form of it that cannot go stale as later bodies add veins of their own.
+        # `dimension_filter` is a required field on GregTech's ore vein codec, so a
+        # vein reaches this body only by naming it.
+        if spec.get("ore_veins") == {} and "ore_veins" in spec:
+            for vein_id, got in sorted(veins.items()):
+                if dimension in got["dimensions"]:
+                    yield (f"{body}: ore vein {vein_id} reaches {dimension}, which is "
+                           f"expected to carry no ore veins at all")
+
         for vein_id, want in spec.get("ore_veins", {}).items():
             got = veins.get(vein_id)
             if got is None:
