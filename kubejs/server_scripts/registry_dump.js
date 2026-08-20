@@ -26,6 +26,7 @@ const LOG_MARKER = 'WORLDGEN_DUMP ';
 const GTRegistryKeys = Java.loadClass('com.gregtechceu.gtceu.api.registry.GTRegistries');
 const KubeJSPathConstants = Java.loadClass('dev.latvian.mods.kubejs.KubeJSPaths');
 const KubeJsonIO = Java.loadClass('dev.latvian.mods.kubejs.util.JsonIO');
+const BuiltInRegistryKeys = Java.loadClass('net.minecraft.core.registries.BuiltInRegistries');
 
 const gamePath = (relative) => KubeJSPathConstants.GAMEDIR.resolve(relative);
 
@@ -47,6 +48,7 @@ const dumpRegistries = (server) => {
   const oreVeins = {};
   const worldGenLayers = {};
   const bedrockOres = {};
+  const bedrockFluids = {};
 
   eachEntry(registryAccess, GTRegistryKeys.ORE_VEIN_REGISTRY, (id, vein) => {
     const layer = vein.layer();
@@ -80,7 +82,23 @@ const dumpRegistries = (server) => {
     };
   });
 
-  return { ore_veins: oreVeins, bedrock_ores: bedrockOres, worldgen_layers: worldGenLayers };
+  eachEntry(registryAccess, GTRegistryKeys.BEDROCK_FLUID_REGISTRY, (id, deposit) => {
+    bedrockFluids[id] = {
+      weight: deposit.getWeight(),
+      fluid: BuiltInRegistryKeys.FLUID.getKey(deposit.getStoredFluid()).toString(),
+      depleted_yield: deposit.getDepletedYield(),
+      // Bedrock fluids expose their dimension filter as a field, where veins and
+      // bedrock ores expose an accessor.
+      dimensions: dimensionIds(deposit.dimensionFilter),
+    };
+  });
+
+  return {
+    ore_veins: oreVeins,
+    bedrock_ores: bedrockOres,
+    bedrock_fluids: bedrockFluids,
+    worldgen_layers: worldGenLayers,
+  };
 };
 
 const dumpRequested = () => {

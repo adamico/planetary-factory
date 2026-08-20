@@ -1,0 +1,58 @@
+{
+    "biomes": "#planetaryfactory:is_ignus",
+    "cluster_size": {
+        "max_inclusive": 40,
+        "min_inclusive": 32,
+        "type": "minecraft:uniform"
+    },
+    "density": 0.25,
+    "dimension_filter": [
+        "planetaryfactory:vulcanus"
+    ],
+    "discard_chance_on_air_exposure": 0.0,
+    "generator": {
+        "layer_patterns": [
+            [
+                {
+                    "max_size": 4,
+                    "min_size": 2,
+                    "targets": [
+                        "gtceu:calcite"
+                    ],
+                    "weight": 3
+                },
+                {
+                    "max_size": 2,
+                    "min_size": 1,
+                    "targets": [
+                        "gtceu:apatite"
+                    ],
+                    "weight": 1
+                }
+            ]
+        ],
+        "type": "gtceu:layer"
+    },
+    "height_range": {
+        "height": {
+            "max_inclusive": {
+                "absolute": 90
+            },
+            "min_inclusive": {
+                "absolute": 20
+            },
+            "type": "minecraft:uniform"
+        }
+    },
+    "indicators": [
+        {
+            "block": "gtceu:calcite",
+            "density": 0.2,
+            "placement": "surface",
+            "radius": 5,
+            "type": "gtceu:surface"
+        }
+    ],
+    "layer": "ignus_rock",
+    "weight": 90
+}

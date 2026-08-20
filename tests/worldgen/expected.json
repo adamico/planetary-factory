@@ -82,6 +82,58 @@
         "gtceu:scheelite",
         "gtceu:naquadah",
         "gtceu:sulfur"
+      ],
+      "forbidden_bedrock_fluids": [
+        "gtceu:lava_deposit"
+      ]
+    },
+    "ignus": {
+      "dimension": "planetaryfactory:vulcanus",
+      "ore_veins": {
+        "planetaryfactory:ignus_coal": {
+          "weight": 120,
+          "layer": "ignus_rock"
+        },
+        "planetaryfactory:ignus_sulfur": {
+          "weight": 100,
+          "layer": "ignus_rock"
+        },
+        "planetaryfactory:ignus_calcite": {
+          "weight": 90,
+          "layer": "ignus_rock"
+        },
+        "planetaryfactory:ignus_scheelite": {
+          "weight": 50,
+          "layer": "ignus_rock"
+        }
+      },
+      "bedrock_ores": {
+        "planetaryfactory:ignus_tungsten_deposit": {
+          "materials": [
+            "gtceu:tungsten",
+            "gtceu:lithium"
+          ],
+          "depleted_yield_at_least": 1
+        }
+      },
+      "bedrock_fluids": {
+        "gtceu:lava_deposit": {
+          "fluid": "minecraft:lava",
+          "depleted_yield_at_least": 1
+        },
+        "planetaryfactory:ignus_sulfuric_acid_geyser": {
+          "fluid": "gtceu:sulfuric_acid",
+          "depleted_yield_at_least": 1
+        }
+      },
+      "forbidden_ore_veins": [
+        "gtceu:iron",
+        "gtceu:copper",
+        "gtceu:coal",
+        "gtceu:cassiterite",
+        "planetaryfactory:sphalerite",
+        "gtceu:scheelite",
+        "gtceu:sulfur"
       ]
     }
   }

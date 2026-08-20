@@ -1,0 +1,14 @@
+{
+    "depleted_yield": 12,
+    "depletion_amount": 1,
+    "depletion_chance": 100,
+    "dimension_filter": [
+        "planetaryfactory:vulcanus"
+    ],
+    "fluid": "gtceu:sulfuric_acid",
+    "weight": 35,
+    "yield": {
+        "min": 60,
+        "max": 160
+    }
+}

@@ -7,5 +7,7 @@
   "level.planetaryfactory.fulgora": "Electro",
   "level.planetaryfactory.gleba": "Sapros",
   "level.planetaryfactory.aquilo": "Gelida",
-  "level.planetaryfactory.shattered_planet": "Atlantis"
+  "level.planetaryfactory.shattered_planet": "Atlantis",
+  "biome.planetaryfactory.ignus_barren_plains": "Ignean Barrens",
+  "biome.planetaryfactory.ignus_eroded_plains": "Ignean Flats"
 }

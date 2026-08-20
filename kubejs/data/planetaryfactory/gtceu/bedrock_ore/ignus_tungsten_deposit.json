@@ -1,0 +1,25 @@
+{
+    "weight": 50,
+    "size": 8,
+    "yield": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 32,
+        "max_inclusive": 64
+    },
+    "depletion_amount": 1,
+    "depletion_chance": 20,
+    "depleted_yield": 6,
+    "materials": [
+        {
+            "material": "gtceu:tungsten",
+            "weight": 5
+        },
+        {
+            "material": "gtceu:lithium",
+            "weight": 2
+        }
+    ],
+    "dimension_filter": [
+        "planetaryfactory:vulcanus"
+    ]
+}

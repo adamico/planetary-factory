@@ -1,8 +1,9 @@
 # The worldgen registry check
 
 One automated check covers every body's worldgen: `scripts/worldgen-check.py`. It launches
-the pack into a freshly created world, reads the ore vein, bedrock ore and worldgen layer
-registries the game actually loaded, and compares them to `tests/worldgen/expected.json`.
+the pack into a freshly created world, reads the ore vein, bedrock ore, bedrock fluid and
+worldgen layer registries the game actually loaded, and compares them to
+`tests/worldgen/expected.json`.
 
 ```bash
 scripts/worldgen-check.py                # launch, dump, compare, tear the world down
@@ -20,9 +21,11 @@ Add an entry under `bodies` in `tests/worldgen/expected.json`. Nothing else chan
 ```json
 "ignus": {
   "dimension": "planetaryfactory:vulcanus",
-  "ore_veins": { "planetaryfactory:tungsten": { "weight": 90, "layer": "venus_rock" } },
+  "ore_veins": { "planetaryfactory:ignus_coal": { "weight": 120, "layer": "ignus_rock" } },
   "bedrock_ores": { "planetaryfactory:ignus_tungsten_deposit": {
       "materials": ["gtceu:tungsten"], "depleted_yield_at_least": 1 } },
+  "bedrock_fluids": { "gtceu:lava_deposit": {
+      "fluid": "minecraft:lava", "depleted_yield_at_least": 1 } },
   "forbidden_ore_veins": ["gtceu:iron"]
 }
 ```
@@ -31,8 +34,20 @@ Every field is optional except `dimension`. For each named vein the check assert
 loaded, that its `dimension_filter` includes the body's dimension, that it names the expected
 layer, that its weight is the expected one, and — the failure a codec cannot catch — that the
 layer it names actually covers that dimension. `forbidden_ore_veins` asserts the reverse: that
-a vein does *not* reach this body. Bedrock deposits are checked for presence, dimension,
-material set, and a depleted yield above zero.
+a vein does *not* reach this body. Bedrock ore deposits are checked for presence, dimension,
+material set, and a depleted yield above zero; bedrock fluid deposits for presence,
+dimension, the fluid they hold, and the same non-zero floor, with
+`forbidden_bedrock_fluids` as their reverse.
+
+The comparison itself has its own test, `tests/worldgen/test_compare.py`, which runs it
+against synthetic dumps in a second and needs no game:
+
+```bash
+tests/worldgen/test_compare.py
+```
+
+Run it after editing the fixture. It answers whether the check would notice a given
+failure; only the full run answers what the game actually loaded.
 
 ## How it works, and why this way
 
@@ -71,6 +86,9 @@ The check runs unattended, but it drives the real client, so it needs a graphica
 it cannot run over a bare SSH connection or in CI without one, and fails at
 `glfwGetPrimaryMonitor` if there is no display.
 
-Three things per body remain a human's job on delivery, because the registries cannot show
-them: that the sky is right, that the ground is the intended stone, and that digging into a
-vein yields the intended ore variant under its intended name.
+Four things per body remain a human's job on delivery, because the registries cannot show
+them: that the sky is right, that the ground is the intended stone, that digging into a
+vein yields the intended ore variant under its intended name, and that a Bedrock Ore Miner
+and a Fluid Drilling Rig actually draw from the body's deposits. The registries can say a
+deposit loaded, filters to the right dimension and never depletes to zero; only a rig can
+say it turns.

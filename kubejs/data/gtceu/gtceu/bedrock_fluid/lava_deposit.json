@@ -1,0 +1,14 @@
+{
+    "depleted_yield": 30,
+    "depletion_amount": 1,
+    "depletion_chance": 100,
+    "dimension_filter": [
+        "planetaryfactory:vulcanus"
+    ],
+    "fluid": "minecraft:lava",
+    "weight": 65,
+    "yield": {
+        "min": 125,
+        "max": 250
+    }
+}

@@ -1,0 +1,17 @@
+{
+  "_comment": "Ignus generates on GCyR's orphaned Venus stone (ADR-0008). The blocks stay; their names do not — no player sees the name of a body this pack deleted.",
+
+  "tagprefix.venus": "Ignean %s Ore",
+
+  "block.gcyr.venus_rock": "Ignean Rock",
+  "block.gcyr.venus_rock_slab": "Ignean Rock Slab",
+  "block.gcyr.venus_rock_stairs": "Ignean Rock Stairs",
+  "block.gcyr.venus_rock_button": "Ignean Rock Button",
+  "block.gcyr.venus_cobblestone": "Cobbled Ignean Rock",
+  "block.gcyr.venus_cobblestone_slab": "Cobbled Ignean Rock Slab",
+  "block.gcyr.venus_cobblestone_stairs": "Cobbled Ignean Rock Stairs",
+  "block.gcyr.venus_sand": "Ignean Sand",
+  "block.gcyr.venusian_regolith": "Ignean Regolith",
+  "block.gcyr.venus_marker": "Ignus",
+  "level.gcyr.venus": "Ignus"
+}

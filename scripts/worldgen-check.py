@@ -107,6 +107,7 @@ def compare(dump, expected):
     """Yield one failure line per expectation the dump does not meet."""
     veins = dump.get("ore_veins", {})
     deposits = dump.get("bedrock_ores", {})
+    fluids = dump.get("bedrock_fluids", {})
     layers = dump.get("worldgen_layers", {})
 
     for body, spec in expected["bodies"].items():
@@ -156,6 +157,27 @@ def compare(dump, expected):
             if floor is not None and got["depleted_yield"] < floor:
                 yield (f"{body}: bedrock ore deposit {deposit_id} depletes to "
                        f"{got['depleted_yield']}, expected at least {floor}")
+
+        for deposit_id, want in spec.get("bedrock_fluids", {}).items():
+            got = fluids.get(deposit_id)
+            if got is None:
+                yield f"{body}: bedrock fluid deposit {deposit_id} did not load"
+                continue
+            if dimension not in got["dimensions"]:
+                yield (f"{body}: bedrock fluid deposit {deposit_id} does not filter to "
+                       f"{dimension} (filters to {got['dimensions']})")
+            if "fluid" in want and got["fluid"] != want["fluid"]:
+                yield (f"{body}: bedrock fluid deposit {deposit_id} holds "
+                       f"{got['fluid']}, expected {want['fluid']}")
+            floor = want.get("depleted_yield_at_least")
+            if floor is not None and got["depleted_yield"] < floor:
+                yield (f"{body}: bedrock fluid deposit {deposit_id} depletes to "
+                       f"{got['depleted_yield']}, expected at least {floor}")
+
+        for deposit_id in spec.get("forbidden_bedrock_fluids", []):
+            got = fluids.get(deposit_id)
+            if got is not None and dimension in got["dimensions"]:
+                yield f"{body}: bedrock fluid deposit {deposit_id} leaks onto {dimension}"
 
 
 def main():

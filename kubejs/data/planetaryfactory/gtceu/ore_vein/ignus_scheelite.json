@@ -1,0 +1,60 @@
+{
+    "biomes": "#planetaryfactory:is_ignus",
+    "cluster_size": {
+        "max_inclusive": 64,
+        "min_inclusive": 50,
+        "type": "minecraft:uniform"
+    },
+    "density": 0.7,
+    "dimension_filter": [
+        "planetaryfactory:vulcanus"
+    ],
+    "discard_chance_on_air_exposure": 0.0,
+    "generator": {
+        "blocks": [
+            {
+                "block": "gtceu:scheelite",
+                "max_y": 40,
+                "min_y": -20,
+                "weight": 3
+            },
+            {
+                "block": "gtceu:tungstate",
+                "max_y": 30,
+                "min_y": -10,
+                "weight": 2
+            },
+            {
+                "block": "gtceu:lithium",
+                "max_y": 10,
+                "min_y": -20,
+                "weight": 1
+            }
+        ],
+        "max_y": 40,
+        "min_y": -20,
+        "type": "gtceu:dike"
+    },
+    "height_range": {
+        "height": {
+            "max_inclusive": {
+                "absolute": 40
+            },
+            "min_inclusive": {
+                "absolute": -20
+            },
+            "type": "minecraft:uniform"
+        }
+    },
+    "indicators": [
+        {
+            "block": "gtceu:scheelite",
+            "density": 0.2,
+            "placement": "above",
+            "radius": 5,
+            "type": "gtceu:surface"
+        }
+    ],
+    "layer": "ignus_rock",
+    "weight": 50
+}
