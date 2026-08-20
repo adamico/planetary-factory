@@ -149,6 +149,33 @@
         "gtceu:scheelite",
         "gtceu:sulfur"
       ]
+    },
+    "electro": {
+      "_comment": [
+        "Electro's `ore_veins` is an empty object on purpose, and the emptiness is the",
+        "assertion: no vein in the loaded registry may reach this dimension. The body is",
+        "barren by design \u2014 its economy is recycling. See docs/adr/0009-electro-registers-no-ore-veins.md.",
+        "Fulgorite and scrap piles are placed features, not veins, and so are not checked here."
+      ],
+      "dimension": "planetaryfactory:fulgora",
+      "ore_veins": {},
+      "bedrock_ores": {
+        "planetaryfactory:electro_scrap_deposit": {
+          "materials": [
+            "planetaryfactory:scrap"
+          ],
+          "depleted_yield_at_least": 1
+        }
+      },
+      "bedrock_fluids": {
+        "planetaryfactory:electro_petroleum_deposit": {
+          "fluid": "gtceu:heavy_oil",
+          "depleted_yield_at_least": 1
+        }
+      },
+      "forbidden_bedrock_fluids": [
+        "gtceu:lava_deposit"
+      ]
     }
   }
 }

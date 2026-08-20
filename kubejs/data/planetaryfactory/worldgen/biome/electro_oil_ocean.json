@@ -16,7 +16,19 @@
     "water_color": 2826521,
     "water_fog_color": 1314571
   },
-  "features": [],
+  "features": [
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    []
+  ],
   "has_precipitation": false,
   "spawn_costs": {},
   "spawners": {},

@@ -1,0 +1,24 @@
+{
+  "_comment": "A single-element pool per template and nothing else: no connectors, no expansion. Vanilla 1.21 offers no generic template-placing structure type, and every alternative hijacks a hardcoded vanilla structure's template paths globally. GCyR's own photoshoot structure is built the same way. See issue #13.",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "planetaryfactory:electro_ruin_1",
+        "projection": "rigid",
+        "processors": "minecraft:empty"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "planetaryfactory:electro_ruin_2",
+        "projection": "rigid",
+        "processors": "minecraft:empty"
+      }
+    }
+  ]
+}

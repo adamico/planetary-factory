@@ -1,0 +1,21 @@
+{
+  "weight": 100,
+  "size": 10,
+  "yield": {
+    "type": "minecraft:uniform",
+    "min_inclusive": 48,
+    "max_inclusive": 96
+  },
+  "depletion_amount": 1,
+  "depletion_chance": 15,
+  "depleted_yield": 12,
+  "materials": [
+    {
+      "material": "planetaryfactory:scrap",
+      "weight": 1
+    }
+  ],
+  "dimension_filter": [
+    "planetaryfactory:fulgora"
+  ]
+}

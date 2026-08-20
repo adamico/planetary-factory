@@ -1,0 +1,14 @@
+{
+  "depleted_yield": 15,
+  "depletion_amount": 1,
+  "depletion_chance": 100,
+  "dimension_filter": [
+    "planetaryfactory:fulgora"
+  ],
+  "fluid": "gtceu:heavy_oil",
+  "weight": 100,
+  "yield": {
+    "min": 80,
+    "max": 200
+  }
+}

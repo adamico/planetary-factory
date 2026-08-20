@@ -1,0 +1,15 @@
+{
+  "_comment": "Ruins are everywhere on Electro — several should be visible from one plateau. This is the bootstrap that lets a player who lands with nothing build the miner the body exists to feed.",
+  "structures": [
+    {
+      "structure": "planetaryfactory:electro_ruin",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 130824771,
+    "spacing": 5,
+    "separation": 2
+  }
+}
