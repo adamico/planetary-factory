@@ -14,14 +14,14 @@
 // no ore, just a colour, an icon set and its element — so the material is extended
 // rather than replaced.
 
-const PropertyKey = Java.loadClass(
-  'com.gregtechceu.gtceu.api.material.material.properties.PropertyKey');
 const DustProperty = Java.loadClass(
   'com.gregtechceu.gtceu.api.material.material.properties.DustProperty');
 const MaterialIconSet = Java.loadClass(
   'com.gregtechceu.gtceu.api.material.material.info.MaterialIconSet');
-// GTMaterials is already a KubeJS global binding; declaring it here is a redeclaration
-// error that takes the whole startup script down with it.
+// GTMaterials and PropertyKey are already KubeJS global bindings from GTKubeJSPlugin;
+// declaring either here is a redeclaration error that takes the whole startup script
+// down with it. DustProperty and MaterialIconSet are not bound (the plugin exposes the
+// icon sets as GTMaterialIconSet), so those two still need loadClass.
 
 StartupEvents.registry('gtceu:material', (event) => {
   // Dust and nothing else. An ore variant would put a scrap *ore block* in the
