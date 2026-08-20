@@ -134,6 +134,12 @@ until a player clears it by hand. A stated hazard the player is responsible for 
 not a fault.
 _Avoid_: jam, deadlock, stall, blockage
 
+**Purge**:
+The route by which a Decayed input leaves a Biochamber without being consumed. A material that has
+Decayed past what the running recipe accepts is Purged to the machine's dedicated Spoilage output;
+when that output is full, the input stays where it is and the machine Clogs.
+_Avoid_: trash, trash slot, reject, waste output, eject
+
 ### Hazards
 
 **Emission**:

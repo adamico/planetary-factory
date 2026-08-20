@@ -83,3 +83,34 @@ research ticket's framing that "the mechanic will be ours": it still is, but it 
 existing MIT mod rather than a script, because KubeJS cannot register component types and Spoiled's
 sweep already solves the block-entity walking, chunk handling and container edge cases we would
 otherwise reimplement badly.
+
+## Amended after the grilling session for issue #17
+
+Two things this ADR asserted have changed. Neither disturbs the decision itself — freshness is still
+item identity — but both change what it costs and why the fork exists.
+
+**The authoring ceiling is lower than stated.** "Four textures per material" is not the shape it
+takes. A spoilable is drawn as a two-layer item model: `layer0` is the material's one texture, and
+`layer1` is a stage badge drawn from a single shared set of four — green, yellow, orange, red, in the
+manner of Food Spoilage. Fresh carries the green badge rather than being bare, so the badge is a
+positive statement that this item is subject to Decay at all. The set is shared by every spoilable in
+the pack, so the badges are authored once and a new material costs **one texture**, four generated
+model JSONs and four lang entries.
+
+An abstract status badge also sidesteps a problem a material-specific overlay would have had: a wilt
+or mould motif reads correctly on jelly and absurdly on a bacterial culture or an egg. A coloured pill
+carries no material semantics and is legible on all of them.
+
+**The reasoning for needing a Java mod has expired, though the conclusion holds.** This ADR concluded
+with "the mechanic needs a Java fork of Mrbysco/Spoiled, not KubeJS scripting, because KubeJS cannot
+register component types." The design has no component types — that was the whole point of it — so
+the premise no longer applies, and KubeJS *can* register the four items.
+
+It now does. **KubeJS registers the items, their models and their lang entries; the fork registers no
+content at all.** The fork survives on entirely different grounds: the sweep, the chunk catch-up, the
+Purge route and the storage-blacklist mixins are Java-only, and none of them are content. See
+ADR 0011, ADR 0012 and ADR 0013.
+
+The consequence is a better division than the one this ADR anticipated. The engine can be complete
+and correct while the pack contains no spoilable materials whatsoever, and adding one is a script
+edit rather than a mod rebuild.
