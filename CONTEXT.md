@@ -100,6 +100,40 @@ _Avoid_: crafting table, hand crafter, personal crafter
 A recipe whose type routes it away from the crafting grid to a machine or the Personal Assembler. Gating is a recipe-authoring choice, not a scripted restriction.
 _Avoid_: locked recipe, blocked recipe
 
+### Spoiling
+
+**Decay**:
+The process by which an organic material loses freshness over time and is eventually replaced by
+something else. It runs continuously, everywhere, on every body and in flight — it is not a property
+of any one machine or dimension.
+_Avoid_: spoiling, rotting, decomposition, aging
+
+**Freshness**:
+How far through Decay a material has travelled, expressed as one of four named states rather than a
+percentage or a timer. Freshness is part of what a material *is*, not a hidden value attached to it.
+_Avoid_: spoilage level, staleness, condition, quality, durability
+
+**Fresh**, **Ripe**, **Stale**, **Spoiling**:
+The four freshness states, in order. **Spoiling** is the last state before a material is replaced,
+not the state of having been replaced — that is Spoilage.
+_Avoid_: spoiled (for the fourth state), stage 1-4, tier
+
+**Spoilage**:
+The material that organics become at the end of Decay. It is a feedstock in its own right, not
+waste — biosulfur is made from it.
+_Avoid_: rot, waste, compost, garbage, trash
+
+**Biochamber**:
+The Sapros machine that every recipe involving a spoilable material runs in. Processing organics
+elsewhere is not an alternative path; there is no alternative path.
+_Avoid_: bioreactor, fermenter, organics processor
+
+**Clog**:
+The state of a machine holding a material that has Decayed past what its recipe accepts, halting it
+until a player clears it by hand. A stated hazard the player is responsible for designing around,
+not a fault.
+_Avoid_: jam, deadlock, stall, blockage
+
 ### Hazards
 
 **Emission**:
