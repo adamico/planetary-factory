@@ -65,3 +65,74 @@ javadoc claim that it "runs after GTCEu has set up its content" is wrong.
 **Outcome: verified.** The pack loads a world with 39324 recipes, no registry errors, GT worldgen
 and surface ore indicators present. This also retires the `kubejs.plugins.txt` residue noted in
 ADR-0001 (issue #1), stripped from the installed jar.
+
+---
+
+# Custom materials reach GregTech as data files read by the fork
+
+The same fork, for the same reason, now also carries a material loader. A modpack cannot register
+a GregTech material at all. `Material.Builder.buildAndRegister` carries Rhino's `@HideFromJS` and
+KubeJS hides `BuilderBase.createObject`, so a script cannot finish a builder by hand; the one
+supported seam, `StartupEvents.registry('gtceu:material', ...)`, is dispatched after
+`CommonInit.onRegisterEarly` has closed the material registry and generated every material's
+items. Measured on a probe launch, KubeJS gets the event 340ms too late and the registration is
+rejected with `IllegalStateException: Materials cannot be registered in the PostMaterialEvent (or
+after)`.
+
+Only code inside GregTech's material window can add a material, and only a mod can be there. So
+the fork offers a file format instead: `data/<namespace>/gt_materials/<name>.json`, read during
+the window, from any loaded mod's files and from the pack's `kubejs/data` directory. The fork
+learns the format and nothing else — it does not know that `planetaryfactory:scrap` exists, the
+same way `GTRegistriesMixin` above does not know which registrations it is rescuing. This is the
+move the ore vein weights already made, shipping as datapack overrides because
+`GTCEuServerEvents.oreVeins` proved unusable on 7.0.2.
+
+## Considered Options
+
+- **Register scrap directly in the fork.** Puts a modpack-specific resource in a mod that should
+  not know about it, and makes every future pack material another fork release.
+- **Substitute an existing GT material.** Reverses the tier-3 reasoning that introduced scrap:
+  its whole role is to be one distinct input recycling into a spread of unrelated outputs, and no
+  GregTech, Mekanism or Create material plays that part.
+- **Defer `MaterialRegistry.close()` with a mixin.** Does not work. Item generation has already
+  run by the time the close happens, so a material admitted late would exist with no dust item —
+  closing before item generation is what the flag is for.
+- **Fix the mod ordering.** Not the cause, and not worth re-investigating: `gtceu`'s own
+  `neoforge.mods.toml` declares `kubejs` with `ordering = "AFTER"` and our fork declares no kubejs
+  constraint, so the order is already `kubejs` -> `gtceu` -> `gcyr`.
+
+## Consequences
+
+Definitions are read off disk with `java.nio` rather than through `ResourceManager`. At
+mod-loading time no resource pack has been assembled and no datapack exists, so the usual
+`data/<namespace>/...` lookup has to be done by hand — which also means a definition is *not*
+datapack-overridable and does not reload.
+
+Discovery runs in the `GCYR` constructor while registration runs on the `RegisterEvent`, and the
+split is load-bearing in a way worth spelling out. GregTech generates a material's items on a
+`GTRegistrate` belonging to the material's *namespace*, created on demand while the item registry
+event is being dispatched, falling back to GregTech's own mod bus for a namespace that is not a
+loaded mod. A listener attached to a bus mid-dispatch never sees the event being dispatched, so a
+registrate created that late registers nothing and the material ends up itemless — the same
+failure as registering too late, reached from the other side. Creating the registrate during
+construction, before any registry event fires, is what lets a namespace that owns no mod own a
+material.
+
+A malformed definition costs its own material and logs, rather than throwing. Throwing inside the
+material window aborts mod loading, and this issue is on record as one where that surfaces as a
+crash in an unrelated mod: the dead kubejs container broke resource loading, which left FTB Quests
+with no theme file and crashed it on an empty shape map.
+
+`GTMaterialSpec` (parsing) and `GTMaterialFinder` (walking the directories) touch no Minecraft or
+GregTech class, which is what makes them testable; the fork gained a JUnit source set for them,
+its first. Applying a spec to a `Material.Builder` is still only exercised by launching.
+
+**Outcome: verified.** The pack launches clean. `Found 1 data-driven GregTech material(s) in
+namespace(s) [planetaryfactory]` during construction, `Registered data-driven GregTech material
+planetaryfactory:scrap` in the material window, no `Skipping material`, and KubeJS back to 4/4
+startup scripts with 0 errors.
+
+The item generation is the part worth recording, because it is what the design was uncertain
+about: `scrap_dust`, `small_scrap_dust` and `tiny_scrap_dust` all exist. A namespace owning no mod
+does get its material items, which confirms that creating the `GTRegistrate` during construction
+is both necessary and sufficient.

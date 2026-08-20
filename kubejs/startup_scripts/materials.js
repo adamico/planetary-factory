@@ -14,48 +14,41 @@
 // no ore, just a colour, an icon set and its element — so the material is extended
 // rather than replaced.
 
+// SCRAP IS NOT REGISTERED HERE, and cannot be, so do not add it back. A GregTech material
+// has to be finished inside GregTech's material window, and every seam a script can reach
+// is either hidden or dispatched too late. `Material.Builder.buildAndRegister` carries
+// Rhino's `@HideFromJS` and KubeJS hides `BuilderBase.createObject`, so a builder cannot be
+// finished by hand; `StartupEvents.registry('gtceu:material', ...)` — the supported API on
+// GTCEu 7.0.2, and the 1.20.1 wiki's `GTCEuStartupEvents.registry` does not exist here —
+// reaches KubeJS about 340ms after `CommonInit` has closed the registry and generated the
+// per-material items, and is rejected with `IllegalStateException: Materials cannot be
+// registered in the PostMaterialEvent (or after)`.
+//
+// That exception used to kill the whole kubejs mod container, which broke resource loading,
+// which left FTB Quests with no theme file and crashed it on an empty shape map — a stack
+// trace naming a mod with nothing to do with the cause. Mod ordering is not the problem and
+// is not worth re-investigating: gtceu declares kubejs `ordering = "AFTER"` and the order is
+// already kubejs -> gtceu -> gcyr.
+//
+// Scrap ships as data instead, read by the GCyR fork from inside the material window:
+//
+//     kubejs/data/planetaryfactory/gt_materials/scrap.json
+//
+// Dust and nothing else. An ore variant would put a scrap *ore block* in the registry,
+// which is the block a future reader finds and assumes is missing its worldgen — on the
+// one body whose defining property is having no ore (ADR-0009). The Bedrock Ore Miner does
+// not need one: its drop chain falls through configured-prefix, crushed, gem and ore to
+// dust before giving up. The icon set is ROUGH rather than DULL because scrap should read
+// as broken debris in an input bus rather than as a processed powder. JSON holds no
+// comments, which is why that reasoning lives here.
+//
+// See ADR-0003 for why the loader belongs to the fork.
+
 // Every Java class this script needs is loaded *inside* the callback that uses it.
 // KubeJS startup scripts share one JavaScript scope, so a top-level `const` here is a
 // global: worldgen_layers.js already declares ResourceLocation, and a second declaration
 // is a redeclaration error that stops whichever script loads second — the failure is
 // reported against the innocent script, not this one.
-//
-// `StartupEvents.registry('gtceu:material', ...)` is the supported API on GTCEu 7.0.2 and
-// the only one that works: a material can only be finished from inside this event.
-// GregTech hides `Material.Builder.buildAndRegister` from scripts with `@HideFromJS`, and
-// KubeJS hides `BuilderBase.createObject`, so there is no way to build one earlier by
-// hand. The 1.20.1 wiki's `GTCEuStartupEvents.registry('gtceu:material', ...)` does not
-// exist here either — 7.0.2's GTCEuStartupEvents group offers only materialIconInfo,
-// worldGenLayers, materialModification and craftingComponents.
-//
-// KNOWN DEFECT: in this pack that event currently fires too late. GregTech closes its
-// material registry in `CommonInit.onRegisterEarly` — `MaterialRegistry.close()` followed
-// by `PostMaterialEvent` — and that close lands before KubeJS's turn on the
-// `gtceu:material` RegisterEvent, so this registration is rejected with
-// `IllegalStateException: Materials cannot be registered in the PostMaterialEvent (or
-// after)`. That exception kills the whole kubejs mod container, which breaks resource
-// loading, which leaves FTB Quests with no theme file and crashes it on an empty shape
-// map — a stack trace that points at a mod with nothing to do with the cause. GregTech's
-// own mods.toml declares kubejs with `ordering = "AFTER"`, so KubeJS is supposed to get
-// this event first; the fix belongs at that ordering, not in this script.
-StartupEvents.registry('gtceu:material', (event) => {
-  const MaterialIconSet = Java.loadClass(
-    'com.gregtechceu.gtceu.api.material.material.info.MaterialIconSet');
-
-  // Dust and nothing else. An ore variant would put a scrap *ore block* in the
-  // registry, which is the block a future reader finds and assumes is missing its
-  // worldgen — on the one body whose defining property is having no ore (ADR-0009).
-  // The Bedrock Ore Miner does not need one: its drop chain falls through
-  // configured-prefix, crushed, gem and ore to dust before giving up.
-  event.create('planetaryfactory:scrap')
-    .dust()
-    .color(0x8A6A4F)
-    .secondaryColor(0x4E3A2A)
-    // Rough, not dull: scrap should read as broken debris in an input bus rather
-    // than as a processed powder.
-    .iconSet(MaterialIconSet.ROUGH);
-});
-
 GTCEuStartupEvents.materialModification(() => {
   const DustProperty = Java.loadClass(
     'com.gregtechceu.gtceu.api.material.material.properties.DustProperty');
