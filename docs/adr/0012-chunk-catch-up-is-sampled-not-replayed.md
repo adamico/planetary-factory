@@ -48,3 +48,30 @@ of Decay that can be tested without a world.
 
 Per-chunk timestamps become save data. Once shipped, changing the catch-up model means either
 migrating that data or accepting that every chunk catches up wrongly once.
+
+## Amended after building it
+
+Two claims above did not survive contact with the implementation, both in the direction of the
+design being simpler than expected.
+
+**There are not two implementations.** This ADR's stated surprise — that the sweep path and the
+catch-up path compute the same thing by different means and share no code — is not what got built.
+The number of stages an item advances in `t` passes is exactly `Binomial(t, p)` capped at the stages
+it has left, because each pass is one independent Bernoulli trial. An ordinary sweep is that same
+formula at `t = 1`. So the sweep *is* the catch-up, called with one pass, and there is one code path
+to be wrong rather than two to keep in agreement. The replay-agreement test is still worth having,
+but it now guards a closed form against its own definition rather than guarding two rival
+implementations against each other.
+
+**The cap is the saturation point, not the nominal lifetime.** "Capped at the item's full four-stage
+lifetime" is not quite right: at exactly its nominal lifetime an Erlang-4 has only finished about
+57% of the time, so capping there would leave a large fraction of items short of Spoilage and make
+the cap observable as a wrong answer. The cap is instead the elapsed time at which the chance of an
+item still being short of Spoilage drops below 1e-12, found by binary search per probability. It is
+a bounded constant a few multiples of the lifetime, so the consequence this ADR cares about — that
+an eight-hour absence costs no more than a four-minute one — holds exactly as stated.
+
+**The coefficient of variation is `sqrt(1 - p) / 2`, not 0.5.** 0.5 is that expression's small-`p`
+limit, and it is close enough for the slow materials. The one-minute bacteria, at `p = 0.1`, sit at
+0.474. The test asserts the exact form; the round number in ADR 0010 is a good enough summary for
+prose and would have been a false failure in a test.

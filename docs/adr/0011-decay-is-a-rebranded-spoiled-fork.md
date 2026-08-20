@@ -87,3 +87,39 @@ at all, which is exactly the state this ticket ships in.
 
 The upstream Overworld-gate defect affects anyone using Spoiled with a dimension mod. A config-gated
 fix is drafted at `docs/upstream/spoiled-dimension-gate.md`, not filed.
+
+## Amended after building it
+
+The fork exists. It is a clone of `Mrbysco/Spoiled` at branch `multi/1.21`, rebranded to
+`respoiled` and committed on a branch named `decay` at `../respoiled-src`, beside `gcyr-src`
+exactly as ADR 0001 places that one. The jar is built manually and installed to the gitignored
+`mods/`. **The personal GitHub fork has not been created yet** — that step needs a human, and until
+it exists the work lives only in the local clone.
+
+Four things the diff turned out to involve that this ADR did not anticipate.
+
+**`spoilRate` was seconds, not ticks.** Upstream's config value is multiplied by twenty before use,
+so its default of 30 is a sweep every 600 ticks, not every 30. Every shelf life in
+`docs/research/spoilage.md` is derived at thirty ticks per pass, so left alone the whole table would
+have run twenty times slow — bacteria would take twenty minutes rather than one. Decay reads the
+value as ticks. This is the kind of unit error that produces a mechanic that merely feels wrong
+rather than one that visibly breaks, and it was found by writing the conversion down, not by testing.
+
+**The Java package stays `com.mrbysco.spoiled`.** Only the mod ID, namespace and display name become
+`respoiled`. The package is invisible to players and to datapacks, and renaming it would put a
+diff on every single file in the fork, which is precisely the cost this ADR elsewhere works to
+avoid. The recipe type a pack author types is `respoiled:spoil_recipe`, which is what the naming
+decision was actually about.
+
+**Fabric and REI are gone.** Upstream is a three-module multiloader project. This pack is NeoForge,
+so the Fabric module and the REI integrations that existed only to serve it are deleted outright.
+Deleting a module is also among the cheapest things to carry across a rebase.
+
+**The freshness ladder is derived, not declared.** Nothing tells the engine that four items form a
+chain. It follows each spoil recipe's result to that result's own recipe at reload, which means the
+four-stage structure is a property of the datapack KubeJS writes, and a chain of three or five
+works without the engine caring. A chain that loops back on itself is an authoring mistake that
+gets a log line and a truncation rather than an infinite loop.
+
+**Still outstanding from the diff above.** Item 7, the two digital-storage mixins, and item 8, entity
+results, are not implemented. Neither blocks the engine from running; both are tracked on the issue.
