@@ -1,5 +1,5 @@
 {
-  "_comment": "Ignus generates on GCyR's orphaned Venus stone (ADR-0008). The blocks stay; their names do not — no player sees the name of a body this pack deleted.",
+  "_comment": "Bodies generate on GCyR's orphaned stone (ADR-0008): Ignus on Venus rock, Electro on Martian rock. The blocks stay; their names do not — no player sees the name of a body this pack deleted.",
 
   "tagprefix.venus": "Ignean %s Ore",
 
@@ -13,5 +13,21 @@
   "block.gcyr.venus_sand": "Ignean Sand",
   "block.gcyr.venusian_regolith": "Ignean Regolith",
   "block.gcyr.venus_marker": "Ignus",
-  "level.gcyr.venus": "Ignus"
+  "level.gcyr.venus": "Ignus",
+
+  "_comment_electro": "Electro registers no ore veins, so tagprefix.mars names a block that never generates — it is overridden anyway, because the block exists in the registry and the creative menu shows it.",
+
+  "tagprefix.mars": "Electran %s Ore",
+
+  "block.gcyr.martian_rock": "Electran Rock",
+  "block.gcyr.martian_rock_slab": "Electran Rock Slab",
+  "block.gcyr.martian_rock_stairs": "Electran Rock Stairs",
+  "block.gcyr.martian_rock_button": "Electran Rock Button",
+  "block.gcyr.martian_cobblestone": "Cobbled Electran Rock",
+  "block.gcyr.martian_cobblestone_slab": "Cobbled Electran Rock Slab",
+  "block.gcyr.martian_cobblestone_stairs": "Cobbled Electran Rock Stairs",
+  "block.gcyr.mars_regolith": "Electran Regolith",
+  "block.gcyr.mars_marker": "Electro",
+  "level.gcyr.mars": "Electro",
+  "material.gcyr.martian_rock_dust": "Electran Rock"
 }

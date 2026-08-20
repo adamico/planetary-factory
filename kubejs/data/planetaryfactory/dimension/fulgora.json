@@ -1,11 +1,48 @@
 {
-  "type": "planetaryfactory:placeholder_surface",
+  "type": "planetaryfactory:electro",
   "generator": {
     "type": "minecraft:noise",
-    "settings": "minecraft:overworld",
+    "settings": "planetaryfactory:electro",
     "biome_source": {
-      "type": "minecraft:fixed",
-      "biome": "minecraft:plains"
+      "type": "minecraft:multi_noise",
+      "biomes": [
+        {
+          "biome": "planetaryfactory:electro_scrap_plateau",
+          "parameters": {
+            "temperature": 0.2,
+            "humidity": -0.8,
+            "continentalness": 0.1,
+            "erosion": 0.4,
+            "weirdness": -0.4,
+            "depth": 0,
+            "offset": 0
+          }
+        },
+        {
+          "biome": "planetaryfactory:electro_barren_plateau",
+          "parameters": {
+            "temperature": 0.2,
+            "humidity": -0.8,
+            "continentalness": 0.8,
+            "erosion": -0.2,
+            "weirdness": 0.2,
+            "depth": 0,
+            "offset": 0
+          }
+        },
+        {
+          "biome": "planetaryfactory:electro_oil_ocean",
+          "parameters": {
+            "temperature": 0.2,
+            "humidity": -0.8,
+            "continentalness": -0.8,
+            "erosion": 0.6,
+            "weirdness": 0,
+            "depth": 0,
+            "offset": 0
+          }
+        }
+      ]
     }
   }
 }

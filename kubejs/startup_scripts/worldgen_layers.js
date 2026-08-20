@@ -33,6 +33,19 @@ const BODIES = [
     icon: 'gcyr:venus_rock',
     name: 'level.planetaryfactory.vulcanus',
   },
+  {
+    // Electro registers no ore veins at all (ADR-0009), so nothing this layer
+    // matches ever places an ore. It exists anyway: the layer is what gives the
+    // body a tab in GregTech's prospecting tooling, and a player who prospects
+    // Electro and is told "nothing here" has learned the design. A body with no
+    // layer would instead be told nothing at all, which reads as a bug.
+    layer: 'electro_rock',
+    stone: 'gcyr:martian_rock',
+    dimension: 'planetaryfactory:fulgora',
+    tier: 2,
+    icon: 'gcyr:martian_rock',
+    name: 'level.planetaryfactory.fulgora',
+  },
 ];
 
 const levelKey = (id) => ResourceKey.create(Registries.DIMENSION, ResourceLocation.parse(id));

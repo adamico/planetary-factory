@@ -1,0 +1,17 @@
+{
+  "world": "planetaryfactory:fulgora",
+  "stars": {
+    "fancy_count": 0,
+    "fast_count": 0,
+    "colored_stars": false,
+    "daylight_visible": false
+  },
+  "sunset_color": "none",
+  "dimension_effects": {
+    "type": "none"
+  },
+  "cloud_effects": "none",
+  "weather_effects": "none",
+  "horizon_angle": 0,
+  "sky_objects": []
+}

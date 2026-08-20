@@ -9,5 +9,8 @@
   "level.planetaryfactory.aquilo": "Gelida",
   "level.planetaryfactory.shattered_planet": "Atlantis",
   "biome.planetaryfactory.ignus_barren_plains": "Ignean Barrens",
-  "biome.planetaryfactory.ignus_eroded_plains": "Ignean Flats"
+  "biome.planetaryfactory.ignus_eroded_plains": "Ignean Flats",
+  "biome.planetaryfactory.electro_scrap_plateau": "Electran Scrapfields",
+  "biome.planetaryfactory.electro_barren_plateau": "Electran Highlands",
+  "biome.planetaryfactory.electro_oil_ocean": "Oil Sea"
 }
