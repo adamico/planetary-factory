@@ -1,0 +1,25 @@
+{
+    "weight": 80,
+    "size": 10,
+    "yield": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 48,
+        "max_inclusive": 96
+    },
+    "depletion_amount": 1,
+    "depletion_chance": 20,
+    "depleted_yield": 12,
+    "materials": [
+        {
+            "material": "gtceu:coal",
+            "weight": 5
+        },
+        {
+            "material": "gtceu:sulfur",
+            "weight": 1
+        }
+    ],
+    "dimension_filter": [
+        "planetaryfactory:vulcanus"
+    ]
+}

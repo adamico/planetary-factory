@@ -56,6 +56,34 @@ TERRA_VEIN_WEIGHTS = {
     "olivine": 10,        #  20
 }
 
+# gtceu vein id -> materials Terra gives up, because another body claims them under
+# ADR-0007. Weights alone cannot express this: a material carried as a dike's rarest
+# block is still a material the starter body supplies.
+TERRA_VEIN_MATERIAL_REMOVALS = {
+    "lapis": ["gtceu:calcite"],  # Ignus's, and the pack's only source of it
+}
+
+
+def drop_materials(vein, materials):
+    """Remove materials from a vein's generator, whichever generator it uses."""
+    dropped = 0
+    generator = vein["generator"]
+    if "blocks" in generator:
+        keep = [b for b in generator["blocks"] if b["block"] not in materials]
+        dropped += len(generator["blocks"]) - len(keep)
+        generator["blocks"] = keep
+    for key in ("ore_blocks", "rare_blocks"):
+        if key in generator:
+            keep = [b for b in generator[key] if b["block"] not in materials]
+            dropped += len(generator[key]) - len(keep)
+            generator[key] = keep
+    for pattern in generator.get("layer_patterns", []):
+        for entry in pattern:
+            keep = [t for t in entry["targets"] if t not in materials]
+            dropped += len(entry["targets"]) - len(keep)
+            entry["targets"] = keep
+    return dropped
+
 
 def main():
     OUT_DIR.mkdir(parents=True, exist_ok=True)
@@ -68,6 +96,10 @@ def main():
             if "minecraft:overworld" not in vein["dimension_filter"]:
                 raise SystemExit(f"{vein_id} is not an overworld vein — check the table")
             vein["weight"] = weight
+            for material in TERRA_VEIN_MATERIAL_REMOVALS.get(vein_id, []):
+                if not drop_materials(vein, {material}):
+                    raise SystemExit(
+                        f"{vein_id} no longer carries {material} — drop it from the table")
             with open(OUT_DIR / f"{vein_id}.json", "w") as out:
                 json.dump(vein, out, indent=4, sort_keys=True)
                 out.write("\n")

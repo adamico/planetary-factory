@@ -114,6 +114,20 @@
             "gtceu:lithium"
           ],
           "depleted_yield_at_least": 1
+        },
+        "planetaryfactory:ignus_calcite_deposit": {
+          "materials": [
+            "gtceu:calcite",
+            "gtceu:apatite"
+          ],
+          "depleted_yield_at_least": 1
+        },
+        "planetaryfactory:ignus_coal_deposit": {
+          "materials": [
+            "gtceu:coal",
+            "gtceu:sulfur"
+          ],
+          "depleted_yield_at_least": 1
         }
       },
       "bedrock_fluids": {

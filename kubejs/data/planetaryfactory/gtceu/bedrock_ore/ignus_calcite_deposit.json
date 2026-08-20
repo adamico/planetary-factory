@@ -1,0 +1,25 @@
+{
+    "weight": 90,
+    "size": 10,
+    "yield": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 48,
+        "max_inclusive": 96
+    },
+    "depletion_amount": 1,
+    "depletion_chance": 20,
+    "depleted_yield": 12,
+    "materials": [
+        {
+            "material": "gtceu:calcite",
+            "weight": 5
+        },
+        {
+            "material": "gtceu:apatite",
+            "weight": 2
+        }
+    ],
+    "dimension_filter": [
+        "planetaryfactory:vulcanus"
+    ]
+}
