@@ -107,3 +107,4 @@ observable_announce
 # Per-save state, keyed by world/player UUID
 gtceu/prospection_cache/
 config/chunky/tasks/
+config/emi.css
