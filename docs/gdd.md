@@ -206,16 +206,55 @@ GCyR ships four satellite types, all adopted:
   have not been enumerated.
 - **Per-planet Vanguard Kit variants.** Deferred to a later upgrade tier.
 
+## 9. Resource substitution policy
+
+Per-body content is drawn from `docs/scratch/planets.md`, a scratch transcription of Factorio's own
+resource lists organised under Factorio's names. Every resource named there is resolved by this rule,
+applied in order:
+
+1. **An existing GregTech material.** Always preferred — the material system supplies dusts, plates,
+   fluids, ore variants and recipe integration for free.
+2. **A Mekanism or Create equivalent**, where GregTech has none.
+3. **A custom KubeJS material**, only where the puzzle depends on the thing existing separately from
+   anything that already exists.
+
+GregTech already covers most of the source document: `tungsten`, `scheelite`, `calcite`, `lithium`,
+`fluorine`, `ammonia`, `holmium`, `sulfuric_acid`, `apatite`, `rock_salt` and `salt_water` all exist
+as materials. That list is recorded here so the next reader does not re-derive it. Scrap on Electro is
+the clearest candidate for tier 3, its whole role being to be a distinct thing that recycles into a
+spread of outputs.
+
+Each body ticket argues only about its own exceptions to this rule.
+
+Save compatibility is not a design constraint for this pack. Worlds under `saves/` are disposable test
+state; where a change is only observable in a fresh world that is a testing fact, not a reason to
+defer it.
+
 ## Delivery sequence
 
-Specs are cut per slice from this document, in this order:
+Specs are cut per slice from this document, in this order. Bodies land one at a time, each finished
+before the next, and each body is two tickets: a **`Body:`** ticket delivers terrain, stone, ore
+veins, fluid deposits, surface indicators, dimension marker and sky — everything that makes arriving
+there complete — and a **`Puzzle:`** ticket, cut after its body ships, delivers that body's processing
+chains, machine restrictions and craft gating from `docs/scratch/planets.md`.
 
 1. **Planet definitions** — six bodies, IDs, lang files. Blocks the space stack.
-2. **Ore gen** - planet specific ore generation
-3. **Resource unification** - using AlmostUnified
-4. **Tech and recipe gating** - using kubejs
-5. **Personal Assembler** — plus the cross-mod recipe audit. Largely independent.
-6. **Emission** — per-chunk scoring, decay, diffusion.
-7. **Overseer loop** — Command Center, Cryo-Pod, Dormant Siege. Depends on Emission and Sapros.
-8. **Cargo terminals** — Launch/Receiving/Drop Hatch as GT machines, plus the Flight timer model.
-9. **Vanguard Kit** — arrival intercept, beachhead paste, Gateway Flag.
+2. **Body: Terra** — ore layout reweighted for the early recipes, a bedrock deposit for GregTech's
+   common base materials, vanilla ores untouched. Establishes the registry test seam every later body
+   extends by fixture.
+3. **Body: Ignus** — carries the scaffolding: the first custom stone, worldgen layer and noise
+   settings, so every body after it is content against a proven pattern.
+4. **Body: Electro** — no natural veins by design; hand-mined surface ruins and a bedrock scrap
+   deposit.
+5. **Research: spoilage** — how this pack implements decay on industrial intermediates. Blocks Sapros,
+   because specifying it first would be inventing the answer rather than finding it.
+6. **Body: Sapros** — cut once the spoilage research closes, and not before.
+7. **Body: Gelida** — the last body before the endgame; fluids and no solid ore.
+8. **`Puzzle:` tickets** — one per body, each sequenced after its own body ships.
+9. **Resource unification** — using AlmostUnified.
+10. **Tech and recipe gating** — using KubeJS.
+11. **Personal Assembler** — plus the cross-mod recipe audit. Largely independent.
+12. **Emission** — per-chunk scoring, decay, diffusion.
+13. **Overseer loop** — Command Center, Cryo-Pod, Dormant Siege. Depends on Emission and Sapros.
+14. **Cargo terminals** — Launch/Receiving/Drop Hatch as GT machines, plus the Flight timer model.
+15. **Vanguard Kit** — arrival intercept, beachhead paste, Gateway Flag.
