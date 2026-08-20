@@ -20,7 +20,8 @@ const DustProperty = Java.loadClass(
   'com.gregtechceu.gtceu.api.material.material.properties.DustProperty');
 const MaterialIconSet = Java.loadClass(
   'com.gregtechceu.gtceu.api.material.material.info.MaterialIconSet');
-const GTMaterials = Java.loadClass('com.gregtechceu.gtceu.data.material.GTMaterials');
+// GTMaterials is already a KubeJS global binding; declaring it here is a redeclaration
+// error that takes the whole startup script down with it.
 
 StartupEvents.registry('gtceu:material', (event) => {
   // Dust and nothing else. An ore variant would put a scrap *ore block* in the

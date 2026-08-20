@@ -16,8 +16,8 @@ StartupEvents.registry('block', (event) => {
   // the situation this block exists to rescue.
   event.create('planetaryfactory:scrap_pile')
     .displayName('Scrap Pile')
-    .textureAll('gcyr:block/mars_regolith')
-    .soundType('gravel')
+    .texture('gcyr:block/mars_regolith')
+    .gravelSoundType()
     .hardness(0.6)
     .resistance(0.6)
     .requiresTool(false)
@@ -27,8 +27,8 @@ StartupEvents.registry('block', (event) => {
   // source of holmium in the pack.
   event.create('planetaryfactory:fulgorite')
     .displayName('Fulgorite')
-    .textureAll('gcyr:block/martian_rock')
-    .soundType('glass')
+    .texture('gcyr:block/martian_rock')
+    .glassSoundType()
     .hardness(1.5)
     .resistance(1.5)
     .requiresTool(false)
