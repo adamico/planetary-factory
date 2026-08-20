@@ -1,0 +1,88 @@
+{
+  "_comment": [
+    "Expectations for the automated worldgen check. Add a body by adding an entry",
+    "under 'bodies' \u2014 the harness in scripts/worldgen-check.py needs no change.",
+    "See docs/testing/worldgen-registry-check.md."
+  ],
+  "bodies": {
+    "terra": {
+      "dimension": "minecraft:overworld",
+      "ore_veins": {
+        "gtceu:iron": {
+          "weight": 160,
+          "layer": "stone"
+        },
+        "gtceu:copper": {
+          "weight": 140,
+          "layer": "deepslate"
+        },
+        "gtceu:coal": {
+          "weight": 130,
+          "layer": "stone"
+        },
+        "gtceu:cassiterite": {
+          "weight": 90,
+          "layer": "stone"
+        },
+        "gtceu:copper_tin": {
+          "weight": 70,
+          "layer": "stone"
+        },
+        "planetaryfactory:sphalerite": {
+          "weight": 70,
+          "layer": "stone"
+        },
+        "gtceu:galena": {
+          "weight": 60,
+          "layer": "stone"
+        },
+        "gtceu:magnetite": {
+          "weight": 60,
+          "layer": "stone"
+        },
+        "gtceu:nickel": {
+          "weight": 55,
+          "layer": "stone"
+        },
+        "gtceu:mica": {
+          "weight": 10,
+          "layer": "deepslate"
+        },
+        "gtceu:olivine": {
+          "weight": 10,
+          "layer": "deepslate"
+        }
+      },
+      "bedrock_ores": {
+        "planetaryfactory:terra_ferrous_deposit": {
+          "materials": [
+            "gtceu:iron",
+            "gtceu:nickel"
+          ],
+          "depleted_yield_at_least": 1
+        },
+        "planetaryfactory:terra_cupriferous_deposit": {
+          "materials": [
+            "gtceu:copper",
+            "gtceu:tin",
+            "gtceu:zinc"
+          ],
+          "depleted_yield_at_least": 1
+        },
+        "planetaryfactory:terra_polymetallic_deposit": {
+          "materials": [
+            "gtceu:lead",
+            "gtceu:silver",
+            "gtceu:sulfur"
+          ],
+          "depleted_yield_at_least": 1
+        }
+      },
+      "forbidden_ore_veins": [
+        "gtceu:scheelite",
+        "gtceu:naquadah",
+        "gtceu:sulfur"
+      ]
+    }
+  }
+}

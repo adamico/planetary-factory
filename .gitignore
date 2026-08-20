@@ -108,3 +108,6 @@ observable_announce
 gtceu/prospection_cache/
 config/chunky/tasks/
 config/emi.css
+
+# Python bytecode from the test harness
+__pycache__/

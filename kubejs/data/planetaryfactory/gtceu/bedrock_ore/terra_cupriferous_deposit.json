@@ -1,0 +1,29 @@
+{
+    "weight": 35,
+    "size": 6,
+    "yield": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 24,
+        "max_inclusive": 48
+    },
+    "depletion_amount": 1,
+    "depletion_chance": 20,
+    "depleted_yield": 4,
+    "materials": [
+        {
+            "material": "gtceu:copper",
+            "weight": 5
+        },
+        {
+            "material": "gtceu:tin",
+            "weight": 2
+        },
+        {
+            "material": "gtceu:zinc",
+            "weight": 1
+        }
+    ],
+    "dimension_filter": [
+        "minecraft:overworld"
+    ]
+}
