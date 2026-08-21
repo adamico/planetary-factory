@@ -1,0 +1,142 @@
+{
+	default_hide_dependency_lines: false
+	default_quest_shape: ""
+	filename: "basics"
+	group: "245010F6A7F20B92"
+	id: "2AA08F08F774E207"
+	images: [ ]
+	order_index: 0
+	quest_links: [ ]
+	quests: [
+		{
+			id: "7B411FE8E7239FC1"
+			tasks: [{
+				id: "173C1F98B156DFCB"
+				item: { count: 1, id: "gtceu:lp_steam_solid_boiler" }
+				type: "item"
+			}]
+			x: -1.0d
+			y: 1.0d
+		}
+		{
+			id: "7CBBCF698A18B194"
+			tasks: [{
+				id: "7539A0B35152AEF2"
+				item: { count: 1, id: "gtceu:bronze_plate" }
+				type: "item"
+			}]
+			x: -3.0d
+			y: 2.0d
+		}
+		{
+			id: "046E6D86CEE899E9"
+			tasks: [{
+				id: "1C60E3C540FB78B4"
+				item: { count: 1, id: "mekanism:dust_bronze" }
+				type: "item"
+			}]
+			x: -4.5d
+			y: 2.0d
+		}
+		{
+			id: "0EFB94AE9EF50159"
+			tasks: [{
+				id: "237DB7E1B93E6E4D"
+				item: { components: { "ftbfiltersystem:filter": "item_tag(c:tools/mortar)" }, count: 1, id: "ftbfiltersystem:smart_filter" }
+				type: "item"
+			}]
+			x: -5.5d
+			y: 2.0d
+		}
+		{
+			id: "6B109148171DE199"
+			tasks: [{
+				id: "1E54DC1B400B514B"
+				item: { count: 1, id: "minecraft:copper_ingot" }
+				type: "item"
+			}]
+			x: -5.5d
+			y: 1.0d
+		}
+		{
+			id: "511863ADA487BB10"
+			tasks: [{
+				id: "73023B86D5D7DBBD"
+				item: { count: 1, id: "mekanism:ingot_tin" }
+				type: "item"
+			}]
+			x: -5.5d
+			y: 3.0d
+		}
+		{
+			id: "37BE879D7EA53392"
+			tasks: [{
+				id: "011592805E79D653"
+				item: { count: 1, id: "minecraft:iron_ingot" }
+				type: "item"
+			}]
+			x: -6.5d
+			y: 2.0d
+		}
+		{
+			id: "0AA5BF8B77BD962C"
+			tasks: [{
+				id: "484EEC314C9053C1"
+				item: { count: 1, id: "gtceu:lp_steam_miner" }
+				type: "item"
+			}]
+			x: -1.0d
+			y: 3.0d
+		}
+		{
+			id: "5AE8665120913EE6"
+			tasks: [{
+				id: "0ED1E6ECBEBAE73F"
+				item: { count: 1, id: "minecraft:diamond" }
+				type: "item"
+			}]
+			x: -5.5d
+			y: 4.0d
+		}
+		{
+			id: "42D38FA96D0DCC00"
+			tasks: [{
+				id: "431AF443A6562A73"
+				item: { components: { "ftbfiltersystem:filter": "item_tag(c:tools/hammer)" }, count: 1, id: "ftbfiltersystem:smart_filter" }
+				type: "item"
+			}]
+			x: -2.0d
+			y: -1.5d
+		}
+		{
+			id: "252750514746E080"
+			tasks: [{
+				id: "42A8BCE1E823C1FB"
+				item: { components: { "ftbfiltersystem:filter": "item_tag(c:tools/wrench)" }, count: 1, id: "ftbfiltersystem:smart_filter" }
+				type: "item"
+			}]
+			x: -3.0d
+			y: -1.5d
+		}
+		{
+			id: "2CE7F37CB5E74433"
+			tasks: [{
+				id: "3CE1869757BCF722"
+				item: { components: { "ftbfiltersystem:filter": "item_tag(c:tools/wire_cutter)" }, count: 1, id: "ftbfiltersystem:smart_filter" }
+				type: "item"
+			}]
+			x: -4.0d
+			y: -1.5d
+		}
+		{
+			id: "465D835F9BDC862D"
+			tasks: [{
+				id: "54F1B44A14BBC92D"
+				item: { count: 1, id: "gtceu:small_bronze_gear" }
+				type: "item"
+			}]
+			x: -2.0d
+			y: 2.0d
+		}
+	]
+}
