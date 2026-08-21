@@ -1,7 +1,5 @@
 package com.planetaryfactory.core;
 
-import java.util.function.Supplier;
-
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SaplingBlock;
@@ -37,7 +35,7 @@ public final class PFBlocks {
     }
 
     private static DeferredHolder<Block, SaplingBlock> sapling(String name, TreeGrower grower) {
-        Supplier<SaplingBlock> block = () -> new SaplingBlock(
+        return BLOCKS.register(name, () -> new SaplingBlock(
                 grower,
                 BlockBehaviour.Properties.of()
                         .mapColor(net.minecraft.world.level.material.MapColor.PLANT)
@@ -45,7 +43,6 @@ public final class PFBlocks {
                         .randomTicks()
                         .instabreak()
                         .sound(SoundType.GRASS)
-                        .pushReaction(net.minecraft.world.level.material.PushReaction.DESTROY));
-        return BLOCKS.register(name, () -> block.get());
+                        .pushReaction(net.minecraft.world.level.material.PushReaction.DESTROY)));
     }
 }

@@ -1,8 +1,16 @@
 {
+  "_comment": "No biome carries this yet, on purpose: Sapros's biomes are the body's ticket, and Yumako belongs in exactly one of them (green marshland for Yumako, red for Jellystem). Until then the feature is reachable by `/place feature`, which is how the trees are demonstrated in an existing world. The body adds a biome modifier; it does not redefine the tree.",
   "feature": "planetaryfactory:yumako_tree",
   "placement": [
-    { "type": "minecraft:in_square" },
-    { "type": "minecraft:heightmap", "heightmap": "OCEAN_FLOOR" },
-    { "type": "minecraft:biome" }
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "OCEAN_FLOOR"
+    },
+    {
+      "type": "minecraft:biome"
+    }
   ]
 }
