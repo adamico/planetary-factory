@@ -93,8 +93,11 @@ fix is drafted at `docs/upstream/spoiled-dimension-gate.md`, not filed.
 The fork exists. It is a clone of `Mrbysco/Spoiled` at branch `multi/1.21`, rebranded to
 `respoiled` and committed on a branch named `decay` at `../respoiled-src`, beside `gcyr-src`
 exactly as ADR 0001 places that one. The jar is built manually and installed to the gitignored
-`mods/`. **The personal GitHub fork has not been created yet** — that step needs a human, and until
-it exists the work lives only in the local clone.
+`mods/`.
+
+The personal fork is `adamico/respoiled` and the work is pushed to its `decay` branch. In the clone,
+`origin` is that fork and `upstream` is `Mrbysco/Spoiled`, so the rebase this ADR's consequences
+promise is `git fetch upstream && git rebase upstream/multi/1.21`.
 
 Four things the diff turned out to involve that this ADR did not anticipate.
 
