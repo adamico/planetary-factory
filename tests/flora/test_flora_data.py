@@ -58,6 +58,22 @@ def json_strings(node):
             yield from json_strings(value)
 
 
+def nested_uniform_providers(node):
+    """A uniform IntProvider is flat -- {"type","min_inclusive","max_inclusive"}. Wrapping the
+    bounds in a "value" object parses nowhere and fails the whole registry load, taking world
+    creation with it, so every worldgen file is swept rather than the ones we remember."""
+    if isinstance(node, dict):
+        if (str(node.get("type", "")).endswith("uniform")
+                and isinstance(node.get("value"), dict)
+                and "min_inclusive" in node["value"]):
+            yield node
+        for value in node.values():
+            yield from nested_uniform_providers(value)
+    elif isinstance(node, list):
+        for value in node:
+            yield from nested_uniform_providers(value)
+
+
 def main():
     blocks = mod_block_ids() | kubejs_ids(KUBEJS_BLOCKS)
     items = kubejs_ids(KUBEJS_ITEMS)
@@ -178,6 +194,10 @@ def main():
             (DATA / f"worldgen/biome/{biome_name}.json").read_text())))
         check(not any(c.endswith("_tree") for c in carried),
               f"{biome_name} carries neither tree")
+
+    for path in sorted((DATA / "worldgen").rglob("*.json")):
+        check(not list(nested_uniform_providers(json.loads(path.read_text()))),
+              f"{path.relative_to(DATA)} states its uniform providers flat")
 
     lang = json.loads((ASSETS / "lang/en_us.json").read_text())
     for biome_name in ("gleba_dark_highlands", "gleba_midlands", "gleba_marshes",
