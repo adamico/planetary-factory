@@ -1,0 +1,6 @@
+{
+  "variants": {
+    "fruiting=false": { "model": "planetaryfactory:block/yumako_leaves" },
+    "fruiting=true": { "model": "planetaryfactory:block/yumako_leaves_fruiting" }
+  }
+}

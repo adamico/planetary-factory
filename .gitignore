@@ -10,6 +10,8 @@
 **/*.bak
 **/*.exe
 **/*.jar
+# ...except the Gradle wrapper, which is how the first-party mod is built.
+!gradle/wrapper/gradle-wrapper.jar
 **/*.zip
 # ...except the filter pack, which is pack content and must ship.
 !kubejs/data/*.zip
@@ -111,3 +113,8 @@ config/emi.css
 
 # Python bytecode from the test harness
 __pycache__/
+
+# Gradle build state for `mod/` (ADR-0014). The jar it produces lands in mods/, already ignored.
+.gradle/
+mod/build/
+build/

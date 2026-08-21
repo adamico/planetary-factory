@@ -49,6 +49,49 @@ _Avoid_: registry name, dimension key
 A GCyR space station: a player-expanded orbital factory that mines and processes asteroids. Static — it never travels.
 _Avoid_: space station, orbital base, ship, vessel
 
+### Sapros terrain
+
+Sapros's five biomes. Identifiers carry Factorio's terms so the mapping to the wiki stays free;
+display names are plain English. Transcribed in `docs/research/gleba-worldgen.md`.
+
+**Dark Highlands**:
+Sapros's elevated stone biome, and where its stone is found. Internal ID `gleba_dark_highlands`.
+_Avoid_: the highlands, mountains, uplands
+
+**Midlands**:
+Sapros's other elevated biome, distinguished from the Dark Highlands by carrying no shallow water. Internal ID `gleba_midlands`.
+_Avoid_: orange midlands, turquoise midlands, the plateau
+
+**Marshes**:
+Sapros's wetland biome, found beside its deep water lakes. Holds neither tree. Internal ID `gleba_marshes`.
+_Avoid_: blue marshes, the swamp, wetlands
+
+**Green Marshland**:
+The marshland where Yumako trees grow, and one of the two biomes bearing Stromatolites. Internal ID `gleba_green_marshland`.
+_Avoid_: the green biome, yumako forest, the swamp
+
+**Red Marshland**:
+The marshland where Jellystem grows, and the other biome bearing Stromatolites. Internal ID `gleba_red_marshland`.
+_Avoid_: the red biome, jellystem swamp, the swamp
+
+### Sapros flora
+
+**Yumako**:
+The fruit picked from a Yumako tree's fruiting leaves. Harvesting takes the fruit and leaves the tree standing; the leaves refruit. A spoilable material, so ultimately four items per Freshness.
+_Avoid_: yumako fruit, the orange fruit
+
+**Jellystem**:
+The tree of Sapros's red marshland, whose stem blocks yield Jellynut. Named for the tree, never for its fruit.
+_Avoid_: jelly tree, jelly stem, the jelly plant
+
+**Jellynut**:
+The material taken from a Jellystem's stem blocks — from the trunk, not picked from a canopy. A spoilable material. Distinct from Jelly, which is what a Biochamber makes from it.
+_Avoid_: jelly, jelly nut, jellyfruit
+
+**Stromatolite**:
+The surface-generated block of Sapros's two marshlands, mined by hand for iron or copper bacteria plus stone. It is not an ore and yields no metal directly; the bacteria become metal by Decaying.
+_Avoid_: ore patch, bacteria ore, iron ore, copper ore
+
 ### Establishing a presence
 
 **Orbital Starter Kit**:

@@ -1,3 +1,16 @@
+// Custom blocks registered from KubeJS.
+//
+// REGISTRATION BOUNDARY (ADR-0015). KubeJS, the `planetaryfactory_core` mod and
+// datapack JSON all register into the `planetaryfactory` namespace, so a block ID
+// does not tell you which one produced it. The ownership rule is:
+//
+//   flora and multi-block features -> the mod
+//   every other custom block/item  -> here
+//   biomes, features, loot, tags   -> datapack JSON
+//
+// Adding a block here that the mod already registers is a startup crash whose
+// message will not mention this file. Check `planetaryfactory_core` first.
+//
 // The two blocks a pickaxe meets on Electro.
 //
 // Neither is a GregTech ore block, and that is the point: Electro registers no ore
@@ -33,4 +46,90 @@ StartupEvents.registry('block', (event) => {
     .resistance(1.5)
     .requiresTool(false)
     .tagBlock('minecraft:mineable/pickaxe');
+});
+
+// Sapros's two trees, minus the two saplings: those are `planetaryfactory_core`'s, because
+// a sapling is a `SaplingBlock` backed by a `TreeGrower` and no scripting API here exposes
+// one (ADR-0014). Everything else the trees are made of is an ordinary block, so it is here.
+//
+// The trees' shapes are not here either. Each is one `minecraft:tree` configured feature under
+// `kubejs/data/planetaryfactory/worldgen/configured_feature/`, placed by worldgen and grown by
+// the sapling from that same definition, so a farmed tree cannot differ from a wild one.
+//
+// `minecraft:logs` and `minecraft:leaves` are what make Create's saw fell these trees and its
+// Deployer treat them as a canopy. They are load-bearing integration, not decoration.
+
+// Yumako's fruit is picked from the canopy, and the canopy is what carries the fruit: a real
+// blockstate property, regrown on random tick, taken by right-click. See
+// `kubejs/server_scripts/sapros_flora.js` for the picking, and the block's loot table for what
+// felling a fruiting canopy yields.
+const YUMAKO_FRUITING = Java.loadClass(
+  'net.minecraft.world.level.block.state.properties.BooleanProperty'
+).create('fruiting');
+
+StartupEvents.registry('block', (event) => {
+  event.create('planetaryfactory:yumako_log')
+    .displayName('Yumako Log')
+    .texture('planetaryfactory:block/yumako_log')
+    .soundType('wood')
+    .hardness(2.0)
+    .resistance(2.0)
+    .requiresTool(false)
+    .tagBlock('minecraft:logs')
+    .tagBlock('minecraft:logs_that_burn')
+    .tagBlock('minecraft:mineable/axe')
+    .tagItem('minecraft:logs')
+    .tagItem('minecraft:logs_that_burn');
+
+  event.create('planetaryfactory:yumako_leaves')
+    .displayName('Yumako Leaves')
+    .texture('planetaryfactory:block/yumako_leaves')
+    .soundType('grass')
+    .hardness(0.2)
+    .resistance(0.2)
+    .requiresTool(false)
+    .notSolid()
+    .renderType('cutout_mipped')
+    .property(YUMAKO_FRUITING)
+    .defaultState((state) => state.set(YUMAKO_FRUITING, false))
+    .randomTick((callback) => {
+      // One in eight ticks, an unfruited canopy block fruits again. A standing Yumako tree is
+      // therefore a renewable source and the farm loop is optional, not mandatory.
+      if (callback.block.properties.fruiting === 'true') {
+        return;
+      }
+      if (callback.random.nextInt(8) !== 0) {
+        return;
+      }
+      callback.block.set('planetaryfactory:yumako_leaves', { fruiting: 'true' });
+    })
+    .tagBlock('minecraft:leaves')
+    .tagBlock('minecraft:mineable/hoe')
+    .tagItem('minecraft:leaves');
+
+  event.create('planetaryfactory:jellystem_stem')
+    .displayName('Jellystem Stem')
+    .texture('planetaryfactory:block/jellystem_stem')
+    .soundType('wood')
+    .hardness(1.5)
+    .resistance(1.5)
+    .requiresTool(false)
+    .tagBlock('minecraft:logs')
+    .tagBlock('minecraft:logs_that_burn')
+    .tagBlock('minecraft:mineable/axe')
+    .tagItem('minecraft:logs')
+    .tagItem('minecraft:logs_that_burn');
+
+  event.create('planetaryfactory:jellystem_leaves')
+    .displayName('Jellystem Leaves')
+    .texture('planetaryfactory:block/jellystem_leaves')
+    .soundType('grass')
+    .hardness(0.2)
+    .resistance(0.2)
+    .requiresTool(false)
+    .notSolid()
+    .renderType('cutout_mipped')
+    .tagBlock('minecraft:leaves')
+    .tagBlock('minecraft:mineable/hoe')
+    .tagItem('minecraft:leaves');
 });

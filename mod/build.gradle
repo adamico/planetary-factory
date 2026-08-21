@@ -1,0 +1,61 @@
+plugins {
+    id 'java-library'
+    id 'net.neoforged.moddev' version '2.0.107'
+}
+
+version = mod_version
+group = maven_group
+base.archivesName = mod_id
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+
+neoForge {
+    version = project.neoforge_version
+
+    parchment {
+        mappingsVersion = project.parchment_mappings_version
+        minecraftVersion = project.parchment_minecraft_version
+    }
+
+    runs {
+        client { client() }
+        server { server(); programArgument '--nogui' }
+        gameTestServer {
+            type = 'gameTestServer'
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+        }
+    }
+
+    mods {
+        "$mod_id" {
+            sourceSet sourceSets.main
+        }
+    }
+}
+
+// `neoforge.mods.toml` is the one place a version string has to be interpolated;
+// everything else the mod knows lives in the pack's data, not in the jar.
+def modMetadata = [
+        mod_id              : mod_id,
+        mod_name            : mod_name,
+        mod_version         : mod_version,
+        minecraft_version   : minecraft_version,
+        loader_version_range: loader_version_range,
+        // The pack ships one NeoForge build; the mod refuses to load on an older one.
+        neoforge_version_range: "[${neoforge_version},)",
+]
+
+tasks.named('processResources', ProcessResources).configure {
+    inputs.properties modMetadata
+    filesMatching(['META-INF/neoforge.mods.toml']) {
+        expand modMetadata
+    }
+}
+
+// The pack loads jars from `mods/`, which is gitignored. Build straight into it so
+// `./gradlew build` is the whole install step.
+tasks.register('installToPack', Copy) {
+    dependsOn tasks.named('jar')
+    from tasks.named('jar')
+    into rootProject.file('mods')
+}

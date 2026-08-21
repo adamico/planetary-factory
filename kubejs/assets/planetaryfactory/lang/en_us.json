@@ -13,5 +13,7 @@
   "biome.planetaryfactory.electro_scrap_plateau": "Electran Scrapfields",
   "biome.planetaryfactory.electro_barren_plateau": "Electran Highlands",
   "biome.planetaryfactory.electro_oil_ocean": "Oil Sea",
-  "material.planetaryfactory.scrap": "Scrap"
+  "material.planetaryfactory.scrap": "Scrap",
+  "block.planetaryfactory.yumako_sapling": "Yumako Sapling",
+  "block.planetaryfactory.jellystem_sapling": "Jellystem Sapling"
 }

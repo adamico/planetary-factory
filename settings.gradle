@@ -1,0 +1,17 @@
+// The pack's first-party mod (ADR-0014). The pack itself is not a Gradle project;
+// this build exists solely to produce `planetaryfactory_core`'s jar.
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        maven { url = 'https://maven.neoforged.net/releases' }
+    }
+}
+
+plugins {
+    id 'org.gradle.toolchains.foojay-resolver-convention' version '0.8.0'
+}
+
+rootProject.name = 'planetaryfactory'
+
+include 'planetaryfactory_core'
+project(':planetaryfactory_core').projectDir = file('mod')
