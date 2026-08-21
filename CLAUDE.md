@@ -12,6 +12,12 @@ The five canonical triage roles, used verbatim as label strings. See `docs/agent
 
 Single-context — `CONTEXT.md` and `docs/adr/` at the repo root. See `docs/agents/domain.md`.
 
+### Testing policy
+
+Which check a feature warrants — and whether it warrants one at all — is decided by the claim the
+feature makes, not ad hoc per ticket. Six claims, six answers, and a content ticket names its check
+kind explicitly so that "no check" is a recorded decision. See `docs/testing/what-to-check.md`.
+
 ### Worldgen check
 
 `scripts/worldgen-check.py` launches a fresh world and asserts the loaded ore vein, bedrock

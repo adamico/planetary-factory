@@ -13,6 +13,13 @@ Issues and specs for this repo live as GitHub issues. Use the `gh` CLI for all o
 
 Infer the repo from `git remote -v` — `gh` does this automatically when run inside a clone.
 
+## The `## Checks` section
+
+An issue that changes pack content carries a `## Checks` section naming, one line per claim, what
+kind of check the work warrants — including the claims that warrant none, with the reason. Docs and
+process issues omit the section. `docs/testing/what-to-check.md` has the six claims and their
+answers; write the section from it rather than deciding afresh.
+
 ## Pull requests as a triage surface
 
 **PRs as a request surface: no.** _(Set to `yes` if this repo treats external PRs as feature requests; `/triage` reads this flag.)_
