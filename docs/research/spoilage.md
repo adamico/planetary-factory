@@ -106,7 +106,14 @@ Java. Registering four items does not.
 **Ticked — and the earlier draft's rejection of tick sweeps was wrong about the cause.**
 
 Spoiled's `SpoilHandler.onWorldTick` (`forge/.../handler/SpoilHandler.java:40`) runs on
-`LevelTickEvent.Post` every `spoilRate` game ticks, default 30 (`SpoiledConfig.java:72`). Each sweep
+`LevelTickEvent.Post` every `spoilRate` game ticks, default 30 (`SpoiledConfig.java:72`).
+
+> **Correction, found while building the fork.** Upstream's `spoilRate` is **seconds**, not ticks:
+> `SpoiledConfigCache.setSpoilRate` stores `value * 20L`, so the default of 30 sweeps every 600
+> ticks. Every pass count in this document — including the shelf-life table below and the
+> `bar_of_chocolate` worked example — assumes thirty *ticks* per pass. Our fork reads the config as
+> ticks precisely so those numbers hold, so the table is correct for Decay and wrong for upstream
+> Spoiled. Left uncorrected, the one-minute bacteria would have taken twenty minutes. See ADR 0011. Each sweep
 walks every ticking chunk's block entities, resolves `Capabilities.ItemHandler.BLOCK` on each, and
 then — the expensive part — for **every non-empty slot** calls `SpoilHelper.getSpoilRecipe`, which is
 `level.getRecipeManager().getRecipesFor(SPOIL_RECIPE_TYPE, new SingleRecipeInput(stack), level)`.
