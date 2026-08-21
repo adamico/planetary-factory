@@ -33,7 +33,10 @@ const BuiltInRegistryKeys = Java.loadClass('net.minecraft.core.registries.BuiltI
 const WorldGeneratorUtilities = Java.loadClass('com.gregtechceu.gtceu.api.worldgen.WorldGeneratorUtils');
 const RegistryKeys = Java.loadClass('net.minecraft.core.registries.Registries');
 
-const gamePath = (relative) => KubeJSPathConstants.GAMEDIR.resolve(relative);
+// Rhino cannot choose between Path.resolve(String) and Path.resolve(Path) from a JS
+// string, and the InternalError it raises is swallowed by the request guard -- so the
+// overload is named explicitly rather than left to overload resolution.
+const gamePath = (relative) => KubeJSPathConstants.GAMEDIR['resolve(java.lang.String)'](relative);
 
 // Sorted ids, so the fixture can be compared literally rather than order-sensitively.
 const dimensionIds = (levelKeys) => {
@@ -119,27 +122,48 @@ const dumpRegistries = (server) => {
 // simply never contains it. So the sample asks the generator itself, over a grid of quart
 // positions around the origin, through the same climate sampler worldgen uses. It reads no
 // chunks -- nothing here generates or loads terrain, which is what makes it affordable.
-const SAMPLE_RADIUS_QUARTS = 256;   // 1024 blocks either side of the origin
+// 4096 blocks either side of the origin. A narrower window reported Gleba's green marshland
+// as never generated: vegetation is sampled at xz_scale 0.25, which stretches the humidity
+// lobes wide enough that 1024 blocks can sit entirely inside one of them. The radius has to
+// clear a lobe, or the check invents failures.
+const SAMPLE_RADIUS_QUARTS = 1024;
 const SAMPLE_STEP_QUARTS = 8;       // every 32 blocks
 const SAMPLE_HEIGHTS_QUARTS = [4, 16, 24];   // y = 16, 64, 96
+
+// Rhino may expose a Java accessor as a property or as a method; read it either way.
+const beanValue = (object, name) => {
+  const value = object[name];
+  return typeof value === 'function' ? object[name]() : value;
+};
+
+// A level's dimension id, whether `dimension` hands back a ResourceKey or a ResourceLocation.
+const dimensionId = (level) => {
+  const dimension = beanValue(level, 'dimension');
+  const location = beanValue(dimension, 'location');
+  return String(location === undefined || location === null ? dimension : location);
+};
 
 const sampleBiomes = (server) => {
   const biomes = {};
   server.getAllLevels().forEach((level) => {
-    const generator = level.getChunkSource().getGenerator();
-    const source = generator.getBiomeSource();
-    const sampler = generator.climateSampler();
+    // Asked of the level rather than of the generator: ChunkGenerator.climateSampler() is
+    // not reachable through Rhino's remapper, and the level's own lookup needs no sampler.
+    // It reads a loaded chunk when there is one and falls through to the generator's biome
+    // source when there is not, so it still loads no terrain.
     const names = level.registryAccess().registryOrThrow(RegistryKeys.BIOME);
     const found = {};
     for (let x = -SAMPLE_RADIUS_QUARTS; x <= SAMPLE_RADIUS_QUARTS; x += SAMPLE_STEP_QUARTS) {
       for (let z = -SAMPLE_RADIUS_QUARTS; z <= SAMPLE_RADIUS_QUARTS; z += SAMPLE_STEP_QUARTS) {
         SAMPLE_HEIGHTS_QUARTS.forEach((y) => {
-          const key = names.getKey(source.getNoiseBiome(x, y, z, sampler).value());
+          const key = names.getKey(level.getNoiseBiome(x, y, z).value());
           if (key !== null) found[key.toString()] = true;
         });
       }
     }
-    biomes[level.dimension().location().toString()] = Object.keys(found).sort();
+    // Rhino exposes some accessors as bean properties and others as callables, and which
+    // one a given method gets is not ours to predict -- so both shapes are accepted, and
+    // whatever the chain yields is stringified at the end.
+    biomes[dimensionId(level)] = Object.keys(found).sort();
   });
   return biomes;
 };
@@ -149,6 +173,9 @@ const dumpRequested = () => {
   try {
     return KubeJsonIO.read(gamePath(REQUEST_FILE)) !== null;
   } catch (error) {
+    // A guard that swallows silently once hid a broken path resolve for the whole life of
+    // this check, so the reason the dump is skipped is always said out loud.
+    console.warn(`worldgen registry dump not requested: ${error}`);
     return false;
   }
 };
