@@ -1,8 +1,6 @@
 {
-  "_comment": "Bodies generate on GCyR's orphaned stone (ADR-0008): Ignus on Venus rock, Electro on Martian rock. The blocks stay; their names do not — no player sees the name of a body this pack deleted.",
-
+  "_comment": "Bodies generate on GCyR's orphaned stone (ADR-0008): Ignus on Venus rock, Electro on Martian rock. The blocks stay; their names do not \u2014 no player sees the name of a body this pack deleted.",
   "tagprefix.venus": "Ignean %s Ore",
-
   "block.gcyr.venus_rock": "Ignean Rock",
   "block.gcyr.venus_rock_slab": "Ignean Rock Slab",
   "block.gcyr.venus_rock_stairs": "Ignean Rock Stairs",
@@ -14,11 +12,8 @@
   "block.gcyr.venusian_regolith": "Ignean Regolith",
   "block.gcyr.venus_marker": "Ignus",
   "level.gcyr.venus": "Ignus",
-
-  "_comment_electro": "Electro registers no ore veins, so tagprefix.mars names a block that never generates — it is overridden anyway, because the block exists in the registry and the creative menu shows it.",
-
+  "_comment_electro": "Electro registers no ore veins, so tagprefix.mars names a block that never generates \u2014 it is overridden anyway, because the block exists in the registry and the creative menu shows it.",
   "tagprefix.mars": "Electran %s Ore",
-
   "block.gcyr.martian_rock": "Electran Rock",
   "block.gcyr.martian_rock_slab": "Electran Rock Slab",
   "block.gcyr.martian_rock_stairs": "Electran Rock Stairs",
@@ -29,5 +24,15 @@
   "block.gcyr.mars_regolith": "Electran Regolith",
   "block.gcyr.mars_marker": "Electro",
   "level.gcyr.mars": "Electro",
-  "material.gcyr.martian_rock_dust": "Electran Rock"
+  "material.gcyr.martian_rock_dust": "Electran Rock",
+  "_comment_sapros": "Sapros claims gcyr:mercury_rock, leaving gcyr:moon_stone unclaimed for Gelida. It registers no ore veins either (ADR-0016), so tagprefix.mercury names ore blocks that never generate -- overridden anyway, because they are in the creative menu.",
+  "tagprefix.mercury": "Saprine %s Ore",
+  "block.gcyr.mercury_rock": "Saprine Rock",
+  "block.gcyr.mercury_rock_slab": "Saprine Rock Slab",
+  "block.gcyr.mercury_rock_stairs": "Saprine Rock Stairs",
+  "block.gcyr.mercury_rock_button": "Saprine Rock Button",
+  "block.gcyr.mercury_cobblestone_slab": "Cobbled Saprine Rock Slab",
+  "block.gcyr.cobbled_mercury_rock_stairs": "Cobbled Saprine Rock Stairs",
+  "block.gcyr.mercury_marker": "Sapros",
+  "level.gcyr.mercury": "Sapros"
 }

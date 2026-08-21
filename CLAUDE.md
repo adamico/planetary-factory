@@ -20,9 +20,10 @@ fixture entry, not code. See `docs/testing/worldgen-registry-check.md`.
 
 ### Flora data check
 
-`tests/flora/test_flora_data.py` asserts Sapros's tree data is internally consistent — features,
-loot tables, blockstates, textures and lang against what is actually registered — with no game
-launch. Run it after any edit to the trees.
+`tests/flora/test_flora_data.py` asserts Sapros's tree and surface data are internally consistent
+— features, loot tables, blockstates, textures and lang against what is actually registered, plus
+which marshland carries which tree and that no stromatolite drops ore — with no game launch. Run it
+after any edit to the trees, the stromatolites or the five biomes.
 
 ### First-party mod
 

@@ -92,6 +92,14 @@ _Avoid_: jelly, jelly nut, jellyfruit
 The surface-generated block of Sapros's two marshlands, mined by hand for iron or copper bacteria plus stone. It is not an ore and yields no metal directly; the bacteria become metal by Decaying.
 _Avoid_: ore patch, bacteria ore, iron ore, copper ore
 
+**Ore Bacteria**:
+What a Stromatolite drops — Iron Bacteria or Copper Bacteria. A spoilable material whose Decay product is metal, which is the only way Sapros yields metal at all. Until the Decay engine ships it is inert (ADR-0016).
+_Avoid_: bacteria ore, ore culture, iron dust, raw ore
+
+**Saprine**:
+The adjective for anything of Sapros — the rock its ground is made of, and the ore variants that rock would carry if the body had any veins. Never Mercurian: the block is GCyR's orphan, the name is not (ADR-0008).
+_Avoid_: Mercurian, Gleban, Sapran
+
 ### Establishing a presence
 
 **Orbital Starter Kit**:

@@ -13,6 +13,11 @@
   "biome.planetaryfactory.electro_scrap_plateau": "Electran Scrapfields",
   "biome.planetaryfactory.electro_barren_plateau": "Electran Highlands",
   "biome.planetaryfactory.electro_oil_ocean": "Oil Sea",
+  "biome.planetaryfactory.gleba_dark_highlands": "Dark Highlands",
+  "biome.planetaryfactory.gleba_midlands": "Midlands",
+  "biome.planetaryfactory.gleba_marshes": "Marshes",
+  "biome.planetaryfactory.gleba_green_marshland": "Green Marshland",
+  "biome.planetaryfactory.gleba_red_marshland": "Red Marshland",
   "material.planetaryfactory.scrap": "Scrap",
   "block.planetaryfactory.yumako_sapling": "Yumako Sapling",
   "block.planetaryfactory.jellystem_sapling": "Jellystem Sapling"

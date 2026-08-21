@@ -1,0 +1,25 @@
+{
+  "world": "planetaryfactory:gleba",
+  "stars": {
+    "fancy_count": 1500,
+    "fast_count": 800,
+    "colored_stars": false,
+    "daylight_visible": false
+  },
+  "dimension_effects": {
+    "type": "colored_horizon",
+    "color": 9161573
+  },
+  "cloud_effects": "vanilla",
+  "weather_effects": "vanilla",
+  "horizon_angle": 0,
+  "sky_objects": [
+    {
+      "texture": "gcyr:textures/sky/sun.png",
+      "blending": true,
+      "render_type": "dynamic",
+      "scale": 26.0,
+      "rotation": [0.0, -90.0, 0.0]
+    }
+  ]
+}

@@ -26,7 +26,9 @@ Add an entry under `bodies` in `tests/worldgen/expected.json`. Nothing else chan
       "materials": ["gtceu:tungsten"], "depleted_yield_at_least": 1 } },
   "bedrock_fluids": { "gtceu:lava_deposit": {
       "fluid": "minecraft:lava", "depleted_yield_at_least": 1 } },
-  "forbidden_ore_veins": ["gtceu:iron"]
+  "forbidden_ore_veins": ["gtceu:iron"],
+  "worldgen_layer": "ignus_rock",
+  "biomes": ["planetaryfactory:ignus_barren_plains"]
 }
 ```
 
@@ -36,13 +38,25 @@ layer, that its weight is the expected one, and — the failure a codec cannot c
 layer it names actually covers that dimension. `forbidden_ore_veins` asserts the reverse: that
 a vein does *not* reach this body.
 
-An `ore_veins` object that is **present but empty** means something stronger than "no veins
-to check": it asserts the body is barren, and the check walks the *entire* loaded vein
-registry and fails if any vein at all reaches that dimension. That is the form a barren body
-needs, because a list of forbidden veins goes stale the moment another ticket adds one.
-`dimension_filter` is a required field on GregTech's ore vein codec, so a vein reaches a body
-only by naming it — there is no unfiltered vein that silently reaches everywhere. Electro
-uses this; see ADR-0009.
+An `ore_veins`, `bedrock_ores` or `bedrock_fluids` object that is **present but empty** means
+something stronger than "nothing to check": it asserts the body carries none of that kind of
+thing at all, and the check walks the *entire* loaded registry and fails if any entry reaches
+that dimension. That is the form a barren body needs, because a list of forbidden names goes
+stale the moment another ticket adds one. A vein whose `dimension_filter` is empty reaches
+nothing — GregTech matches a level against that set with `anyMatch` — so the walk sees it as
+reaching nowhere, which is the same answer the game gives. Electro asserts this of its veins
+(ADR-0009); Sapros asserts it of all three (ADR-0016).
+
+`worldgen_layer` asserts the body's layer loaded and covers its dimension. Named veins already
+imply that for the layer they name, so this field is for a body with no veins at all, whose
+layer nothing else would mention — and whose absence a player only discovers by prospecting.
+
+`biomes` lists biomes the body's generator must actually emit. This is not the same as being
+registered or being listed in a biome source: a biome parameter point that is closest to no
+point in the reachable noise space parses fine and generates nowhere, and no codec catches it.
+The dump answers it by sampling the generator's own biome source over a grid of quart positions
+around the origin, through the climate sampler worldgen itself uses — it loads no chunks, so
+it costs nothing. Sapros's five biomes are the reason it exists.
 
 Bedrock ore deposits are checked for presence, dimension,
 material set, and a depleted yield above zero; bedrock fluid deposits for presence,
@@ -86,7 +100,9 @@ at the start of each run and deleted at the end. A world persists the dimension 
 created with, so reusing one answers a question about the past. Everything the check reads is
 reloaded from the datapacks on every load.
 
-Regenerate the template when a body ticket adds a **dimension**: create a world in-game once,
+Changing a dimension's *generator* — its noise settings, its biome source, its biomes — needs no
+regeneration either; only the dimension list is persisted. Regenerate the template when a body
+ticket adds a **dimension**: create a world in-game once,
 copy its `level.dat` over the template, and note the change in the commit. Ore veins, deposits
 and layers need no regeneration — they are not persisted in the save.
 

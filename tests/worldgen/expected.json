@@ -176,6 +176,30 @@
       "forbidden_bedrock_fluids": [
         "gtceu:lava_deposit"
       ]
+    },
+    "sapros": {
+      "_comment": [
+        "Sapros is barren of veins and of both kinds of bedrock deposit, and all three empty",
+        "objects are assertions rather than omissions \u2014 the check walks the whole registry for",
+        "each. It differs from Electro's emptiness: Electro has no metal at all, where Sapros has",
+        "metal that arrives by Decaying a bacterium taken from a stromatolite (ADR-0016). Until the",
+        "Decay engine (#17) ships, that metal is unobtainable, and that is the design.",
+        "Stromatolites are placed features, not veins, so they are not checked here.",
+        "The five biomes are: a biome that parses but occupies unreachable noise space generates",
+        "nowhere, and only the generator can tell the two apart."
+      ],
+      "dimension": "planetaryfactory:gleba",
+      "worldgen_layer": "sapros_rock",
+      "biomes": [
+        "planetaryfactory:gleba_dark_highlands",
+        "planetaryfactory:gleba_midlands",
+        "planetaryfactory:gleba_marshes",
+        "planetaryfactory:gleba_green_marshland",
+        "planetaryfactory:gleba_red_marshland"
+      ],
+      "ore_veins": {},
+      "bedrock_ores": {},
+      "bedrock_fluids": {}
     }
   }
 }

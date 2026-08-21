@@ -29,3 +29,21 @@ StartupEvents.registry('item', (event) => {
     .displayName('Jellynut')
     .texture('planetaryfactory:item/jellynut');
 });
+
+// Sapros's ore bacteria, taken from a stromatolite by hand.
+//
+// These are not ore and they do not smelt. A bacterium becomes metal by spoiling into it,
+// which is the Decay engine's job (#17, ADR-0010) -- so on the day this body ships, Sapros
+// has metal in the ground and no way to hold it as metal. That gap is the design, recorded
+// in ADR-0016; the wrong fix is a smelting recipe.
+//
+// Fresh only, and under the id each will keep, exactly as the two fruits above.
+StartupEvents.registry('item', (event) => {
+  event.create('planetaryfactory:iron_bacteria_fresh')
+    .displayName('Iron Bacteria')
+    .texture('planetaryfactory:item/iron_bacteria');
+
+  event.create('planetaryfactory:copper_bacteria_fresh')
+    .displayName('Copper Bacteria')
+    .texture('planetaryfactory:item/copper_bacteria');
+});

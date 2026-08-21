@@ -21,6 +21,9 @@ compare = worldgen_check.compare
 
 IGNUS = "planetaryfactory:vulcanus"
 ELECTRO = "planetaryfactory:fulgora"
+SAPROS = "planetaryfactory:gleba"
+GREEN = "planetaryfactory:gleba_green_marshland"
+RED = "planetaryfactory:gleba_red_marshland"
 
 EXPECTED = {
     "bodies": {
@@ -41,6 +44,16 @@ EXPECTED = {
             "ore_veins": {},
             "bedrock_ores": {"planetaryfactory:electro_scrap_deposit": {
                 "materials": ["planetaryfactory:scrap"], "depleted_yield_at_least": 1}},
+        },
+        # A body barren of all three, whose layer is asserted directly because no vein
+        # names it, and whose biomes have to be emitted rather than merely registered.
+        "sapros": {
+            "dimension": SAPROS,
+            "worldgen_layer": "sapros_rock",
+            "biomes": [GREEN, RED],
+            "ore_veins": {},
+            "bedrock_ores": {},
+            "bedrock_fluids": {},
         },
     }
 }
@@ -67,7 +80,10 @@ GOOD = {
                               "dimensions": ["minecraft:overworld"]},
     },
     "worldgen_layers": {"ignus_rock": {"dimensions": [IGNUS]},
+                        "sapros_rock": {"dimensions": [SAPROS]},
                         "stone": {"dimensions": ["minecraft:overworld"]}},
+    "biomes": {SAPROS: [GREEN, RED, "planetaryfactory:gleba_marshes"],
+               IGNUS: ["planetaryfactory:ignus_barren_plains"]},
 }
 
 
@@ -109,6 +125,30 @@ CASES = [
      mutate(lambda d: d["ore_veins"].__setitem__(
          "planetaryfactory:electro_scrap", {"weight": 80, "layer": "electro_rock",
                                             "dimensions": [ELECTRO]})), 1),
+    # An empty dimension_filter is GregTech's "nowhere", and the barren walk has to read
+    # it the same way rather than as "everywhere" or as an entry it may skip.
+    ("a vein with an empty dimension filter leaves a barren body barren",
+     mutate(lambda d: d["ore_veins"].__setitem__(
+         "planetaryfactory:unfiltered", {"weight": 1, "layer": "sapros_rock",
+                                         "dimensions": []})), 0),
+    ("a bedrock ore deposit reaching a body asserted to have none fails",
+     mutate(lambda d: d["bedrock_ores"]["planetaryfactory:electro_scrap_deposit"]
+            ["dimensions"].append(SAPROS)), 1),
+    ("a bedrock fluid deposit reaching a body asserted to have none fails",
+     mutate(lambda d: d["bedrock_fluids"]["gtceu:oil_deposit"]["dimensions"]
+            .append(SAPROS)), 1),
+    # A layer nothing references is invisible until someone prospects the body.
+    ("a layer that did not load fails",
+     mutate(lambda d: d["worldgen_layers"].pop("sapros_rock")), 1),
+    ("a layer scoped away from its body fails",
+     mutate(lambda d: d["worldgen_layers"]["sapros_rock"]
+            .__setitem__("dimensions", ["gcyr:mercury"])), 1),
+    # The failure that made this fixture grow biomes: a biome that parses, is listed in the
+    # biome source, and is closest to no point in the noise space, so it generates nowhere.
+    ("a biome the generator never emits fails",
+     mutate(lambda d: d["biomes"][SAPROS].remove(RED)), 1),
+    ("a dimension with no biome sample at all fails",
+     mutate(lambda d: d["biomes"].pop(SAPROS)), 2),
     ("a barren body with veins elsewhere in the registry passes",
      mutate(lambda d: d["ore_veins"].__setitem__(
          "planetaryfactory:ignus_sulfur", {"weight": 100, "layer": "ignus_rock",

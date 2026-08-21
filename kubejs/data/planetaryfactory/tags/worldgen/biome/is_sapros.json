@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "planetaryfactory:gleba_dark_highlands",
+    "planetaryfactory:gleba_midlands",
+    "planetaryfactory:gleba_marshes",
+    "planetaryfactory:gleba_green_marshland",
+    "planetaryfactory:gleba_red_marshland"
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "carvers": {
+    "air": [
+      "minecraft:cave",
+      "minecraft:cave_extra_underground",
+      "minecraft:canyon"
+    ]
+  },
+  "creature_spawn_probability": 0,
+  "downfall": 1.0,
+  "effects": {
+    "fog_color": 5140100,
+    "foliage_color": 6192720,
+    "grass_color": 7113310,
+    "sky_color": 5930646,
+    "water_color": 4159204,
+    "water_fog_color": 329011
+  },
+  "features": [
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    []
+  ],
+  "has_precipitation": true,
+  "spawn_costs": {},
+  "spawners": {},
+  "temperature": 0.9
+}

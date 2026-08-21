@@ -46,6 +46,19 @@ const BODIES = [
     icon: 'gcyr:martian_rock',
     name: 'level.planetaryfactory.fulgora',
   },
+  {
+    // Sapros registers no ore veins either (ADR-0016), and for a different reason than
+    // Electro's: Electro has no metal at all, where Sapros has metal that arrives by
+    // Decaying a bacterium rather than by coming out of the ground. The layer is here for
+    // the same reason Electro's is -- a prospecting tab that says "nothing here" teaches
+    // the design, where no tab at all reads as a bug.
+    layer: 'sapros_rock',
+    stone: 'gcyr:mercury_rock',
+    dimension: 'planetaryfactory:gleba',
+    tier: 3,
+    icon: 'gcyr:mercury_rock',
+    name: 'level.planetaryfactory.gleba',
+  },
 ];
 
 const levelKey = (id) => ResourceKey.create(Registries.DIMENSION, ResourceLocation.parse(id));

@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""Check that Sapros's flora data hangs together, without launching Minecraft.
+"""Check that Sapros's flora and surface data hang together, without launching Minecraft.
 
 Every failure this covers is one the game reports late, quietly, or not at all: a tree
 feature naming a block nobody registers places air; a loot table naming an item nobody
 registers drops nothing; a blockstate file missing a variant is a purple-black canopy the
-first time a leaf fruits. All of them are hours away from the edit that caused them, and
+first time a leaf fruits; a stromatolite that drops ore instead of bacteria quietly deletes the
+Decay chain the body exists to carry (ADR-0016). All of them are hours away from the edit that caused them, and
 all of them are a string comparison here.
 
 What it deliberately does not check is behaviour -- refruiting, growth, whether Create's saw
@@ -68,8 +69,11 @@ def main():
           "the mod registers exactly the two saplings")
     check(not (mod_block_ids() & kubejs_ids(KUBEJS_BLOCKS)),
           "no id is registered by both the mod and KubeJS")
-    check(items == {"planetaryfactory:yumako_fresh", "planetaryfactory:jellynut_fresh"},
-          "the two harvested materials are registered as Fresh, and only Fresh")
+    check({"planetaryfactory:yumako_fresh", "planetaryfactory:jellynut_fresh"} <= items,
+          "the two harvested materials are registered, as Fresh")
+    check({"planetaryfactory:iron_bacteria_fresh",
+           "planetaryfactory:copper_bacteria_fresh"} <= items,
+          "both ore bacteria are registered, as Fresh")
     check(all(not i.endswith(("_ripe", "_stale", "_spoiling")) for i in items),
           "no Decay stage beyond Fresh ships here")
     # Jelly is what a Biochamber makes from Jellynut, and it belongs to `Puzzle: Sapros`.
@@ -133,7 +137,53 @@ def main():
                     "item/yumako", "item/jellynut"):
         check((ASSETS / f"textures/{texture}.png").is_file(), f"texture {texture}.png exists")
 
+    for texture in ("block/iron_stromatolite", "block/copper_stromatolite",
+                    "item/iron_bacteria", "item/copper_bacteria"):
+        check((ASSETS / f"textures/{texture}.png").is_file(), f"texture {texture}.png exists")
+
+    # Sapros's terrain, checked here for the same reason the trees are: every one of these
+    # fails silently in-game, hours after the edit.
+    #
+    # A stromatolite yields bacteria and stone. If one ever yields ore instead, the Decay
+    # chain the whole body exists to carry becomes optional, and nothing crashes to say so.
+    for metal in ("iron", "copper"):
+        table = json.loads(
+            (DATA / f"loot_table/blocks/{metal}_stromatolite.json").read_text())
+        drops = set(json_strings(table))
+        check(f"planetaryfactory:{metal}_bacteria_fresh" in drops,
+              f"a {metal} stromatolite yields {metal} bacteria")
+        check(not any(d.endswith("_ore") or "/ores" in d or ":ore" in d for d in drops),
+              f"no {metal} stromatolite drop is an ore")
+        check(any(d.startswith("gcyr:") for d in drops),
+              f"a {metal} stromatolite also yields stone")
+
+    # The two marshlands are two destinations, and they stop being that the moment both
+    # trees grow in one of them.
+    marshlands = {"green": "yumako", "red": "jellystem"}
+    for colour, tree in marshlands.items():
+        biome = json.loads(
+            (DATA / f"worldgen/biome/gleba_{colour}_marshland.json").read_text())
+        carried = set(json_strings(biome))
+        other = marshlands["red" if colour == "green" else "green"]
+        check(f"planetaryfactory:{tree}_tree" in carried,
+              f"the {colour} marshland carries {tree}")
+        check(f"planetaryfactory:{other}_tree" not in carried,
+              f"the {colour} marshland does not carry {other}")
+        for metal in ("iron", "copper"):
+            check(f"planetaryfactory:sapros_{metal}_stromatolite" in carried,
+                  f"the {colour} marshland carries {metal} stromatolites")
+
+    for biome_name in ("gleba_dark_highlands", "gleba_midlands", "gleba_marshes"):
+        carried = set(json_strings(json.loads(
+            (DATA / f"worldgen/biome/{biome_name}.json").read_text())))
+        check(not any(c.endswith("_tree") for c in carried),
+              f"{biome_name} carries neither tree")
+
     lang = json.loads((ASSETS / "lang/en_us.json").read_text())
+    for biome_name in ("gleba_dark_highlands", "gleba_midlands", "gleba_marshes",
+                       "gleba_green_marshland", "gleba_red_marshland"):
+        check(f"biome.planetaryfactory.{biome_name}" in lang,
+              f"{biome_name} has a display name")
     for sapling in mod_block_ids():
         key = "block.planetaryfactory." + sapling.split(":")[1]
         check(key in lang, f"the mod's {sapling} has a lang entry (the pack names it, not the jar)")

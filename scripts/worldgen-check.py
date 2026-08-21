@@ -109,21 +109,57 @@ def compare(dump, expected):
     deposits = dump.get("bedrock_ores", {})
     fluids = dump.get("bedrock_fluids", {})
     layers = dump.get("worldgen_layers", {})
+    biomes = dump.get("biomes", {})
+
+    def barren(spec, key, registry, noun, dimension, body):
+        """Assert an emptiness against the whole registry, not against a list of names.
+
+        A present-but-empty object in the fixture claims the body carries none of this
+        kind of thing at all. Walking the registry is the only form of that claim which
+        cannot go stale as later tickets add entries, and it catches an entry that
+        reaches the body without naming it -- an empty `dimension_filter` included,
+        which GregTech reads as "nowhere" and which must therefore appear as nowhere
+        here too.
+        """
+        if spec.get(key) != {} or key not in spec:
+            return
+        for entry_id, got in sorted(registry.items()):
+            if dimension in got["dimensions"]:
+                yield (f"{body}: {noun} {entry_id} reaches {dimension}, which is "
+                       f"expected to carry no {noun}s at all")
 
     for body, spec in expected["bodies"].items():
         dimension = spec["dimension"]
 
-        # An `ore_veins` object that is present but empty is not "nothing to check".
-        # It is the assertion that the body carries no veins whatsoever, which is a
-        # claim about the whole registry rather than about any named vein — the only
-        # form of it that cannot go stale as later bodies add veins of their own.
-        # `dimension_filter` is a required field on GregTech's ore vein codec, so a
-        # vein reaches this body only by naming it.
-        if spec.get("ore_veins") == {} and "ore_veins" in spec:
-            for vein_id, got in sorted(veins.items()):
-                if dimension in got["dimensions"]:
-                    yield (f"{body}: ore vein {vein_id} reaches {dimension}, which is "
-                           f"expected to carry no ore veins at all")
+        # The body's own worldgen layer, asserted directly rather than through a vein. A
+        # body with no veins has nothing else that would mention its layer, and a layer
+        # that does not cover the dimension is invisible until someone prospects there.
+        want_layer = spec.get("worldgen_layer")
+        if want_layer is not None:
+            got_layer = layers.get(want_layer)
+            if got_layer is None:
+                yield f"{body}: worldgen layer {want_layer} did not load"
+            elif dimension not in got_layer.get("dimensions", []):
+                yield (f"{body}: worldgen layer {want_layer} does not cover {dimension} "
+                       f"(covers {got_layer.get('dimensions', [])})")
+
+        # A biome that parses but occupies unreachable noise space generates nowhere, and
+        # nothing but the generator itself can say which of the two it is.
+        emitted = biomes.get(dimension)
+        for biome_id in spec.get("biomes", []):
+            if emitted is None:
+                yield f"{body}: no biome sample for {dimension}, so {biome_id} is unproven"
+            elif biome_id not in emitted:
+                yield (f"{body}: biome {biome_id} is never emitted by {dimension}'s "
+                       f"generator")
+
+        # A present-but-empty object is not "nothing to check": it is the assertion
+        # that the body carries none of that kind of thing at all. See `barren`.
+        yield from barren(spec, "ore_veins", veins, "ore vein", dimension, body)
+        yield from barren(spec, "bedrock_ores", deposits, "bedrock ore deposit",
+                          dimension, body)
+        yield from barren(spec, "bedrock_fluids", fluids, "bedrock fluid deposit",
+                          dimension, body)
 
         for vein_id, want in spec.get("ore_veins", {}).items():
             got = veins.get(vein_id)

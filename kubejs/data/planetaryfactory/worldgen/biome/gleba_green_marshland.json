@@ -1,0 +1,40 @@
+{
+  "carvers": {
+    "air": [
+      "minecraft:cave",
+      "minecraft:cave_extra_underground",
+      "minecraft:canyon"
+    ]
+  },
+  "creature_spawn_probability": 0,
+  "downfall": 1.0,
+  "effects": {
+    "fog_color": 7245642,
+    "foliage_color": 5219134,
+    "grass_color": 6533963,
+    "sky_color": 8364892,
+    "water_color": 4159204,
+    "water_fog_color": 329011
+  },
+  "features": [
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [
+      "planetaryfactory:yumako_tree",
+      "planetaryfactory:sapros_iron_stromatolite",
+      "planetaryfactory:sapros_copper_stromatolite"
+    ],
+    []
+  ],
+  "has_precipitation": true,
+  "spawn_costs": {},
+  "spawners": {},
+  "temperature": 0.95
+}

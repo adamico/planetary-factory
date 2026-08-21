@@ -92,4 +92,28 @@ png(f"{BASE}/block/jellystem_sapling.png", sprig([138, 54, 62, 255], [132, 74, 1
 # with the Decay engine (#17), and nothing here may depend on it existing.
 png(f"{BASE}/item/yumako.png", blob(CLEAR, [236, 138, 40, 255], 7))
 png(f"{BASE}/item/jellynut.png", blob(CLEAR, [176, 92, 156, 255], 8, r=4))
+
+# Stromatolites. Layered mineral crust in one shape, two tints: what a player reads off the
+# block is which metal, and the organism is the same either way. Not ore textures on purpose --
+# nothing here is a GregTech ore block, and it should not look like one.
+def crust(base, band, seed):
+    rnd = random.Random(seed)
+    rows = noise(base, 10, seed)
+    y = 0
+    while y < 16:
+        h = rnd.randint(1, 3)
+        d = rnd.randint(-24, 10)
+        for yy in range(y, min(16, y + h)):
+            for x in range(16):
+                rows[yy][x] = shade(band, d + rnd.randint(-6, 6))
+        y += h + rnd.randint(1, 3)
+    return rows
+
+png(f"{BASE}/block/iron_stromatolite.png", crust([122, 118, 106, 255], [166, 122, 96, 255], 9))
+png(f"{BASE}/block/copper_stromatolite.png", crust([122, 118, 106, 255], [96, 154, 132, 255], 10))
+
+# The bacteria the stromatolites drop. Fresh only, single-layer, like the two fruits: the
+# Freshness badge arrives with the Decay engine (#17).
+png(f"{BASE}/item/iron_bacteria.png", blob(CLEAR, [188, 142, 112, 255], 11, r=4))
+png(f"{BASE}/item/copper_bacteria.png", blob(CLEAR, [104, 172, 148, 255], 12, r=4))
 print("ok")

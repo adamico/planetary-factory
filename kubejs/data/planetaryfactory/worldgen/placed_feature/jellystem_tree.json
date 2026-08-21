@@ -1,7 +1,17 @@
 {
-  "_comment": "No biome carries this yet, on purpose: Sapros's biomes are the body's ticket, and Jellystem belongs in exactly one of them (green marshland for Yumako, red for Jellystem). Until then the feature is reachable by `/place feature`, which is how the trees are demonstrated in an existing world. The body adds a biome modifier; it does not redefine the tree.",
+  "_comment": "Carried by the red marshland alone, and by no other biome: Yumako grows in the green and Jellystem in the red, and a body where both grow together is not Sapros. The count is what makes arrival survivable -- a player landing with nothing has to be able to start a farm from what they find.",
   "feature": "planetaryfactory:jellystem_tree",
   "placement": [
+    {
+      "type": "minecraft:count",
+      "count": {
+        "type": "minecraft:uniform",
+        "value": {
+          "min_inclusive": 4,
+          "max_inclusive": 8
+        }
+      }
+    },
     {
       "type": "minecraft:in_square"
     },
