@@ -77,8 +77,8 @@ _Avoid_: the red biome, jellystem swamp, the swamp
 ### Sapros flora
 
 **Yumako**:
-The fruit picked from a Yumako tree's fruiting leaves. Harvesting takes the fruit and leaves the tree standing; the leaves refruit. A spoilable material, so ultimately four items per Freshness.
-_Avoid_: yumako fruit, the orange fruit
+The fruit harvested from a Yumako tree's leaves. The tree is felled to take it and replanted from a sapling; it is not a standing crop that regrows. A spoilable material, so ultimately four items per Freshness.
+_Avoid_: yumako fruit, the orange fruit, fruiting leaves
 
 **Jellystem**:
 The tree of Sapros's red marshland, whose stem blocks yield Jellynut. Named for the tree, never for its fruit.

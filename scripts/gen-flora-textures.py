@@ -56,9 +56,9 @@ def blob(bg, fg, seed, cx=8, cy=9, r=5):
 
 CLEAR = [0, 0, 0, 0]
 
-# Yumako: warm orange canopy over pale bark. Nothing vanilla is this colour.
+# Yumako: warm orange canopy over pale bark. Nothing vanilla is this colour. The fruit is
+# drawn into the leaves because it is always there -- the tree is harvested once, by felling.
 png(f"{BASE}/block/yumako_log.png", bark([164, 122, 84, 255], [120, 86, 58, 255], 1))
-png(f"{BASE}/block/yumako_leaves.png", noise([94, 158, 66, 255], 16, 2))
 fruiting = noise([94, 158, 66, 255], 16, 2)
 for (fx, fy) in [(3, 4), (11, 6), (6, 11), (13, 12)]:
     for dy in range(3):
@@ -66,7 +66,7 @@ for (fx, fy) in [(3, 4), (11, 6), (6, 11), (13, 12)]:
             if (dx, dy) in ((0, 0), (2, 0), (0, 2), (2, 2)):
                 continue
             fruiting[(fy + dy) % 16][(fx + dx) % 16] = shade([236, 138, 40, 255], (dx + dy) * 6 - 6)
-png(f"{BASE}/block/yumako_leaves_fruiting.png", fruiting)
+png(f"{BASE}/block/yumako_leaves.png", fruiting)
 
 # Jellystem: a deep red trunk with a translucent-looking violet core, purple canopy.
 png(f"{BASE}/block/jellystem_stem.png", rings([138, 54, 62, 255], [176, 92, 156, 255], 3))

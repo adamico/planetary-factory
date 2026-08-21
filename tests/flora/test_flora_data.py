@@ -103,28 +103,31 @@ def main():
         unknown = referenced - registered
         check(not unknown, f"{table.name} drops only registered items (stray: {unknown})")
 
-    # The two harvests must stay mechanically distinct -- fruit off a standing canopy,
-    # Jellynut out of a felled trunk. Identical drops would mean one behaviour on two blocks.
+    # Both trees are felled to harvest them, so both materials come off loot tables -- but off
+    # different blocks. Yumako out of the canopy, Jellynut out of the trunk. The check is that
+    # neither material can be had from the other tree's block, which is what would collapse the
+    # two trees into one with two textures.
     leaves = json.loads((DATA / "loot_table/blocks/yumako_leaves.json").read_text())
-    fruit_pool = [p for p in leaves["pools"]
-                  if any(c.get("condition") == "minecraft:block_state_property"
-                         for c in p.get("conditions", []))]
-    check(len(fruit_pool) == 1,
-          "yumako leaves drop their fruit only when the fruiting property is set")
+    leaf_drops = set(json_strings(leaves)) & registered
+    check(leaf_drops == {"planetaryfactory:yumako_sapling", "planetaryfactory:yumako_fresh"},
+          "yumako leaves yield Yumako and the sapling to replant with")
     stem = json.loads((DATA / "loot_table/blocks/jellystem_stem.json").read_text())
     stem_drops = set(json_strings(stem)) & registered
     check(stem_drops == {"planetaryfactory:jellynut_fresh"},
           "a jellystem stem yields Jellynut and not itself")
 
-    states = json.loads((ASSETS / "blockstates/yumako_leaves.json").read_text())["variants"]
-    check(set(states) == {"fruiting=false", "fruiting=true"},
-          "both fruiting states have a model")
-    for variant in states.values():
-        model = variant["model"].split(":")[1]
-        check((ASSETS / f"models/block/{model.split('/')[-1]}.json").is_file(),
-              f"model {variant['model']} exists")
+    # A harvest-once tree has no state to track, so the leaves are a plain block again: no
+    # property, no random tick, no hand-written blockstate file. If any of that comes back,
+    # it brings a standing-crop mechanic back with it.
+    blocks_js = KUBEJS_BLOCKS.read_text()
+    check("property(" not in blocks_js and "randomTick(" not in blocks_js,
+          "no flora block carries a blockstate property or a random tick")
+    check(not (ROOT / "kubejs/server_scripts/sapros_flora.js").exists(),
+          "no script picks fruit off a standing tree")
+    check(not (ASSETS / "blockstates/yumako_leaves.json").exists(),
+          "yumako leaves use KubeJS's generated blockstate, having only one state")
 
-    for texture in ("block/yumako_log", "block/yumako_leaves", "block/yumako_leaves_fruiting",
+    for texture in ("block/yumako_log", "block/yumako_leaves",
                     "block/jellystem_stem", "block/jellystem_leaves",
                     "block/yumako_sapling", "block/jellystem_sapling",
                     "item/yumako", "item/jellynut"):

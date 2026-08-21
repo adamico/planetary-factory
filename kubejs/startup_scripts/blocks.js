@@ -59,14 +59,9 @@ StartupEvents.registry('block', (event) => {
 // `minecraft:logs` and `minecraft:leaves` are what make Create's saw fell these trees and its
 // Deployer treat them as a canopy. They are load-bearing integration, not decoration.
 
-// Yumako's fruit is picked from the canopy, and the canopy is what carries the fruit: a real
-// blockstate property, regrown on random tick, taken by right-click. See
-// `kubejs/server_scripts/sapros_flora.js` for the picking, and the block's loot table for what
-// felling a fruiting canopy yields.
-const YUMAKO_FRUITING = Java.loadClass(
-  'net.minecraft.world.level.block.state.properties.BooleanProperty'
-).create('fruiting');
-
+// Both harvests are destructive: a tree yields once and is felled doing it, then replanted
+// from a sapling. Yumako's fruit is in the canopy and Jellynut is in the trunk, so the two
+// still come off different blocks -- but neither tree is a standing crop you return to.
 StartupEvents.registry('block', (event) => {
   event.create('planetaryfactory:yumako_log')
     .displayName('Yumako Log')
@@ -90,19 +85,6 @@ StartupEvents.registry('block', (event) => {
     .requiresTool(false)
     .notSolid()
     .renderType('cutout_mipped')
-    .property(YUMAKO_FRUITING)
-    .defaultState((state) => state.set(YUMAKO_FRUITING, false))
-    .randomTick((callback) => {
-      // One in eight ticks, an unfruited canopy block fruits again. A standing Yumako tree is
-      // therefore a renewable source and the farm loop is optional, not mandatory.
-      if (callback.block.properties.fruiting === 'true') {
-        return;
-      }
-      if (callback.random.nextInt(8) !== 0) {
-        return;
-      }
-      callback.block.set('planetaryfactory:yumako_leaves', { fruiting: 'true' });
-    })
     .tagBlock('minecraft:leaves')
     .tagBlock('minecraft:mineable/hoe')
     .tagItem('minecraft:leaves');
