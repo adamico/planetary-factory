@@ -4,6 +4,10 @@ status: accepted
 
 # Bodies are registered under Factorio's names and displayed under Latin ones
 
+**This decision governs celestial bodies and nothing else.** It is a planet-naming rule, not a
+pack-wide one. Machines, items, fluids, science packs and every other registered thing are outside
+its scope and are named on their own merits — see the Consequences.
+
 Every celestial body carries two names. The identifier it is registered under is Factorio's —
 `vulcanus`, `fulgora`, `gleba`, `aquilo`, `shattered_planet` — and the name a player ever sees is
 Latin or Greek, supplied by lang files alone: Terra, Ignus, Electro, Sapros, Gelida, Atlantis.
@@ -38,3 +42,13 @@ avoided entirely to keep the convention — identifiers are Factorio's names, no
 
 Gelida and Atlantis have no GCyR body behind them and must be defined as new entries in the
 `SolarSystem` registry.
+
+Nothing outside the `SolarSystem` registry inherits this rule. In particular **the science packs
+keep Factorio's names in the display layer too** — `automation_science`, `logistic_science`,
+`chemical_science`, `production_science` are shown to players under those names, because the
+audience is Factorio-literate and the spine's whole teaching value is that the player recognises the
+ladder they are climbing (#26). The identity argument that earns the bodies their Latin names cuts
+the other way here: a body is scenery the pack wants to own, whereas a science pack is a citation.
+
+Where a future decision wants a Latin or Greek name for something that is not a body, it argues for
+it on its own terms rather than claiming this ADR as precedent.

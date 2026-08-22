@@ -38,7 +38,7 @@ The orbit-only endgame destination, reachable only once a Platform is establishe
 _Avoid_: the shattered planet, Fragmenta
 
 **Display name**:
-The Latin or Greek name a player sees, supplied by lang files only. Every body has one, and it is never the identifier.
+The Latin or Greek name a player sees for a **celestial body**, supplied by lang files only. Every body has one, and it is never the identifier. The convention is a body-naming rule and stops there (ADR-0004) — science packs and everything else keep their own names.
 _Avoid_: label, alias
 
 **Internal ID**:
