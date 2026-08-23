@@ -1,0 +1,3 @@
+#Whether to use FTB Teams' API for team logic instead of Researchd's own.
+#This disables the team screen and team command
+use_ftb_teams = false

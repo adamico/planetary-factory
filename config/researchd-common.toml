@@ -1,0 +1,10 @@
+#The length of the researchPack queue
+# Default: 7
+# Range: 1 ~ 99
+research_queue_length = 7
+#Whether to load the default resourcepack that can be enabled in the world creation screen.
+load_default_datapack = true
+
+[debug]
+	#Whether to enable console debug messages for Researchd
+	console_debug = false
