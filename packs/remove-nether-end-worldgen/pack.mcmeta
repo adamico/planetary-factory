@@ -1,0 +1,91 @@
+{
+  "pack": {
+    "pack_format": 48,
+    "description": "PlanetaryFactory: removes GregTech worldgen from the Nether and the End"
+  },
+  "filter": {
+    "block": [
+      {
+        "namespace": "gtceu",
+        "path": "^gtceu/ore_vein/banded_iron\\.json"
+      },
+      {
+        "namespace": "gtceu",
+        "path": "^gtceu/ore_vein/beryllium\\.json"
+      },
+      {
+        "namespace": "gtceu",
+        "path": "^gtceu/ore_vein/certus_quartz\\.json"
+      },
+      {
+        "namespace": "gtceu",
+        "path": "^gtceu/ore_vein/molybdenum\\.json"
+      },
+      {
+        "namespace": "gtceu",
+        "path": "^gtceu/ore_vein/monazite\\.json"
+      },
+      {
+        "namespace": "gtceu",
+        "path": "^gtceu/ore_vein/nether_manganese\\.json"
+      },
+      {
+        "namespace": "gtceu",
+        "path": "^gtceu/ore_vein/nether_quartz\\.json"
+      },
+      {
+        "namespace": "gtceu",
+        "path": "^gtceu/ore_vein/nether_redstone\\.json"
+      },
+      {
+        "namespace": "gtceu",
+        "path": "^gtceu/ore_vein/saltpeter\\.json"
+      },
+      {
+        "namespace": "gtceu",
+        "path": "^gtceu/ore_vein/sulfur\\.json"
+      },
+      {
+        "namespace": "gtceu",
+        "path": "^gtceu/ore_vein/tetrahedrite\\.json"
+      },
+      {
+        "namespace": "gtceu",
+        "path": "^gtceu/ore_vein/topaz\\.json"
+      },
+      {
+        "namespace": "gtceu",
+        "path": "^gtceu/ore_vein/end_bauxite\\.json"
+      },
+      {
+        "namespace": "gtceu",
+        "path": "^gtceu/ore_vein/end_magnetite\\.json"
+      },
+      {
+        "namespace": "gtceu",
+        "path": "^gtceu/ore_vein/naquadah\\.json"
+      },
+      {
+        "namespace": "gtceu",
+        "path": "^gtceu/ore_vein/pitchblende\\.json"
+      },
+      {
+        "namespace": "gtceu",
+        "path": "^gtceu/ore_vein/scheelite\\.json"
+      },
+      {
+        "namespace": "gtceu",
+        "path": "^gtceu/ore_vein/sheldonite\\.json"
+      },
+      {
+        "namespace": "gtceu",
+        "path": "^gtceu/bedrock_fluid/nether_natural_gas_deposit\\.json"
+      }
+    ]
+  },
+  "_comment": [
+    "gtceu:lava_deposit is not blocked here: kubejs/data/gtceu/gtceu/bedrock_fluid/",
+    "lava_deposit.json already re-filters it to Ignus (ADR-0007), and blocking the",
+    "path would take that override down with the mod's file."
+  ]
+}

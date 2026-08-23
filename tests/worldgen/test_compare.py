@@ -45,6 +45,14 @@ EXPECTED = {
             "bedrock_ores": {"planetaryfactory:electro_scrap_deposit": {
                 "materials": ["planetaryfactory:scrap"], "depleted_yield_at_least": 1}},
         },
+        # A vanilla dimension stripped of GregTech worldgen (#16): same emptiness
+        # assertion as a barren body, made against a dimension the pack does not own.
+        "nether": {
+            "dimension": "minecraft:the_nether",
+            "ore_veins": {},
+            "bedrock_ores": {},
+            "bedrock_fluids": {},
+        },
         # A body barren of all three, whose layer is asserted directly because no vein
         # names it, and whose biomes have to be emitted rather than merely registered.
         "sapros": {
@@ -149,6 +157,17 @@ CASES = [
      mutate(lambda d: d["biomes"][SAPROS].remove(RED)), 1),
     ("a dimension with no biome sample at all fails",
      mutate(lambda d: d["biomes"].pop(SAPROS)), 2),
+    # #16: the stock Nether veins and the Nether natural gas deposit are filtered out,
+    # and nothing may put them back.
+    ("a stock vein still reaching the Nether fails",
+     mutate(lambda d: d["ore_veins"].__setitem__(
+         "gtceu:sulfur", {"weight": 100, "layer": "netherrack",
+                          "dimensions": ["minecraft:the_nether"]})), 1),
+    ("a bedrock fluid deposit still reaching the Nether fails",
+     mutate(lambda d: d["bedrock_fluids"].__setitem__(
+         "gtceu:nether_natural_gas_deposit",
+         {"fluid": "gtceu:natural_gas", "depleted_yield": 3, "weight": 15,
+          "dimensions": ["minecraft:the_nether"]})), 1),
     ("a barren body with veins elsewhere in the registry passes",
      mutate(lambda d: d["ore_veins"].__setitem__(
          "planetaryfactory:ignus_sulfur", {"weight": 100, "layer": "ignus_rock",

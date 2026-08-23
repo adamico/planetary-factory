@@ -124,3 +124,15 @@ skies, solar system, rocket tiers, fuel costs and display names — is datapack 
 in this repo, and giving them GregTech ore generation is KubeJS startup-script work. Dropping the stock
 bodies is a zipped datapack in `kubejs/data/` carrying a `pack.mcmeta` filter. Nothing in this slice
 needs a change to the fork.
+
+## Second use: stripping the Nether and the End (#16)
+
+The same mechanism removes GregTech's own worldgen from the two vanilla dimensions ADR-0007 keeps
+but empties: `packs/remove-nether-end-worldgen/` blocks namespace `gtceu`, the twelve Nether veins,
+the six End veins and `bedrock_fluid/nether_natural_gas_deposit.json`. `gtceu:lava_deposit` is
+deliberately *not* blocked — `kubejs/data/gtceu/gtceu/bedrock_fluid/lava_deposit.json` already
+re-filters it to Ignus, and a block on that path would take the override down with the mod's file,
+since the filter applies to every pack below the zip, loose `kubejs/data` included.
+
+`scripts/build-filter-pack.sh` builds every directory under `packs/` (or the ones named as
+arguments); adding a filter pack means adding a source directory, not editing the script.
