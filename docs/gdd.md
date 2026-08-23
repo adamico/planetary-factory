@@ -21,8 +21,13 @@ This document describes intended design. Decisions that are hard to reverse are 
 - **KubeJS 2101.7.1-build.181** — Scripting glue: custom GT machines and recipe types, emission
   tracking, flight simulation, planetary arrival. Pinned to the build GTCEu 7.0.2 compiles against;
   `kubejs-create` is not installed.
-- **Pre-AE2 logistics** — Modular Routers, Integrated Dynamics and LaserIO cover routing and
-  circuit-network roles before digital storage is unlocked.
+- **Pre-AE2 logistics — Create and Mekanism, and nothing else.** Create owns item logistics and
+  bulk item storage; Mekanism owns fluid logistics and bulk fluid storage (ADR-0017). The
+  dedicated routing mods — Modular Routers, Integrated Dynamics, LaserIO, XNet, SFM, Pipez, Flux
+  Networks, Functional Storage and Sophisticated Storage — are cut from the pack, because one mod
+  owns each capability and a substitute routing idiom is a straight bypass of the ladder. Only two
+  routing capabilities are gated rather than cut: **AE2**, unlocked at endgame once every planet's
+  puzzle is done, and **Create 6's package logistics**, granted at the `logistic` science rung.
 
 ## 2. The Solar System
 
