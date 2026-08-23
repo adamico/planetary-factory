@@ -36,7 +36,7 @@ two-layer models and their lang entries. Adding a spoilable is a script edit, no
   ADR 0001; the diff here is surgical changes to someone else's mod, not a new mod.
 - **KubeJS scripting instead of a fork.** ADR 0010 ruled this out on the grounds that KubeJS cannot
   register component types. That reasoning has since expired — the design has no component types.
-  The fork survives on different grounds: the sweep, the chunk catch-up, the Purge route and the
+  The fork survives on different grounds: the sweep, the chunk catch-up, the Drain route and the
   storage mixins are all Java-only. See the ADR 0010 amendment.
 
 ## The diff
@@ -126,3 +126,71 @@ gets a log line and a truncation rather than an infinite loop.
 
 **Still outstanding from the diff above.** Item 7, the two digital-storage mixins, and item 8, entity
 results, are not implemented. Neither blocks the engine from running; both are tracked on the issue.
+
+## Amended after testing it against a real GregTech bus
+
+The spike this ADR's ticket demanded ran in game, against a real input bus. It overturned the write
+strategy and, with it, the whole **Interaction with the Biochamber** section above. Treat that
+section as superseded by this one.
+
+**Writes are `setStackInSlot`, not extract-then-insert.** The earlier strategy was chosen because it
+is correct whether or not a handler hands back a copy. It is not correct on a GregTech bus, and it
+fails silently in two opposite directions. `IOFilteredInvWrapper.extractItem` returns empty whenever
+`!io.support(OUT)`, so on an **input** bus the write bailed on its first simulated extract and
+nothing ever decayed — no error, no log line, items fresh forever. On an **output** bus the two
+rollback paths called `insertItem` and discarded the return value, so a refused insert destroyed the
+stack. `DecayWriter` now plans a set of writes and commits them with `setStackInSlot`, which
+`NotifiableItemStackHandler` delegates straight to storage with no `io` check and no filter. With no
+extraction there is nothing to roll back, so the deletion defect is gone structurally. GregTech's own
+recipe consumption uses `extractItemInternal`, which never consults those gates, so crafting is
+untouched.
+
+The copy-semantics worry that motivated the original strategy was the wrong worry. Direction gating
+was the hazard.
+
+**There is no Purge bus.** A write that cannot be refused has no room for the Purge model: Purge, the
+dedicated Spoilage output bus, and the structure requirement that guaranteed one all rested on a
+handler saying no. Clog is now simply a machine's inability to consume what is sitting in it — a
+spoiled stack in an input slot clogs the input, a spoiled stack in an output slot clogs the output or
+the storage it feeds. Factorio's trash slots are not modelled. The `CONTEXT.md` **Purge** entry goes
+with them.
+
+**Terminal Spoilage may be extracted from a one-way handler; nothing else may.** Removing Purge left
+automation with no way to clear an input clog, since a bus refuses outward extraction. Rather than
+reintroduce a dedicated bus, `SpoilIndex` computes the terminal set at reload and `DecayUnclog`
+grants extraction for exactly those items, wired through two optional `@Pseudo` mixins that return a
+drained stack only where GregTech already returned empty. The mixin config is `required: false`, so
+the pack runs unchanged without GregTech. Fresh and mid-ladder items stay locked in the bus, so this
+is not a siphon. The unclog is player-built — a hopper under the bus — not automatic.
+
+A terminal is a spoil result that no recipe consumes **or** whose recipe hands it straight back.
+The self-loop case is not hypothetical: upstream gives every food a spoil recipe, so rotten flesh
+spoils into itself, and a terminal test that only checked for the absence of a recipe never marked
+it terminal.
+
+**A stack split needs a free slot, so a one-slot bus is all-or-nothing.** Item 2 of the diff above
+notes the whole-stack fallback and calls it self-limiting. On a ULV input bus, which has one slot,
+there is nothing to limit: every rung advances the entire stack on a single roll, collapsing the
+Erlang-4 variance reduction that ADR 0010 leans on into four coin flips for the whole batch. LV
+upward has four slots, which is the number of freshness stages. Judged acceptable rather than fixed —
+the machine tier that exhibits it is the one nobody automates.
+
+**The fork's branch is `main`, and the fork is single-version.** The amendment above records the
+branch as `decay` off `multi/1.21`. It was renamed: `adamico/respoiled` now has `main` as its only
+work branch and its default. We are not backporting and not maintaining a fork per Minecraft
+version, so the per-version branch naming upstream needs buys us nothing and hides what the repo is
+when someone opens it. `main` here means 1.21.1. The rebase in the consequences above is unchanged —
+`upstream` still points at `Mrbysco/Spoiled` and the command is still
+`git fetch upstream && git rebase upstream/multi/1.21`.
+
+**Verified in game.** Dimension gate gone, `spoilRate` read as ticks, floor decay, identical rates in
+chest, barrel and shulker, decay inside a GregTech input bus, Jade showing fresh and spoiled counts
+together, and terminal Spoilage draining through a hopper into a chest with fresh items left behind.
+Chunk catch-up was checked with two identical chests, one past the simulation distance, across a quit
+and rejoin: matching stage distributions. That path has no upstream analogue, since ADR 0010 deleted
+the per-stack timestamp that every other mod computes elapsed time from, and it was the last
+untested thing in the engine.
+
+The output bus is proven by construction but not against a **formed multiblock**, which is what
+additionally exercises GregTech pulling from a bus while Decay writes to it. That belongs to the
+Biochamber.

@@ -181,15 +181,17 @@ _Avoid_: bioreactor, fermenter, organics processor
 
 **Clog**:
 The state of a machine holding a material that has Decayed past what its recipe accepts, halting it
-until a player clears it by hand. A stated hazard the player is responsible for designing around,
-not a fault.
+until the Spoilage is removed. A stated hazard the player is responsible for designing around, not a
+fault. A Clog is an inability to consume, never a refused write — Decay writes slots directly and
+cannot be turned away.
 _Avoid_: jam, deadlock, stall, blockage
 
-**Purge**:
-The route by which a Decayed input leaves a Biochamber without being consumed. A material that has
-Decayed past what the running recipe accepts is Purged to the machine's dedicated Spoilage output;
-when that output is full, the input stays where it is and the machine Clogs.
-_Avoid_: trash, trash slot, reject, waste output, eject
+**Drain**:
+The player-built route by which Spoilage leaves a Clogged machine. Terminal Spoilage, and only
+terminal Spoilage, may be pulled out of a bus that otherwise refuses extraction, so a hopper under an
+input bus clears a Clog while leaving every un-Decayed stage locked inside. There is no dedicated
+bus and no automatic removal: the Drain is something the player builds, or does not.
+_Avoid_: purge, trash, trash slot, reject, waste output, eject
 
 ### Hazards
 

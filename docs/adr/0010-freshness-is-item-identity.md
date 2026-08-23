@@ -108,7 +108,7 @@ the premise no longer applies, and KubeJS *can* register the four items.
 
 It now does. **KubeJS registers the items, their models and their lang entries; the fork registers no
 content at all.** The fork survives on entirely different grounds: the sweep, the chunk catch-up, the
-Purge route and the storage-blacklist mixins are Java-only, and none of them are content. See
+Drain route and the storage-blacklist mixins are Java-only, and none of them are content. See
 ADR 0011, ADR 0012 and ADR 0013.
 
 The consequence is a better division than the one this ADR anticipated. The engine can be complete
