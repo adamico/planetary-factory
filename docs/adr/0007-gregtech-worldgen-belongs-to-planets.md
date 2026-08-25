@@ -64,3 +64,20 @@ Players arriving from other GregTech packs will find the Nether and End empty of
 contrary to universal expectation in this mod's ecosystem. That is a deliberate signal that the
 progression is elsewhere, and it needs saying in the quest book rather than being left as a
 surprise.
+
+## Amended by ADR-0019 for Terra
+
+ADR-0019 makes Terra flat, cave-free and shallow, and this decision's consequences on that body move
+with it. The decision itself is unchanged: worldgen still belongs to planets, and the Nether and End
+are still empty.
+
+What changes on Terra: the world column becomes `0..192`, so **negative Y ceases to exist** and the
+`deepslate` layer is retired there — the eight veins that lived on it either move into the shallow
+band above bedrock or are cut. Every surviving vein's `height_range` is reassigned, since several
+currently start below Y 0. The other bodies are untouched; the `deepslate` retirement is Terra-only.
+
+The `terra_*` bedrock deposits keep working — they key off the bedrock layer, which is now Y 0.
+
+The practical consequence for anyone reading this ADR to place a vein: **Terra's Y-ranges are no
+longer GregTech's**, and the shallow band is deliberate — ore has to be reachable without caving,
+because Terra has no caves.
