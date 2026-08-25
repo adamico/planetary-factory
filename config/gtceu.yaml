@@ -6,7 +6,7 @@ recipes:
 
   # Whether to remove Block/Ingot compression and decompression in the Crafting Table.
   # Default: true
-  disableManualCompression: true
+  disableManualCompression: false
 
   # Change the recipe of Rods in the Lathe to 1 Rod and 2 Small Piles of Dust, instead of 2 Rods.
   # Default: false
@@ -27,7 +27,7 @@ recipes:
 
   # Recipes for Buckets, Cauldrons, Hoppers, and Iron Bars require Iron Plates, Rods, and more.
   # Default: true
-  hardIronRecipes: true
+  hardIronRecipes: false
 
   # Whether to make Redstone related recipes harder.
   # Default: false
@@ -43,11 +43,11 @@ recipes:
   hardMiscRecipes: false
 
   # Whether to make Glass related recipes harder. Default: true
-  hardGlassRecipes: true
+  hardGlassRecipes: false
 
   # Whether to nerf the Paper crafting recipe.
   # Default: true
-  nerfPaperCrafting: true
+  nerfPaperCrafting: false
 
   # Recipes for items like Iron Doors, Trapdoors, Anvil require Iron Plates, Rods, and more.
   # Default: false
@@ -63,7 +63,7 @@ recipes:
 
   # Whether to make the Flint and Steel recipe require steel parts.
   # Default: true.
-  flintAndSteelRequireSteel: true
+  flintAndSteelRequireSteel: false
 
   # Whether to remove Vanilla Block Recipes from the Crafting Table.
   # Default: false
@@ -71,11 +71,11 @@ recipes:
 
   # Whether to remove Vanilla TNT Recipe from the Crafting Table.
   # Default: true
-  removeVanillaTNTRecipe: true
+  removeVanillaTNTRecipe: false
 
   # How many Multiblock Casings to make per craft. Either 1, 2, or 3.
   # Default: 2
-  casingsPerCraft: 2
+  casingsPerCraft: 3
 
   # Whether to nerf the output amounts of the first circuit in a set to 1 (from 2) and SoC to 2 (from 4).
   # Default: false
@@ -157,7 +157,7 @@ machines:
   # If true, progress will reset.
   # If false, progress will decrease to zero with 2x speed
   # Default: true
-  recipeProgressLowEnergy: true
+  recipeProgressLowEnergy: false
 
   # Whether to require a Wrench, Wirecutter, or other GregTech tools to break machines, casings, wires, and more.
   # Default: false
@@ -211,15 +211,15 @@ machines:
 
   # Whether to enable Assembly Line research for recipes.
   # Default: true
-  enableResearch: true
+  enableResearch: false
 
   # Whether to enable the Maintenance Hatch, required for Multiblocks.
   # Default: true
-  enableMaintenance: true
+  enableMaintenance: false
 
   # Whether to enable World Accelerators, which accelerate ticks for surrounding Tile Entities, Crops, etc.
   # Default: true
-  enableWorldAccelerators: true
+  enableWorldAccelerators: false
 
   # List of TileEntities that the World Accelerator should not accelerate.
   # GregTech TileEntities are always blocked.
@@ -236,7 +236,7 @@ machines:
 
   # Whether to add a "Bedrock Ore Miner" (also enables bedrock ore generation)
   # Default: false
-  doBedrockOres: false
+  doBedrockOres: true
 
   # What Kind of material should the bedrock ore miner output?
   # Default: "raw"
@@ -279,7 +279,7 @@ machines:
 
   # Whether the Assembly Line should require the item inputs to be in order.
   # Default: true
-  orderedAssemblyLineItems: true
+  orderedAssemblyLineItems: false
 
   # Whether the Assembly Line should require the fluid inputs to be in order.
   # (Requires Ordered Assembly Line Item Inputs to be enabled.)
@@ -294,7 +294,7 @@ machines:
   smallBoilers:
     # The amount of steam a Steam Solid Boiler produces per second at max temperature.
     # Default: 120
-    solidBoilerBaseOutput: 120
+    solidBoilerBaseOutput: 320
 
     # The amount of steam a High Pressure Steam Solid Boiler produces per second at max temperature.
     # Default: 300
@@ -302,15 +302,15 @@ machines:
 
     # The amount of steam a Steam Liquid Boiler produces per second at max temperature.
     # Default: 240
-    liquidBoilerBaseOutput: 240
+    liquidBoilerBaseOutput: 480
 
     # The amount of steam a High Pressure Steam Liquid Boiler produces per second at max temperature.
     # Default: 600
-    hpLiquidBoilerBaseOutput: 600
+    hpLiquidBoilerBaseOutput: 960
 
     # The amount of steam a Steam Solar Boiler produces per second at max temperature.
     # Default: 120
-    solarBoilerBaseOutput: 120
+    solarBoilerBaseOutput: 320
 
     # The amount of steam a High Pressure Steam Solar Boiler produces per second at max temperature.
     # Default: 360
@@ -482,12 +482,12 @@ tools:
 gameplay:
   # Enable hazardous materials
   # Default: true
-  hazardsEnabled: true
+  hazardsEnabled: false
 
   # Whether hazards are applied to all valid items, or just GT's.
   # true = all, false = GT only.
   # Default: true
-  universalHazards: true
+  universalHazards: false
 
   # Whether environmental hazards like pollution or radiation are active
   # Default: false
@@ -541,7 +541,7 @@ compat:
     # Toggle specific map mod integration on/off (need to restart for this to take effect)
     toggle:
       # FTB Chunks integration enabled
-      ftbChunksIntegration: false
+      ftbChunksIntegration: true
 
       # Journey Map integration enabled
       journeyMapIntegration: true
@@ -614,7 +614,7 @@ compat:
 
   # Whether Gregtech should remove smelting recipes from the vanilla furnace for ingots requiring the Electric Blast Furnace.
   # Default: true
-  removeSmeltingForEBFMetals: true
+  removeSmeltingForEBFMetals: false
 
   # Whether dimension markers should show the dimension tier value.
   # Default: false

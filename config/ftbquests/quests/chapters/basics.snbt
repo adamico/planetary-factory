@@ -15,7 +15,7 @@
 				item: { count: 1, id: "gtceu:lp_steam_solid_boiler" }
 				type: "item"
 			}]
-			x: -1.0d
+			x: -1.5d
 			y: 1.0d
 		}
 		{
@@ -25,8 +25,8 @@
 				item: { count: 1, id: "gtceu:bronze_plate" }
 				type: "item"
 			}]
-			x: -3.0d
-			y: 2.0d
+			x: -2.5d
+			y: 1.5d
 		}
 		{
 			id: "046E6D86CEE899E9"
@@ -85,7 +85,7 @@
 				item: { count: 1, id: "gtceu:lp_steam_miner" }
 				type: "item"
 			}]
-			x: -1.0d
+			x: -1.5d
 			y: 3.0d
 		}
 		{
@@ -99,44 +99,94 @@
 			y: 4.0d
 		}
 		{
-			id: "42D38FA96D0DCC00"
-			tasks: [{
-				id: "431AF443A6562A73"
-				item: { components: { "ftbfiltersystem:filter": "item_tag(c:tools/hammer)" }, count: 1, id: "ftbfiltersystem:smart_filter" }
-				type: "item"
-			}]
-			x: -2.0d
-			y: -1.5d
-		}
-		{
-			id: "252750514746E080"
-			tasks: [{
-				id: "42A8BCE1E823C1FB"
-				item: { components: { "ftbfiltersystem:filter": "item_tag(c:tools/wrench)" }, count: 1, id: "ftbfiltersystem:smart_filter" }
-				type: "item"
-			}]
-			x: -3.0d
-			y: -1.5d
-		}
-		{
-			id: "2CE7F37CB5E74433"
-			tasks: [{
-				id: "3CE1869757BCF722"
-				item: { components: { "ftbfiltersystem:filter": "item_tag(c:tools/wire_cutter)" }, count: 1, id: "ftbfiltersystem:smart_filter" }
-				type: "item"
-			}]
-			x: -4.0d
-			y: -1.5d
-		}
-		{
 			id: "465D835F9BDC862D"
 			tasks: [{
-				id: "54F1B44A14BBC92D"
-				item: { count: 1, id: "gtceu:small_bronze_gear" }
+				id: "4AF4CCDD0BBD459B"
+				item: { count: 1, id: "create:cogwheel" }
 				type: "item"
 			}]
-			x: -2.0d
-			y: 2.0d
+			x: -2.5d
+			y: 2.5d
+		}
+		{
+			id: "3CEE14E24FF254EE"
+			tasks: [{
+				id: "555E3E15E5D359CE"
+				item: { count: 1, id: "create:andesite_alloy" }
+				type: "item"
+			}]
+			x: -5.5d
+			y: 5.0d
+		}
+		{
+			id: "56AF3EAC18578DD8"
+			tasks: [{
+				id: "3665C763911A5AF6"
+				item: { count: 1, id: "create:fluid_pipe" }
+				type: "item"
+			}]
+			x: -1.5d
+			y: 0.0d
+		}
+		{
+			id: "51F6B58C9A44709C"
+			tasks: [{
+				id: "25C6CB505570C879"
+				item: { count: 1, id: "create:mechanical_pump" }
+				type: "item"
+			}]
+			x: -0.5d
+			y: 0.0d
+		}
+		{
+			id: "34520C9F072DEC82"
+			tasks: [{
+				id: "16D86BC880592DFB"
+				item: { count: 1, id: "create:mechanical_press" }
+				type: "item"
+			}]
+			x: -3.5d
+			y: 0.0d
+		}
+		{
+			id: "38F83B12FEA0B89C"
+			tasks: [{
+				id: "578AFA829ADCB4CC"
+				item: { count: 1, id: "create:brass_funnel" }
+				type: "item"
+			}]
+			x: 1.0d
+			y: -1.0d
+		}
+		{
+			id: "70CA447F93DDF313"
+			tasks: [{
+				id: "504BDE8A00ACFEE9"
+				item: { count: 1, id: "create:belt_connector" }
+				type: "item"
+			}]
+			x: 1.0d
+			y: 0.0d
+		}
+		{
+			id: "5F9659DAFD659621"
+			tasks: [{
+				id: "47900F7152077325"
+				item: { count: 1, id: "create:deployer" }
+				type: "item"
+			}]
+			x: 1.0d
+			y: -2.0d
+		}
+		{
+			id: "4E2621071C18E41A"
+			tasks: [{
+				id: "5371DF8FACFE9DB3"
+				item: { count: 1, id: "gtceu:lv_assembler" }
+				type: "item"
+			}]
+			x: 1.0d
+			y: 4.0d
 		}
 	]
 }
