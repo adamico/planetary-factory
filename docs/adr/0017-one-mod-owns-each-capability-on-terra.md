@@ -8,7 +8,7 @@ Terra runs three tech mods in series on one ladder — GregTech, Create, Mekanis
 Energetics for the grid, and each of the three ships a full-stack answer to mining, moving, processing
 and powering. Left alone, that is three
 parallel routes to the same capability, and a Factorio-literate player finds the cheapest one and
-never learns the line the quest book teaches. The spine (ADR pending, `#33`) is only a spine if
+never learns the line the quest book teaches. The spine (ADR-0018) is only a spine if
 exactly one mod owns each rung.
 
 This ADR is consulted **every time anyone adds a recipe**. The spine ADR is read once. They are

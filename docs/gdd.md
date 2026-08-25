@@ -137,6 +137,17 @@ and where a cross-mod shortcut undercuts GT. Create and Mekanism both offer grid
 GT expects to be machined, and Almost Unified is installed, so those shortcuts will be live and need
 auditing.
 
+### Science and research
+
+Progression is **Factorio's science packs** — four packs plus an unscienced rung 0 (`automation`,
+`logistic`, `chemical`, `production`), each rung granting a capability the next rung's production
+physically requires. The gate is **Researchd's Research Lab**, fed by pipe and consumed unattended;
+FTB Quests keeps the book and the reward surface but does not gate. GregTech is instrumental rather
+than the ladder. The spine is recorded in ADR-0018; which mod owns each rung is ADR-0017.
+
+**Terra's science packs are inert items. Sapros's science pack decays** — the buffer-as-liability
+puzzle belongs to that body and is specified with it, not here.
+
 ### The Personal Assembler
 
 A portable device with its own recipe type, covering the bootstrap tier only: the components of the
@@ -251,15 +262,18 @@ chains, machine restrictions and craft gating from `docs/scratch/planets.md`.
    settings, so every body after it is content against a proven pattern.
 4. **Body: Electro** — no natural veins by design; hand-mined surface ruins and a bedrock scrap
    deposit.
-5. **Research: spoilage** — how this pack implements decay on industrial intermediates. Blocks Sapros,
+5. **Terra flow** — the science spine, the rung-ownership table and the rocket-part chain, ahead of
+   Sapros: tech-tree feedback is wanted before the remaining bodies' puzzles are committed. A
+   sequence quietly deviated from stops being the plan.
+6. **Research: spoilage** — how this pack implements decay on industrial intermediates. Blocks Sapros,
    because specifying it first would be inventing the answer rather than finding it.
-6. **Body: Sapros** — cut once the spoilage research closes, and not before.
-7. **Body: Gelida** — the last body before the endgame; fluids and no solid ore.
-8. **`Puzzle:` tickets** — one per body, each sequenced after its own body ships.
-9. **Resource unification** — using AlmostUnified.
-10. **Tech and recipe gating** — using KubeJS.
-11. **Personal Assembler** — plus the cross-mod recipe audit. Largely independent.
-12. **Emission** — per-chunk scoring, decay, diffusion.
-13. **Overseer loop** — Command Center, Cryo-Pod, Dormant Siege. Depends on Emission and Sapros.
-14. **Cargo terminals** — Launch/Receiving/Drop Hatch as GT machines, plus the Flight timer model.
-15. **Vanguard Kit** — arrival intercept, beachhead paste, Gateway Flag.
+7. **Body: Sapros** — cut once the spoilage research closes, and not before.
+8. **Body: Gelida** — the last body before the endgame; fluids and no solid ore.
+9. **`Puzzle:` tickets** — one per body, each sequenced after its own body ships.
+10. **Resource unification** — using AlmostUnified.
+11. **Tech and recipe gating** — using KubeJS.
+12. **Personal Assembler** — plus the cross-mod recipe audit. Largely independent.
+13. **Emission** — per-chunk scoring, decay, diffusion.
+14. **Overseer loop** — Command Center, Cryo-Pod, Dormant Siege. Depends on Emission and Sapros.
+15. **Cargo terminals** — Launch/Receiving/Drop Hatch as GT machines, plus the Flight timer model.
+16. **Vanguard Kit** — arrival intercept, beachhead paste, Gateway Flag.

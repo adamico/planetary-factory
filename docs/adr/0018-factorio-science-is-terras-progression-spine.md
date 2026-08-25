@@ -1,0 +1,103 @@
+---
+status: accepted
+---
+
+# Factorio science is Terra's progression spine, and Researchd is the lab
+
+Terra runs three tech mods in series plus a grid mod, and every one of them ships its own
+progression. GregTech's is a voltage ladder, Create's is a build-complexity curve, Mekanism's is a
+processing-factor ladder. Left as they are, the pack has three ladders and no spine, and a
+Factorio-literate player — the audience this pack is for — recognises none of them.
+
+This ADR records the spine itself. **Which mod owns each rung is ADR-0017**, consulted on every
+recipe; this one is read once.
+
+## The spine
+
+**Factorio's science packs are the progression, and each rung grants a capability the next rung's
+production physically requires.** One ladder, not two: the science tier is the gate, the capability
+is the reward, and the reward is what makes the next tier producible.
+
+Four packs plus an unscienced rung 0 (`#26`):
+
+| Rung | Pack | What the rung is about |
+| --- | --- | --- |
+| 0 | *(none)* | Steam and Create kinetics. LP Solid Boiler, LP Steam Miner, Crushing Wheels, Steam Engine. |
+| 1 | `automation` | First machines and Mekanism enrichment. |
+| 2 | `logistic` | Movement at scale — Create 6 package logistics is this rung's reward. |
+| 3 | `chemical` | Mekanism chemistry, sulfur and sulfuric acid, the 5x dissolution tier. |
+| 4 | `production` | The oil chapter entire: extraction, refining, the polymer, launch fuel, silo and rocket parts. |
+
+Packs keep **Factorio's names, ingredient count and ingredient roles**; the items filling those
+slots come from the mod that owns the rung. Military is dropped — its ingredients feed nothing
+downstream. Utility and Space are reserved for after the first launch, which is why `production`
+takes the fourth slot, with its vanilla recipe discarded.
+
+**Terra's science packs are inert items.** Sapros's science pack decays; that is where the
+buffer-as-liability puzzle belongs, and it is specified with Sapros.
+
+## GregTech is instrumental, not the ladder
+
+GregTech is in the pack because GCyR requires it, because its miners are good, and because it is a
+cheap chassis for custom machines. It is **not** the progression. Create and Mekanism sit *in
+series* on the same ladder, never as a parallel escape from it — ADR-0017 enforces that block by
+block.
+
+Two consequences bind every recipe author:
+
+- **Assembling Machine I/II/III** (GT's LV/MV/HV Assemblers, renamed) are **granted by a rung,
+  speed-only, and gate nothing**.
+- **Every GT recipe is authored at LV `EUt`**, or machine tier becomes a recipe gate by accident and
+  the pack grows a second ladder underneath the first.
+
+## Researchd is the lab, and the quest book teaches
+
+The gate is **Researchd's Research Lab multiblock** (`#45`): research packs are items, the Lab
+accepts them by pipe and consumes them unattended, and unlocking fires `unlock_recipe` effects.
+FTB Quests keeps the book and the reward surface and **stops being the gate** — which supersedes the
+GTCEu `RecipeCondition` approach of `#36` entirely.
+
+Two rules ride on this:
+
+- **The automation rule** — *hand-crafted implies small; large implies automated*. No fixed
+  quantity: it depends on the item and the tier, and is applied per quest at authoring time. The
+  Lab's piped, unattended intake is what makes the rule enforceable rather than aspirational.
+- **No science tier is unlocked by an item the player can hand-craft.** A rung that a player can
+  reach by grinding a crafting grid is not a rung.
+
+Researchd's lock is a property of the pack's **crafting-surface inventory**, not of the mod: any mod
+that subclasses or replaces `RecipeManager` is a silent hole. That is why FastSuite, FastBench and
+ClientCrafting are cut. Neither JEI nor EMI reflects locked state, so a blocked recipe is **shown
+and refused**.
+
+## The pacing figure
+
+**20–25 hours** from spawn to first launch, for a Factorio-literate, GregTech-naive player following
+the book. It is a figure to **check the beat sheet against**, never a knob to tune costs with. A
+beat sheet that lands far outside it has the wrong number of beats, not the wrong prices.
+
+## Considered Options
+
+- **GregTech's voltage ladder as the spine.** Rejected: it inverts the pack's design, and the
+  audience does not read voltage tiers as progression. It also makes Create and Mekanism decoration.
+- **Two ladders — science for unlocks, mod tiers for capability.** Rejected: the player then has two
+  progressions to track and the cheaper one wins. The rung *is* the capability.
+- **FTB Quests Task Screens as the lab** (the premise this map was chartered on). Superseded by
+  `#45`: Researchd gives real research packs, a research graph and data-driven recipe locking, which
+  Task Screens plus `RecipeCondition` only approximated — and that approximation reached GT machines
+  only.
+- **Three science rungs instead of four.** Rejected in `#26`: in-pack sulfur is a coal product, not
+  a refinery by-product, so `chemical` no longer implies oil and the oil chapter earns its own rung.
+
+## Consequences
+
+- **The beat sheet is written against this table**, rung by rung, and the pack ingredient lists
+  (`#42`) are a production test landing on ADR-0017's ownership boundaries.
+- **A hand-craftable unlock is a bug**, whatever it costs to author around.
+- **A new crafting surface is a spine risk**, not a convenience mod: it must be screened against
+  Researchd's lock before it enters the pack.
+- **Emission's metric is left open.** ADR-0005 defines it as GT machines' EU/t draw, but ADR-0017
+  reduced GT to extraction and assembly, so a GT-only metric now measures a much smaller share of
+  the factory than when it was written. Decided with the Emission work.
+- **Co-op is a standing assumption, not a decision.** The spine is specified single-player.
+- **The delivery sequence moves.** Terra's flow lands before Sapros — see `docs/gdd.md`.
