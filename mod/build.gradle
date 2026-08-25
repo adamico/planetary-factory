@@ -33,6 +33,13 @@ neoForge {
     }
 }
 
+// The mixin in `mixin/gtceu` compiles against GTCEu and Researchd. Both are pack mods, so their
+// jars are already in `mods/` -- taken from there rather than from a maven so the build stays
+// offline and always compiles against exactly the jars the pack ships.
+dependencies {
+    compileOnly fileTree(dir: rootProject.file('mods'), include: ['gtceu-*.jar', 'researchd-*.jar'])
+}
+
 // `neoforge.mods.toml` is the one place a version string has to be interpolated;
 // everything else the mod knows lives in the pack's data, not in the jar.
 def modMetadata = [

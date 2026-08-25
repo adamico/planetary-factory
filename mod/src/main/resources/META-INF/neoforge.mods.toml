@@ -25,3 +25,22 @@ type = "required"
 versionRange = "[${minecraft_version},)"
 ordering = "NONE"
 side = "BOTH"
+
+# GTCEu never asks the vanilla RecipeManager, so Researchd's own lock cannot see a GT
+# machine. `RecipeLogicMixin` is that hook; both mods are hard requirements for it.
+[[dependencies.${mod_id}]]
+modId = "gtceu"
+type = "required"
+versionRange = "[7.0.2,)"
+ordering = "AFTER"
+side = "BOTH"
+
+[[dependencies.${mod_id}]]
+modId = "researchd"
+type = "required"
+versionRange = "[1.2.5,)"
+ordering = "AFTER"
+side = "BOTH"
+
+[[mixins]]
+config = "planetaryfactory_core.mixins.json"
