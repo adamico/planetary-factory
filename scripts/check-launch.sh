@@ -52,6 +52,30 @@ if grep -q "Reloading ResourceManager" "$LOG" \
   grep "Reloading ResourceManager" "$LOG" | tail -1 | cut -c1-200 | sed 's/^/  /'
 fi
 
+# A mod compiled against a class that has moved throws at the call site, not at
+# construction, so everything above stays quiet. Minecraft then *recovers* -- it
+# discards the resource packs and carries on into a playable world -- which is how a
+# KubeJS bump once passed both this script and the worldgen check while GTCEu's
+# recipe hook was dead (ADR-0023). A recovered error is still a failure.
+# Match only a thrown stack trace, anchored at the start of the line. Mixin logs
+# `Error loading class: ... (ClassNotFoundException)` at WARN for every optional mod
+# that is not installed, which is normal and must not fail the run.
+if grep -qE "^java\.lang\.NoClassDefFoundError" "$LOG"; then
+  fail=1
+  echo
+  echo "MISSING CLASS AT RUNTIME — a mod references a class that is not there"
+  grep -nE "^java\.lang\.NoClassDefFoundError" "$LOG" | head -3 | cut -c1-200 | sed 's/^/  /'
+  # The first stack frame naming a mod jar is the mod holding the stale reference.
+  grep -A3 -E "^java\.lang\.NoClassDefFoundError" "$LOG" \
+    | grep -m1 -oE "at TRANSFORMER/[^ ]+" | sed 's/^/  culprit: /'
+fi
+
+if grep -q "Caught error loading resourcepacks" "$LOG"; then
+  fail=1
+  echo
+  echo "RESOURCE PACKS DISCARDED — the game recovered from an error by dropping state"
+fi
+
 if [[ "$fail" -eq 0 ]]; then
   echo "launch clean — no mod construction failures in $LOG"
   exit 0
