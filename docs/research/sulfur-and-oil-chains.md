@@ -1,5 +1,15 @@
 # Sulfur's source chains, and what oil processing is in this pack
 
+> **Its verdict is superseded by ADR-0025; its findings are not.** This document asked whether
+> sulfur *can* be had without oil and answered yes, on three routes. ADR-0025 later decided that it
+> *should not* be — sulfur is petroleum-derived, as in Factorio — and removed all three: coal and
+> charcoal gasification, gunpowder, and the weight-1 `gtceu:sulfur` slot in Terra's polymetallic
+> bedrock deposit. Everything below is still an accurate read of the jars as installed on
+> 2026-08-22, and the routes it documents are the routes ADR-0025 deletes. Read §1 as the evidence
+> for that deletion rather than as the pack's current sulfur supply. §4's fluid inventory carries one
+> correction, also in ADR-0025: the chapter uses `gtceu:light_oil` and `gtceu:heavy_oil`, not
+> `light_fuel` and `heavy_fuel`.
+
 Research for #38, resolving the unverified claim #26 built rung 3 on: that *in-pack sulfur is an
 ore/dust product and not a refinery by-product*. Everything below is read out of the jars and pack
 files actually installed on 2026-08-22, not from a wiki or from memory.
