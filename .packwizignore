@@ -51,6 +51,25 @@ mods/*.jar
 # covered by the `mods/*.jar` rule above and deliberately not re-included.
 
 # --- Per-user and per-run state, never pack behaviour -------------------------
+# NOTE: the repo root is also the live game instance, so it accumulates directories
+# that never appear in a fresh checkout. This list was first written from a clean
+# worktree and missed every one of them — .probe/ and .mixin.out/ alone added ~1500
+# spurious index entries the first time the check ran on a real instance. When adding
+# to it, check against `ls -A` in the instance, not against a checkout.
+#
+# Anchor root-only names with a leading slash. A bare `assets/` matches a directory of
+# that name at ANY depth, which silently swallowed kubejs/assets and kubejs/data.
+/.probe/
+/.mixin.out/
+/.curseclient
+/assets/
+/datapacks/
+/gtceu/
+TrashSlotSaveState.json
+command_history.txt
+emi.json
+observable_announce
+hs_err_pid*.log
 saves/
 logs/
 crash-reports/
@@ -76,6 +95,10 @@ config/jei/
 config/chunky/tasks/
 config/InventoryHUD/
 config/justzoom/
+config/almostunified/debug.json
+config/emi.css
+config/observable.json
+config/runelic.json
 *client*.toml
 *client*.snbt
 *client*.json

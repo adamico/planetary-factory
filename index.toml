@@ -1305,6 +1305,10 @@ file = "kubejs/data/remove-stock-bodies.zip"
 hash = "7c202d1fdd213e8d3b6d7ce5c585b45bee7774a836008d4cf0c5af4b5ab0db71"
 
 [[files]]
+file = "kubejs/server_scripts/create_recipes.js"
+hash = "c5c5c9df1fd6830f7a5638be75705b23b3ea9afb9f98efbb929eea8acdf8c273"
+
+[[files]]
 file = "kubejs/server_scripts/factorio_tech_data.js"
 hash = "5f1cc1c57b22b2bf32857a0c27d2805937847fac025a5759ff8603ffb83d49ee"
 
