@@ -6,7 +6,7 @@ merged NeoForge + vanilla version JSONs under Install/versions, the library
 tree, and a bundled JRE. This rebuilds the java command from those and runs it
 in offline mode, which is enough for singleplayer.
 """
-import json, os, subprocess, sys, uuid
+import contextlib, json, os, re, subprocess, sys, uuid
 from pathlib import Path
 
 INSTALL = Path.home() / "Documents/curseforge/minecraft/Install"
@@ -14,6 +14,34 @@ INSTANCE = Path(__file__).resolve().parent.parent
 VERSION = "neoforge-21.1.248"
 JAVA = INSTALL / "java/java-runtime-delta/Contents/Home/bin/java"
 LIBS = INSTALL / "libraries"
+FML_CONFIG = INSTANCE / "config/fml.toml"
+
+
+@contextlib.contextmanager
+def headless():
+    """Run without a display by taking FML's early loading window out of the way.
+
+    On a machine with no attached display -- a remote session, CI -- the pack dies
+    before mod loading with `glfwGetPrimaryMonitor failed`. That is FML's *early*
+    window, the splash it draws while mods construct; it insists on a primary
+    monitor. Minecraft's own window has no such requirement and creates offscreen
+    quite happily, so the whole game runs headless once the splash is out of the way.
+
+    The setting lives in config/fml.toml and is read from there, not from a system
+    property, so there is nothing to pass on the command line -- the file has to be
+    edited. It is patched for the duration of the run and restored afterwards, since
+    players want their splash screen.
+    """
+    original = FML_CONFIG.read_text()
+    patched = re.sub(r'^earlyWindowProvider\s*=.*$', 'earlyWindowProvider = "NOOP"',
+                     original, flags=re.M)
+    patched = re.sub(r'^earlyWindowControl\s*=.*$', 'earlyWindowControl = false',
+                     patched, flags=re.M)
+    FML_CONFIG.write_text(patched)
+    try:
+        yield
+    finally:
+        FML_CONFIG.write_text(original)
 
 
 def load(v):
@@ -107,11 +135,14 @@ def main():
     cmd = [str(JAVA), "-Xmx6G", "-XstartOnFirstThread", *jvm, nf["mainClass"], *game]
     if "--demo" in cmd:
         cmd.remove("--demo")
-    cmd += sys.argv[1:]
+    args = sys.argv[1:]
+    no_display = "--headless" in args
+    cmd += [a for a in args if a != "--headless"]
 
     print(" ".join(cmd[:6]), "...", file=sys.stderr)
     os.chdir(INSTANCE)
-    sys.exit(subprocess.call(cmd))
+    with headless() if no_display else contextlib.nullcontext():
+        sys.exit(subprocess.call(cmd))
 
 
 if __name__ == "__main__":

@@ -46,7 +46,7 @@ def fresh_world():
     shutil.copytree(WORLD_TEMPLATE, WORLD)
 
 
-def run_game(timeout):
+def run_game(timeout, no_display=False):
     REQUEST.parent.mkdir(parents=True, exist_ok=True)
     REQUEST.write_text('{"requested_by": "scripts/worldgen-check.py"}\n')
     DUMP.unlink(missing_ok=True)
@@ -56,6 +56,7 @@ def run_game(timeout):
 
     game = subprocess.Popen(
         [sys.executable, str(INSTANCE / "scripts/launch.py"),
+         *(["--headless"] if no_display else []),
          "--quickPlaySingleplayer", WORLD_NAME],
         stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
         start_new_session=True,
@@ -236,11 +237,13 @@ def main():
                         help="leave saves/%s in place afterwards" % WORLD_NAME)
     parser.add_argument("--dump-only", action="store_true",
                         help="compare the existing dump without launching the game")
+    parser.add_argument("--headless", action="store_true",
+                        help="run with no display (remote session, CI) — see launch.py")
     args = parser.parse_args()
 
     if not args.dump_only:
         fresh_world()
-        if not run_game(args.timeout):
+        if not run_game(args.timeout, args.headless):
             print(f"no registry dump after {args.timeout}s — see logs/latest.log", file=sys.stderr)
             return 2
         if not args.keep_world and WORLD.exists():
