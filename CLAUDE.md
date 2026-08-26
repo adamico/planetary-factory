@@ -31,6 +31,15 @@ fixture entry, not code. See `docs/testing/worldgen-registry-check.md`.
 which marshland carries which tree and that no stromatolite drops ore — with no game launch. Run it
 after any edit to the trees, the stromatolites or the five biomes.
 
+### Factorio tech tree
+
+The pack's research tree takes its shape from Factorio's, extracted rather than transcribed
+(ADR-0022). `data/factorio/technology.json` is the committed reference; `researchd.js` declares
+each research with `fromFactorio(name, {icon, unlocks, ...})` and supplies only the
+Minecraft-specific parts. Regeneration and provenance are in `data/factorio/README.md`.
+`tests/factorio/test_tech_extract.py` asserts the pruned tree is still a valid tree and that every
+declared name exists — run it after re-extracting or after editing `researchd.js`.
+
 ### First-party mod
 
 `planetaryfactory_core` is a Gradle subproject in `mod/`, built from the repo root with
