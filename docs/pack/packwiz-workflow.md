@@ -15,8 +15,9 @@ therefore pins a commit, so that "which packwiz built this manifest" has an answ
 go install github.com/packwiz/packwiz@dfd8b68a4796c763e25bad50265ea1f1233e24f1
 ```
 
-The binary lands in `~/go/bin/packwiz`. The same SHA is recorded in `scripts/pack-check.sh` as
-`PACKWIZ_SHA`; if you bump it, bump it in both places and say so in the commit.
+The binary lands in `~/go/bin/packwiz`. **`PACKWIZ_SHA` in `scripts/pack-check.sh` is the source of
+truth for that pin** — the SHA above is quoted from it. Change it there, and the check reports the
+new value in its own output.
 
 `packwiz` has no `--version` flag, which is a fair summary of the situation.
 
@@ -35,7 +36,25 @@ falls out of version control. That is the exact bug this whole setup exists to f
 
 `.packwizignore` limits what gets indexed to pack content — `mods/`, `config/`, `kubejs/`,
 `defaultconfigs/`, `data/`, `packs/`. Docs, tests, scripts and `mod/` are excluded so that editing
-prose does not dirty the manifest.
+prose does not dirty the manifest. Per-user state inside `config/` (`config/jei/`, `config/spark/`,
+the `*client*.toml` files) is excluded too — it is not pack behaviour.
+
+**The jars themselves are excluded, and this is the subtle part.** packwiz assumes `mods/` holds
+metafiles and that an installer fetches the jars. Here the pack root *is* the playable instance, so
+the jars sit right next to their metafiles — and `refresh` would happily index each managed mod
+twice, once as its metafile and once as a raw hashed jar (465 index entries become 586). So
+`.packwizignore` carries `mods/*.jar`, with negations re-including only the two forks, whose hash is
+the sole record of which build is installed:
+
+```
+mods/*.jar
+!mods/gcyr-*.jar
+!mods/Respoiled-*.jar
+```
+
+A consequence worth knowing: because `refresh` cannot see the managed jars, it cannot notice one
+going missing or a new one appearing either. That is what the MISSING and STRAY checks below exist
+for.
 
 ## The three local jars
 
@@ -69,17 +88,20 @@ scripts/pack-check.sh          # fail if installed jars differ from the manifest
 scripts/pack-check.sh --fix    # keep the refreshed manifest, when the drift is intended
 ```
 
-It checks two different things, because one alone is not enough:
+It checks three things, because none alone is enough:
 
-1. **`packwiz refresh` changed something tracked** — a jar was added, removed or edited. This is the
-   only signal for the unmanaged jars, which have no metafile.
-2. **A metafile names a jar that is not installed.** `refresh` hashes the *metafiles*, not the jars
-   they point at, so a metafile bumped to a version nobody downloaded refreshes perfectly clean.
-   Without this second check the whole thing is vacuous for the ~121 mods that have metafiles —
-   including the case where `mods/` is empty.
+1. **`packwiz refresh` changed something tracked** — an edit to indexed pack content, or to one of
+   the two unmanaged fork jars.
+2. **MISSING** — a metafile names a jar that is not installed. `refresh` hashes the *metafiles*, not
+   the jars they point at, so a metafile bumped to a version nobody downloaded refreshes perfectly
+   clean.
+3. **STRAY** — a jar is installed that nothing accounts for. The managed jars are excluded from the
+   index (see below), so `refresh` cannot see these at all.
 
-A failing run restores the tree, so a failed check never leaves the manifest half-updated. `--fix`
-can rewrite the manifest but cannot conjure a missing jar, so a missing jar fails even under `--fix`.
+A failing run restores the tree, so a failed check never leaves the manifest half-updated — and it
+deletes only metafiles that *this run* created, never one you wrote and have not committed yet.
+`--fix` rewrites the manifest but will neither conjure a missing jar nor silently adopt a stray one,
+so MISSING and STRAY fail even under `--fix`.
 
 **What it still does not check:** that an installed jar's *contents* match the CurseForge file id its
 metafile names. Filenames are compared, not hashes. Swapping a jar's bytes while keeping its name
@@ -88,8 +110,9 @@ would pass. Closing that needs packwiz-installer, which is not set up here.
 Run it after touching `mods/`. Nothing runs it automatically yet — there is no CI in this repo —
 which is its own ticket.
 
-**It needs a real `mods/`.** A git worktree does not have one (the jars are gitignored and never
-copied in), so the check exits 2 there rather than reporting a false pass.
+**It needs the jars, not just the manifest.** The metafiles are tracked, so `mods/` exists in every
+checkout — but a git worktree has the manifest and none of the jars it describes. The check detects
+that by the absence of jars and exits 2, rather than reporting 121 false failures.
 
 ## Adding a mod
 
@@ -100,8 +123,10 @@ packwiz mr install <slug>       # from Modrinth
 
 Then commit the new `mods/<slug>.pw.toml` along with the changed `index.toml` and `pack.toml`.
 
-For a jar with no index entry — a new fork, a hand-built jar — drop it in `mods/` and run
-`scripts/pack-check.sh --fix`. `packwiz refresh` picks it up as an unmanaged hashed entry.
+For a jar with no index entry — a new fork, a hand-built jar — add a `!mods/<name>` negation to
+`.packwizignore` first, then run `scripts/pack-check.sh --fix`. Without the negation the jar is
+excluded along with every other managed jar and `refresh` will not index it; the check reports it as
+STRAY until you decide which it is.
 
 ## Bumping a mod, and rolling it back
 

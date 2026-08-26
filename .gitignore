@@ -32,7 +32,6 @@ logs
 mods/*
 !mods/*.pw.toml
 profilekeys
-releases
 saves
 screenshots
 world
