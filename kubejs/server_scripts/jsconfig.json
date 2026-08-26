@@ -1,0 +1,25 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "ES2015",
+        "lib": [
+            "ES5",
+            "ES2015"
+        ],
+        "rootDir": ".",
+        "typeRoots": [
+            "../../.probe/server/probe-types"
+        ],
+        "skipLibCheck": true,
+        "baseUrl": "../../.probe/server/probe-types",
+        "ignoreDeprecations": "6.0",
+        "types": [
+            "global",
+            "packages"
+        ]
+    },
+    "include": [
+        "./**/*.js",
+        "./**/*.ts"
+    ]
+}
