@@ -121,3 +121,7 @@ build/
 *.log
 
 .probe
+
+# Agent worktrees. Each is a second checkout of this repo, not pack content, and a
+# `git add -A` from the repo root would otherwise commit every session's copy of it.
+.claude/worktrees/
