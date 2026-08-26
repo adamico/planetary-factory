@@ -1,0 +1,13 @@
+name = "Runelic"
+filename = "runelic-neoforge-1.21.1-21.1.5.jar"
+side = "both"
+
+[download]
+hash-format = "sha1"
+hash = "5f9ad64e60872f37a9eca99a6efecccdfb7fd083"
+mode = "metadata:curseforge"
+
+[update]
+[update.curseforge]
+file-id = 7115350
+project-id = 393149

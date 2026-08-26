@@ -24,25 +24,18 @@ libraries
 llibrary
 local
 logs
-mods
+# The jar set is tracked as a packwiz manifest (ADR-0024). The jars themselves stay
+# out of git, but packwiz writes one `.pw.toml` metafile per mod into `mods/` and
+# those ARE the manifest. Written as `mods/*` rather than a bare `mods`, because git
+# will not re-include a file beneath an excluded *directory* — a negation under the
+# bare form fails silently, leaving the manifest untracked.
+mods/*
+!mods/*.pw.toml
 profilekeys
-releases
 saves
 screenshots
 world
 world_backup
-
-# Automation stuff
-!Cat-Downloader-Legacy.jar
-!server_files/**
-!server_files/server-guide.txt
-.github_changelog_generator
-automation/Cat-Downloader-Legacy-Settings.json5
-automation/CDL-Logs
-automation/game-versions.json
-automation/secrets.ps1
-CHANGELOG-GENERATED.md
-secrets.ps1
 
 # Utilities
 .curseclient

@@ -79,8 +79,8 @@ language server installed at all. Those are fixed independently, and editor supp
 
 The failure mode above was discovered three times and recorded once. Two things make the difference:
 
-- `docs/pack/mods-snapshot.md` records the working jar set, and issue #68 tracks replacing it with
-  a real tracked manifest. A rolled-back jar must leave evidence.
+- The jar set is tracked, so a rolled-back jar leaves evidence. This was a flat snapshot when this
+  ADR was written; ADR-0024 replaced it with a packwiz manifest, and a rollback is now `git revert`.
 - `scripts/launch.py --headless` and `scripts/worldgen-check.py --headless` let the check run
   without a display, so "does this bump work" is a command anyone can run rather than a thing only
   reproducible at a particular desk.

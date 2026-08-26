@@ -1,0 +1,13 @@
+name = "Porting Dead Libs"
+filename = "portingdeadlibs-1.1.8-1.21.1.jar"
+side = "both"
+
+[download]
+hash-format = "sha1"
+hash = "c1f9b4af84fc22a60bf460a67d792e5b9f92b6a0"
+mode = "metadata:curseforge"
+
+[update]
+[update.curseforge]
+file-id = 7249956
+project-id = 1173919

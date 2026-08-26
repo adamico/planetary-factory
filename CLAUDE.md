@@ -40,6 +40,14 @@ Minecraft-specific parts. Regeneration and provenance are in `data/factorio/READ
 `tests/factorio/test_tech_extract.py` asserts the pruned tree is still a valid tree and that every
 declared name exists — run it after re-extracting or after editing `researchd.js`.
 
+### Pack manifest
+
+The jar set is a packwiz manifest tracked in git (ADR-0024) — `pack.toml`, `index.toml` and one
+`mods/*.pw.toml` per externally-sourced mod. `mods/*` is gitignored with `!mods/*.pw.toml` re-included;
+never rewrite that as a bare `mods`, or the manifest silently stops being tracked. The two forked jars
+are unmanaged hashed entries and `planetaryfactory_core` is not indexed at all. `scripts/pack-check.sh`
+asserts the installed jars still match. See `docs/pack/packwiz-workflow.md`.
+
 ### First-party mod
 
 `planetaryfactory_core` is a Gradle subproject in `mod/`, built from the repo root with

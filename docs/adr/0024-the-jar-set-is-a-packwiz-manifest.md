@@ -4,7 +4,7 @@ status: accepted
 
 # The jar set is a packwiz manifest
 
-`mods/` is gitignored wholesale (`.gitignore:27`). The pack's 124 jars — the thing that *is* the
+`mods/` was gitignored wholesale. The pack's 124 jars — the thing that *is* the
 modpack — have had no representation in version control at all, and the cost has already been paid
 twice. The KubeJS bump was attempted and rolled back with no record of the failure mode, leaving
 only an untracked `mods/.replaced/` directory; the constraint that came out of it survived as an
@@ -68,6 +68,23 @@ building a source-only dependency at a known point rather than trusting a floati
 `mods/`, `config/`, `kubejs/`, `defaultconfigs/`, `data/`, `packs/` — and excluding `docs/`,
 `tests/`, `scripts/`, `mod/` and the Gradle files. Indexing those would give files git already
 tracks a second, hash-based source of truth and dirty the manifest on every documentation edit.
+Two narrowings were added during implementation: per-user state inside `config/` (`config/jei/`,
+`config/spark/`, the `*client*.toml` files) is excluded, being per-user rather than pack behaviour;
+and the editor/agent directories `.claude/`, `.vscode/` and `.github/` are excluded as repo
+machinery.
+
+**The managed jars are excluded from the index as well** — discovered during implementation, and it
+changes the shape of the answer. packwiz assumes `mods/` holds metafiles while an installer fetches
+the jars; this pack root *is* the playable instance, so the jars sit beside their metafiles and
+`refresh` indexes each managed mod twice, once as its metafile and once as a raw hashed jar (465
+entries become 586). `.packwizignore` therefore carries `mods/*.jar`, re-including only the two
+forks by negation. A mod with a metafile is fully described by it; the jar is that metafile's
+payload, not content in its own right.
+
+The cost is that `refresh` can no longer see a managed jar appearing or disappearing, so the drift
+check has to compare the manifest against `mods/` itself — a metafile naming an absent jar
+(MISSING), and an installed jar nothing accounts for (STRAY). Without those two the check would be
+vacuous for 121 of the pack's 124 jars.
 
 **Metafiles stay in `mods/`, and `.gitignore` gains a negation for them.** packwiz writes one
 `.pw.toml` per mod into `mods/`, which is precisely the directory ignored today — so the manifest
@@ -108,4 +125,8 @@ failure this ADR exists to fix.
 - The dead ModpackUploader lines in `.gitignore` go with it.
 - `packwiz update --all` will report *"A supported update system for X cannot be found"* for the two
   unmanaged jars. This is expected, non-fatal and non-mutating, not a defect to fix.
-- `packwiz update` prompts interactively and has no `--yes`, so bumps are not scriptable unattended.
+- Adding a new locally built jar takes an edit to `.packwizignore` (a `!mods/<name>` negation) as
+  well as dropping the file in. The drift check reports it as STRAY until that happens, which is the
+  intended prompt rather than an obstacle.
+- `packwiz update` prompts interactively, but every packwiz command takes a global `-y` to accept
+  prompts, so bumps are scriptable when they need to be.

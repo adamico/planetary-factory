@@ -1,0 +1,13 @@
+name = "Planetary Factory"
+author = "kc00l"
+version = "0.1.0"
+pack-format = "packwiz:1.1.0"
+
+[index]
+file = "index.toml"
+hash-format = "sha256"
+hash = "8d5a657ef30dd41efba69f57fa6388c81eba49b73254721abdf61e519939848d"
+
+[versions]
+minecraft = "1.21.1"
+neoforge = "21.1.248"
