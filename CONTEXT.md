@@ -151,6 +151,32 @@ _Avoid_: crafting table, hand crafter, personal crafter
 A recipe whose type routes it away from the crafting grid to a machine or the Personal Assembler. Gating is a recipe-authoring choice, not a scripted restriction.
 _Avoid_: locked recipe, blocked recipe
 
+### The oil chapter
+
+**Oil Refinery**:
+The pack-registered GregTech multiblock that splits crude. It runs basic and advanced oil processing on Terra and coal liquefaction on Ignus, and it is the only machine in the pack that emits three fluids at once (ADR-0025).
+_Avoid_: distillation tower, refinery multiblock, cracker
+
+**Chemical Plant**:
+The pack-registered GregTech single block carrying Factorio's whole chemical-plant recipe list — both crackings, lubricant, plastic, sulfur, solid fuel, sulfuric acid, battery and explosives (ADR-0025).
+_Avoid_: chemical reactor, chem plant, reaction chamber
+
+**Crude Oil**:
+The unprocessed fluid a Fluid Drilling Rig extracts, and the sole input to oil processing. `gtceu:raw_oil`.
+_Avoid_: raw oil, oil, petroleum
+
+**Petroleum Gas**:
+The lightest fraction, and the one that feeds sulfur and plastic. `gtceu:oil`, renamed in lang only.
+_Avoid_: refinery gas, natural gas, naphtha
+
+**Heavy Oil** / **Light Oil**:
+The two heavier fractions. `gtceu:heavy_oil` and `gtceu:light_oil` — not `heavy_fuel` and `light_fuel`, which are different materials the pack hides. Heavy Oil is also what Electro's oceans are made of (ADR-0009).
+_Avoid_: heavy fuel, light fuel, fuel oil, kerosene
+
+**The oil chapter**:
+Everything from crude to plastic, lubricant and launch fuel. It spans rungs 2 to 4 rather than sitting in one, because sulfur is petroleum-derived and sulfur gates chemical science.
+_Avoid_: the oil rung, rung 4, the petroleum tier
+
 ### Spoiling
 
 **Decay**:

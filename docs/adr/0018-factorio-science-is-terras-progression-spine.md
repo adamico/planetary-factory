@@ -24,9 +24,23 @@ Four packs plus an unscienced rung 0 (`#26`):
 | --- | --- | --- |
 | 0 | *(none)* | Steam and Create kinetics. LP Solid Boiler, LP Steam Miner, Crushing Wheels, Steam Engine. |
 | 1 | `automation` | First machines and Mekanism enrichment. |
-| 2 | `logistic` | Movement at scale — Create 6 package logistics is this rung's reward. |
-| 3 | `chemical` | Mekanism chemistry, sulfur and sulfuric acid, the 5x dissolution tier. |
-| 4 | `production` | The oil chapter entire: extraction, refining, the polymer, launch fuel, silo and rocket parts. |
+| 2 | `logistic` | Movement at scale — Create 6 package logistics — **plus the Oil Refinery, the Chemical Plant, basic oil processing, solid fuel, sulfur, sulfuric acid and plastic** (ADR-0025). |
+| 3 | `chemical` | **Advanced oil processing, heavy and light cracking, lubricant** (ADR-0025). The 5x dissolution tier's placement is under review, `#69`. |
+| 4 | `production` | **Rocket fuel, rocket control units, rocket parts and the silo.** |
+
+**Rungs 2–4 were re-cut by ADR-0025.** Rung 4 was "the oil chapter entire"; the chapter now starts
+at rung 2. The cause is sulfur: making it petroleum-derived, as Factorio does, puts it and sulfuric
+acid behind oil — and sulfur gates chemical science, so oil must precede it. Factorio's own tech
+costs say the same thing, since `Oil processing`, `Sulfur processing` and `Plastics` are all
+red+green while `Advanced oil processing` costs blue.
+
+The spine rule survives the move intact: rung 2's sulfur buys rung 3's science pack, rung 3's
+advanced processing buys rung 4's launch fuel, and rung 4's fuel buys the silo.
+
+**Rung 4's gate is re-argued.** `#39` justified the rung on the polymer, since every GCyR fuel tank
+and rocket motor is an Assembler recipe taking `plate KaptonK ×6`. The polymer is now rung 2, so
+that argument is spent, and the replacement is Factorio's own: the **Rocket silo** is the technology
+that costs production science, and it requires rocket fuel, rocket control units and concrete.
 
 Packs keep **Factorio's names, ingredient count and ingredient roles**; the items filling those
 slots come from the mod that owns the rung. Military is dropped — its ingredients feed nothing
@@ -88,6 +102,10 @@ beat sheet that lands far outside it has the wrong number of beats, not the wron
   only.
 - **Three science rungs instead of four.** Rejected in `#26`: in-pack sulfur is a coal product, not
   a refinery by-product, so `chemical` no longer implies oil and the oil chapter earns its own rung.
+  **The premise inverted in ADR-0025** — sulfur *is* a refinery by-product now, by choice, so
+  `chemical` does imply oil. The rejection nonetheless stands, on a different fact: oil does not fill
+  a rung by itself once it is split across two of them, and rung 4 is held by the silo rather than by
+  the chapter. Four rungs, re-cut, not three.
 
 ## Consequences
 

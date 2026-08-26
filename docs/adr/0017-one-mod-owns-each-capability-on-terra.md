@@ -27,9 +27,9 @@ craftable has not made the choice.
 | Capability | Owner | The losing blocks |
 | --- | --- | --- |
 | Extraction (ore) | **GregTech** | Create Mechanical Drill **cut**; Mekanism Digital Miner **cut** |
-| Extraction (fluid) | **GregTech** — Fluid Drilling Rig, rung 4 | — |
+| Extraction (fluid) | **GregTech** — Fluid Drilling Rig, **rung 2** (was rung 4; moved with the oil chapter, ADR-0025) | — |
 | Mining automation | **GregTech** — LP Steam Miner (rung 0) → Basic Ore Drilling Rig → Advanced, one rig per rung, each granted by a science tier | as above |
-| Ore processing | **Create** at rung 0 (Crushing Wheels, Millstone); **Mekanism** from rung 1 (enrichment → 5x) | GT's ore-processing line recipe-removed (ADR pending, `#37`) |
+| Ore processing | **Create** at rung 0 (Crushing Wheels, Millstone); **Mekanism** from rung 1 (enrichment → 5x) — **this row is under review, `#69`** | GT's ore-processing line recipe-removed (ADR pending, `#37`) |
 | Power generation | **Create** generates first (Steam Engine, rung 0); **Mekanism** generates at scale as FE; **Electro carries what either makes** | GT's power layer removed entire |
 | Power transmission (between areas) | **Create: Electro Energetics** — poles, wire, catenary | GT cables removed with the power layer |
 | Power distribution (inside an area) | **Mekanism** (Universal Cables) | — |
@@ -38,12 +38,23 @@ craftable has not made the choice.
 | Fluid logistics | **Mekanism** (Mechanical Pipes) | Create fluid pipes **kept** for short local runs — pumps and hand-placed, not a network |
 | Bulk storage (item) | **Create** (Item Vault) | Mekanism Bins and QIO **cut**; GT quantum chests removed |
 | Bulk storage (fluid) | **Mekanism** (Dynamic Tank) | GT quantum tanks removed |
-| Chemistry | **Mekanism** | GT has no petrochemistry to lose; its chem line is not Terra's |
-| Refining | **Mekanism**, by pack-authored recipes on machines it owns | GT Distillation Tower and Distillery **recipe-removed on Terra** |
+| Oil processing | **The pack** — a registered **Oil Refinery** on a GT chassis (ADR-0025) | GT Distillation Tower and Distillery **recipe-removed on Terra**; Create: Petrochem and Create: Diesel Generators declined |
+| Chemistry | **The pack** — a registered **Chemical Plant** on a GT chassis (ADR-0025), carrying Factorio's whole chemical-plant list | Mekanism keeps chemistry only where the oil chapter does not reach it; GT's chem line is not Terra's |
+| Refining | **The pack** (ADR-0025) — *this row was "Mekanism, by pack-authored recipes on machines it owns" and was written without checking that Mekanism can express the recipe. It cannot: advanced oil processing is two fluids in and three out, and no Mekanism machine has that shape.* | as above |
 | Assembly | **GregTech** (Assembling Machine I/II/III) | — |
 
 GregTech is left with exactly extraction and assembly, plus the fluid rig that is extraction by
 another name. Nothing was added to its share.
+
+**Two rows now name "the pack" rather than a mod, and that is a fourth answer this table did not
+originally admit.** ADR-0025 registers an Oil Refinery and a Chemical Plant through GTCEu's KubeJS
+machine builders — a GregTech *chassis*, not a GregTech capability, in the same way Launch Terminals
+and Drop Hatches already are. The rule the table enforces is unchanged: exactly one owner per
+capability, and the losing block recipe-removed. What changed is that for one capability the owner
+is a block this pack registers, because no installed mod can express the recipe shape Factorio needs.
+
+**Plant Oil and Transformer Oil keep their one-way rule below, and ADR-0025 adds its mirror:**
+lubricant must not become an input to anything grid-side.
 
 ## The extraction ladder is GregTech's end to end
 
@@ -96,7 +107,7 @@ answer on a body where sun and steam are not available. Terra does not need that
 **Plant Oil and Transformer Oil are kept and read as lubricant, not petroleum.** Seed oil is
 renewable, so transformers are craftable at whatever rung grants the grid without borrowing rung 4's
 oil chapter. The constraint is one-way: **Transformer Oil must not become an input to anything in the
-oil chapter**, or the grid silently gates rung 4.
+oil chapter**, or the grid silently gates rung 2.
 
 ## This costs the four-facts doctrine, knowingly
 
