@@ -1,0 +1,86 @@
+[
+  {
+    "name": "automation-science-pack",
+    "suggested_id": "planetary_factory:automation_science_pack",
+    "order": "a[automation-science-pack]",
+    "subgroup": "science-pack",
+    "hidden": false
+  },
+  {
+    "name": "logistic-science-pack",
+    "suggested_id": "planetary_factory:logistic_science_pack",
+    "order": "b[logistic-science-pack]",
+    "subgroup": "science-pack",
+    "hidden": false
+  },
+  {
+    "name": "military-science-pack",
+    "suggested_id": "planetary_factory:military_science_pack",
+    "order": "c[military-science-pack]",
+    "subgroup": "science-pack",
+    "hidden": false
+  },
+  {
+    "name": "chemical-science-pack",
+    "suggested_id": "planetary_factory:chemical_science_pack",
+    "order": "d[chemical-science-pack]",
+    "subgroup": "science-pack",
+    "hidden": false
+  },
+  {
+    "name": "production-science-pack",
+    "suggested_id": "planetary_factory:production_science_pack",
+    "order": "e[production-science-pack]",
+    "subgroup": "science-pack",
+    "hidden": false
+  },
+  {
+    "name": "utility-science-pack",
+    "suggested_id": "planetary_factory:utility_science_pack",
+    "order": "f[utility-science-pack]",
+    "subgroup": "science-pack",
+    "hidden": false
+  },
+  {
+    "name": "space-science-pack",
+    "suggested_id": "planetary_factory:space_science_pack",
+    "order": "g[space-science-pack]",
+    "subgroup": "science-pack",
+    "hidden": false
+  },
+  {
+    "name": "metallurgic-science-pack",
+    "suggested_id": "planetary_factory:metallurgic_science_pack",
+    "order": "h",
+    "subgroup": "science-pack",
+    "hidden": false
+  },
+  {
+    "name": "agricultural-science-pack",
+    "suggested_id": "planetary_factory:agricultural_science_pack",
+    "order": "i",
+    "subgroup": "science-pack",
+    "hidden": false
+  },
+  {
+    "name": "electromagnetic-science-pack",
+    "suggested_id": "planetary_factory:electromagnetic_science_pack",
+    "order": "j",
+    "subgroup": "science-pack",
+    "hidden": false
+  },
+  {
+    "name": "cryogenic-science-pack",
+    "suggested_id": "planetary_factory:cryogenic_science_pack",
+    "order": "k",
+    "subgroup": "science-pack",
+    "hidden": false
+  },
+  {
+    "name": "promethium-science-pack",
+    "suggested_id": "planetary_factory:promethium_science_pack",
+    "order": "l",
+    "subgroup": "science-pack",
+    "hidden": false
+  }
+]
