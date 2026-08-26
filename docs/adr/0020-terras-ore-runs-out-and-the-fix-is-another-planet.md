@@ -195,3 +195,15 @@ safe. Raise it and it stops being a consolation and starts being a reason to sta
   claims about play, verified by a human playing, in the same category ADR-0019 put flatness and
   cave-freeness. Recorded as a decision, not skipped.
 - **Save invalidation is not a cost.** The pack is pre-release.
+
+## Amended by ADR-0021: the starting materials
+
+**The starting patches are iron, copper and coal.** ADR-0021 cuts Terra's ore to Nauvis's set, and
+zinc and tin are cut with it, so the five above are drawn from a pool that no longer contains them.
+Uranium exists on Terra but is deliberately excluded from the starting area, as Factorio excludes it.
+
+This is not the playtest tuning the section anticipated: the pool changed, not the judgement about
+which of it belongs at spawn. The bootstrap targets named above — brass for Create, bronze for steam
+— are casualties of that cut and are re-specified elsewhere; they are not an argument for keeping
+the materials. Everything else here stands, including that the patches are spawn-pinned veins and
+that membership does not vary by seed.

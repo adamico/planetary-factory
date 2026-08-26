@@ -165,3 +165,11 @@ rather than a discrete choice.
   feeling, and with manual extraction ending after the starting patches it is also the transition
   from the hand-crafted opening to the automated midgame. Its own ADR, and the higher priority.
 - **Save invalidation is not a cost.** The pack is pre-release.
+
+## Amended by ADR-0021: the noise settings suppress vanilla ore
+
+Terra's `noise_settings` override must also **suppress vanilla ore features**, not only replace
+terrain and close the carvers. Because Terra had no noise settings before this ADR, it generated the
+full vanilla ore set; ADR-0021 cuts Terra's ore to iron, copper, coal and uranium across all four of
+its ore systems, and vanilla's is one of them. Vanilla ore left in place would be uncharted by
+prospecting and undepletable by a miner — a straight bypass of ADR-0020.
