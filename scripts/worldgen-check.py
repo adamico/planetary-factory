@@ -15,6 +15,8 @@ file should not need to change. See docs/testing/worldgen-registry-check.md.
 Usage: scripts/worldgen-check.py [--timeout SECONDS] [--keep-world] [--dump-only]
 """
 import argparse
+import contextlib
+import importlib.util
 import json
 import os
 import shutil
@@ -229,6 +231,14 @@ def compare(dump, expected):
                 yield f"{body}: bedrock fluid deposit {deposit_id} leaks onto {dimension}"
 
 
+def _headless_guard():
+    """The headless() context manager out of launch.py, which is not importable by name."""
+    spec = importlib.util.spec_from_file_location("pf_launch", INSTANCE / "scripts/launch.py")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod.headless()
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--timeout", type=int, default=600,
@@ -243,7 +253,14 @@ def main():
 
     if not args.dump_only:
         fresh_world()
-        if not run_game(args.timeout, args.headless):
+        # run_game kills the whole process group, which takes launch.py down with the
+        # game and skips the restore in its own headless() finally -- leaving
+        # config/fml.toml patched. Hold the guard out here instead, where nothing is
+        # killing us. launch.py keeps its own for standalone use; nesting is harmless
+        # because the inner one restores to whatever the outer one set.
+        with _headless_guard() if args.headless else contextlib.nullcontext():
+            ok = run_game(args.timeout, args.headless)
+        if not ok:
             print(f"no registry dump after {args.timeout}s — see logs/latest.log", file=sys.stderr)
             return 2
         if not args.keep_world and WORLD.exists():
