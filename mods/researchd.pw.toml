@@ -1,0 +1,13 @@
+name = "Researchd"
+filename = "researchd-1.2.5.jar"
+side = "both"
+
+[download]
+hash-format = "sha1"
+hash = "524aad014c59fcec490581ee3880735756ea87ef"
+mode = "metadata:curseforge"
+
+[update]
+[update.curseforge]
+file-id = 8686705
+project-id = 1283539

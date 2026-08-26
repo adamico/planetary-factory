@@ -1,0 +1,82 @@
+# What packwiz indexes (ADR-0024).
+#
+# The pack root is the repo root, so `packwiz refresh` would otherwise hash every
+# tracked file — giving documentation, tests and build scripts a second, hash-based
+# source of truth alongside git, and dirtying the manifest on every prose edit.
+#
+# The index covers pack *content* only: mods/, config/, kubejs/, defaultconfigs/,
+# data/, packs/. Everything below is excluded. Syntax is gitignore's.
+
+# --- Repo machinery, not pack content -----------------------------------------
+docs/
+tests/
+scripts/
+.claude/
+.github/
+.vscode/
+*.md
+.gitignore
+.gitattributes
+
+# --- The first-party mod's source and build tooling ---------------------------
+# `mod/` is fully tracked in git, so hashing it records nothing new.
+mod/
+gradle/
+gradlew
+gradlew.bat
+gradle.properties
+settings.gradle
+build.gradle
+.gradle/
+build/
+
+# --- The first-party mod's build output (ADR-0024) ----------------------------
+# `installToPack` rebuilds this jar into mods/ on every `./gradlew build`, and
+# Gradle jars are not byte-reproducible, so indexing it would dirty index.toml
+# constantly and train everyone to ignore the drift check. Its provenance is
+# `mod/`, which git already tracks in full.
+mods/planetaryfactory_core-*.jar
+
+# --- Per-user and per-run state, never pack behaviour -------------------------
+saves/
+logs/
+crash-reports/
+backups/
+world/
+world_backup/
+screenshots/
+resourcepacks/
+shaderpacks/
+schematics/
+downloads/
+libraries/
+local/
+dumps/
+profilekeys/
+observable_profiles/
+spark-modernfix/
+ldlib2/
+ESM/
+gtceu/prospection_cache/
+config/spark/
+config/jei/
+config/chunky/tasks/
+config/InventoryHUD/
+config/justzoom/
+*client*.toml
+*client*.snbt
+*client*.json
+*client*.properties
+options.txt
+servers.dat
+usercache.json
+usernamecache.json
+minecraftinstance.json
+*.log
+__pycache__/
+.DS_Store
+
+# --- Disabled and replaced jars -----------------------------------------------
+*.jar.disabled
+*.jar.meta
+mods/.replaced/

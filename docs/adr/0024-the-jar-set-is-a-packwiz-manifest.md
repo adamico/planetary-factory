@@ -108,4 +108,5 @@ failure this ADR exists to fix.
 - The dead ModpackUploader lines in `.gitignore` go with it.
 - `packwiz update --all` will report *"A supported update system for X cannot be found"* for the two
   unmanaged jars. This is expected, non-fatal and non-mutating, not a defect to fix.
-- `packwiz update` prompts interactively and has no `--yes`, so bumps are not scriptable unattended.
+- `packwiz update` prompts interactively, but every packwiz command takes a global `-y` to accept
+  prompts, so bumps are scriptable when they need to be.
