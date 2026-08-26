@@ -54,8 +54,10 @@ fi
 
 # Metafiles are tracked but untracked-new ones (a jar added by hand, then
 # refreshed) show up as untracked files rather than as a diff, so check both.
+# Diff against HEAD, not the index: a drift that has already been `git add`ed is
+# still drift, and a plain `git diff` would call it clean.
 DRIFT=0
-git diff --quiet -- "${TRACKED[@]}" mods/ || DRIFT=1
+git diff --quiet HEAD -- "${TRACKED[@]}" mods/ || DRIFT=1
 if [[ -n "$(git ls-files --others --exclude-standard -- mods/)" ]]; then
     DRIFT=1
 fi
