@@ -69,8 +69,21 @@ scripts/pack-check.sh          # fail if installed jars differ from the manifest
 scripts/pack-check.sh --fix    # keep the refreshed manifest, when the drift is intended
 ```
 
-It runs `packwiz refresh` and fails if that changed anything tracked. A failing run restores the
-tree, so a failed check never leaves the manifest half-updated.
+It checks two different things, because one alone is not enough:
+
+1. **`packwiz refresh` changed something tracked** — a jar was added, removed or edited. This is the
+   only signal for the unmanaged jars, which have no metafile.
+2. **A metafile names a jar that is not installed.** `refresh` hashes the *metafiles*, not the jars
+   they point at, so a metafile bumped to a version nobody downloaded refreshes perfectly clean.
+   Without this second check the whole thing is vacuous for the ~121 mods that have metafiles —
+   including the case where `mods/` is empty.
+
+A failing run restores the tree, so a failed check never leaves the manifest half-updated. `--fix`
+can rewrite the manifest but cannot conjure a missing jar, so a missing jar fails even under `--fix`.
+
+**What it still does not check:** that an installed jar's *contents* match the CurseForge file id its
+metafile names. Filenames are compared, not hashes. Swapping a jar's bytes while keeping its name
+would pass. Closing that needs packwiz-installer, which is not set up here.
 
 Run it after touching `mods/`. Nothing runs it automatically yet — there is no CI in this repo —
 which is its own ticket.

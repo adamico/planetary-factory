@@ -62,23 +62,56 @@ if [[ -n "$(git ls-files --others --exclude-standard -- mods/)" ]]; then
     DRIFT=1
 fi
 
+# `packwiz refresh` hashes the metafiles, not the jars they name — so a metafile
+# pointing at a version that is not installed (or not installed at all) refreshes
+# perfectly clean. Check the managed jars explicitly, or the check is vacuous for
+# the ~121 mods that have metafiles.
+MISSING="$(python3 - <<'PY'
+import glob, os, re
+missing = []
+for meta in sorted(glob.glob("mods/*.pw.toml")):
+    m = re.search(r'^filename\s*=\s*"(.+)"', open(meta).read(), re.M)
+    if m and not os.path.exists(os.path.join("mods", m.group(1))):
+        missing.append(f"{os.path.basename(meta)} -> {m.group(1)}")
+print("\n".join(missing))
+PY
+)"
+
+if [[ -n "$MISSING" ]]; then
+    COUNT="$(printf '%s\n' "$MISSING" | wc -l | tr -d ' ')"
+    echo >&2
+    echo "MISSING — $COUNT metafile(s) name a jar that is not installed:" >&2
+    printf '%s\n' "$MISSING" | head -20 >&2
+    [[ "$COUNT" -gt 20 ]] && echo "  ... and $((COUNT - 20)) more" >&2
+    echo >&2
+    echo "Either install the jars the manifest names, or bump the manifest to" >&2
+    echo "match what is installed. A git worktree has no jars at all — run this" >&2
+    echo "from the pack instance." >&2
+    DRIFT=1
+fi
+
 if [[ "$DRIFT" -eq 0 ]]; then
     echo "OK — installed jars match the manifest."
     exit 0
 fi
 
-if [[ "$FIX" -eq 1 ]]; then
+# --fix can rewrite the manifest, but it cannot conjure a jar that is not there,
+# so a missing jar fails even under --fix.
+if [[ "$FIX" -eq 1 && -z "$MISSING" ]]; then
     echo "Manifest updated to match the installed jars. Review and commit:"
     git status --short -- "${TRACKED[@]}" mods/
     exit 0
 fi
 
-echo >&2
-echo "DRIFT — the installed jars do not match the tracked manifest:" >&2
-git status --short -- "${TRACKED[@]}" mods/ >&2
-echo >&2
-echo "If the change is intended, re-run with --fix and commit the result." >&2
-echo "If it is not, restore the jars the manifest names." >&2
+if ! git diff --quiet HEAD -- "${TRACKED[@]}" mods/ || \
+   [[ -n "$(git ls-files --others --exclude-standard -- mods/)" ]]; then
+    echo >&2
+    echo "DRIFT — the installed jars do not match the tracked manifest:" >&2
+    git status --short -- "${TRACKED[@]}" mods/ >&2
+    echo >&2
+    echo "If the change is intended, re-run with --fix and commit the result." >&2
+    echo "If it is not, restore the jars the manifest names." >&2
+fi
 
 # Leave the tree as git has it, so a failing check is not also a mutation. That
 # means restoring the tracked files AND removing metafiles this refresh just
