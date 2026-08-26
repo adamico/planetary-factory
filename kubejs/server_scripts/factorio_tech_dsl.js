@@ -1,3 +1,4 @@
+// priority: 10
 // Builds Researchd researches from Factorio's extracted technology tree.
 //
 // The tree's *shape* is imported rather than invented (ADR-0022): Factorio has playtested
@@ -11,11 +12,18 @@
 // binding is NOT the way to do this -- it is an unmodifiable Java map, so writes fail and
 // reads come back undefined.
 //
-// Load order matters and is alphabetical within server_scripts:
-//   factorio_tech_data.js  (generated, defines FACTORIO_TECHS)
-//   factorio_tech_dsl.js   (this file, defines fromFactorio)
-//   researchd.js           (the hand-authored declarations)
+// Load order is the `// priority:` header, descending -- NOT the filename. KubeJS sorts
+// scripts by priority and the order is otherwise arbitrary, so naming files to sort
+// alphabetically does nothing:
+//   factorio_tech_data.js  priority 20  (generated, defines FACTORIO_TECHS)
+//   factorio_tech_dsl.js   priority 10  (this file, defines fromFactorio)
+//   researchd.js           priority 0   (the hand-authored declarations)
 // The flush below runs inside registerResearches, which fires long after all three load.
+//
+// Everything here is `var`, deliberately. KubeJS's Rhino throws
+// `TypeError: redeclaration of var <name>` when a `const` or `let` inside a nested block is
+// re-entered -- which a per-technology loop does 162 times. It fails at runtime, inside the
+// event handler, so nothing catches it earlier.
 
 var PF_TECH_OVERRIDES = {};
 
@@ -51,10 +59,10 @@ function pfId(name) {
 }
 
 ResearchdEvents.registerResearches((event) => {
-  const techs = typeof FACTORIO_TECHS === 'undefined' ? [] : FACTORIO_TECHS;
-  const overrides = PF_TECH_OVERRIDES;
+  var techs = typeof FACTORIO_TECHS === 'undefined' ? [] : FACTORIO_TECHS;
+  var overrides = PF_TECH_OVERRIDES;
 
-  const byName = {};
+  var byName = {};
   techs.forEach((t) => {
     byName[t.name] = t;
   });
@@ -63,13 +71,13 @@ ResearchdEvents.registerResearches((event) => {
   // must not orphan everything downstream of it. Resolving through to the nearest declared
   // ancestors is what keeps a partially-authored tree connected -- which matters most
   // early, when most of the 162 are still undeclared.
-  const declared = (n) => {
-    const o = overrides[n];
+  var declared = (n) => {
+    var o = overrides[n];
     return o && !o.skip;
   };
 
-  const resolveParents = (tech, seen) => {
-    const out = [];
+  var resolveParents = (tech, seen) => {
+    var out = [];
     (tech.prerequisites || []).forEach((parent) => {
       if (seen[parent]) return;
       seen[parent] = true;
@@ -82,16 +90,16 @@ ResearchdEvents.registerResearches((event) => {
     return out;
   };
 
-  const missing = [];
+  var missing = [];
 
   techs.forEach((tech) => {
-    const over = overrides[tech.name];
+    var over = overrides[tech.name];
     if (!over || over.skip) {
       if (!over) missing.push(tech.name);
       return;
     }
 
-    const research = event.create(pfId(tech.name));
+    var research = event.create(pfId(tech.name));
 
     if (over.iconPack) {
       research.iconPack(over.iconPack);
@@ -101,7 +109,7 @@ ResearchdEvents.registerResearches((event) => {
 
     research.literalName(over.name || tech.localised_name);
 
-    const parents = resolveParents(tech, {}).concat(over.gatedBy || []);
+    var parents = resolveParents(tech, {}).concat(over.gatedBy || []);
     if (parents.length) research.parents(parents);
 
     if (over.has) {
@@ -120,8 +128,8 @@ ResearchdEvents.registerResearches((event) => {
       // Every ingredient amount in Factorio's tree is 1, so the technology's `count` is the
       // per-pack count and consumePacks' shape maps exactly. If that ever stops being true
       // the extractor's data will say so, and this needs and(...) composition instead.
-      const scale = over.costScale || 1;
-      const packs = (tech.unit.ingredients || []).map((pair) => pfId(pair[0]));
+      var scale = over.costScale || 1;
+      var packs = (tech.unit.ingredients || []).map((pair) => pfId(pair[0]));
       if (packs.length) {
         research.consumePacks(packs, Math.ceil(tech.unit.count * scale), tech.unit.time);
       }
@@ -130,7 +138,7 @@ ResearchdEvents.registerResearches((event) => {
     // One effect object, always: researchEffect is a single field, so calling effect()
     // twice keeps only the second. Recipes collapse into one unlockRecipes(), dimensions
     // into one unlockDimensions(), and the two are joined with and().
-    const effects = [];
+    var effects = [];
     if ((over.unlocks || []).length) {
       effects.push(ResearchEffectHelper.unlockRecipes(over.unlocks));
     }

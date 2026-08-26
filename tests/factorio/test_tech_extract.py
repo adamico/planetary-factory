@@ -232,6 +232,17 @@ def check_builder_singletons(techs):
         "the DSL calls unlockDimension() -- it overwrites, so extra dimensions are lost",
     )
 
+    # KubeJS's Rhino throws `TypeError: redeclaration of var <name>` when a const or let
+    # inside a nested block is re-entered, and the flush re-enters one per technology. It
+    # throws at runtime inside the event handler, after every static check has passed, so
+    # only a launch catches it.
+    for keyword in ("const ", "let "):
+        check(
+            keyword not in body,
+            f"the DSL uses `{keyword.strip()}` -- Rhino redeclares it on a later loop "
+            "iteration; use var",
+        )
+
     # consumeItem destroys the items and, like checkItemPresence, reads the player's
     # inventory rather than the Research Lab -- so it buys no automation and costs the
     # player the thing they just proved they could make. Factorio's own research triggers
@@ -262,6 +273,49 @@ def check_builder_singletons(techs):
             and "consumeItem" in line
         ]
         check(not lines, f"{name} uses consumeItem, which the pack does not use")
+
+
+def check_load_order():
+    """The three scripts must declare a `// priority:` header, in the right order.
+
+    KubeJS does NOT load scripts alphabetically -- the order is arbitrary and it sorts by
+    the `// priority:` header, descending. Getting this wrong is not subtle in hindsight but
+    is invisible in review: `researchd.js` loaded before the DSL and threw
+    `ReferenceError: "fromFactorio" is not defined`, which costs exactly one script out of
+    six and leaves the rest of the pack looking healthy.
+
+    Data must load before the DSL that reads it, and the DSL before the declarations that
+    call it.
+    """
+    order = [
+        ("factorio_tech_data.js", "the extracted tree"),
+        ("factorio_tech_dsl.js", "fromFactorio()"),
+        ("researchd.js", "the fromFactorio() calls"),
+    ]
+    priorities = []
+    for name, what in order:
+        path = REPO / "kubejs" / "server_scripts" / name
+        if not path.is_file():
+            check(False, f"{name} is missing")
+            return
+        head = path.read_text(encoding="utf-8").splitlines()[:8]
+        found = None
+        for line in head:
+            match = re.match(r"^//\s*priority\s*[:=]?\s*(-?\d+)\s*$", line.strip())
+            if match:
+                found = int(match.group(1))
+                break
+        if found is None:
+            check(False, f"{name} ({what}) has no `// priority:` header in its first 8 lines")
+            return
+        priorities.append((name, found))
+
+    for (earlier, high), (later, low) in zip(priorities, priorities[1:]):
+        check(
+            high > low,
+            f"{earlier} (priority {high}) must load before {later} (priority {low}), "
+            "so its priority must be strictly higher",
+        )
 
 
 def check_declarations(techs):
@@ -296,6 +350,7 @@ def main():
     check_no_pruned_families(techs)
     check_generated_js(techs)
     check_builder_singletons(techs)
+    check_load_order()
     check_declarations(techs)
 
     check(packs, "no science packs extracted -- the prototype key moved again")

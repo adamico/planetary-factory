@@ -34,11 +34,25 @@ survive.
 
 **Cross-file sharing is the shared `topLevelScope`, never `global`.** KubeJS evaluates every script
 of a type against one scope, so a top-level `var` or `function` is visible to every file loading
-after it — which is why load order is alphabetical and deliberate:
-`factorio_tech_data.js`, `factorio_tech_dsl.js`, `researchd.js`. KubeJS's `global` binding looks
-like the obvious namespace and is not one: it is an **unmodifiable Java map**, so writes fail and
-reads return `undefined`. A DSL built on it registers no researches at all and reports nothing —
-the failure is total and silent, which is why the check forbids `global.` outright. The researches themselves are written by hand. A generator would emit 162 nodes of
+after it. KubeJS's `global` binding looks like the obvious namespace and is not one: it is an
+**unmodifiable Java map**, so writes fail and reads return `undefined`. A DSL built on it registers
+no researches at all and reports nothing — the failure is total and silent, which is why the check
+forbids `global.` outright.
+
+**Load order is the `// priority:` header, not the filename.** KubeJS sorts scripts by that header
+descending and is otherwise arbitrary — so `factorio_tech_data.js` is 20, `factorio_tech_dsl.js` is
+10 and `researchd.js` is 0. Naming files to sort alphabetically does nothing; the first launch
+loaded `researchd.js` second of six and threw `ReferenceError: "fromFactorio" is not defined`. That
+costs one script out of six and leaves the other five, the recipes and the worldgen check all
+passing, so the pack looks healthy.
+
+**Everything in the DSL is `var`.** KubeJS's Rhino throws `TypeError: redeclaration of var <name>`
+when a `const` or `let` inside a nested block is re-entered, and the flush re-enters one per
+technology. It throws inside the event handler at runtime, so the scripts still load, `0 errors` is
+still reported for the file, and the only symptom is Researchd reporting a parent that "does not
+exist" — the flush having died partway through registering.
+
+Both are asserted by the check, because neither is visible to any amount of reading. The researches themselves are written by hand. A generator would emit 162 nodes of
 `TODO` and we would edit all of them anyway, now with a generator to maintain.
 
 ## Three families are dropped, because Researchd cannot express them
