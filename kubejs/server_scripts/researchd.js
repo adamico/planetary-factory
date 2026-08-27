@@ -50,11 +50,10 @@ ServerEvents.recipes(event => {
   ).id('planetary_factory:chemical_science_pack');
 });
 
-// Factorio: craft-item iron-plate x50. Bronze is this pack's equivalent first metal.
 fromFactorio('steam-power', {
   icon: 'gtceu:lp_steam_solid_boiler',
-  has: ['mekanism:ingot_bronze', 32],
-  unlocks: ['gtceu:shaped/lp_steam_solid_boiler']
+  has: ['create:iron_sheet', 50],
+  unlocks: ['kubejs:shaped/lp_steam_solid_boiler']
 });
 
 // Factorio: craft-item lab. Parent `electronics` is undeclared, so the DSL resolves
