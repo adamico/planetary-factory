@@ -3,7 +3,21 @@ package com.planetaryfactory.core.research;
 import java.util.UUID;
 
 /**
- * Whether a block entity being placed already has an owner worth keeping.
+ * Whether a placed-by team UUID names a real owner.
+ *
+ * <p>Two callers ask this, and both hinge on the same fact: Researchd's {@code PLACED_BY_UUID}
+ * attachment is declared with the zero UUID as its <em>default</em>, so an unowned machine does not
+ * read back as absent -- it reads back as owned by a team that does not exist.
+ *
+ * <ul>
+ *   <li>The recipe wrapper, deciding whether the filter frame it was handed represents a team at
+ *       all. Because the default is non-null, Researchd pushes a frame even for a machine placed by
+ *       {@code /setblock}, and only this test tells that frame apart from a real one.
+ *   <li>The placement guard below, deciding whether a machine already has an owner worth keeping.
+ *
+ * </ul>
+ *
+ * <h2>The placement guard</h2>
  *
  * <p>Researchd stamps its placed-by attachment on every player placement, unconditionally:
  *

@@ -7,6 +7,7 @@ import com.gregtechceu.gtceu.api.recipe.ActionResult;
 import com.gregtechceu.gtceu.api.recipe.kind.GTRecipe;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.planetaryfactory.core.research.PlacedByOwnership;
 import com.planetaryfactory.core.research.ResearchLocks;
 import com.portingdeadmods.researchd.api.RecipeFilterContext;
 import com.portingdeadmods.researchd.api.ResearchdApi;
@@ -38,15 +39,24 @@ import org.spongepowered.asm.mixin.Shadow;
  * {@code BoundTickingBlockEntityMixin} has pushed the owning team's frame before any of this runs.
  * For a multiblock that owner is the controller's, which is the block the player placed.
  *
- * <p>That push is gated on the block entity carrying Researchd's {@code PLACED_BY_UUID} attachment:
- * without it {@code BoundTickingBlockEntityMixin} pushes nothing, {@code current()} returns null and
- * this wrapper falls through to the original call. Failing open is deliberate -- an unowned machine
- * belongs to no team and has no lock to honour -- but it means a machine placed by anything other
- * than ordinary player placement runs every locked recipe. Observed in-game, issue #48.
+ * <p>A machine that reached the world by anything other than player placement -- {@code /setblock},
+ * {@code /clone}, worldgen -- carries no owner, and every lock passes for it. Failing open is
+ * deliberate: it belongs to no team and has no lock to honour, and refusing would turn a silent
+ * bypass into a silent brick the player cannot fix. Issue #74 kept that and added
+ * {@link ResearchLocks}, which logs the first such bypass at each position so the case is legible
+ * from a log rather than only from an in-game A/B.
  *
- * <p>It is no longer silent: issue #74 kept the fall-through and added {@link ResearchLocks}, which
- * logs the first such bypass at each position. Refusing instead was considered and rejected -- it
- * converts a silent bypass into a silent brick the player has no way to fix.
+ * <p><b>An unowned machine still gets a frame.</b> Issue #74 describes the bypass as
+ * {@code current()} returning null, and that is not what happens -- checked in-game, where a
+ * {@code /setblock} Assembler crafted a locked recipe and logged nothing at all. Researchd's
+ * {@code PLACED_BY_UUID} attachment is declared with the zero UUID as its <em>default</em>, so
+ * {@code getData} never returns null; {@code getOrMigratePlacedByTeam} hands that zero UUID straight
+ * back, {@code BoundTickingBlockEntityMixin} finds it non-null and pushes a frame for a team that
+ * does not exist. The lock then passes not because there is no frame but because no effect data is
+ * stored against that team.
+ *
+ * <p>So the bypass test is the team, not the frame: a null frame <em>or</em> a frame whose team is
+ * the empty UUID. The null case is kept because nothing guarantees Researchd will always push.
  *
  * <p>Only the recipe id is tested, not {@code isBlocked}'s item rules: {@code GTRecipe} carries its
  * contents as capabilities, so {@code getResultItem} is always empty and {@code getIngredients}
@@ -64,12 +74,12 @@ public abstract class RecipeLogicMixin {
     private ActionResult planetaryfactory$refuseLockedRecipe(
             GTRecipe recipe, Operation<ActionResult> original) {
         RecipeFilterContext.Frame frame = RecipeFilterContext.current();
-        if (frame == null) {
-            // No frame means no owner, and an unowned machine runs the recipe. This is the pinned
-            // decision of issue #74, not an oversight: a machine reaching the world by /setblock,
-            // /clone or worldgen belongs to no team and has no lock to honour, and refusing would
-            // turn a silent bypass into a silent brick the player cannot fix. The report below is
-            // the whole change -- the outcome is deliberately identical to what it always was.
+        if (frame == null || !PlacedByOwnership.isOwned(frame.teamId())) {
+            // No owner, so the recipe runs. This is the pinned decision of issue #74, not an
+            // oversight: a machine reaching the world by /setblock, /clone or worldgen belongs to
+            // no team and has no lock to honour, and refusing would turn a silent bypass into a
+            // silent brick the player cannot fix. The report is the whole change -- the outcome is
+            // deliberately identical to what it always was.
             planetaryfactory$noteUnownedBypass(recipe);
             return original.call(recipe);
         }
