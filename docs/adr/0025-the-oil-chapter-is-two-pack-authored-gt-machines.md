@@ -54,9 +54,15 @@ Create addons, and Create is hard-pinned at 6.0.10 by Electro's `required` mixin
 
 **A Mekanism addon for a custom multiblock was declined on cost**, and is moot: GTCEu already
 exposes `MACHINE_REGISTRY` and `RECIPE_TYPE_REGISTRY` to KubeJS
-(`integration/kjs/builders/machine/*`), and **the pack already registers custom GT machines this
-way** — Launch Terminals, Receiving Terminals and Drop Hatches (`docs/gdd.md`). The technique is not
-new here; it is the pack's established idiom for exactly this problem.
+(`integration/kjs/builders/machine/*`), and **the pack registers custom GT machines this way** —
+Launch Terminals, Receiving Terminals and Drop Hatches are designed against it (`docs/gdd.md`).
+
+**Corrected by ADR-0026:** this paragraph read "the pack *already* registers custom GT machines this
+way … the pack's established idiom", which was not true of the repo — no `MACHINE_REGISTRY` or
+machine-builder call existed anywhere in `kubejs/`, so those three were design rather than code. The
+conclusion here is unaffected: the technique is available and it is still the right one. But the
+Assembling Machines of ADR-0026 are the **first**, and the Refinery and Chemical Plant inherit
+whatever pattern they establish rather than the other way round.
 
 ## The two machines
 

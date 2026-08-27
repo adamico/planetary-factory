@@ -147,6 +147,10 @@ _Avoid_: abstraction, going virtual
 The portable device, with its own recipe type, that turns a bootstrap-tier craft into a queued request completing after a duration. It supplements the crafting grid rather than replacing it, and covers only the components of the first machines.
 _Avoid_: crafting table, hand crafter, personal crafter
 
+**Assembling Machine**:
+One of the three machines the pack registers on a GregTech chassis to run Factorio's crafting recipes — `assembling_machine_1`, `_2` and `_3`, differing by speed and tint only, each granted by a science rung and gating nothing (ADR-0026). Not GregTech's Assembler, whose craft the pack removes.
+_Avoid_: assembler, GT assembler, crafter, fabricator
+
 **Gated recipe**:
 A recipe whose type routes it away from the crafting grid to a machine or the Personal Assembler. Gating is a recipe-authoring choice, not a scripted restriction.
 _Avoid_: locked recipe, blocked recipe

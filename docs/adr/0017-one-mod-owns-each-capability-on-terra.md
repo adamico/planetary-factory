@@ -41,12 +41,15 @@ craftable has not made the choice.
 | Oil processing | **The pack** — a registered **Oil Refinery** on a GT chassis (ADR-0025) | GT Distillation Tower and Distillery **recipe-removed on Terra**; Create: Petrochem and Create: Diesel Generators declined |
 | Chemistry | **The pack** — a registered **Chemical Plant** on a GT chassis (ADR-0025), carrying Factorio's whole chemical-plant list | Mekanism keeps chemistry only where the oil chapter does not reach it; GT's chem line is not Terra's |
 | Refining | **The pack** (ADR-0025) — *this row was "Mekanism, by pack-authored recipes on machines it owns" and was written without checking that Mekanism can express the recipe. It cannot: advanced oil processing is two fluids in and three out, and no Mekanism machine has that shape.* | as above |
-| Assembly | **GregTech** (Assembling Machine I/II/III) | — |
+| Assembly | **The pack** — three registered Assembling Machines on a GT chassis (ADR-0026) | GT's stock Assembler and its whole recipe corpus removed |
 
-GregTech is left with exactly extraction and assembly, plus the fluid rig that is extraction by
-another name. Nothing was added to its share.
+GregTech is left with exactly extraction, plus the fluid rig that is extraction by another name.
+Nothing was added to its share, and **the Assembly row has since left it** (ADR-0026): the stock
+Assembler carried a circuit slot, a voltage ladder and several hundred recipes the pack does not
+want, and KubeJS's `GTRecipeBuilder` could not author against it. The chassis is still GregTech's;
+the capability is the pack's.
 
-**Two rows now name "the pack" rather than a mod, and that is a fourth answer this table did not
+**Three rows now name "the pack" rather than a mod, and that is a fourth answer this table did not
 originally admit.** ADR-0025 registers an Oil Refinery and a Chemical Plant through GTCEu's KubeJS
 machine builders — a GregTech *chassis*, not a GregTech capability, in the same way Launch Terminals
 and Drop Hatches already are. The rule the table enforces is unchanged: exactly one owner per
