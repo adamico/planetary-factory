@@ -11,11 +11,17 @@ exposes:
 - **Research locks** — a mixin teaching GregTech machines to honour Researchd's `unlock_recipe`
   effects, plus the `research/` package behind it. KubeJS cannot mixin, and GregTech never asks the
   vanilla `RecipeManager`, so there is nowhere else this can live.
+- **The lock annotation** — an EMI plugin and a JEI plugin marking a recipe the viewing team has not
+  researched, in `compat/emi` and `compat/jei` over the shared `research/client` note (issue #75).
+  Both viewers' decorator APIs are Java interfaces discovered by annotation, which is another thing
+  KubeJS cannot do.
 
 Nothing a designer would tune is compiled in: tree shape, drop counts, growth chance, display names,
-models and textures are all pack data, and **the jar ships no assets and no data at all**. Which
-research locks which recipe is likewise data — `kubejs/server_scripts/researchd.js` — and this mod
-only enforces whatever that declares.
+models and textures are all pack data. **The jar's only asset is its own lang file**, holding the
+handful of strings the mod itself emits — the GregTech lock refusal and the recipe-viewer annotation
+— because a string a Java class passes to `Component.translatable` has no pack-side author to own
+it. Which research locks which recipe is likewise data — `kubejs/server_scripts/researchd.js` — and
+this mod only enforces whatever that declares.
 
 Note the two names, which are deliberately different:
 
@@ -65,8 +71,10 @@ crashing obscurely. When the pack's NeoForge build moves, move `neoforge_version
 
 JUnit 5, run on a plain JVM. This is the pack's "this pack logic computes something" row in
 [what to check](../docs/testing/what-to-check.md), and it covers exactly that: `research/` holds the
-recipe-to-research index and the lock-bypass dedupe, and both are written free of any Minecraft type
-so the check needs no game. Registration — blocks, items, trees — still has nothing to assert that
+recipe-to-research index, the lock-bypass dedupe and the viewer's lock lookup, and all three are
+written free of any Minecraft type so the check needs no game. What touches Minecraft is glue that
+holds no rules — `ResearchLocks`, `research/client` and the two viewer plugins — and it is the
+"looks or feels right" row instead: checked by a human on delivery. Registration — blocks, items, trees — still has nothing to assert that
 the game does not assert louder at startup, and gets no test.
 
 **The test source set is deliberately absent from `neoForge.mods` in `build.gradle`**, so Minecraft

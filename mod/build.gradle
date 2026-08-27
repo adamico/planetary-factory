@@ -58,7 +58,12 @@ def extractLdLib = tasks.register('extractLdLib', Copy) {
 }
 
 dependencies {
-    compileOnly fileTree(dir: rootProject.file('mods'), include: ['gtceu-*.jar', 'researchd-*.jar'])
+    // EMI and JEI are here for the recipe-viewer lock annotation (issue #75). Both plugin
+    // classes are found by their own viewer's annotation scan and referenced from nowhere
+    // else in the mod, so neither jar is needed at runtime for the rest of it to load.
+    compileOnly fileTree(
+            dir: rootProject.file('mods'),
+            include: ['gtceu-*.jar', 'researchd-*.jar', 'emi-*.jar', 'jei-*.jar'])
     compileOnly fileTree(dir: layout.buildDirectory.dir('ldlib'), include: ['*.jar'])
             .builtBy(extractLdLib)
 

@@ -44,3 +44,19 @@ side = "BOTH"
 
 [[mixins]]
 config = "planetaryfactory_core.mixins.json"
+
+# Both recipe viewers ship with the pack and both were listing a research-locked recipe exactly
+# like an unlocked one (issue #75). The plugin for each is discovered by that viewer's own
+# annotation scan, so neither is required for the mod to load -- but the annotation only appears
+# in a viewer that is present.
+[[dependencies.${mod_id}]]
+modId = "emi"
+type = "optional"
+ordering = "AFTER"
+side = "CLIENT"
+
+[[dependencies.${mod_id}]]
+modId = "jei"
+type = "optional"
+ordering = "AFTER"
+side = "CLIENT"

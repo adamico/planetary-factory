@@ -1,3 +1,7 @@
 {
-  "planetaryfactory_core.recipe.locked": "Recipe not researched"
+  "planetaryfactory_core.recipe.locked": "Recipe not researched",
+  "planetaryfactory_core.recipe_viewer.locked_badge": "!",
+  "planetaryfactory_core.recipe_viewer.locked": "Locked by research",
+  "planetaryfactory_core.recipe_viewer.locked_by": "Complete: %s",
+  "planetaryfactory_core.recipe_viewer.locked_by_unknown": "The research that unlocks it is unknown"
 }

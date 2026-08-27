@@ -159,6 +159,10 @@ _Avoid_: locked recipe, blocked recipe
 A Researchd `unlock_recipe` effect withholding a recipe from a team until they research it. Distinct from a **Gated recipe** in both mechanism and meaning: gating is where a recipe is crafted and is permanent, a research lock is whether a team may craft it yet and is lifted by play. A lock is held per team, so the same recipe can be locked for one team and not another.
 _Avoid_: recipe unlock, tech lock, gated recipe
 
+**Lock annotation**:
+The badge and tooltip a recipe viewer draws on a recipe under a **Research lock** the viewing player's team has not lifted, naming the research that would lift it. The pack annotates rather than hides, in both EMI and JEI and for every recipe source alike: hiding is vanilla's habit and tells the player nothing, and applying either policy to one viewer or one recipe source only relocates the incoherence (issue #75).
+_Avoid_: hidden recipe, greyed-out recipe, locked overlay
+
 **Unowned machine**:
 A machine carrying no Researchd placed-by attachment, so it belongs to no team and no **Research lock** applies to it — it runs every recipe. Ordinary placement always stamps an owner; this is what `/setblock`, `/clone` and worldgen leave behind. Failing open is deliberate, and the pack logs the first such bypass at each position rather than refusing it (issue #74).
 _Avoid_: ownerless machine, orphan machine, teamless machine
