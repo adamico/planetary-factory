@@ -170,3 +170,18 @@ maceration.
   if it ever breaks, the cost needs `and(...)` composition instead.
 - **Re-extraction is expected, not exceptional.** A Factorio update that reshapes the tree is a
   script rerun and a diff to read, not a re-transcription.
+- **A datapack and KubeJS cannot both declare a research.** Researchd's `ReloadableRegistryManager`
+  puts datapack JSON entries and KubeJS entries into one `ImmutableMap.Builder` — JSON first, KubeJS
+  second — and calls `build()`, not `buildKeepingLast()`. Guava throws on a duplicate key, so an id
+  declared in both places fails the registry load outright rather than one source winning. Anything
+  that emits researches as data must therefore replace `fromFactorio` for those ids in the same
+  change, or take a disjoint namespace.
+- **Researchd has a GUI research editor, and it writes datapacks.** `EditorDatapackWriter` emits
+  `pack.mcmeta` and `data/<namespace>/researchd/research/*.json` to a path chosen in game, editing
+  dependencies, effects, methods and icons. It is not a layout tool: `DisplayImpl` holds only `name`
+  and `desc`, and placement is derived from `parents`. So the editor edits both halves of the seam
+  this ADR draws — the extracted `parents` and the hand-authored icon, unlocks and method.
+  **Whether the pack should emit its tree in that form is open, and tracked in issue #82.** The
+  rejection of generation above stands until that issue decides otherwise: changing the emitted
+  format from JS to JSON does not by itself answer "regenerated and hand-edited both", which is the
+  ground the option was rejected on.
