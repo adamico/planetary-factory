@@ -27,10 +27,16 @@ import org.spongepowered.asm.mixin.Mixin;
  * <p>No cache key needs scoping: the trie holds recipes rather than lookup results, and it is built
  * once at datapack load, so there is nothing per-team to keep apart.
  *
- * <p>The team frame is already free. GT machines tick through a plain vanilla
- * {@code BlockEntityTicker} ({@code IMachineBlock.getTicker}), so Researchd's
+ * <p>The team frame is already free -- for a machine that has an owner. GT machines tick through a
+ * plain vanilla {@code BlockEntityTicker} ({@code IMachineBlock.getTicker}), so Researchd's
  * {@code BoundTickingBlockEntityMixin} has pushed the owning team's frame before any of this runs.
  * For a multiblock that owner is the controller's, which is the block the player placed.
+ *
+ * <p>That push is gated on the block entity carrying Researchd's {@code PLACED_BY_UUID} attachment:
+ * without it {@code BoundTickingBlockEntityMixin} pushes nothing, {@code current()} returns null and
+ * this wrapper falls through to the original call. Failing open is deliberate -- an unowned machine
+ * belongs to no team and has no lock to honour -- but it means a machine placed by anything other
+ * than ordinary player placement runs every locked recipe, silently. Observed in-game, issue #48.
  *
  * <p>Only the recipe id is tested, not {@code isBlocked}'s item rules: {@code GTRecipe} carries its
  * contents as capabilities, so {@code getResultItem} is always empty and {@code getIngredients}
@@ -45,8 +51,12 @@ public abstract class RecipeLogicMixin {
             GTRecipe recipe, Operation<ActionResult> original) {
         RecipeFilterContext.Frame frame = RecipeFilterContext.current();
         if (frame != null && ResearchdApi.isRecipeBlocked(frame.level(), frame.teamId(), recipe.id)) {
-            // The reason surfaces in the machine's own status readout and in Jade, so a locked
-            // recipe reads as locked rather than as a machine that silently does nothing.
+            // The reason is carried but not shown on the search path: there matchRecipe is
+            // the iterator's predicate, so a failure only means "this recipe does not
+            // match" and the machine ends with no recipe selected and nothing to display a
+            // reason against. It surfaces only on the lastRecipe fast path, where a recipe
+            // was already selected. A locked recipe therefore reads to the player as a
+            // machine that silently does nothing -- verified in-game, issue #48.
             return ActionResult.fail(Component.translatable("planetaryfactory_core.recipe.locked"));
         }
         return original.call(recipe);
