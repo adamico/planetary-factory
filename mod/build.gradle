@@ -36,8 +36,48 @@ neoForge {
 // The mixin in `mixin/gtceu` compiles against GTCEu and Researchd. Both are pack mods, so their
 // jars are already in `mods/` -- taken from there rather than from a maven so the build stays
 // offline and always compiles against exactly the jars the pack ships.
+//
+// GTCEu ships LDLib as a jar-in-jar rather than depending on the pack's `ldlib2-*.jar`, which is a
+// different mod under a different package. Nothing here uses LDLib, but GTCEu's `MetaMachine`
+// implements one of its interfaces and javac loads a class's whole supertype hierarchy before it
+// will resolve any call on it -- so reading a machine's position needs the nested jar unpacked.
+def gtceuJars = rootProject.fileTree('mods').matching { include 'gtceu-*.jar' }.files
+if (gtceuJars.size() != 1) {
+    throw new GradleException(
+            "Expected exactly one gtceu-*.jar in mods/ to unpack LDLib from, found ${gtceuJars.size()}: " +
+            "${gtceuJars*.name}. The jar set is a packwiz manifest (ADR-0024) -- reconcile mods/ with it.")
+}
+
+def extractLdLib = tasks.register('extractLdLib', Copy) {
+    from(zipTree(gtceuJars.first())) {
+        include 'META-INF/jarjar/ldlib-*.jar'
+    }
+    into layout.buildDirectory.dir('ldlib')
+    eachFile { it.path = it.name }
+    includeEmptyDirs = false
+}
+
 dependencies {
     compileOnly fileTree(dir: rootProject.file('mods'), include: ['gtceu-*.jar', 'researchd-*.jar'])
+    compileOnly fileTree(dir: layout.buildDirectory.dir('ldlib'), include: ['*.jar'])
+            .builtBy(extractLdLib)
+
+    testImplementation platform('org.junit:junit-bom:5.10.2')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+repositories {
+    mavenCentral()
+}
+
+// The test source set is deliberately absent from `neoForge.mods` above, so Minecraft is not on its
+// classpath. That is the pack's testing policy, not an oversight: the row for "this pack logic
+// computes something" asks for an ordinary unit test run without Minecraft, and a classpath that
+// cannot see a `ResourceLocation` is what keeps the logic honest about staying testable.
+tasks.named('test', Test).configure {
+    useJUnitPlatform()
+    testLogging { events 'failed' }
 }
 
 // `neoforge.mods.toml` is the one place a version string has to be interpolated;

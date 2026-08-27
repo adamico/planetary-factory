@@ -155,6 +155,14 @@ _Avoid_: assembler, GT assembler, crafter, fabricator
 A recipe whose type routes it away from the crafting grid to a machine or the Personal Assembler. Gating is a recipe-authoring choice, not a scripted restriction.
 _Avoid_: locked recipe, blocked recipe
 
+**Research lock**:
+A Researchd `unlock_recipe` effect withholding a recipe from a team until they research it. Distinct from a **Gated recipe** in both mechanism and meaning: gating is where a recipe is crafted and is permanent, a research lock is whether a team may craft it yet and is lifted by play. A lock is held per team, so the same recipe can be locked for one team and not another.
+_Avoid_: recipe unlock, tech lock, gated recipe
+
+**Unowned machine**:
+A machine carrying no Researchd placed-by attachment, so it belongs to no team and no **Research lock** applies to it — it runs every recipe. Ordinary placement always stamps an owner; this is what `/setblock`, `/clone` and worldgen leave behind. Failing open is deliberate, and the pack logs the first such bypass at each position rather than refusing it (issue #74).
+_Avoid_: ownerless machine, orphan machine, teamless machine
+
 ### The oil chapter
 
 **Oil Refinery**:

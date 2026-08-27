@@ -4,10 +4,18 @@ The pack's first-party NeoForge mod, built as a Gradle subproject of this repo (
 
 ## What is in here, and what is not
 
-Its remit is **mechanism only** (ADR-0015). Today that is two `SaplingBlock`s and their
-`TreeGrower`, because no scripting API in this pack exposes either. Nothing a designer would tune
-is compiled in: tree shape, drop counts, growth chance, display names, models and textures are all
-pack data, and **the jar ships no assets and no data at all** — only four classes.
+Its remit is **mechanism only** (ADR-0015). Today that is two things no scripting API in this pack
+exposes:
+
+- **Flora** — two `SaplingBlock`s and their `TreeGrower`.
+- **Research locks** — a mixin teaching GregTech machines to honour Researchd's `unlock_recipe`
+  effects, plus the `research/` package behind it. KubeJS cannot mixin, and GregTech never asks the
+  vanilla `RecipeManager`, so there is nowhere else this can live.
+
+Nothing a designer would tune is compiled in: tree shape, drop counts, growth chance, display names,
+models and textures are all pack data, and **the jar ships no assets and no data at all**. Which
+research locks which recipe is likewise data — `kubejs/server_scripts/researchd.js` — and this mod
+only enforces whatever that declares.
 
 Note the two names, which are deliberately different:
 
@@ -51,7 +59,22 @@ crashing obscurely. When the pack's NeoForge build moves, move `neoforge_version
 
 ## Tests
 
-There are none yet, and that is on purpose: four classes of registration have nothing to assert
-that the game does not assert at startup. The subproject is configured with a `gameTestServer` run
-so that NeoForge GameTest is available the moment this mod grows logic worth testing — which is a
-capability the pack's sibling-clone mods (GCyR, `respoiled`) do not have.
+```
+./gradlew :planetaryfactory_core:test
+```
+
+JUnit 5, run on a plain JVM. This is the pack's "this pack logic computes something" row in
+[what to check](../docs/testing/what-to-check.md), and it covers exactly that: `research/` holds the
+recipe-to-research index and the lock-bypass dedupe, and both are written free of any Minecraft type
+so the check needs no game. Registration — blocks, items, trees — still has nothing to assert that
+the game does not assert louder at startup, and gets no test.
+
+**The test source set is deliberately absent from `neoForge.mods` in `build.gradle`**, so Minecraft
+is not on its classpath. That is what keeps the split honest: logic that drifts into needing a
+`Level` stops compiling in the test source set rather than quietly becoming untestable. The glue
+that does need a `Level` lives in `ResearchLocks`, holds no rules of its own, and is checked by a
+human in-game.
+
+The subproject is also configured with a `gameTestServer` run, so NeoForge GameTest is available the
+moment this mod grows behaviour that needs a server — a capability the pack's sibling-clone mods
+(GCyR, `respoiled`) do not have. Nothing trips that trigger today.

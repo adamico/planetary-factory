@@ -3,7 +3,8 @@
   "package": "com.planetaryfactory.core.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "gtceu.RecipeLogicMixin"
+    "gtceu.RecipeLogicMixin",
+    "researchd.ResearchdBEPlacementHandlerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
