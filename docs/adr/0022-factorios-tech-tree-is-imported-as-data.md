@@ -181,7 +181,15 @@ maceration.
   dependencies, effects, methods and icons. It is not a layout tool: `DisplayImpl` holds only `name`
   and `desc`, and placement is derived from `parents`. So the editor edits both halves of the seam
   this ADR draws — the extracted `parents` and the hand-authored icon, unlocks and method.
-  **Whether the pack should emit its tree in that form is open, and tracked in issue #82.** The
-  rejection of generation above stands until that issue decides otherwise: changing the emitted
-  format from JS to JSON does not by itself answer "regenerated and hand-edited both", which is the
-  ground the option was rejected on.
+  **Whether the pack should emit its tree in that form is open, and tracked in issue #82.** Note
+  what the rejection above does and does not cover: it rejects generating `researchd.js`, the
+  *editing surface*. The tree itself is already generated — that is what this ADR decides — so
+  emitting it as data is not the rejected option wearing a new format. What #82 must answer is
+  narrower: which surface the hand-authoring happens on.
+- **The editor reads researches through a different path than the commands do.** It enumerates via
+  `ResearchdApi.getResearchManager()`, whose map includes the KubeJS entries, so the pack's tree is
+  visible and browsable in it — confirmed in play. Researchd's own unlock/remove commands resolve
+  through the vanilla datapack registry instead and cannot see KubeJS researches at all (#77). Same
+  mod, two enumeration paths, opposite visibility. **Browsing is safe; saving is not.** An edit
+  saved onto an id `researchd.js` also declares emits JSON for that id and trips the duplicate-key
+  failure above on the next reload.
