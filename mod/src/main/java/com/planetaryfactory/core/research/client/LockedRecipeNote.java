@@ -62,7 +62,13 @@ public final class LockedRecipeNote {
      */
     public static boolean isLocked(ResourceLocation recipeId) {
         LocalPlayer player = Minecraft.getInstance().player;
-        return player != null && lookupFor(player).lockOn(recipeId).isPresent();
+        if (player == null || recipeId == null) return false;
+
+        // Deliberately not through RecipeLockLookup: naming the research needs the index, and the
+        // badge does not. Keeping the index off this path means a client-side index that is empty
+        // or late cannot swallow the mark -- the team's own blocked set is the whole answer to
+        // "will the machine refuse this", and that is what the badge claims.
+        return ResearchdApi.isRecipeBlocked(player, recipeId);
     }
 
     /**

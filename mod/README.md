@@ -11,10 +11,12 @@ exposes:
 - **Research locks** — a mixin teaching GregTech machines to honour Researchd's `unlock_recipe`
   effects, plus the `research/` package behind it. KubeJS cannot mixin, and GregTech never asks the
   vanilla `RecipeManager`, so there is nowhere else this can live.
-- **The lock annotation** — an EMI plugin and a JEI plugin marking a recipe the viewing team has not
-  researched, in `compat/emi` and `compat/jei` over the shared `research/client` note (issue #75).
-  Both viewers' decorator APIs are Java interfaces discovered by annotation, which is another thing
-  KubeJS cannot do.
+- **The lock annotation** — a recipe the viewing team has not researched is marked in both recipe
+  viewers, from `compat/emi` and `compat/jei` over the shared `research/client` note (issue #75).
+  JEI is a plugin its own annotation scan discovers. EMI is a mixin instead: its decorator API
+  registers fine but only runs behind `EmiConfig.showRecipeDecorators`, which defaults off for
+  players, so the documented seam is invisible to them. Either way these are Java interfaces and
+  render calls, which is another thing KubeJS cannot do.
 
 Nothing a designer would tune is compiled in: tree shape, drop counts, growth chance, display names,
 models and textures are all pack data. **The jar's only asset is its own lang file**, holding the
@@ -73,7 +75,7 @@ JUnit 5, run on a plain JVM. This is the pack's "this pack logic computes someth
 [what to check](../docs/testing/what-to-check.md), and it covers exactly that: `research/` holds the
 recipe-to-research index, the lock-bypass dedupe and the viewer's lock lookup, and all three are
 written free of any Minecraft type so the check needs no game. What touches Minecraft is glue that
-holds no rules — `ResearchLocks`, `research/client` and the two viewer plugins — and it is the
+holds no rules — `ResearchLocks`, `research/client` and the two viewers' compat code — and it is the
 "looks or feels right" row instead: checked by a human on delivery. Registration — blocks, items, trees — still has nothing to assert that
 the game does not assert louder at startup, and gets no test.
 

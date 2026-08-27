@@ -45,10 +45,15 @@ side = "BOTH"
 [[mixins]]
 config = "planetaryfactory_core.mixins.json"
 
+# Separate, and not required, because it targets EMI -- an optional client-side dependency. A
+# missing target class in the main config would be fatal; here it is skipped.
+[[mixins]]
+config = "planetaryfactory_core.emi.mixins.json"
+
 # Both recipe viewers ship with the pack and both were listing a research-locked recipe exactly
-# like an unlocked one (issue #75). The plugin for each is discovered by that viewer's own
-# annotation scan, so neither is required for the mod to load -- but the annotation only appears
-# in a viewer that is present.
+# like an unlocked one (issue #75). Neither is required for the mod to load. JEI is driven by a
+# plugin its own annotation scan discovers; EMI needs a mixin, because the equivalent EMI seam is
+# gated behind a developer-facing config flag that is off for players -- see RecipeDisplayMixin.
 [[dependencies.${mod_id}]]
 modId = "emi"
 type = "optional"

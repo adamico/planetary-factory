@@ -1,0 +1,11 @@
+{
+  "required": false,
+  "package": "com.planetaryfactory.core.mixin.emi",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "RecipeDisplayMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
