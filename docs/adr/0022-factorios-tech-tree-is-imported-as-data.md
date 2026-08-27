@@ -177,8 +177,12 @@ maceration.
   that emits researches as data must therefore replace `fromFactorio` for those ids in the same
   change, or take a disjoint namespace.
 - **Researchd has a GUI research editor, and it writes datapacks.** `EditorDatapackWriter` emits
-  `pack.mcmeta` and `data/<namespace>/researchd/research/*.json` to a path chosen in game, editing
-  dependencies, effects, methods and icons. It is not a layout tool: `DisplayImpl` holds only `name`
+  `pack.mcmeta` and `data/<namespace>/researchd/research/*.json`, editing dependencies, effects,
+  methods and icons. **It writes into the world save, not into pack content**:
+  `CreateDatapackPayload` fixes the root to
+  `MinecraftServer.getWorldPath(LevelResource.DATAPACK_DIR)`, and `saves` is gitignored — so
+  anything edited in the GUI is outside version control until a copy step brings it back, and a
+  shipped copy of the same ids cannot be loaded alongside the world-local one. It is not a layout tool: `DisplayImpl` holds only `name`
   and `desc`, and placement is derived from `parents`. So the editor edits both halves of the seam
   this ADR draws — the extracted `parents` and the hand-authored icon, unlocks and method.
   **Whether the pack should emit its tree in that form is open, and tracked in issue #82.** Note
