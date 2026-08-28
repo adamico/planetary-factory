@@ -129,9 +129,6 @@ public final class LockedRecipeNote {
     }
 
     private static List<Component> lines(Set<ResourceKey<Research>> researches, Level level) {
-        return LockedByResearchLines.of(
-                Component.translatable("planetaryfactory_core.recipe_viewer.locked").withStyle(ChatFormatting.RED),
-                researches,
-                level);
+        return LockedByResearchLines.of(researches, level);
     }
 }

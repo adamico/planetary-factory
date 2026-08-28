@@ -36,6 +36,13 @@ import org.spongepowered.asm.mixin.Shadow;
  * next answer by itself -- see {@link com.planetaryfactory.core.research.MachineLockStatus}. That is
  * the issue's explicit requirement, and the failure #76 was.
  *
+ * <p><b>The cost, stated honestly.</b> All three methods derive independently, so a machine screen
+ * open on an idle, loaded, locked machine can run the trie search up to three times a frame. Nothing
+ * memoises it, because a memo is the stored conclusion the issue rules out and its invalidation is
+ * the bug #76 already was. What keeps the bill small is the {@code isIdle} gate -- a working,
+ * waiting or suspended machine never reaches the search -- and the search itself stopping at the
+ * first runnable candidate. It is paid only while a player is looking at the screen.
+ *
  * <p>Client-side only, guarded at {@link #planetaryfactory$lockLines()} rather than by a client-only
  * mixin config: the enclosing class stays loadable on a dedicated server, and the client-only
  * {@link IdleMachineLockNote} is never resolved there because the call is never reached.
@@ -62,9 +69,12 @@ public abstract class RecipeLogicStatusMixin {
     }
 
     /**
-     * The same icon GregTech puts on a machine waiting for input. A lock is that same shape of
-     * problem to the player -- the machine is fed and still not running -- and inventing a second
-     * warning glyph for it would say the difference matters before the tooltip has said what it is.
+     * The same icon GregTech puts on a machine waiting for input. Not decoration: the icon is the
+     * widget the tooltip hangs off, so a lock left with {@code IGuiTexture.EMPTY} would have its
+     * explanation behind nothing to look at -- which is the silence this whole change is about. A
+     * lock is that same shape of problem to the player anyway (the machine is fed and still not
+     * running), and inventing a second warning glyph would claim the difference matters before the
+     * tooltip has said what it is.
      */
     @WrapMethod(method = "getFancyTooltipIcon")
     private IGuiTexture planetaryfactory$lockIcon(Operation<IGuiTexture> original) {

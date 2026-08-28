@@ -27,15 +27,19 @@ public final class LockedByResearchLines {
     private LockedByResearchLines() {}
 
     /**
-     * The tooltip for a lock, headed by {@code header} and followed by one line per research.
+     * The tooltip for a lock: the header, then one line per research.
+     *
+     * <p>The header is not a parameter. Both callers want the same sentence in the same colour, and
+     * a parameter with one value is the drift this class exists to prevent -- the wording is the
+     * point, so it is written here once.
      *
      * @param researches the researches that would unlock it, in the order they should be read. May
      *     be empty -- the lock outran the index, see {@code RecipeLockLookup} -- in which case the
      *     lines say so rather than naming a research that may since have been renamed or removed.
      */
-    public static List<Component> of(Component header, Set<ResourceKey<Research>> researches, Level level) {
+    public static List<Component> of(Set<ResourceKey<Research>> researches, Level level) {
         List<Component> lines = new ArrayList<>(researches.size() + 1);
-        lines.add(header);
+        lines.add(Component.translatable("planetaryfactory_core.recipe_viewer.locked").withStyle(ChatFormatting.RED));
 
         if (researches.isEmpty()) {
             lines.add(Component.translatable("planetaryfactory_core.recipe_viewer.locked_by_unknown")

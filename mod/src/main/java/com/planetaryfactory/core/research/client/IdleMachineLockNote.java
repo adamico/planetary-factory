@@ -11,7 +11,6 @@ import com.portingdeadmods.researchd.api.ResearchdApi;
 import com.portingdeadmods.researchd.api.research.Research;
 import java.util.Iterator;
 import java.util.List;
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
@@ -26,16 +25,18 @@ import net.minecraft.resources.ResourceLocation;
  * reason is worked out here instead, from the contents the machine holds at the moment of asking.
  *
  * <p><b>The candidates are GregTech's own search, minus the pack's lock.</b>
- * {@code RecipeLogic.matchRecipe} is exactly {@code RecipeHelper.matchContents}, and the pack's
- * refusal is a wrapper around it -- so searching the trie with {@code matchContents} directly yields
+ * {@code RecipeLogic.matchRecipe} is exactly {@code return RecipeHelper.matchContents(machine,
+ * recipe);} -- the whole method body in 7.0.2, read off the shipped jar; the conditions check lives
+ * in {@code checkRecipe}, not here -- and the pack's refusal is a wrapper around it -- so searching the trie with {@code matchContents} directly yields
  * the recipes the machine <em>would</em> have matched had nothing been locked. Anything else would
  * be a second, divergent notion of "the machine has the ingredients for this".
  *
  * <p><b>Nothing is stored.</b> The search runs per query, so emptying the machine or completing the
  * research changes the next answer with no invalidation rule to get wrong -- the requirement the
- * issue makes of this fix, and the trap #76 fell into. The cost is a trie search per query, paid
- * only while a player has an idle machine's screen open; the {@code isIdle} gate keeps a working
- * machine off this path entirely.
+ * issue makes of this fix, and the trap #76 fell into. The cost is a trie search per query -- and
+ * the machine screen asks up to three times a frame, see {@code RecipeLogicStatusMixin} -- paid only
+ * while a player has an idle machine's screen open; the {@code isIdle} gate keeps a working machine
+ * off this path entirely.
  *
  * <p><b>Read as the local player's team.</b> Client-side, so the lock is the one the player looking
  * at the machine is under -- the same frame the recipe viewer annotates in, and for the machine's
@@ -63,11 +64,7 @@ public final class IdleMachineLockNote {
                     RecipeLockLookup.of(index, id -> ResearchdApi.isRecipeBlocked(player, id));
 
             return MachineLockStatus.lockStopping(() -> candidateIds(machine), lookup)
-                    .map(lock -> LockedByResearchLines.of(
-                            Component.translatable("planetaryfactory_core.machine.locked")
-                                    .withStyle(ChatFormatting.RED),
-                            lock.unlockingResearches(),
-                            player.level()))
+                    .map(lock -> LockedByResearchLines.of(lock.unlockingResearches(), player.level()))
                     .orElse(List.of());
         } catch (RuntimeException | LinkageError ignored) {
             // A status line is never worth a broken screen.

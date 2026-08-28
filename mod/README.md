@@ -4,13 +4,18 @@ The pack's first-party NeoForge mod, built as a Gradle subproject of this repo (
 
 ## What is in here, and what is not
 
-Its remit is **mechanism only** (ADR-0015). Today that is two things no scripting API in this pack
-exposes:
+Its remit is **mechanism only** (ADR-0015). Today that is these things, none of which a scripting
+API in this pack exposes:
 
 - **Flora** — two `SaplingBlock`s and their `TreeGrower`.
 - **Research locks** — a mixin teaching GregTech machines to honour Researchd's `unlock_recipe`
   effects, plus the `research/` package behind it. KubeJS cannot mixin, and GregTech never asks the
   vanilla `RecipeManager`, so there is nowhere else this can live.
+- **The idle-machine reason** — a second GregTech mixin, on the recipe logic's own `IFancyTooltip`
+  status question, so a machine that is idle only because of an incomplete research says which
+  research (issue #79). The answer is derived from the machine's current contents at the moment of
+  asking and never stored; ADR-0027 is why the refusal cannot speak for itself, and #76 is what the
+  stored alternative costs.
 - **The lock annotation** — a recipe the viewing team has not researched is marked in both recipe
   viewers, from `compat/emi` and `compat/jei` over the shared `research/client` note (issue #75).
   JEI is a plugin its own annotation scan discovers. EMI is a mixin instead: its decorator API
@@ -20,8 +25,8 @@ exposes:
 
 Nothing a designer would tune is compiled in: tree shape, drop counts, growth chance, display names,
 models and textures are all pack data. **The jar's only asset is its own lang file**, holding the
-handful of strings the mod itself emits — the GregTech lock refusal and the recipe-viewer annotation
-— because a string a Java class passes to `Component.translatable` has no pack-side author to own
+handful of strings the mod itself emits — the GregTech lock refusal, and the lock wording the recipe
+viewers and an idle machine share — because a string a Java class passes to `Component.translatable` has no pack-side author to own
 it. Which research locks which recipe is likewise data — `kubejs/server_scripts/researchd.js` — and
 this mod only enforces whatever that declares.
 
@@ -73,8 +78,9 @@ crashing obscurely. When the pack's NeoForge build moves, move `neoforge_version
 
 JUnit 5, run on a plain JVM. This is the pack's "this pack logic computes something" row in
 [what to check](../docs/testing/what-to-check.md), and it covers exactly that: `research/` holds the
-recipe-to-research index, the lock-bypass dedupe and the viewer's lock lookup, and all three are
-written free of any Minecraft type so the check needs no game. What touches Minecraft is glue that
+recipe-to-research index, the lock-bypass dedupe, the retry that keeps a locked machine ticking, the
+viewer's lock lookup and the idle machine's derived status, and all of them are written free of any
+Minecraft type so the check needs no game. What touches Minecraft is glue that
 holds no rules — `ResearchLocks`, `research/client` and the two viewers' compat code — and it is the
 "looks or feels right" row instead: checked by a human on delivery. Registration — blocks, items, trees — still has nothing to assert that
 the game does not assert louder at startup, and gets no test.
