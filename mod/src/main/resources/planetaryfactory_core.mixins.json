@@ -4,6 +4,7 @@
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "gtceu.RecipeLogicMixin",
+    "gtceu.RecipeLogicStatusMixin",
     "researchd.ResearchdBEPlacementHandlerMixin"
   ],
   "injectors": {

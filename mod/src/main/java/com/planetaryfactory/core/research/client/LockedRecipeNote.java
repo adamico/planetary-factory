@@ -4,10 +4,7 @@ import com.planetaryfactory.core.research.RecipeLockLookup;
 import com.planetaryfactory.core.research.RecipeResearchIndex;
 import com.planetaryfactory.core.research.ResearchLocks;
 import com.portingdeadmods.researchd.api.ResearchdApi;
-import com.portingdeadmods.researchd.api.research.RegistryDisplay;
 import com.portingdeadmods.researchd.api.research.Research;
-import com.portingdeadmods.researchd.api.research.ResearchManager;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import net.minecraft.ChatFormatting;
@@ -132,39 +129,9 @@ public final class LockedRecipeNote {
     }
 
     private static List<Component> lines(Set<ResourceKey<Research>> researches, Level level) {
-        List<Component> lines = new ArrayList<>(researches.size() + 1);
-        lines.add(Component.translatable("planetaryfactory_core.recipe_viewer.locked").withStyle(ChatFormatting.RED));
-
-        if (researches.isEmpty()) {
-            // The lock outran the index -- see RecipeLockLookup. Saying so beats naming a research
-            // that may since have been renamed or removed.
-            lines.add(Component.translatable("planetaryfactory_core.recipe_viewer.locked_by_unknown")
-                    .withStyle(ChatFormatting.GRAY));
-            return lines;
-        }
-
-        ResearchManager manager = ResearchdApi.getResearchManager();
-        for (ResourceKey<Research> research : researches) {
-            lines.add(Component.translatable(
-                            "planetaryfactory_core.recipe_viewer.locked_by", nameOf(research, manager, level))
-                    .withStyle(ChatFormatting.GRAY));
-        }
-        return lines;
-    }
-
-    /**
-     * The name the research screen shows. The pack's researches are built by
-     * {@code fromFactorio(...)}, which calls the KubeJS builder's {@code literalName} -- so they
-     * carry a display name and no lang key at all, and {@code Research.getLangName} would render a
-     * raw {@code research.planetary_factory.*_name} string. {@link RegistryDisplay} is the branch
-     * that finds the literal one; the lang key stays as the fallback for a research declared
-     * without it.
-     */
-    private static Component nameOf(ResourceKey<Research> research, ResearchManager manager, Level level) {
-        Research declared = manager == null ? null : manager.lookupResearch(research, level);
-        if (declared instanceof RegistryDisplay<?> display) {
-            return display.getDisplayNameUnsafe(research);
-        }
-        return Research.getLangName(research);
+        return LockedByResearchLines.of(
+                Component.translatable("planetaryfactory_core.recipe_viewer.locked").withStyle(ChatFormatting.RED),
+                researches,
+                level);
     }
 }
