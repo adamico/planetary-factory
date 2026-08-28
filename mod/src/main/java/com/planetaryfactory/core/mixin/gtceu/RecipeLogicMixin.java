@@ -7,10 +7,12 @@ import com.gregtechceu.gtceu.api.recipe.ActionResult;
 import com.gregtechceu.gtceu.api.recipe.kind.GTRecipe;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.planetaryfactory.core.research.LockedRecipeRetry;
 import com.planetaryfactory.core.research.PlacedByOwnership;
 import com.planetaryfactory.core.research.ResearchLocks;
 import com.portingdeadmods.researchd.api.RecipeFilterContext;
 import com.portingdeadmods.researchd.api.ResearchdApi;
+import java.util.List;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Final;
@@ -70,6 +72,14 @@ public abstract class RecipeLogicMixin {
     @Final
     public IRecipeLogicMachine machine;
 
+    /**
+     * GregTech's memory of recipes it matched but could not run. Its emptiness is the last term of
+     * {@code serverTick}'s unsubscribe condition, which makes it the whole of the fix for #76 --
+     * see {@link LockedRecipeRetry}.
+     */
+    @Shadow
+    public List<GTRecipe> lastFailedMatches;
+
     @WrapMethod(method = "matchRecipe")
     private ActionResult planetaryfactory$refuseLockedRecipe(
             GTRecipe recipe, Operation<ActionResult> original) {
@@ -84,6 +94,10 @@ public abstract class RecipeLogicMixin {
             return original.call(recipe);
         }
         if (ResearchdApi.isRecipeBlocked(frame.level(), frame.teamId(), recipe.id)) {
+            // Remember the refusal so the machine stays on the tick list and re-searches once the
+            // research lands. Without this a machine loaded with a locked recipe's ingredients
+            // unsubscribes itself and only a break-and-replace ever starts it -- issue #76.
+            this.lastFailedMatches = LockedRecipeRetry.remember(this.lastFailedMatches, recipe, r -> r.id);
             // The reason is carried but not shown on the search path: there matchRecipe is
             // the iterator's predicate, so a failure only means "this recipe does not
             // match" and the machine ends with no recipe selected and nothing to display a
