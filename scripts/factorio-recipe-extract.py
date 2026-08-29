@@ -22,6 +22,10 @@ the pack:
     machines that may also craft it -- `transport-belt` is `["crafting", "metallurgy"]`
     because Vulcanus's foundry exists, not because a belt is a metallurgy recipe. The first
     entry is the primary one, and it is what `data/pack/category-map.json` routes on.
+  - **Classification.** Every recipe carries Factorio's own `group` and `subgroup`, resolved
+    through its main product where the recipe does not set one itself. The item map is
+    argued per group -- combat, logistics, production, intermediate-products, space -- not
+    per recipe, so the taxonomy is extracted rather than hand-assigned.
   - **`setMaxIOSize`.** ADR-0026 says the number is read off this output rather than
     guessed. The report prints it per machine, as (item in, item out, fluid in, fluid out).
 
@@ -65,6 +69,42 @@ RUNG_PACKS = frozenset(
 # placeholder items Factorio's parametrised blueprints substitute into; they are enabled
 # from the start, which is the only reason they reach the corpus at all.
 UI_CATEGORIES = frozenset({"parameters"})
+
+
+def subgroup_index(dump):
+    """`subgroup name -> group name`, and `prototype name -> subgroup name`.
+
+    Factorio's own taxonomy is the classification the item map is argued in: an item group
+    is one of `intermediate-products`, `logistics`, `production`, `combat`, `space`. It has
+    to be *resolved* rather than copied, because a recipe carries its own `subgroup` on only
+    219 of the game's 662 recipes -- the rest inherit it from their main product's item
+    prototype. Items live under a dozen top-level prototype types (`item`, `ammo`, `gun`,
+    `armor`, `capsule`, `module`, `fluid`, ...), so the index spans all of them.
+    """
+    groups = {name: proto["group"] for name, proto in (dump.get("item-subgroup") or {}).items()}
+    if not groups:
+        sys.exit("no `item-subgroup` prototypes in the dump -- did the key move?")
+
+    subgroups = {}
+    for prototype_type, protos in dump.items():
+        if prototype_type == "recipe" or not isinstance(protos, dict):
+            continue
+        for name, proto in protos.items():
+            if isinstance(proto, dict) and isinstance(proto.get("subgroup"), str):
+                subgroups.setdefault(name, proto["subgroup"])
+    return groups, subgroups
+
+
+def classify(recipe, results, subgroups, groups):
+    """A recipe's `(group, subgroup)` -- its own, else its main product's."""
+    subgroup = recipe.get("subgroup")
+    if not subgroup:
+        # `main_product` is set to "" to declare that a multi-result recipe has none.
+        main = recipe.get("main_product")
+        if not isinstance(main, str) or not main:
+            main = results[0]["name"] if results else None
+        subgroup = subgroups.get(main)
+    return groups.get(subgroup), subgroup
 
 
 def scoped_technologies(techs):
@@ -142,6 +182,7 @@ def extract(dump, techs):
 
     keep, by_name = scoped_technologies(techs)
     unlocked = scoped_recipes(recipes, techs, keep, by_name)
+    groups, subgroups = subgroup_index(dump)
 
     out = []
     skipped = collections.Counter()
@@ -151,6 +192,15 @@ def extract(dump, techs):
         if categories[0] in UI_CATEGORIES:
             skipped[categories[0]] += 1
             continue
+        # `recipe-unknown` is core's placeholder icon: hidden, no ingredients, no results.
+        # It is enabled from the start, which is the only reason it reaches the corpus.
+        if recipe.get("hidden"):
+            skipped["hidden"] += 1
+            continue
+        results = contents(recipe.get("results"))
+        group, subgroup = classify(recipe, results, subgroups, groups)
+        if group is None:
+            sys.exit(f"{name}: no item group -- its main product has no subgroup")
         out.append(
             {
                 "name": name,
@@ -159,9 +209,10 @@ def extract(dump, techs):
                 "unlocked_by": unlocked[name],
                 "energy_required": recipe.get("energy_required", 0.5),
                 "ingredients": contents(recipe.get("ingredients")),
-                "results": contents(recipe.get("results")),
+                "results": results,
                 "allow_productivity": bool(recipe.get("allow_productivity")),
-                "subgroup": recipe.get("subgroup"),
+                "group": group,
+                "subgroup": subgroup,
                 "order": recipe.get("order"),
             }
         )
@@ -224,6 +275,14 @@ def main():
     print(f"item map needs {len(refs)} distinct references "
           f"({sum(1 for t, _ in refs if t == 'fluid')} fluid)")
     print(f"wrote          {args.out.relative_to(REPO)}")
+    by_group = collections.Counter(
+        (r["group"], r["subgroup"]) for r in recipes)
+    print("\nitem groups:")
+    for group, count in collections.Counter(r["group"] for r in recipes).most_common():
+        print(f"  {count:4}  {group}")
+        for (g, subgroup), n in sorted(by_group.items()):
+            if g == group:
+                print(f"          {n:4}  {subgroup}")
     print("\nprimary categories:")
     for category, count in by_category.most_common():
         print(f"  {count:4}  {category}")

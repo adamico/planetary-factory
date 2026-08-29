@@ -28,7 +28,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "production",
+    "subgroup": "energy",
     "order": null
   },
   {
@@ -65,7 +66,8 @@
       }
     ],
     "allow_productivity": true,
-    "subgroup": null,
+    "group": "intermediate-products",
+    "subgroup": "intermediate-product",
     "order": null
   },
   {
@@ -106,6 +108,7 @@
       }
     ],
     "allow_productivity": true,
+    "group": "intermediate-products",
     "subgroup": "fluid-recipes",
     "order": "a[oil-processing]-b[advanced-oil-processing]"
   },
@@ -137,7 +140,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "logistics",
+    "subgroup": "circuit-network",
     "order": null
   },
   {
@@ -173,7 +177,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "production",
+    "subgroup": "production-machine",
     "order": null
   },
   {
@@ -214,7 +219,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "production",
+    "subgroup": "production-machine",
     "order": null
   },
   {
@@ -245,7 +251,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "production",
+    "subgroup": "production-machine",
     "order": null
   },
   {
@@ -281,7 +288,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "space",
+    "subgroup": "space-platform",
     "order": null
   },
   {
@@ -312,7 +320,8 @@
       }
     ],
     "allow_productivity": true,
-    "subgroup": null,
+    "group": "intermediate-products",
+    "subgroup": "science-pack",
     "order": null
   },
   {
@@ -338,6 +347,7 @@
       }
     ],
     "allow_productivity": true,
+    "group": "intermediate-products",
     "subgroup": "intermediate-product",
     "order": null
   },
@@ -366,6 +376,7 @@
       }
     ],
     "allow_productivity": true,
+    "group": "intermediate-products",
     "subgroup": "fluid-recipes",
     "order": "a[oil-processing]-a[basic-oil-processing]"
   },
@@ -403,7 +414,8 @@
       }
     ],
     "allow_productivity": true,
-    "subgroup": null,
+    "group": "intermediate-products",
+    "subgroup": "raw-material",
     "order": null
   },
   {
@@ -434,7 +446,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "combat",
+    "subgroup": "equipment",
     "order": null
   },
   {
@@ -476,7 +489,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "production",
+    "subgroup": "module",
     "order": null
   },
   {
@@ -507,7 +521,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "combat",
+    "subgroup": "utility-equipment",
     "order": null
   },
   {
@@ -544,7 +559,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "logistics",
+    "subgroup": "energy-pipe-distribution",
     "order": null
   },
   {
@@ -575,7 +591,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "production",
+    "subgroup": "energy",
     "order": null
   },
   {
@@ -616,7 +633,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "logistics",
+    "subgroup": "inserter",
     "order": null
   },
   {
@@ -647,7 +665,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "logistics",
+    "subgroup": "inserter",
     "order": null
   },
   {
@@ -683,7 +702,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "production",
+    "subgroup": "extraction-machine",
     "order": null
   },
   {
@@ -719,7 +739,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "logistics",
+    "subgroup": "transport",
     "order": null
   },
   {
@@ -750,6 +771,7 @@
       }
     ],
     "allow_productivity": true,
+    "group": "space",
     "subgroup": "space-crushing",
     "order": "b-a-b"
   },
@@ -786,7 +808,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "space",
+    "subgroup": "space-platform",
     "order": null
   },
   {
@@ -822,7 +845,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "space",
+    "subgroup": "space-interactors",
     "order": null
   },
   {
@@ -858,7 +882,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "logistics",
+    "subgroup": "train-transport",
     "order": null
   },
   {
@@ -899,7 +924,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "production",
+    "subgroup": "production-machine",
     "order": null
   },
   {
@@ -940,7 +966,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "production",
+    "subgroup": "production-machine",
     "order": null
   },
   {
@@ -976,7 +1003,8 @@
       }
     ],
     "allow_productivity": true,
-    "subgroup": null,
+    "group": "intermediate-products",
+    "subgroup": "science-pack",
     "order": null
   },
   {
@@ -1012,7 +1040,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "logistics",
+    "subgroup": "terrain",
     "order": null
   },
   {
@@ -1043,7 +1072,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "logistics",
+    "subgroup": "circuit-network",
     "order": null
   },
   {
@@ -1074,7 +1104,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "logistics",
+    "subgroup": "logistic-network",
     "order": null
   },
   {
@@ -1101,7 +1132,8 @@
       }
     ],
     "allow_productivity": true,
-    "subgroup": null,
+    "group": "intermediate-products",
+    "subgroup": "intermediate-product",
     "order": null
   },
   {
@@ -1127,7 +1159,8 @@
       }
     ],
     "allow_productivity": true,
-    "subgroup": null,
+    "group": "intermediate-products",
+    "subgroup": "raw-material",
     "order": null
   },
   {
@@ -1158,6 +1191,7 @@
       }
     ],
     "allow_productivity": false,
+    "group": "intermediate-products",
     "subgroup": "fill-barrel",
     "order": "a[fluid]-b[oil]-a[crude-oil]"
   },
@@ -1194,7 +1228,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "space",
+    "subgroup": "space-platform",
     "order": null
   },
   {
@@ -1225,7 +1260,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "logistics",
+    "subgroup": "circuit-network",
     "order": null
   },
   {
@@ -1256,7 +1292,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "logistics",
+    "subgroup": "circuit-network",
     "order": null
   },
   {
@@ -1292,7 +1329,8 @@
       }
     ],
     "allow_productivity": true,
-    "subgroup": null,
+    "group": "intermediate-products",
+    "subgroup": "intermediate-product",
     "order": null
   },
   {
@@ -1328,7 +1366,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "production",
+    "subgroup": "smelting-machine",
     "order": null
   },
   {
@@ -1364,7 +1403,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "production",
+    "subgroup": "extraction-machine",
     "order": null
   },
   {
@@ -1396,7 +1436,8 @@
       }
     ],
     "allow_productivity": true,
-    "subgroup": null,
+    "group": "intermediate-products",
+    "subgroup": "intermediate-product",
     "order": null
   },
   {
@@ -1427,6 +1468,7 @@
       }
     ],
     "allow_productivity": false,
+    "group": "intermediate-products",
     "subgroup": "empty-barrel",
     "order": "a[fluid]-b[oil]-a[crude-oil]"
   },
@@ -1458,6 +1500,7 @@
       }
     ],
     "allow_productivity": false,
+    "group": "intermediate-products",
     "subgroup": "empty-barrel",
     "order": "b[new-fluid]-e[aquilo]-e[fluoroketone-cold]"
   },
@@ -1489,6 +1532,7 @@
       }
     ],
     "allow_productivity": false,
+    "group": "intermediate-products",
     "subgroup": "empty-barrel",
     "order": "b[new-fluid]-e[aquilo]-d[fluoroketone-hot]"
   },
@@ -1520,6 +1564,7 @@
       }
     ],
     "allow_productivity": false,
+    "group": "intermediate-products",
     "subgroup": "empty-barrel",
     "order": "a[fluid]-b[oil]-d[heavy-oil]"
   },
@@ -1551,6 +1596,7 @@
       }
     ],
     "allow_productivity": false,
+    "group": "intermediate-products",
     "subgroup": "empty-barrel",
     "order": "a[fluid]-b[oil]-c[light-oil]"
   },
@@ -1582,6 +1628,7 @@
       }
     ],
     "allow_productivity": false,
+    "group": "intermediate-products",
     "subgroup": "empty-barrel",
     "order": "a[fluid]-b[oil]-e[lubricant]"
   },
@@ -1613,6 +1660,7 @@
       }
     ],
     "allow_productivity": false,
+    "group": "intermediate-products",
     "subgroup": "empty-barrel",
     "order": "a[fluid]-b[oil]-b[petroleum-gas]"
   },
@@ -1644,6 +1692,7 @@
       }
     ],
     "allow_productivity": false,
+    "group": "intermediate-products",
     "subgroup": "empty-barrel",
     "order": "a[fluid]-b[oil]-f[sulfuric-acid]"
   },
@@ -1675,6 +1724,7 @@
       }
     ],
     "allow_productivity": false,
+    "group": "intermediate-products",
     "subgroup": "empty-barrel",
     "order": "a[fluid]-a[water]-a[water]"
   },
@@ -1711,7 +1761,8 @@
       }
     ],
     "allow_productivity": true,
-    "subgroup": null,
+    "group": "intermediate-products",
+    "subgroup": "intermediate-product",
     "order": null
   },
   {
@@ -1747,7 +1798,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "combat",
+    "subgroup": "utility-equipment",
     "order": null
   },
   {
@@ -1784,7 +1836,8 @@
       }
     ],
     "allow_productivity": true,
-    "subgroup": null,
+    "group": "intermediate-products",
+    "subgroup": "raw-material",
     "order": null
   },
   {
@@ -1826,7 +1879,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "logistics",
+    "subgroup": "belt",
     "order": null
   },
   {
@@ -1863,7 +1917,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "logistics",
+    "subgroup": "belt",
     "order": null
   },
   {
@@ -1900,7 +1955,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "logistics",
+    "subgroup": "belt",
     "order": null
   },
   {
@@ -1936,7 +1992,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "logistics",
+    "subgroup": "inserter",
     "order": null
   },
   {
@@ -1973,7 +2030,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "logistics",
+    "subgroup": "belt",
     "order": null
   },
   {
@@ -2005,7 +2063,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "logistics",
+    "subgroup": "belt",
     "order": null
   },
   {
@@ -2037,7 +2096,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "logistics",
+    "subgroup": "belt",
     "order": null
   },
   {
@@ -2063,7 +2123,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "combat",
+    "subgroup": "ammo",
     "order": null
   },
   {
@@ -2104,7 +2165,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "logistics",
+    "subgroup": "train-transport",
     "order": null
   },
   {
@@ -2135,6 +2197,7 @@
       }
     ],
     "allow_productivity": false,
+    "group": "intermediate-products",
     "subgroup": "fill-barrel",
     "order": "b[new-fluid]-e[aquilo]-e[fluoroketone-cold]"
   },
@@ -2166,6 +2229,7 @@
       }
     ],
     "allow_productivity": false,
+    "group": "intermediate-products",
     "subgroup": "fill-barrel",
     "order": "b[new-fluid]-e[aquilo]-d[fluoroketone-hot]"
   },
@@ -2207,7 +2271,8 @@
       }
     ],
     "allow_productivity": true,
-    "subgroup": null,
+    "group": "intermediate-products",
+    "subgroup": "intermediate-product",
     "order": null
   },
   {
@@ -2243,7 +2308,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "combat",
+    "subgroup": "defensive-structure",
     "order": null
   },
   {
@@ -2274,7 +2340,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "combat",
+    "subgroup": "capsule",
     "order": null
   },
   {
@@ -2310,7 +2377,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "combat",
+    "subgroup": "turret",
     "order": null
   },
   {
@@ -2336,7 +2404,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "logistics",
+    "subgroup": "terrain",
     "order": null
   },
   {
@@ -2372,7 +2441,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "production",
+    "subgroup": "energy",
     "order": null
   },
   {
@@ -2403,7 +2473,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "production",
+    "subgroup": "energy",
     "order": null
   },
   {
@@ -2434,7 +2505,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "combat",
+    "subgroup": "armor",
     "order": null
   },
   {
@@ -2465,6 +2537,7 @@
       }
     ],
     "allow_productivity": false,
+    "group": "intermediate-products",
     "subgroup": "fill-barrel",
     "order": "a[fluid]-b[oil]-d[heavy-oil]"
   },
@@ -2497,6 +2570,7 @@
       }
     ],
     "allow_productivity": true,
+    "group": "intermediate-products",
     "subgroup": "fluid-recipes",
     "order": "b[fluid-chemistry]-a[heavy-oil-cracking]"
   },
@@ -2533,7 +2607,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "logistics",
+    "subgroup": "inserter",
     "order": null
   },
   {
@@ -2559,7 +2634,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "logistics",
+    "subgroup": "storage",
     "order": null
   },
   {
@@ -2585,7 +2661,8 @@
       }
     ],
     "allow_productivity": true,
-    "subgroup": null,
+    "group": "intermediate-products",
+    "subgroup": "intermediate-product",
     "order": null
   },
   {
@@ -2611,7 +2688,8 @@
       }
     ],
     "allow_productivity": true,
-    "subgroup": null,
+    "group": "intermediate-products",
+    "subgroup": "raw-material",
     "order": null
   },
   {
@@ -2637,7 +2715,8 @@
       }
     ],
     "allow_productivity": true,
-    "subgroup": null,
+    "group": "intermediate-products",
+    "subgroup": "intermediate-product",
     "order": null
   },
   {
@@ -2673,7 +2752,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "production",
+    "subgroup": "production-machine",
     "order": null
   },
   {
@@ -2699,7 +2779,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "logistics",
+    "subgroup": "terrain",
     "order": null
   },
   {
@@ -2725,7 +2806,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "combat",
+    "subgroup": "armor",
     "order": null
   },
   {
@@ -2756,6 +2838,7 @@
       }
     ],
     "allow_productivity": false,
+    "group": "intermediate-products",
     "subgroup": "fill-barrel",
     "order": "a[fluid]-b[oil]-c[light-oil]"
   },
@@ -2788,6 +2871,7 @@
       }
     ],
     "allow_productivity": true,
+    "group": "intermediate-products",
     "subgroup": "fluid-recipes",
     "order": "b[fluid-chemistry]-b[light-oil-cracking]"
   },
@@ -2824,7 +2908,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "logistics",
+    "subgroup": "train-transport",
     "order": null
   },
   {
@@ -2855,7 +2940,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "logistics",
+    "subgroup": "logistic-network",
     "order": null
   },
   {
@@ -2886,7 +2972,8 @@
       }
     ],
     "allow_productivity": true,
-    "subgroup": null,
+    "group": "intermediate-products",
+    "subgroup": "science-pack",
     "order": null
   },
   {
@@ -2922,7 +3009,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "logistics",
+    "subgroup": "inserter",
     "order": null
   },
   {
@@ -2958,7 +3046,8 @@
       }
     ],
     "allow_productivity": true,
-    "subgroup": null,
+    "group": "intermediate-products",
+    "subgroup": "intermediate-product",
     "order": null
   },
   {
@@ -2984,6 +3073,7 @@
       }
     ],
     "allow_productivity": true,
+    "group": "intermediate-products",
     "subgroup": "fluid-recipes",
     "order": "c[oil-products]-a[lubricant]"
   },
@@ -3015,6 +3105,7 @@
       }
     ],
     "allow_productivity": false,
+    "group": "intermediate-products",
     "subgroup": "fill-barrel",
     "order": "a[fluid]-b[oil]-e[lubricant]"
   },
@@ -3052,7 +3143,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "logistics",
+    "subgroup": "energy-pipe-distribution",
     "order": null
   },
   {
@@ -3083,6 +3175,7 @@
       }
     ],
     "allow_productivity": true,
+    "group": "space",
     "subgroup": "space-crushing",
     "order": "b-a-a"
   },
@@ -3119,7 +3212,8 @@
       }
     ],
     "allow_productivity": true,
-    "subgroup": null,
+    "group": "intermediate-products",
+    "subgroup": "science-pack",
     "order": null
   },
   {
@@ -3150,7 +3244,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "combat",
+    "subgroup": "armor",
     "order": null
   },
   {
@@ -3181,7 +3276,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "combat",
+    "subgroup": "utility-equipment",
     "order": null
   },
   {
@@ -3207,6 +3303,7 @@
       }
     ],
     "allow_productivity": true,
+    "group": "intermediate-products",
     "subgroup": "uranium-processing",
     "order": "b[uranium-products]-b[nuclear-fuel-reprocessing]"
   },
@@ -3248,7 +3345,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "production",
+    "subgroup": "energy",
     "order": null
   },
   {
@@ -3279,7 +3377,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "production",
+    "subgroup": "extraction-machine",
     "order": null
   },
   {
@@ -3325,7 +3424,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "production",
+    "subgroup": "production-machine",
     "order": null
   },
   {
@@ -3356,6 +3456,7 @@
       }
     ],
     "allow_productivity": true,
+    "group": "space",
     "subgroup": "space-crushing",
     "order": "b-a-c"
   },
@@ -3392,7 +3493,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "logistics",
+    "subgroup": "logistic-network",
     "order": null
   },
   {
@@ -3433,7 +3535,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "combat",
+    "subgroup": "utility-equipment",
     "order": null
   },
   {
@@ -3464,6 +3567,7 @@
       }
     ],
     "allow_productivity": false,
+    "group": "intermediate-products",
     "subgroup": "fill-barrel",
     "order": "a[fluid]-b[oil]-b[petroleum-gas]"
   },
@@ -3500,7 +3604,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "combat",
+    "subgroup": "ammo",
     "order": null
   },
   {
@@ -3526,7 +3631,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "logistics",
+    "subgroup": "energy-pipe-distribution",
     "order": null
   },
   {
@@ -3557,7 +3663,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "logistics",
+    "subgroup": "energy-pipe-distribution",
     "order": null
   },
   {
@@ -3589,7 +3696,8 @@
       }
     ],
     "allow_productivity": true,
-    "subgroup": null,
+    "group": "intermediate-products",
+    "subgroup": "raw-material",
     "order": null
   },
   {
@@ -3625,7 +3733,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "combat",
+    "subgroup": "armor",
     "order": null
   },
   {
@@ -3661,7 +3770,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "logistics",
+    "subgroup": "circuit-network",
     "order": null
   },
   {
@@ -3698,7 +3808,8 @@
       }
     ],
     "allow_productivity": true,
-    "subgroup": null,
+    "group": "intermediate-products",
+    "subgroup": "intermediate-product",
     "order": null
   },
   {
@@ -3734,7 +3845,8 @@
       }
     ],
     "allow_productivity": true,
-    "subgroup": null,
+    "group": "intermediate-products",
+    "subgroup": "science-pack",
     "order": null
   },
   {
@@ -3775,7 +3887,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "logistics",
+    "subgroup": "circuit-network",
     "order": null
   },
   {
@@ -3811,7 +3924,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "logistics",
+    "subgroup": "energy-pipe-distribution",
     "order": null
   },
   {
@@ -3852,7 +3966,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "production",
+    "subgroup": "extraction-machine",
     "order": null
   },
   {
@@ -3888,7 +4003,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "combat",
+    "subgroup": "defensive-structure",
     "order": null
   },
   {
@@ -3924,7 +4040,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "logistics",
+    "subgroup": "train-transport",
     "order": null
   },
   {
@@ -3955,7 +4072,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "logistics",
+    "subgroup": "train-transport",
     "order": null
   },
   {
@@ -3986,21 +4104,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
-    "order": null
-  },
-  {
-    "name": "recipe-unknown",
-    "category": "crafting",
-    "categories": [
-      "crafting"
-    ],
-    "unlocked_by": null,
-    "energy_required": 0.5,
-    "ingredients": [],
-    "results": [],
-    "allow_productivity": false,
-    "subgroup": null,
+    "group": "logistics",
+    "subgroup": "train-transport",
     "order": null
   },
   {
@@ -4041,7 +4146,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "logistics",
+    "subgroup": "terrain",
     "order": null
   },
   {
@@ -4067,7 +4173,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "logistics",
+    "subgroup": "terrain",
     "order": null
   },
   {
@@ -4098,7 +4205,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "production",
+    "subgroup": "tool",
     "order": null
   },
   {
@@ -4134,7 +4242,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "logistics",
+    "subgroup": "logistic-network",
     "order": null
   },
   {
@@ -4166,7 +4275,8 @@
       }
     ],
     "allow_productivity": true,
-    "subgroup": null,
+    "group": "intermediate-products",
+    "subgroup": "intermediate-product",
     "order": null
   },
   {
@@ -4202,7 +4312,8 @@
       }
     ],
     "allow_productivity": true,
-    "subgroup": null,
+    "group": "space",
+    "subgroup": "space-interactors",
     "order": null
   },
   {
@@ -4248,7 +4359,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "space",
+    "subgroup": "space-interactors",
     "order": null
   },
   {
@@ -4279,7 +4391,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "logistics",
+    "subgroup": "circuit-network",
     "order": null
   },
   {
@@ -4320,7 +4433,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "combat",
+    "subgroup": "gun",
     "order": null
   },
   {
@@ -4351,7 +4465,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "combat",
+    "subgroup": "ammo",
     "order": null
   },
   {
@@ -4383,7 +4498,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "logistics",
+    "subgroup": "energy-pipe-distribution",
     "order": null
   },
   {
@@ -4419,7 +4535,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "logistics",
+    "subgroup": "circuit-network",
     "order": null
   },
   {
@@ -4456,7 +4573,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "production",
+    "subgroup": "energy",
     "order": null
   },
   {
@@ -4492,7 +4610,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "combat",
+    "subgroup": "equipment",
     "order": null
   },
   {
@@ -4518,6 +4637,7 @@
       }
     ],
     "allow_productivity": true,
+    "group": "intermediate-products",
     "subgroup": "fluid-recipes",
     "order": "b[fluid-chemistry]-e[solid-fuel-from-heavy-oil]"
   },
@@ -4544,6 +4664,7 @@
       }
     ],
     "allow_productivity": true,
+    "group": "intermediate-products",
     "subgroup": "fluid-recipes",
     "order": "b[fluid-chemistry]-d[solid-fuel-from-light-oil]"
   },
@@ -4570,6 +4691,7 @@
       }
     ],
     "allow_productivity": true,
+    "group": "intermediate-products",
     "subgroup": "fluid-recipes",
     "order": "b[fluid-chemistry]-c[solid-fuel-from-petroleum-gas]"
   },
@@ -4601,7 +4723,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "space",
+    "subgroup": "space-platform",
     "order": null
   },
   {
@@ -4637,7 +4760,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "space",
+    "subgroup": "space-rocket",
     "order": null
   },
   {
@@ -4673,7 +4797,8 @@
       }
     ],
     "allow_productivity": true,
-    "subgroup": null,
+    "group": "intermediate-products",
+    "subgroup": "science-pack",
     "order": null
   },
   {
@@ -4710,7 +4835,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "logistics",
+    "subgroup": "belt",
     "order": null
   },
   {
@@ -4746,7 +4872,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "production",
+    "subgroup": "energy",
     "order": null
   },
   {
@@ -4782,7 +4909,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "production",
+    "subgroup": "energy",
     "order": null
   },
   {
@@ -4808,7 +4936,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "logistics",
+    "subgroup": "storage",
     "order": null
   },
   {
@@ -4839,7 +4968,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "production",
+    "subgroup": "smelting-machine",
     "order": null
   },
   {
@@ -4865,7 +4995,8 @@
       }
     ],
     "allow_productivity": true,
-    "subgroup": null,
+    "group": "intermediate-products",
+    "subgroup": "raw-material",
     "order": null
   },
   {
@@ -4891,7 +5022,8 @@
       }
     ],
     "allow_productivity": true,
-    "subgroup": null,
+    "group": "logistics",
+    "subgroup": "terrain",
     "order": null
   },
   {
@@ -4917,7 +5049,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "production",
+    "subgroup": "smelting-machine",
     "order": null
   },
   {
@@ -4943,7 +5076,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "combat",
+    "subgroup": "defensive-structure",
     "order": null
   },
   {
@@ -4979,7 +5113,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "logistics",
+    "subgroup": "logistic-network",
     "order": null
   },
   {
@@ -5010,7 +5145,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "logistics",
+    "subgroup": "storage",
     "order": null
   },
   {
@@ -5046,7 +5182,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "combat",
+    "subgroup": "gun",
     "order": null
   },
   {
@@ -5083,7 +5220,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "logistics",
+    "subgroup": "energy-pipe-distribution",
     "order": null
   },
   {
@@ -5115,7 +5253,8 @@
       }
     ],
     "allow_productivity": true,
-    "subgroup": null,
+    "group": "intermediate-products",
+    "subgroup": "raw-material",
     "order": null
   },
   {
@@ -5152,6 +5291,7 @@
       }
     ],
     "allow_productivity": true,
+    "group": "intermediate-products",
     "subgroup": "fluid-recipes",
     "order": "c[oil-products]-b[sulfuric-acid]"
   },
@@ -5183,6 +5323,7 @@
       }
     ],
     "allow_productivity": false,
+    "group": "intermediate-products",
     "subgroup": "fill-barrel",
     "order": "a[fluid]-b[oil]-f[sulfuric-acid]"
   },
@@ -5224,7 +5365,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "logistics",
+    "subgroup": "train-transport",
     "order": null
   },
   {
@@ -5256,7 +5398,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "logistics",
+    "subgroup": "belt",
     "order": null
   },
   {
@@ -5288,7 +5431,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "logistics",
+    "subgroup": "belt",
     "order": null
   },
   {
@@ -5324,6 +5468,7 @@
       }
     ],
     "allow_productivity": true,
+    "group": "intermediate-products",
     "subgroup": "uranium-processing",
     "order": null
   },
@@ -5355,6 +5500,7 @@
       }
     ],
     "allow_productivity": true,
+    "group": "intermediate-products",
     "subgroup": "uranium-processing",
     "order": "a[uranium-processing]-a[uranium-processing]"
   },
@@ -5391,7 +5537,8 @@
       }
     ],
     "allow_productivity": true,
-    "subgroup": null,
+    "group": "intermediate-products",
+    "subgroup": "science-pack",
     "order": null
   },
   {
@@ -5422,6 +5569,7 @@
       }
     ],
     "allow_productivity": false,
+    "group": "intermediate-products",
     "subgroup": "fill-barrel",
     "order": "a[fluid]-a[water]-a[water]"
   },
@@ -5448,7 +5596,8 @@
       }
     ],
     "allow_productivity": false,
-    "subgroup": null,
+    "group": "logistics",
+    "subgroup": "storage",
     "order": null
   }
 ]
