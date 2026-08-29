@@ -107,6 +107,36 @@ The extraction also settles `setMaxIOSize`, which is read off the data — the m
 across the crafting categories — the way ADR-0025 read `(2, 1, 2, 2)` off the wiki rather than
 choosing it.
 
+## Amended by #73: the ids are GregTech's, and the recipe type is created before the machines
+
+Building the row turned up two facts about the API this ADR names, both measured in game rather
+than reasoned about.
+
+**The ids cannot be `planetaryfactory:`.** `KJSTieredMachineBuilder` registers through GregTech's
+own registrate, which owns the namespace and prefixes each tier's short name, so
+`event.create('assembling_machine').tiers(LV, MV, HV)` produces
+**`gtceu:lv_assembling_machine`**, `gtceu:mv_assembling_machine` and
+`gtceu:hv_assembling_machine`. A namespace passed into `create` is discarded. `GTRecipeTypes`
+behaves the same way, so the recipe type is **`gtceu:assembling`**, not
+`planetaryfactory:assembling`.
+
+The machine table above keeps its display names, because that is what the argument was about: *a
+Factorio player has to recognise the block on sight*. "Assembling Machine 1/2/3" is authored in
+`kubejs/assets/gtceu/lang/en_us.json` and is what the player reads. The ids are internal, and the
+only way to move them into the pack's namespace is to register the machines from
+`planetaryfactory_core` with a registrate of its own — a larger change than this ADR's reasoning
+asks for, and one that would spend the "no Java" property the row was chosen for.
+
+**The recipe type is created at script-evaluation time, not in a registry event.** KubeJS fires
+`gtceu:machine` *before* `minecraft:recipe_type` — the machine definitions ran at `.763` and the
+recipe-type event at `1.458` of the same second — so a machine registered in the first event cannot
+name a type created in the second, and GregTech reports it as "Tried to set null recipe type on
+machine …". The type is therefore built with `GTRecipeTypes.register(...)` at the top level of
+`kubejs/startup_scripts/machines.js`, which runs before any registry event fires. The GUI calls
+this ADR lists are unaffected; they are the same builder methods either way, except that the
+progress bar is `setProgressBar`, not `setProgressBarTexture`, and the model is
+`workableTieredHullModel`, not a renderer.
+
 ## Considered Options
 
 - **Replace GregTech with a custom-machines mod** (Modular Machinery Reborn, Custom Machinery).
