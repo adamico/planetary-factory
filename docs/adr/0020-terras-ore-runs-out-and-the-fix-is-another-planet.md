@@ -196,6 +196,33 @@ safe. Raise it and it stops being a consolation and starts being a reason to sta
   cave-freeness. Recorded as a decision, not skipped.
 - **Save invalidation is not a cost.** The pack is pre-release.
 
+## Amended by #57: a derived yield readout is not a counter
+
+**No counter, but a derived readout is not a counter.** The map states each charted patch's
+**material, `depleted` flag and remaining yield**, because Factorio always states yield and that
+overrides the instinct to show only a binary.
+
+The reasoning above — *a counter competes with the hole in the ground, and the player believes the
+hole* — is not overturned. It is the argument for **deriving** the number rather than storing one.
+Yield is counted on demand from the ore blocks actually present in the vein's bounds, when a chunk
+is charted; it is a *view of* the hole, not a rival to it, which is exactly how Factorio's own yield
+works — summed from the entities that are there. What the Considered Options section rejects is a
+**persisted** per-patch counter, which can disagree with the world; a number recomputed from the
+world cannot.
+
+Deriving is also the only option that adds no persisted state: `GeneratedVeinMetadata` carries
+`originChunk`, `center`, `definition` and `depleted` and nothing else. There is no remaining-count
+field, and nothing in GregTech computes one.
+
+`depleted` is unchanged — the cheap binary the Miner flips when it fails to find ore. It is not
+replaced by the yield number, and the two cannot drift: **yield 0 and `depleted` agree by
+construction**, because both are answers about the same blocks. Snapshot staleness is unchanged too
+(a half-worked vein still reads as it was last charted), and is accepted above.
+
+**Bedrock deposits need no change.** They already carry yield —
+`ProspectorMode.OreInfo(material, weight, left, yield)` — and the miner already renders a depletion
+percentage. Only ore veins needed this decision.
+
 ## Amended by ADR-0021: the starting materials
 
 **The starting patches are iron, copper and coal.** ADR-0021 cuts Terra's ore to Nauvis's set, and
