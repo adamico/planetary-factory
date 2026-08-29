@@ -7,9 +7,17 @@ ServerEvents.recipes(event => {
 
   [
     'gtceu:lp_steam_solid_boiler', 'gtceu:bronze_brick_casing',
-    'gtceu:lv_assembler', 'gtceu:lv_machine_hull'
+    'gtceu:lv_machine_hull'
   ].forEach(id => {
-    event.remove({ output: id })  
+    event.remove({ output: id })
+  });
+
+  // GregTech's own Assemblers lose their crafts entirely (ADR-0026). Every tier, not just
+  // LV: the pack's Assembling Machines are the Assembly row now, and a stock Assembler
+  // reachable at any tier is GregTech taking the capability back by recipe placement --
+  // which is the failure ADR-0025 named when it declined the Large Chemical Reactor.
+  ['lv', 'mv', 'hv', 'ev', 'iv', 'luv', 'zpm', 'uv'].forEach(tier => {
+    event.remove({ output: `gtceu:${tier}_assembler` })
   });
 
   event.shaped('gtceu:bronze_brick_casing',
@@ -61,7 +69,12 @@ ServerEvents.recipes(event => {
     }
   ).id('kubejs:shaped/lv_machine_hull');
 
-  event.shaped('gtceu:lv_assembler',
+  // Assembling Machine 1, the pack's own (ADR-0026). The id is GregTech-namespaced and
+  // tier-prefixed because GregTech's registrate owns both; the display name is authored in
+  // `kubejs/assets/gtceu/lang/en_us.json`. Machines 2 and 3 are the same build on the next
+  // hull up -- ADR-0018 makes the tiers speed-only, so the ingredients climb with the hull
+  // and nothing else changes.
+  event.shaped('gtceu:lv_assembling_machine',
     [
       'WEW',
       'BCB',
@@ -74,5 +87,32 @@ ServerEvents.recipes(event => {
       C: 'gtceu:lv_machine_hull'
     }
   ).id('kubejs:shaped/assembling_machine_1');
-});
 
+  event.shaped('gtceu:mv_assembling_machine',
+    [
+      'WEW',
+      'BCB',
+      'WEW'
+    ],
+    {
+      W: 'create:cogwheel',
+      E: 'planetaryfactory:electronic_circuit',
+      B: 'create:belt_connector',
+      C: 'gtceu:mv_machine_hull'
+    }
+  ).id('kubejs:shaped/assembling_machine_2');
+
+  event.shaped('gtceu:hv_assembling_machine',
+    [
+      'WEW',
+      'BCB',
+      'WEW'
+    ],
+    {
+      W: 'create:cogwheel',
+      E: 'planetaryfactory:electronic_circuit',
+      B: 'create:belt_connector',
+      C: 'gtceu:hv_machine_hull'
+    }
+  ).id('kubejs:shaped/assembling_machine_3');
+});
