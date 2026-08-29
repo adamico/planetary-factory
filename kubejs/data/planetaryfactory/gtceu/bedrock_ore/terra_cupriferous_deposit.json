@@ -12,14 +12,6 @@
     "materials": [
         {
             "material": "gtceu:copper",
-            "weight": 5
-        },
-        {
-            "material": "gtceu:tin",
-            "weight": 2
-        },
-        {
-            "material": "gtceu:zinc",
             "weight": 1
         }
     ],

@@ -72,6 +72,14 @@ EXPECTED = {
             "bedrock_ores": {},
             "bedrock_fluids": {},
         },
+        # Terra's shape: a shortened column no registry entry mentions, and a retired
+        # deposit that must not come back — the reverse assertion bedrock ores lacked
+        # until the four-ore set gave them one.
+        "terra": {
+            "dimension": "minecraft:overworld",
+            "dimension_bounds": {"min_y": 0, "height": 192},
+            "forbidden_bedrock_ores": ["planetaryfactory:terra_polymetallic_deposit"],
+        },
     }
 }
 
@@ -108,6 +116,8 @@ GOOD = {
         "placement": {"type": "minecraft:random_spread", "spacing": 5, "separation": 2},
         "structures": ["planetaryfactory:electro_ruin"]}},
     "blocks": ["planetaryfactory:scrap_pile", "gtceu:goethite_ore"],
+    "dimension_bounds": {"minecraft:overworld": {"min_y": 0, "height": 192},
+                         IGNUS: {"min_y": -64, "height": 384}},
 }
 
 
@@ -207,6 +217,28 @@ CASES = [
          "gtceu:nether_natural_gas_deposit",
          {"fluid": "gtceu:natural_gas", "depleted_yield": 3, "weight": 15,
           "dimensions": ["minecraft:the_nether"]})), 1),
+    # ADR-0019's column is written in two files that can disagree in silence, and no vein,
+    # layer or deposit in the dump mentions either number.
+    ("a dimension that reverted to the vanilla column fails",
+     mutate(lambda d: d["dimension_bounds"]["minecraft:overworld"]
+            .__setitem__("height", 384)), 1),
+    ("a dimension whose floor moved fails",
+     mutate(lambda d: d["dimension_bounds"]["minecraft:overworld"]
+            .__setitem__("min_y", -64)), 1),
+    ("a dump with no bounds at all fails the body that asserts them",
+     mutate(lambda d: d.pop("dimension_bounds")), 1),
+    # A retired deposit is an absent file, and a file that comes back is invisible to
+    # every other row: nothing the fixture names would change.
+    ("a retired bedrock ore deposit that came back fails",
+     mutate(lambda d: d["bedrock_ores"].__setitem__(
+         "planetaryfactory:terra_polymetallic_deposit",
+         {"materials": [{"material": "gtceu:lead", "weight": 4}], "depleted_yield": 4,
+          "dimensions": ["minecraft:overworld"]})), 1),
+    ("a retired deposit still registered but filtered elsewhere passes",
+     mutate(lambda d: d["bedrock_ores"].__setitem__(
+         "planetaryfactory:terra_polymetallic_deposit",
+         {"materials": [{"material": "gtceu:lead", "weight": 4}], "depleted_yield": 4,
+          "dimensions": [IGNUS]})), 0),
     ("a barren body with veins elsewhere in the registry passes",
      mutate(lambda d: d["ore_veins"].__setitem__(
          "planetaryfactory:ignus_sulfur", {"weight": 100, "layer": "ignus_rock",

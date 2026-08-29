@@ -402,7 +402,7 @@ hash = "746ced134e9f2bf1cf0ce28931028457d5cffa3fec6b2e3f5496d33786686d8a"
 
 [[files]]
 file = "config/gtceu.yaml"
-hash = "6a4040208de9face688fbb7c617c988ab50b13692f748b529149a5648d8b2cb2"
+hash = "ed019f8e1cf399f8a4034640361c8809fae5774211be7d81ad1040efffd57b4f"
 
 [[files]]
 file = "config/guardvillagers-common.toml"
@@ -1058,15 +1058,11 @@ hash = "2812c703cf8af135dea94621b70f42b2136b5470f830369730cbce0e56b2a47f"
 
 [[files]]
 file = "kubejs/data/planetaryfactory/gtceu/bedrock_ore/terra_cupriferous_deposit.json"
-hash = "619e0f3cb99356f49ab4ff7a524c62a28370e2e4e9719d944b523c993228fe1f"
+hash = "82047a0c6bd16fa7267ab3bd5186a0188b8340aaa16c47a2079d7f4edc080e9a"
 
 [[files]]
 file = "kubejs/data/planetaryfactory/gtceu/bedrock_ore/terra_ferrous_deposit.json"
-hash = "4b7b88685d62d1bab24b7be0be0e131ee934abcc22c1a95e44469da0255b798f"
-
-[[files]]
-file = "kubejs/data/planetaryfactory/gtceu/bedrock_ore/terra_polymetallic_deposit.json"
-hash = "558aa7ad566aa36556c5cd3b1193533c3e03972b5ae98f77b29aa72a467cea65"
+hash = "dbcfd072538de414caafb181a9722d25b2837034dec09f4512712a4adba1330c"
 
 [[files]]
 file = "kubejs/data/planetaryfactory/gtceu/ore_vein/ignus_calcite.json"
@@ -1133,6 +1129,54 @@ file = "kubejs/data/planetaryfactory/structure/electro_ruin_2.nbt"
 hash = "744a17c7f41e4168691311713eebe1d3312c42d77c3b0b8cb770537b57e4b11f"
 
 [[files]]
+file = "kubejs/data/planetaryfactory/structure/terra_start_coal_large.nbt"
+hash = "a4ff4d4991b0f382b47f8cf127489ec5bc5a3061e899f99d2927ec3494480c79"
+
+[[files]]
+file = "kubejs/data/planetaryfactory/structure/terra_start_coal_medium.nbt"
+hash = "7fa6d046732f7dc72275aafc6f7427c2154765cbbdd1e4ad472524f0d434fd1c"
+
+[[files]]
+file = "kubejs/data/planetaryfactory/structure/terra_start_coal_small.nbt"
+hash = "acfa78c4044987380e0424ceb883b4c1be8554866753c5e4c4bc5bff10fa86b9"
+
+[[files]]
+file = "kubejs/data/planetaryfactory/structure/terra_start_copper_large.nbt"
+hash = "b25a217b8e89e56a8ea62b753e0927e1f98d2b354be1890ccc0197bd9588fbf0"
+
+[[files]]
+file = "kubejs/data/planetaryfactory/structure/terra_start_copper_medium.nbt"
+hash = "b0ebe3a82d53197d9093a8c626efa2212266ff2b520b6a0b5fbd2132d4a64496"
+
+[[files]]
+file = "kubejs/data/planetaryfactory/structure/terra_start_copper_small.nbt"
+hash = "b6fd07709280e9e23fc3c6071002ec77f92f0f0fb899a2ecb382bd09118743f1"
+
+[[files]]
+file = "kubejs/data/planetaryfactory/structure/terra_start_hub_0.nbt"
+hash = "26b9be7ae7a736825b89fc64d60615eafe55c9ef97f936cba82696decc3e6e9d"
+
+[[files]]
+file = "kubejs/data/planetaryfactory/structure/terra_start_hub_1.nbt"
+hash = "ce43f61756b01685879520104ef367aa6dd71a7c54b74b408cf05fa4c4df5ef7"
+
+[[files]]
+file = "kubejs/data/planetaryfactory/structure/terra_start_hub_2.nbt"
+hash = "2c7ebc4df0b4994b5dcacd0e1c4af1b427ee2deaf7bfd836bee3f7818d5357ed"
+
+[[files]]
+file = "kubejs/data/planetaryfactory/structure/terra_start_iron_large.nbt"
+hash = "94fc29f1e7202a1617729991264001b71c397694790f2217406baf6431444584"
+
+[[files]]
+file = "kubejs/data/planetaryfactory/structure/terra_start_iron_medium.nbt"
+hash = "32778241a26a5d610e250d6936e976f5640ed593d399ac13d08e68edb8d6c6f8"
+
+[[files]]
+file = "kubejs/data/planetaryfactory/structure/terra_start_iron_small.nbt"
+hash = "de3f3f171952efce022d08d0ce6bf4003c1256b07e5c0d2da70a0af7f0876116"
+
+[[files]]
 file = "kubejs/data/planetaryfactory/tags/worldgen/biome/is_electro.json"
 hash = "41a5034cbc4195ae39ab13ec90809fbbd3668f6343a4d36c1031403c199920db"
 
@@ -1147,6 +1191,10 @@ hash = "6c56ba3fbe1db8a88208c8b74d124cf7c82c0cf5f244aac95327e45e507d5446"
 [[files]]
 file = "kubejs/data/planetaryfactory/tags/worldgen/biome/terra.json"
 hash = "7d45fd01e55ee40e2ff4f56697795581a9d3bf7441633a9b826f80afb716d361"
+
+[[files]]
+file = "kubejs/data/planetaryfactory/tags/worldgen/biome/terra_land.json"
+hash = "6df7f6b8701f43d38f2f3127a6a7a909aecf701cdcdc686afb61008efe9feeea"
 
 [[files]]
 file = "kubejs/data/planetaryfactory/worldgen/biome/electro_barren_plateau.json"
@@ -1289,8 +1337,16 @@ file = "kubejs/data/planetaryfactory/worldgen/placed_feature/yumako_tree.json"
 hash = "c30645f116b7c83f540dd41de621d695f10658c9e2c506793fc30e42801fe597"
 
 [[files]]
+file = "kubejs/data/planetaryfactory/worldgen/processor_list/terra_start_ground.json"
+hash = "3a2cd7e1286c20a7a90417bae71b95bfac6a6c12a932630bc05333822f263ba0"
+
+[[files]]
 file = "kubejs/data/planetaryfactory/worldgen/structure/electro_ruin.json"
 hash = "703f014f20898aea3d6e36971c70ab100fe3622a6645d6fa56e9620d007c73bc"
+
+[[files]]
+file = "kubejs/data/planetaryfactory/worldgen/structure/terra_starting_area.json"
+hash = "14afc4bd5f4a1e3c414af4732fe3157a058bc34be02adfe3f0d9475cb82b7d6c"
 
 [[files]]
 file = "kubejs/data/planetaryfactory/worldgen/structure_set/electro_ruins.json"
@@ -1299,6 +1355,22 @@ hash = "1b2f641a2939a22fa9d16a23d773dd91a42fd465c7d96543980fb5020273b856"
 [[files]]
 file = "kubejs/data/planetaryfactory/worldgen/template_pool/electro_ruin.json"
 hash = "16b1348014019a2ba7947710529a04e09a6188d299c6eb107fc130aaec6e3038"
+
+[[files]]
+file = "kubejs/data/planetaryfactory/worldgen/template_pool/terra_start.json"
+hash = "b15290663bb4c9bb3058d11d9854a9fafc4b17ff44d20d2928a5c354f7a928fc"
+
+[[files]]
+file = "kubejs/data/planetaryfactory/worldgen/template_pool/terra_start_coal.json"
+hash = "4af5acf926c8c4218b8c8cbb980834e0a5dfcf0df61ed9ad381a294e7b696cdc"
+
+[[files]]
+file = "kubejs/data/planetaryfactory/worldgen/template_pool/terra_start_copper.json"
+hash = "e30c0ca618562434bd971806ceabd2b9f03ab4e35631e560634dc5e0622be6ba"
+
+[[files]]
+file = "kubejs/data/planetaryfactory/worldgen/template_pool/terra_start_iron.json"
+hash = "b311849910b0e628d2f9c171570143f8c2f7ef3c2849840c0fd3a998ed1d28fd"
 
 [[files]]
 file = "kubejs/data/remove-nether-end-worldgen.zip"
@@ -1338,7 +1410,7 @@ hash = "5bebf7a67cd34de5834d88b0608a38c38e8d816fefb1857348ce33db60939a02"
 
 [[files]]
 file = "kubejs/server_scripts/registry_dump.js"
-hash = "4c4ef27a478f9007b05f64508c5407098913b69dd21de8d278e5e509bb9c2434"
+hash = "fe04f4e1b85db254908036a4dd591788051d18846ba5c67e28d1e92eb0e9ac23"
 
 [[files]]
 file = "kubejs/server_scripts/research_dev_commands.js"
@@ -1346,7 +1418,7 @@ hash = "5abfe0a6e6b45110691e681f9613ea1dcda6fa3bcb677a786d250fda058af21c"
 
 [[files]]
 file = "kubejs/server_scripts/researchd.js"
-hash = "29ce776a3d2951f4e86359b69efdabd49b8d38a8f61e69830920fdb4a730fed3"
+hash = "fcf1e45cf3ab86f82de7eb8289eb4983f911a5802c1a38af6d5f8b92008881fb"
 
 [[files]]
 file = "kubejs/server_scripts/researchd.js.bak"

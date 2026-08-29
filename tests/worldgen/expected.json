@@ -158,84 +158,92 @@
       "worldgen_layer": "sapros_rock"
     },
     "terra": {
+      "_comment": [
+        "Terra after #58: four ore veins, iron then copper then coal with uranium rare, all on",
+        "the `stone` layer inside ADR-0019's shallow band. The `deepslate` layer is gone, and so",
+        "is every other vein -- `forbidden_ore_veins` names each one, because a cut here is an",
+        "absent file (kubejs/data/remove-terra-cut-veins.zip filters GregTech's own) and a file",
+        "that comes back reverts the decision without touching anything this fixture would",
+        "otherwise read. ADR-0019's other two claims -- the terrain is flat, no caves generate --",
+        "are invisible to every registry and are checked by a human on delivery.",
+        "Terra's bedrock fluids are deliberately unasserted: #58 calls for a Terra oil deposit and",
+        "none exists yet, and which deposits the body carries is still open."
+      ],
       "bedrock_ores": {
         "planetaryfactory:terra_cupriferous_deposit": {
           "depleted_yield_at_least": 1,
           "materials": [
-            "gtceu:copper",
-            "gtceu:tin",
-            "gtceu:zinc"
+            "gtceu:copper"
           ]
         },
         "planetaryfactory:terra_ferrous_deposit": {
           "depleted_yield_at_least": 1,
           "materials": [
-            "gtceu:iron",
-            "gtceu:nickel"
-          ]
-        },
-        "planetaryfactory:terra_polymetallic_deposit": {
-          "depleted_yield_at_least": 1,
-          "materials": [
-            "gtceu:lead",
-            "gtceu:silver",
-            "gtceu:sulfur"
+            "gtceu:iron"
           ]
         }
       },
+      "biomes": [
+        "planetaryfactory:terra_desert",
+        "planetaryfactory:terra_dry_steppe",
+        "planetaryfactory:terra_grassland",
+        "planetaryfactory:terra_red_desert",
+        "planetaryfactory:terra_sea",
+        "planetaryfactory:terra_shore",
+        "planetaryfactory:terra_woodland"
+      ],
       "dimension": "minecraft:overworld",
+      "dimension_bounds": {
+        "height": 192,
+        "min_y": 0
+      },
       "forbidden_bedrock_fluids": [
         "gtceu:lava_deposit"
       ],
+      "forbidden_bedrock_ores": [
+        "planetaryfactory:terra_polymetallic_deposit"
+      ],
       "forbidden_ore_veins": [
-        "gtceu:scheelite",
+        "gtceu:apatite",
+        "gtceu:cassiterite",
+        "gtceu:copper_tin",
+        "gtceu:diamond",
+        "gtceu:galena",
+        "gtceu:garnet",
+        "gtceu:garnet_tin",
+        "gtceu:lapis",
+        "gtceu:lubricant",
+        "gtceu:magnetite",
+        "gtceu:manganese",
+        "gtceu:mica",
+        "gtceu:mineral_sand",
         "gtceu:naquadah",
-        "gtceu:sulfur"
+        "gtceu:nickel",
+        "gtceu:oilsands",
+        "gtceu:olivine",
+        "gtceu:redstone",
+        "gtceu:salts",
+        "gtceu:sapphire",
+        "gtceu:scheelite",
+        "gtceu:sulfur",
+        "planetaryfactory:sphalerite"
       ],
       "ore_veins": {
-        "gtceu:cassiterite": {
-          "layer": "stone",
-          "weight": 90
-        },
         "gtceu:coal": {
           "layer": "stone",
           "weight": 130
         },
         "gtceu:copper": {
-          "layer": "deepslate",
+          "layer": "stone",
           "weight": 140
-        },
-        "gtceu:copper_tin": {
-          "layer": "stone",
-          "weight": 70
-        },
-        "gtceu:galena": {
-          "layer": "stone",
-          "weight": 60
         },
         "gtceu:iron": {
           "layer": "stone",
           "weight": 160
         },
-        "gtceu:magnetite": {
+        "gtceu:uranium": {
           "layer": "stone",
-          "weight": 60
-        },
-        "gtceu:mica": {
-          "layer": "deepslate",
-          "weight": 10
-        },
-        "gtceu:nickel": {
-          "layer": "stone",
-          "weight": 55
-        },
-        "gtceu:olivine": {
-          "layer": "deepslate",
-          "weight": 10
-        },
-        "planetaryfactory:sphalerite": {
-          "layer": "stone",
-          "weight": 70
+          "weight": 40
         }
       },
       "structures": {

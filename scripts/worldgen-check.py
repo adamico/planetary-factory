@@ -116,6 +116,7 @@ def compare(dump, expected):
     structures = dump.get("structures", {})
     structure_sets = dump.get("structure_sets", {})
     blocks = set(dump.get("blocks", []))
+    bounds = dump.get("dimension_bounds", {})
 
     def barren(spec, key, registry, noun, dimension, body):
         """Assert an emptiness against the whole registry, not against a list of names.
@@ -136,6 +137,20 @@ def compare(dump, expected):
 
     for body, spec in expected["bodies"].items():
         dimension = spec["dimension"]
+
+        # The dimension's column. Nothing else in the dump implies it: a vein's height range
+        # is clamped to whatever the dimension turns out to be, so a column that silently
+        # reverted to vanilla's -64..320 still loads every vein the fixture names.
+        want_bounds = spec.get("dimension_bounds")
+        if want_bounds is not None:
+            got_bounds = bounds.get(dimension)
+            if got_bounds is None:
+                yield f"{body}: no dimension bounds dumped for {dimension}"
+            else:
+                for field, value in sorted(want_bounds.items()):
+                    if got_bounds.get(field) != value:
+                        yield (f"{body}: dimension {dimension} has {field} "
+                               f"{got_bounds.get(field)!r}, expected {value!r}")
 
         # The body's own worldgen layer, asserted directly rather than through a vein. A
         # body with no veins has nothing else that would mention its layer, and a layer
@@ -250,6 +265,11 @@ def compare(dump, expected):
             if floor is not None and got["depleted_yield"] < floor:
                 yield (f"{body}: bedrock ore deposit {deposit_id} depletes to "
                        f"{got['depleted_yield']}, expected at least {floor}")
+
+        for deposit_id in spec.get("forbidden_bedrock_ores", []):
+            got = deposits.get(deposit_id)
+            if got is not None and dimension in got["dimensions"]:
+                yield f"{body}: bedrock ore deposit {deposit_id} leaks onto {dimension}"
 
         for deposit_id, want in spec.get("bedrock_fluids", {}).items():
             got = fluids.get(deposit_id)
