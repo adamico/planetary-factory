@@ -1,0 +1,58 @@
+{
+  "_comment": [
+    "Which pack machine crafts a Factorio recipe category (ADR-0026's conversion input).",
+    "Routing is on a recipe's FIRST category. Factorio 2.x gives a recipe a list, and the",
+    "extra entries are the DLC machines that may also craft it -- `transport-belt` is",
+    "[\"crafting\", \"metallurgy\"] because Vulcanus's foundry exists, not because a belt is a",
+    "metallurgy recipe. Routing on anything but the first entry would hand Terra's recipes to",
+    "machines this map does not build.",
+    "A `!` prefix means the category is deliberately not routed: the converter emits nothing",
+    "and says why. It is not the same as a category missing from this file, which is a hard",
+    "failure -- a new Factorio version adding a category must not silently drop its recipes."
+  ],
+  "routes": {
+    "crafting": "assembling",
+    "advanced-crafting": "assembling",
+    "crafting-with-fluid": "assembling",
+    "chemistry": "chemical_plant",
+    "oil-processing": "oil_refinery",
+    "smelting": "smelting",
+    "rocket-building": "rocket_silo",
+    "centrifuging": "!uranium-is-mekanism-dissolution",
+    "crushing": "!asteroids-are-post-launch",
+    "metallurgy": "!vulcanus",
+    "cryogenics": "!aquilo",
+    "organic": "!gleba",
+    "electromagnetics": "!fulgora",
+    "recycling": "!fulgora",
+    "captive-spawner-process": "!gleba",
+    "hand-crafting": "personal_assembler",
+    "parameters": "!blueprint-ui-scaffolding"
+  },
+  "machines": {
+    "assembling": {
+      "recipe_type": "planetaryfactory:assembling",
+      "note": "ADR-0026's Assembling Machine 1/2/3, one recipe type across the three tiers"
+    },
+    "chemical_plant": {
+      "recipe_type": "planetaryfactory:chemical_plant",
+      "note": "ADR-0025"
+    },
+    "oil_refinery": {
+      "recipe_type": "planetaryfactory:oil_refinery",
+      "note": "ADR-0025"
+    },
+    "smelting": {
+      "recipe_type": null,
+      "note": "Plates and stone brick. The surface is not decided here -- ADR-0017 splits ore processing between Create at rung 0 and Mekanism from rung 1, and smelting rides that split."
+    },
+    "rocket_silo": {
+      "recipe_type": null,
+      "note": "The Rocket Part. #29 and #41 settle what a launch consumes; the silo is GCyR's."
+    },
+    "personal_assembler": {
+      "recipe_type": null,
+      "note": "GDD §5's bootstrap surface, delivery step 11. In scope for the spec, not for this build."
+    }
+  }
+}
