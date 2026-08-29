@@ -5,8 +5,8 @@
       "element": {
         "element_type": "minecraft:single_pool_element",
         "location": "planetaryfactory:terra_start_iron_small",
-        "processors": "minecraft:empty",
-        "projection": "terrain_matching"
+        "processors": "planetaryfactory:terra_start_ground",
+        "projection": "rigid"
       },
       "weight": 1
     },
@@ -14,8 +14,8 @@
       "element": {
         "element_type": "minecraft:single_pool_element",
         "location": "planetaryfactory:terra_start_iron_medium",
-        "processors": "minecraft:empty",
-        "projection": "terrain_matching"
+        "processors": "planetaryfactory:terra_start_ground",
+        "projection": "rigid"
       },
       "weight": 1
     },
@@ -23,8 +23,8 @@
       "element": {
         "element_type": "minecraft:single_pool_element",
         "location": "planetaryfactory:terra_start_iron_large",
-        "processors": "minecraft:empty",
-        "projection": "terrain_matching"
+        "processors": "planetaryfactory:terra_start_ground",
+        "projection": "rigid"
       },
       "weight": 1
     }

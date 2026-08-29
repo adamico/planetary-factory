@@ -67,10 +67,16 @@ because a structure has four separate silent failures:
     "set": "planetaryfactory:terra_starting_area",
     "placement": { "type": "minecraft:concentric_rings", "count": 1, "distance": 0 },
     "biomes": ["planetaryfactory:terra_grassland"],
-    "blocks": ["gtceu:goethite_ore"]
+    "blocks": ["gtceu:iron_ore"]
   }
 }
 ```
+
+`set` and `placement` are **optional**, and Terra's starting area is the case that shows why: it
+is not placed by worldgen at all. No `StructurePlacement` can see world spawn — it is handed a
+`ChunkGeneratorStructureState` and nothing else — so `planetaryfactory_core` stamps that pool onto
+spawn on `ServerStartedEvent` instead (ADR-0019). Omitting both fields keeps the three assertions
+that still mean something: the structure loaded, its biomes are emitted, its blocks are real.
 
 `biomes` are biomes the structure must list *and* the body's generator must emit — a structure
 restricted to a biome that generates nowhere generates nowhere, and neither half says so alone.
@@ -81,7 +87,7 @@ same shape the datapack file carries and does not need to know which placement s
 `blocks` is the odd one: it asserts that each named block id is a **registered block**, not that
 the structure contains it. A structure template naming an id that does not exist resolves to air
 and reports nothing, and GregTech builds its ore blocks at runtime from its material registry,
-so no file in this repo can be read to find out whether `gtceu:goethite_ore` is the id or a
+so no file in this repo can be read to find out whether `gtceu:iron_ore` is the id or a
 plausible-looking near miss. The `blocks` list is that answer.
 
 Bedrock ore deposits are checked for presence, dimension,

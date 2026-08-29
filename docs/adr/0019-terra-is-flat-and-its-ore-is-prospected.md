@@ -228,21 +228,90 @@ no depleted flag on a vein to set — and a GregTech Miner scans for ore blocks 
 consulting the vein registry. Against that, a vein cannot be spawn-anchored at all: GregTech
 places veins on its own grid, and nothing in that placement can be told "one, here".
 
-**Anchoring is `minecraft:concentric_rings` at `distance: 0`, `count: 1`.** It is the only
-vanilla placement type that puts a bounded number of a structure near the world origin instead
-of scattering it on a grid, and vanilla's own spawn search starts from the origin. Its
-`preferred_biomes` is a **land-only** tag, `#planetaryfactory:terra_land`, not the vein tag
-`#planetaryfactory:terra`, which holds the sea and the shore: the placement picks its ring
-position by preferred biome, and a starting area chosen into open water is the one layout the
-fixed-set promise cannot survive.
+**Anchoring is not worldgen at all: `planetaryfactory_core` stamps the pool onto world
+spawn.** This corrects a first attempt at `minecraft:concentric_rings` with `distance: 0`,
+`count: 1`, which anchors to the world *origin* and not to spawn — a difference that only looks
+cosmetic. That placement pins the ring to chunk (0,0) and then searches a hardcoded 112 blocks
+for a `preferred_biomes` match. Terra has a sea, so on a seed whose origin is open water the
+search fails, the ring falls back to (0,0), the structure's land-biome predicate correctly
+refuses to start there, and the player gets no opening whatsoever — silently, with nothing in
+the log. That is not a tuning failure; it is roughly a coin flip on seed.
+
+No custom placement type fixes it either, which is the load-bearing fact. A `StructurePlacement`
+is asked `isPlacementChunk(ChunkGeneratorStructureState, x, z)` and that state carries a biome
+source, a random state and the seeds — no `ServerLevel`, no `ServerLevelData`, no world spawn.
+Worldgen is deliberately isolated from level state so it stays deterministic and thread-safe, so
+*no* placement type can see spawn. Nor can `random_spread` be bent into "exactly one, on land":
+`spacing` caps at 4096 chunks, a large `spacing`/`separation` pair collapses the position back
+onto chunk (0,0), and its biome filtering happens at start time, so a moderate spacing yields
+many starting areas rather than one.
+
+So the placement is imperative and lives in the mod (ADR-0015 puts mechanism there): on
+`ServerStartedEvent` — after vanilla has chosen a spawn, which is on land by construction, and
+after it has prepared the spawn chunks there are blocks to write into — the mod runs vanilla's
+own `JigsawPlacement` against the same start pool. Everything above the placement is unchanged:
+same hub variants, same per-resource pools, same size and rotation randomisation. A `SavedData`
+flag makes it once per world. This is also what the packs that do this well do; the two dedicated
+mods in the space both stamp imperatively at world creation, and neither uses a structure set.
+
+`generateJigsaw` itself is inlined rather than called, for one reason: **the pieces have to have
+loaded chunks under them before anything is written.** A `terrain_matching` piece is placed
+through a `GravityProcessor`, which asks the *level* for the surface height — and `Level.getHeight`
+does not generate. On a chunk that is not loaded it returns `getMinBuildHeight()`, so the field is
+not dropped, it is written at y=-64 inside the bedrock. The prepared spawn area is a few chunks
+across and the fields reach a hundred blocks out, so most of the opening landed in bedrock and the
+player found one partial patch, varying by seed, with a clean log and a successful return value.
+The stamp therefore walks the pieces' own bounding boxes and calls `level.getChunk` over them
+first. It also logs one line per piece: a jigsaw child rejected for overlap is dropped silently,
+so the piece count is the only evidence that the hub dealt fewer than three fields.
+
+The cost is honest and small: the structure is no longer part of worldgen, so `/locate` cannot
+find it and the pack logs the coordinates instead. There is no structure set, and the worldgen
+check's fixture row for it therefore asserts what the stamp depends on — that the structure
+loaded, that its biomes are ones Terra emits, that its ore ids are real blocks — rather than a
+placement that no longer exists.
+
+The land-only biome tag survives the change and still matters. `#planetaryfactory:terra_land` is
+not the vein tag `#planetaryfactory:terra`, which holds the sea and the shore; the structure's
+own biome list is what keeps a field off the seabed.
 
 **Randomization is jigsaw, and the fixed set is one pool per resource.** A single shared pool
 would deal three copper patches and no coal — exactly the failure the fixed-set requirement
 exists to prevent. So the hub carries one connector per resource, each pointing at that
 resource's own pool, and the size variants inside each pool are what randomizes the patch sizes.
-The patch elements use `terrain_matching` projection: the fields are one block thick and lie
-*on* the ground, following the heightmap, which is both the Factorio reading and what keeps a
-half-dug patch legible.
+
+**A patch is one ore block, and not the vein's mix.** The buried veins deal four ore blocks each
+and two of them cross metals: the iron vein carries malachite, which smelts to copper, and the
+copper vein carries iron ore and pyrite, which smelt to iron. Underground that is a feature — a
+vein is where you learn the local rock. In the opening it is a lie, because the patch is the
+tutorial and has to answer "what is this a patch of" with one word; a player who mines the iron
+field and gets copper has been taught something false about how the world is organised. So each
+field is a single block: `gtceu:iron_ore`, `gtceu:copper_ore`, `gtceu:coal_ore`.
+
+**The fields lie on the terrain, and the mod owns the projection that puts them there.** They are
+one block thick and replace the topsoil block, which is both the Factorio reading and what keeps a
+half-dug patch legible. That is *not* `terrain_matching`: vanilla's projection applies a
+`minecraft:gravity` processor, which on a `ServerLevel` reads the `WORLD_SURFACE` heightmap —
+defined as "the highest block that is not air". A tree is not air, so a field crossing a wood
+landed on the canopy, ore in place of leaves twenty blocks up, split between treetop and ground
+wherever the wood ended. No vanilla heightmap avoids it; `OCEAN_FLOOR` and `MOTION_BLOCKING` stop
+at leaves and logs too. So `planetaryfactory_core` registers `planetaryfactory:ground`, a structure
+processor that walks the column down past whatever grew there and lands on the first real terrain
+block, and the elements are `rigid` — the projection is what would add the gravity processor back,
+and it runs last. Under a wood the field therefore lies *beneath* the trees, which go on standing
+on it.
+
+**The hub is sized by the widest field, not by how far apart the connectors look.** A patch
+template's bounding box is a rectangle as wide as the field running the whole way from its
+connector to the far end, so two fields on perpendicular faces both cover the corner beside the
+hub and overlap there. Vanilla drops an overlapping jigsaw child without logging anything — a
+rejected child is an ordinary outcome, not an error — so this ships as "two patches instead of
+three", on some seeds only. Making the hub at least as wide as the widest field plus its scatter,
+and clamping each connector by its own resource's widest variant, keeps every field's sideways
+extent inside the hub's footprint, which is what makes three fields a guarantee rather than a
+usual outcome. `tests/worldgen/test_start_geometry.py` asserts it across every hub variant and
+every combination of size draws, because the size is drawn at world generation and only the worst
+case is a guarantee.
 
 **Stone is not one of the patches**, against the ADR's "iron, copper, coal and stone at
 minimum". Terra's surface is soil over stone everywhere, so a stone patch is decoration rather

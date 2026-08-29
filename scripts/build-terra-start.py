@@ -54,28 +54,34 @@ DATA_VERSION = 3955  # 1.21.1, the version electro_ruin_1.nbt already carries.
 # the jigsaw at world generation, not from rerunning this.
 SEED = 20260829
 
-# The ore blocks each patch is made of, and their weights.
+# The single ore block each patch is made of.
 #
-# These mirror `kubejs/data/gtceu/gtceu/ore_vein/{iron,copper,coal}.json` -- the starting patch
-# of a resource has to look like the buried vein of the same resource, or the player learns the
-# wrong rock. The vein files name *materials* (`gtceu:goethite`) because GregTech resolves a
-# material to the block for the layer it is generating in; a structure template needs the block
-# id itself, and Terra's surface stone layer makes that `gtceu:<material>_ore`.
+# One block per patch, and deliberately *not* the buried vein's mix. The vein files
+# `kubejs/data/gtceu/gtceu/ore_vein/{iron,copper,coal}.json` deal four ore blocks each, and two
+# of those veins are mixed across metals: the iron vein carries malachite, which smelts to copper,
+# and the copper vein carries iron ore and pyrite, which smelt to iron. Underground that is a
+# feature -- a vein is a place you learn the local rock -- but the starting patch is the tutorial,
+# and a patch has to answer the question "what is this a patch of" with one word. A player who
+# mines the iron field and gets copper has been taught something false about how the world is
+# organised.
+#
+# So each field is one block: the plain ore of its own metal. The vein files name *materials*
+# (`gtceu:copper`) because GregTech resolves a material to the block for the layer it is generating
+# in; a structure template needs the block id itself, and Terra's surface stone layer makes that
+# `gtceu:<material>_ore`.
 PATCHES = {
     "iron": {
-        "blocks": [("gtceu:goethite_ore", 5), ("gtceu:yellow_limonite_ore", 2),
-                   ("gtceu:hematite_ore", 2), ("gtceu:malachite_ore", 1)],
+        "block": "gtceu:iron_ore",
         "radii": [10, 12, 14],
         "facing": "east",
     },
     "copper": {
-        "blocks": [("gtceu:chalcopyrite_ore", 5), ("gtceu:iron_ore", 2),
-                   ("gtceu:pyrite_ore", 2), ("gtceu:copper_ore", 2)],
+        "block": "gtceu:copper_ore",
         "radii": [9, 10, 12],
         "facing": "north",
     },
     "coal": {
-        "blocks": [("gtceu:coal_ore", 1)],
+        "block": "gtceu:coal_ore",
         "radii": [9, 11, 13],
         "facing": "west",
     },
@@ -146,16 +152,6 @@ def disc(rng, radius):
     return cells
 
 
-def weighted_pick(rng, blocks):
-    total = sum(weight for _, weight in blocks)
-    roll = rng.uniform(0, total)
-    for block, weight in blocks:
-        roll -= weight
-        if roll <= 0:
-            return block
-    return blocks[-1][0]
-
-
 def write_template(path, size, palette, blocks):
     nbt.write(path, {
         "DataVersion": nbt.Int(DATA_VERSION),
@@ -170,11 +166,11 @@ def write_template(path, size, palette, blocks):
 def build_patch(rng, resource, size_name, radius, distance):
     """One patch template: a connector at the west edge, the ore field `distance` blocks east.
 
-    The template is one block tall. `terrain_matching` projection drops each column onto the
-    heightmap, and the piece itself is projected to `WORLD_SURFACE_WG`, so y=0 is the air just
-    above the ground: the field lies *on* the surface. That is the Factorio reading ADR-0019
-    asks for -- a patch you see the outline of and plan a miner over -- and it is also what
-    makes the field legible after half of it has been dug.
+    The template is one block tall, and `planetaryfactory:ground` drops each of its columns onto
+    the terrain, so y=0 is the topsoil block itself: the ore replaces it and the field lies flush
+    with the surface. That is the Factorio reading ADR-0019 asks for -- a patch you see the outline
+    of and plan a miner over -- and it is also what makes the field legible after half of it has
+    been dug. Under a wood the ore goes beneath the trees, which still stand on it.
     """
     spec = PATCHES[resource]
     cells = disc(rng, radius)
@@ -195,11 +191,18 @@ def build_patch(rng, resource, size_name, radius, distance):
             palette.append(entry)
         return palette_index[key]
 
+    # Always west, whatever direction the field is meant to run. The ore lies along +x in
+    # template space, so the connector -- which points back at the hub from the far end --
+    # is -x. Which way the field actually runs is then decided by rotation, and vanilla picks
+    # the rotation for us: `JigsawBlock.canAttach` only accepts the one that leaves this front
+    # opposite the hub's. Writing OPPOSITE[facing] here instead names the right direction in
+    # world space and the wrong one in template space, which rotates the field off its axis --
+    # copper's would land on top of iron's.
     connector, connector_nbt = jigsaw_block(
         "planetaryfactory:terra_start_patch",
         "planetaryfactory:terra_start_hub",
         "minecraft:empty",
-        OPPOSITE[spec["facing"]],
+        "west",
     )
     blocks.append({
         "pos": [nbt.Int(0), nbt.Int(0), nbt.Int(centre_z)],
@@ -207,18 +210,38 @@ def build_patch(rng, resource, size_name, radius, distance):
         "nbt": connector_nbt,
     })
 
+    ore = state_of({"Name": spec["block"]})
     for dx, dz in cells:
         x, z = centre_x + dx, centre_z + dz
         if x == 0 and z == centre_z:
             continue  # never bury the connector
         blocks.append({
             "pos": [nbt.Int(x), nbt.Int(0), nbt.Int(z)],
-            "state": nbt.Int(state_of({"Name": weighted_pick(rng, spec["blocks"])})),
+            "state": nbt.Int(ore),
         })
 
     write_template(
         os.path.join(STRUCTURES, "terra_start_%s_%s.nbt" % (resource, size_name)),
         (width, 1, depth), palette, blocks)
+
+
+# How far a connector may wander along its face. The hub grows to accommodate it.
+SCATTER = 7
+
+
+def patch_span(resource):
+    """Half the width of this resource's widest field, in blocks.
+
+    The widest, not the drawn one: which size variant a connector deals is decided at world
+    generation, so the hub has to be laid out for the largest it could deal.
+    """
+    return max(PATCHES[resource]["radii"]) + 3
+
+
+def along_face(resource, dx, dz):
+    """A connector's scatter runs along the hub face it sits on: z on an east or west face,
+    x on a north or south one. The other component is pinned to the edge."""
+    return dz if PATCHES[resource]["facing"] in ("east", "west") else dx
 
 
 def build_hub(rng, index, offsets):
@@ -227,6 +250,14 @@ def build_hub(rng, index, offsets):
     The hub places no block of its own. Its whole job is to hold the three connectors far
     enough apart, and at different enough offsets, that the three fields do not land on a
     fixed triangle every world.
+
+    Every connector sits on the hub's own outer face, pointing out of it, and that is not a
+    style choice. Vanilla marks the parent's *entire* bounding box occupied the moment a
+    connector points at a block inside it (`JigsawPlacement.Placer.tryPlacingChildren`), and
+    then rejects every child that overlaps the occupied shape -- which is every child, since
+    each one starts at that same interior block. An interior connector therefore attaches
+    nothing at all, silently, with no warning in the log. So the scatter runs *along* each
+    face rather than across the hub's interior.
     """
     palette = []
     palette_index = {}
@@ -239,22 +270,44 @@ def build_hub(rng, index, offsets):
             palette.append(entry)
         return palette_index[key]
 
-    span = max(max(abs(x), abs(z)) for x, z in offsets.values())
+    # The hub is sized by the widest field, not by the connector offsets, and this is the whole
+    # reason it is large. A patch template's bounding box is a rectangle `2*span+1` wide running
+    # the *entire* way from its connector to the far end of the field. Two fields on perpendicular
+    # faces therefore both cover the diagonal corner beside the hub, overlap there, and vanilla
+    # drops whichever it happens to try second -- silently, since a rejected child is not an error.
+    # Making the hub at least as wide as the widest field plus its scatter keeps every field's
+    # sideways extent inside the hub's own footprint, so no two can reach each other's corner.
+    width = 2 * (max(patch_span(resource) for resource in offsets) + SCATTER) + 1
+    occupied = set()
     for resource, (dx, dz) in offsets.items():
+        facing = PATCHES[resource]["facing"]
         block, block_nbt = jigsaw_block(
             "planetaryfactory:terra_start_hub",
             "planetaryfactory:terra_start_patch",
             "planetaryfactory:terra_start_" + resource,
-            PATCHES[resource]["facing"],
+            facing,
         )
+        # Clamped by this resource's own span, which is what makes the guarantee hold rather
+        # than merely usually hold: the size variant is drawn at world generation, so the hub
+        # has to fit the largest one this connector could ever deal.
+        span = patch_span(resource)
+        along = min(max(width // 2 + along_face(resource, dx, dz), span), width - 1 - span)
+        x, z = {
+            "east": (width - 1, along),
+            "west": (0, along),
+            "north": (along, 0),
+            "south": (along, width - 1),
+        }[facing]
+        assert (x, z) not in occupied, "hub %d puts two connectors in one cell" % index
+        occupied.add((x, z))
         blocks.append({
-            "pos": [nbt.Int(span + dx), nbt.Int(0), nbt.Int(span + dz)],
+            "pos": [nbt.Int(x), nbt.Int(0), nbt.Int(z)],
             "state": nbt.Int(state_of(block)),
             "nbt": block_nbt,
         })
 
     write_template(os.path.join(STRUCTURES, "terra_start_hub_%d.nbt" % index),
-                   (2 * span + 1, 1, 2 * span + 1), palette, blocks)
+                   (width, 1, width), palette, blocks)
 
 
 def write_json(path, obj):
@@ -292,6 +345,18 @@ def build_datapack(hub_count):
         ],
     })
 
+    write_json(os.path.join(WORLDGEN, "processor_list", "terra_start_ground.json"), {
+        "_comment": "Generated by scripts/build-terra-start.py. `planetaryfactory:ground` is "
+                    "registered by planetaryfactory_core. It drops each column of a patch onto the "
+                    "terrain, walking down through whatever grew there. Vanilla's "
+                    "`minecraft:gravity` -- the one the `terrain_matching` projection applies -- "
+                    "reads WORLD_SURFACE instead, which is 'the highest block that is not air', so "
+                    "a field crossing a wood landed on the canopy as ore in place of leaves. No "
+                    "vanilla heightmap avoids that; OCEAN_FLOOR and MOTION_BLOCKING stop at leaves "
+                    "and logs too.",
+        "processors": [{"processor_type": "planetaryfactory:ground"}],
+    })
+
     for resource in PATCHES:
         write_json(os.path.join(WORLDGEN, "template_pool", "terra_start_%s.json" % resource), {
             "_comment": "Generated by scripts/build-terra-start.py. One pool per resource is "
@@ -305,9 +370,12 @@ def build_datapack(hub_count):
                     "element": {
                         "element_type": "minecraft:single_pool_element",
                         "location": "planetaryfactory:terra_start_%s_%s" % (resource, size),
-                        # The field lies on the ground, so every column follows the heightmap.
-                        "projection": "terrain_matching",
-                        "processors": "minecraft:empty",
+                        # `rigid`, not `terrain_matching`, and the field still follows the ground:
+                        # the processor below is what drops each column, and the projection is what
+                        # would otherwise add vanilla's own gravity processor on top of it. See the
+                        # processor list's comment for why vanilla's will not do.
+                        "projection": "rigid",
+                        "processors": "planetaryfactory:terra_start_ground",
                     },
                 }
                 for size in SIZES
@@ -322,34 +390,20 @@ def build_datapack(hub_count):
         # The fields sit on the surface and must not be bearded into a plinth.
         "terrain_adaptation": "none",
         "start_pool": "planetaryfactory:terra_start",
-        # One level of expansion: the hub, then its three patches. Nothing expands further.
+        # The hub, then its three patches: one level of children, so 1. Vanilla gates children
+        # on `maxDepth > 0` and draws from the real pool while `depth != maxDepth`, so at depth
+        # 0 the patches are dealt and at depth 1 only the empty fallback is -- which is what we
+        # want, since a patch carries no connector onward.
         "size": 1,
+        # Both are dead weight now and are kept only so the structure still reads as a whole:
+        # nothing places this structure through worldgen. `planetaryfactory_core` stamps the
+        # pool onto world spawn instead (see TerraStartingArea), because no StructurePlacement
+        # can see world spawn -- it is handed a ChunkGeneratorStructureState and nothing else.
         "start_height": {"absolute": 0},
         "project_start_to_heightmap": "WORLD_SURFACE_WG",
         # Must clear the furthest patch centre plus its own radius.
         "max_distance_from_center": 112,
         "use_expansion_hack": False,
-    })
-
-    write_json(os.path.join(WORLDGEN, "structure_set", "terra_starting_area.json"), {
-        "_comment": "concentric_rings at distance 0, count 1: exactly one starting area, at the "
-                    "origin, where vanilla's own spawn search begins. random_spread cannot "
-                    "express 'one, here', and ADR-0019 wants the opening anchored to spawn.",
-        "structures": [
-            {"structure": "planetaryfactory:terra_starting_area", "weight": 1},
-        ],
-        "placement": {
-            "type": "minecraft:concentric_rings",
-            "distance": 0,
-            "spread": 1,
-            "count": 1,
-            # Not `#planetaryfactory:terra`: that tag is the *vein* tag and holds the sea and
-            # the shore, and concentric_rings picks its ring position by preferred biome. A
-            # starting area chosen into open water is the one layout the fixed-set promise
-            # cannot survive, so the placement gets a land-only tag of its own.
-            "preferred_biomes": "#planetaryfactory:terra_land",
-            "salt": 508113774,
-        },
     })
 
 
