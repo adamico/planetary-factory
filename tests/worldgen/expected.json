@@ -1,7 +1,7 @@
 {
   "_comment": [
     "Expectations for the automated worldgen check. Add a body by adding an entry",
-    "under 'bodies' — the harness in scripts/worldgen-check.py needs no change.",
+    "under 'bodies' \u2014 the harness in scripts/worldgen-check.py needs no change.",
     "See docs/testing/worldgen-registry-check.md."
   ],
   "bodies": {
@@ -85,7 +85,35 @@
       ],
       "forbidden_bedrock_fluids": [
         "gtceu:lava_deposit"
-      ]
+      ],
+      "structures": {
+        "planetaryfactory:terra_starting_area": {
+          "set": "planetaryfactory:terra_starting_area",
+          "biomes": [
+            "planetaryfactory:terra_desert",
+            "planetaryfactory:terra_dry_steppe",
+            "planetaryfactory:terra_grassland",
+            "planetaryfactory:terra_red_desert",
+            "planetaryfactory:terra_woodland"
+          ],
+          "blocks": [
+            "gtceu:goethite_ore",
+            "gtceu:yellow_limonite_ore",
+            "gtceu:hematite_ore",
+            "gtceu:malachite_ore",
+            "gtceu:chalcopyrite_ore",
+            "gtceu:iron_ore",
+            "gtceu:pyrite_ore",
+            "gtceu:copper_ore",
+            "gtceu:coal_ore"
+          ],
+          "placement": {
+            "type": "minecraft:concentric_rings",
+            "count": 1,
+            "distance": 0
+          }
+        }
+      }
     },
     "ignus": {
       "dimension": "planetaryfactory:vulcanus",
@@ -154,10 +182,24 @@
       "_comment": [
         "Electro's `ore_veins` is an empty object on purpose, and the emptiness is the",
         "assertion: no vein in the loaded registry may reach this dimension. The body is",
-        "barren by design — its economy is recycling. See docs/adr/0009-electro-registers-no-ore-veins.md.",
+        "barren by design \u2014 its economy is recycling. See docs/adr/0009-electro-registers-no-ore-veins.md.",
         "Fulgorite and scrap piles are placed features, not veins, and so are not checked here."
       ],
       "dimension": "planetaryfactory:fulgora",
+      "structures": {
+        "planetaryfactory:electro_ruin": {
+          "set": "planetaryfactory:electro_ruins",
+          "biomes": [
+            "planetaryfactory:electro_barren_plateau",
+            "planetaryfactory:electro_scrap_plateau"
+          ],
+          "placement": {
+            "type": "minecraft:random_spread",
+            "spacing": 5,
+            "separation": 2
+          }
+        }
+      },
       "ore_veins": {},
       "bedrock_ores": {
         "planetaryfactory:electro_scrap_deposit": {
@@ -180,7 +222,7 @@
     "sapros": {
       "_comment": [
         "Sapros is barren of veins and of both kinds of bedrock deposit, and all three empty",
-        "objects are assertions rather than omissions — the check walks the whole registry for",
+        "objects are assertions rather than omissions \u2014 the check walks the whole registry for",
         "each. It differs from Electro's emptiness: Electro has no metal at all, where Sapros has",
         "metal that arrives by Decaying a bacterium taken from a stromatolite (ADR-0016). Until the",
         "Decay engine (#17) ships, that metal is unobtainable, and that is the design.",
@@ -204,7 +246,7 @@
     "nether": {
       "_comment": [
         "Not a body: a vanilla dimension the pack strips of GregTech worldgen (ADR-0007, #16).",
-        "The three empty objects are assertions — the check walks the whole registry for each, so",
+        "The three empty objects are assertions \u2014 the check walks the whole registry for each, so",
         "a vein or deposit that later reaches this dimension fails here rather than silently",
         "restoring the stock progression. Vanilla generation is untouched and is not checked."
       ],
@@ -216,7 +258,7 @@
     "end": {
       "_comment": [
         "Not a body: a vanilla dimension the pack strips of GregTech worldgen (ADR-0007, #16).",
-        "The three empty objects are assertions — the check walks the whole registry for each, so",
+        "The three empty objects are assertions \u2014 the check walks the whole registry for each, so",
         "a vein or deposit that later reaches this dimension fails here rather than silently",
         "restoring the stock progression. Vanilla generation is untouched and is not checked."
       ],

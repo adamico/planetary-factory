@@ -108,11 +108,114 @@ const dumpRegistries = (server) => {
 
   return {
     biomes: sampleBiomes(server),
+    structures: dumpStructures(registryAccess),
+    structure_sets: dumpStructureSets(registryAccess),
+    blocks: dumpOreBlocks(),
     ore_veins: oreVeins,
     bedrock_ores: bedrockOres,
     bedrock_fluids: bedrockFluids,
     worldgen_layers: worldGenLayers,
   };
+};
+
+// The structure half of the dump, added for Terra's starting area (#84).
+//
+// A structure fails in three ways a codec cannot see, and all three are silent: it can load
+// but list a biome the body never emits, so it generates nowhere; its structure set can carry
+// a placement that scatters it instead of anchoring it; and its template palette can name a
+// block id that does not exist, which Minecraft resolves to air rather than to an error. The
+// first two are read here from the registries. The third is read as `blocks` -- the ore block
+// ids the game actually registered -- because a template's palette is already resolved by the
+// time anything can look at it, so the only way to catch a typo'd ore id is to check the id
+// against the registry before trusting the template that names it.
+
+// The whole structure and structure-set registries would be mostly vanilla noise; only the
+// pack's own entries are worth dumping, and they are the only ones any fixture asserts.
+const PACK_NAMESPACE = 'planetaryfactory:';
+
+const holderSetIds = (holders) => {
+  const ids = [];
+  holders.forEach((holder) => {
+    const key = holder.unwrapKey();
+    if (key.isPresent()) ids.push(key.get().location().toString());
+  });
+  return ids.sort();
+};
+
+const dumpStructures = (registryAccess) => {
+  const structures = {};
+  eachEntry(registryAccess, RegistryKeys.STRUCTURE, (id, structure) => {
+    if (!id.startsWith(PACK_NAMESPACE)) return;
+    structures[id] = { biomes: holderSetIds(structure.biomes()) };
+  });
+  return structures;
+};
+
+// A placement is read through its own codec rather than through its accessors.
+//
+// The interesting fields -- `count` and `distance` on concentric_rings, `spacing` on
+// random_spread -- live on the subclasses, and Rhino wraps the placement as the declared type
+// of `StructureSet.placement()`, which is the base `StructurePlacement`. So `type()` and
+// `salt()` are reachable and every subclass field is invisible, in all three of the property,
+// bean-getter and explicit-call forms. The codec has no such problem: it dispatches on the
+// placement's own type and hands back exactly the JSON the datapack file would carry, which
+// is also the shape a fixture can be written against without knowing which subclass it is.
+// Registry-aware ops, not plain JsonOps: `concentric_rings` carries `preferred_biomes`, which
+// is a HolderSet, and a HolderSet cannot be written without a registry to resolve its holders
+// against. Plain JsonOps does not throw on one -- it returns an empty DataResult, which read
+// as "this placement has no fields" and passed a fixture asserting nothing.
+const JsonOpsClass = Java.loadClass('com.mojang.serialization.JsonOps');
+const RegistryOpsClass = Java.loadClass('net.minecraft.resources.RegistryOps');
+const StructurePlacementClass = Java.loadClass(
+  'net.minecraft.world.level.levelgen.structure.placement.StructurePlacement');
+
+const encodePlacement = (placement, registryAccess) => {
+  try {
+    // `var`, not `const`. Rhino hoists a `const` declared inside a `try` out of the block,
+    // so the second call to this function -- the pack has two structure sets -- raised
+    // "redeclaration of var" from inside the guard below and turned every placement into a
+    // null that read exactly like a placement with no such field.
+    var encodedPlacement = StructurePlacementClass.CODEC
+      .encodeStart(RegistryOpsClass.create(JsonOpsClass.INSTANCE, registryAccess), placement)
+      .result()
+      .orElse(null);
+    return encodedPlacement === null ? null : JSON.parse(String(encodedPlacement));
+  } catch (error) {
+    // A placement that cannot be encoded is worth saying out loud: the fixture that asserts
+    // its fields would otherwise read as "no such field" and pass on a typo.
+    console.warn(`structure placement could not be encoded: ${error}`);
+    return null;
+  }
+};
+
+const dumpStructureSets = (registryAccess) => {
+  const sets = {};
+  eachEntry(registryAccess, RegistryKeys.STRUCTURE_SET, (id, set) => {
+    if (!id.startsWith(PACK_NAMESPACE)) return;
+    const placement = set.placement();
+    const members = [];
+    set.structures().forEach((entry) => {
+      const key = entry.structure().unwrapKey();
+      if (key.isPresent()) members.push(key.get().location().toString());
+    });
+    sets[id] = {
+      placement: encodePlacement(placement, registryAccess),
+      structures: members.sort(),
+    };
+  });
+  return sets;
+};
+
+// Every ore block the game registered. GregTech builds these at runtime from its material
+// registry, so no file in this repo can be read to find out whether `gtceu:goethite_ore` is
+// the id or a plausible-looking near miss.
+const dumpOreBlocks = () => {
+  const ids = [];
+  BuiltInRegistryKeys.BLOCK.keySet().forEach((key) => {
+    const id = key.toString();
+    if (id.endsWith('_ore')) ids.push(id);
+  });
+  return ids.sort();
 };
 
 // Which biomes a dimension's generator actually emits.

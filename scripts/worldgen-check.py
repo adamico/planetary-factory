@@ -113,6 +113,9 @@ def compare(dump, expected):
     fluids = dump.get("bedrock_fluids", {})
     layers = dump.get("worldgen_layers", {})
     biomes = dump.get("biomes", {})
+    structures = dump.get("structures", {})
+    structure_sets = dump.get("structure_sets", {})
+    blocks = set(dump.get("blocks", []))
 
     def barren(spec, key, registry, noun, dimension, body):
         """Assert an emptiness against the whole registry, not against a list of names.
@@ -184,6 +187,45 @@ def compare(dump, expected):
             if dimension not in layer.get("dimensions", []):
                 yield (f"{body}: layer {got['layer']} does not cover {dimension}, "
                        f"so {vein_id} cannot generate there")
+
+        # A structure loads, lists biomes and is placed by a set, and each of the three can
+        # be wrong on its own without the other two noticing. The block list is the fourth
+        # failure: a template naming an id that does not exist places air and says nothing.
+        for structure_id, want in spec.get("structures", {}).items():
+            got = structures.get(structure_id)
+            if got is None:
+                yield f"{body}: structure {structure_id} did not load"
+                continue
+            emitted_here = biomes.get(dimension) or []
+            for biome_id in want.get("biomes", []):
+                if biome_id not in got["biomes"]:
+                    yield (f"{body}: structure {structure_id} does not list biome "
+                           f"{biome_id}")
+                elif emitted_here and biome_id not in emitted_here:
+                    yield (f"{body}: structure {structure_id} lists biome {biome_id}, "
+                           f"which {dimension}'s generator never emits")
+            for block_id in want.get("blocks", []):
+                if block_id not in blocks:
+                    yield (f"{body}: structure {structure_id} is built from {block_id}, "
+                           f"which is not a registered block -- it will place air")
+            want_set = want.get("set")
+            if want_set is not None:
+                got_set = structure_sets.get(want_set)
+                if got_set is None:
+                    yield f"{body}: structure set {want_set} did not load"
+                elif structure_id not in got_set["structures"]:
+                    yield (f"{body}: structure set {want_set} does not contain "
+                           f"{structure_id}")
+                else:
+                    # The placement is dumped as the JSON its own codec produces, so a
+                    # fixture names only the fields it cares about and stays indifferent to
+                    # which placement subclass carries them.
+                    got_placement = got_set.get("placement") or {}
+                    for field, value in want.get("placement", {}).items():
+                        if got_placement.get(field) != value:
+                            yield (f"{body}: structure set {want_set} has placement "
+                                   f"{field} {got_placement.get(field)!r}, expected "
+                                   f"{value!r}")
 
         for vein_id in spec.get("forbidden_ore_veins", []):
             got = veins.get(vein_id)

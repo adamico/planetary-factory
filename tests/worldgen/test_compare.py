@@ -41,6 +41,15 @@ EXPECTED = {
         # A body asserted barren: the empty object is the assertion, not an omission.
         "electro": {
             "dimension": ELECTRO,
+            # A structure fails in four separable ways, and the row asserts all four.
+            "structures": {
+                "planetaryfactory:electro_ruin": {
+                    "set": "planetaryfactory:electro_ruins",
+                    "placement": {"type": "minecraft:random_spread", "spacing": 5},
+                    "biomes": ["planetaryfactory:electro_scrap_plateau"],
+                    "blocks": ["planetaryfactory:scrap_pile"],
+                },
+            },
             "ore_veins": {},
             "bedrock_ores": {"planetaryfactory:electro_scrap_deposit": {
                 "materials": ["planetaryfactory:scrap"], "depleted_yield_at_least": 1}},
@@ -91,7 +100,14 @@ GOOD = {
                         "sapros_rock": {"dimensions": [SAPROS]},
                         "stone": {"dimensions": ["minecraft:overworld"]}},
     "biomes": {SAPROS: [GREEN, RED, "planetaryfactory:gleba_marshes"],
-               IGNUS: ["planetaryfactory:ignus_barren_plains"]},
+               IGNUS: ["planetaryfactory:ignus_barren_plains"],
+               ELECTRO: ["planetaryfactory:electro_scrap_plateau"]},
+    "structures": {"planetaryfactory:electro_ruin": {
+        "biomes": ["planetaryfactory:electro_scrap_plateau"]}},
+    "structure_sets": {"planetaryfactory:electro_ruins": {
+        "placement": {"type": "minecraft:random_spread", "spacing": 5, "separation": 2},
+        "structures": ["planetaryfactory:electro_ruin"]}},
+    "blocks": ["planetaryfactory:scrap_pile", "gtceu:goethite_ore"],
 }
 
 
@@ -103,6 +119,29 @@ def mutate(fn):
 
 CASES = [
     ("a matching dump passes", GOOD, 0),
+    ("a structure that did not load fails",
+     mutate(lambda d: d["structures"].pop("planetaryfactory:electro_ruin")), 1),
+    ("a structure that dropped its biome fails",
+     mutate(lambda d: d["structures"]["planetaryfactory:electro_ruin"]
+            .__setitem__("biomes", ["planetaryfactory:electro_barren_plateau"])), 1),
+    # Listed by the structure, never emitted by the generator: the structure parses, the
+    # biome parses, and nothing is ever placed.
+    ("a structure restricted to a biome the generator never emits fails",
+     mutate(lambda d: d["biomes"].__setitem__(ELECTRO, ["planetaryfactory:electro_x"])), 1),
+    ("a structure whose set did not load fails",
+     mutate(lambda d: d["structure_sets"].pop("planetaryfactory:electro_ruins")), 1),
+    ("a structure missing from its own set fails",
+     mutate(lambda d: d["structure_sets"]["planetaryfactory:electro_ruins"]
+            .__setitem__("structures", [])), 1),
+    ("a set whose placement was swapped fails",
+     mutate(lambda d: d["structure_sets"]["planetaryfactory:electro_ruins"]["placement"]
+            .__setitem__("type", "minecraft:concentric_rings")), 1),
+    ("a set respaced away from what the fixture claims fails",
+     mutate(lambda d: d["structure_sets"]["planetaryfactory:electro_ruins"]["placement"]
+            .__setitem__("spacing", 32)), 1),
+    # The silent one: an unregistered id in a template palette places air and logs nothing.
+    ("a structure built from a block id that does not exist fails",
+     mutate(lambda d: d["blocks"].remove("planetaryfactory:scrap_pile")), 1),
     ("a vein that did not load fails",
      mutate(lambda d: d["ore_veins"].pop("planetaryfactory:ignus_coal")), 1),
     ("a vein filtered to the wrong dimension fails",
