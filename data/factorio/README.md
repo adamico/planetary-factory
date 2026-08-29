@@ -56,7 +56,14 @@ is stale.
 - **`recipe.json`** — the recipe corpus the pack's recipes are generated from (ADR-0026). One
   object per recipe: `name`, `category` (the primary one), `categories` (all of them),
   `unlocked_by` (the technology, or `null` for enabled-from-the-start), `energy_required`,
-  `ingredients`, `results`, `allow_productivity`, `subgroup`, `order`.
+  `ingredients`, `results`, `allow_productivity`, `group`, `subgroup`, `order`.
+
+  `group` and `subgroup` are Factorio's own taxonomy — `intermediate-products`, `logistics`,
+  `production`, `combat`, `space` — and they are what the item map is argued in, one group at a
+  time rather than one recipe at a time. They are *resolved*, not copied: only 219 of the game's
+  662 recipes set a subgroup themselves, and the rest inherit it from their main product's item
+  prototype, which may live under any of a dozen prototype types (`item`, `ammo`, `armor`,
+  `capsule`, `module`, `fluid`, …).
 
   **Scope is Nauvis pre-launch**: every recipe unlocked by a technology whose pack cost is a
   subset of ADR-0018's four rungs, closed downward through prerequisites, plus the recipes

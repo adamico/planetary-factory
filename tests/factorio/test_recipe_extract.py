@@ -10,6 +10,10 @@ output still says what the decisions say it says:
   - every recipe names a technology that exists in `technology.json`, or none at all
   - the corpus is still Nauvis pre-launch: no recipe arrives via a technology costing a
     science pack outside ADR-0018's four rungs
+  - every recipe carries one of Factorio's item groups, because the item map is argued per
+    group rather than per recipe, and a null group is a recipe no group decision covers
+  - no recipe is empty: `recipe-unknown` is core's hidden placeholder icon and reached the
+    corpus once, being enabled from the start like everything else with no technology
   - `setMaxIOSize` is unchanged, because ADR-0026 hard-codes those numbers into the recipe
     type and a regeneration that widens a recipe must not do it silently
 
@@ -30,6 +34,12 @@ EXPECTED_IO = {
     "rocket_silo": (3, 1, 0, 0),
     "smelting": (1, 1, 0, 0),
 }
+
+# Factorio's own taxonomy, resolved through each recipe's main product. `enemies`,
+# `environment`, `fluids`, `signals`, `tiles` and `other` exist too, but no Nauvis
+# pre-launch *recipe* lands in them; one that did would be a classification bug, not a new
+# group to argue about.
+GROUPS = {"intermediate-products", "logistics", "production", "combat", "space", "effects"}
 
 RUNG_PACKS = {
     "automation-science-pack",
@@ -83,6 +93,15 @@ def main():
                 f"{recipe['name']} arrives via {tech}, which costs "
                 + ", ".join(sorted(packs - RUNG_PACKS))
             )
+
+    for recipe in recipes:
+        if recipe.get("group") not in GROUPS:
+            failures.append(
+                f"{recipe['name']} has group {recipe.get('group')!r}, "
+                "which is not one of Factorio's item groups"
+            )
+        if not recipe["results"]:
+            failures.append(f"{recipe['name']} produces nothing -- a hidden placeholder?")
 
     for recipe in recipes:
         for entry in recipe["ingredients"] + recipe["results"]:
