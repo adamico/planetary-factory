@@ -137,6 +137,43 @@ this ADR lists are unaffected; they are the same builder methods either way, exc
 progress bar is `setProgressBar`, not `setProgressBarTexture`, and the model is
 `workableTieredHullModel`, not a renderer.
 
+## Amended by #73: two of the three GUI complaints need the MetaMachine subclass after all
+
+Placing the machines answered the question this ADR left open — *if the layout still reads wrong in
+game, `setUiBuilder` is a cheap follow-up with evidence behind it*. The layout read wrong in three
+ways, and only one of them was reachable from the recipe type.
+
+**The circuit overlay was self-inflicted.** `setSlotOverlay(false, false, INT_CIRCUIT_OVERLAY)` was
+copied from GregTech's own assembler, where it is correct: a stock GT assembler recipe is *selected*
+by a programmed circuit, so the input slots advertise it. Here it painted a circuit behind all five
+inputs of a machine whose corpus contains no circuit at all. The signature is
+`setSlotOverlay(isOutput, isFluid, texture)` and it paints every slot of that kind, so the call is
+simply removed.
+
+**The other two are welded into `SimpleTieredMachine` and no builder call reaches them.**
+`isCircuitSlotEnabled()` is `IHasCircuitSlot`'s default, a hardcoded `return true`, and it is the
+only thing gating the circuit configurator that `attachConfigurators` attaches. The charger slot is
+built inside that class's own `EDITABLE_UI_CREATOR`, which wraps the recipe type's template in an
+outer group padded to 78px to make room for it — the slot is not read off the recipe type, so
+nothing at recipe-type level can decline it.
+
+So the row does get a `MetaMachine` subclass: `AssemblingMachine` in `planetaryfactory_core`,
+selected through `KJSTieredMachineBuilder.machine(...)`. **This is not the unbounded work this ADR
+declined.** What was rejected was chasing GT's internals for cover buttons; what is written is one
+overridden predicate and one `EditableMachineUI` that is GregTech's own minus the battery slot. It
+overrides no recipe logic and names two members of one class.
+
+Two details that are load-bearing:
+
+- **`editableUI` is set inside `.definition(...)`, not left to KubeJS.** The tiered builder applies
+  GregTech's stock UI only when the definition function leaves the field null, so setting it there
+  wins; setting it nowhere silently restores the charger slot.
+- **`chargerInventory` itself stays.** It is a plain handler rather than a machine trait, so it is
+  exposed to no capability and no pipe — dropping the widget makes it unreachable. Emptying it is
+  the unsafe move: `chargeBattery` and `updateBatterySubscription` both index slot 0 unguarded.
+
+Cover buttons are unchanged and still dead chrome, for the reason this ADR already gave.
+
 ## Considered Options
 
 - **Replace GregTech with a custom-machines mod** (Modular Machinery Reborn, Custom Machinery).

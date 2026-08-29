@@ -25,7 +25,11 @@ const ASSEMBLING_IO = [5, 1, 1, 1];
 const ASSEMBLING = GTRecipeTypes.register('assembling', GTRecipeTypes.ELECTRIC)
   .setMaxIOSize(ASSEMBLING_IO[0], ASSEMBLING_IO[1], ASSEMBLING_IO[2], ASSEMBLING_IO[3])
   .setEUIO('in')
-  .setSlotOverlay(false, false, GuiTextures.INT_CIRCUIT_OVERLAY)
+  // No slot overlay. GregTech's own assembler sets the item-input slots to
+  // INT_CIRCUIT_OVERLAY, because a stock GT assembler recipe is selected by a programmed
+  // circuit; copying that call printed a circuit behind all five input slots of a machine
+  // whose corpus contains no circuit at all. `setSlotOverlay(isOutput, isFluid, texture)`
+  // paints every slot of that kind, so the honest overlay here is none.
   .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, FillDirection.LEFT_TO_RIGHT)
   .setSound(GTSoundEntries.ASSEMBLER);
 
@@ -44,14 +48,27 @@ const ASSEMBLING = GTRecipeTypes.register('assembling', GTRecipeTypes.ELECTRIC)
 // ADR-0018 makes the tiers speed-only and says they gate nothing, so there is no per-tier
 // fluid restriction -- Factorio's assembling-machine-1-cannot-craft-fluids rule is exactly
 // the accidental gate that line exists to prevent -- and every recipe is authored at LV EUt.
+// Two parts of a stock GT machine's GUI are welded into `SimpleTieredMachine` rather than read
+// off the recipe type, so no builder call reaches them: the programmed-circuit configurator
+// (`isCircuitSlotEnabled()` returns a hardcoded `true`) and the charger slot (built into that
+// class's own `EDITABLE_UI_CREATOR`). Neither belongs on an assembling machine here -- there is
+// no circuit anywhere in the corpus, and machines are wired rather than battery-fed -- so the
+// chassis is `planetaryfactory_core`'s `AssemblingMachine`, which is `SimpleTieredMachine` with
+// that predicate flipped and that one slot dropped. It overrides no recipe logic.
+const AssemblingMachine = Java.loadClass('com.planetaryfactory.core.machine.AssemblingMachine');
+
 StartupEvents.registry('gtceu:machine', (event) => {
   // The name is passed unqualified: a namespace here is discarded, as the note above says.
   event.create('assembling_machine')
     .tiers(GTValues.LV, GTValues.MV, GTValues.HV)
+    .machine((holder, tier, tankScaling) => new AssemblingMachine(holder, tier, tankScaling))
     .definition((tier, builder) => {
       builder.rotationState(RotationState.NON_Y_AXIS)
         .recipeType(ASSEMBLING)
         .recipeModifier(GTRecipeModifiers.OC_NON_PERFECT)
+        // Set here, not left to KubeJS: the tiered builder only falls back to GregTech's stock
+        // UI -- the one carrying the charger slot -- when the definition function leaves this null.
+        .editableUI(AssemblingMachine.editableUI(GTCEu.id('assembling_machine'), ASSEMBLING))
         .workableTieredHullModel(GTCEu.id('block/machines/assembler'));
     })
     .addDefaultTooltips(false);
