@@ -57,6 +57,20 @@ const ASSEMBLING = GTRecipeTypes.register('assembling', GTRecipeTypes.ELECTRIC)
 // that predicate flipped and that one slot dropped. It overrides no recipe logic.
 const AssemblingMachine = Java.loadClass('com.planetaryfactory.core.machine.AssemblingMachine');
 
+// The tint half of ADR-0026's "speed and tint, nothing else" -- Factorio's three assembling
+// machines are told apart at a glance by body colour, and the tier ladder teaches nothing if
+// three blocks on a GregTech hull look like three GregTech hulls. Keyed by tier rather than by
+// position in `tiers()` so the mapping stays readable if the ladder ever moves.
+//
+// GregTech tints the hull, not the machine face: `paintingColor` is the machine's *default*
+// painting colour, the same value a spray can would overwrite, and the recipe-face overlay is a
+// separate untinted layer. So this colours the body and leaves the assembler face legible --
+// which is the Factorio read, where the coloured part is the chassis.
+const ASSEMBLING_TINT = {};
+ASSEMBLING_TINT[GTValues.LV] = 0xc8813c; // 1: brown
+ASSEMBLING_TINT[GTValues.MV] = 0x3c7fc8; // 2: blue
+ASSEMBLING_TINT[GTValues.HV] = 0x4ca64c; // 3: green
+
 StartupEvents.registry('gtceu:machine', (event) => {
   // The name is passed unqualified: a namespace here is discarded, as the note above says.
   event.create('assembling_machine')
@@ -64,6 +78,7 @@ StartupEvents.registry('gtceu:machine', (event) => {
     .machine((holder, tier, tankScaling) => new AssemblingMachine(holder, tier, tankScaling))
     .definition((tier, builder) => {
       builder.rotationState(RotationState.NON_Y_AXIS)
+        .paintingColor(ASSEMBLING_TINT[tier])
         .recipeType(ASSEMBLING)
         .recipeModifier(GTRecipeModifiers.OC_NON_PERFECT)
         // Set here, not left to KubeJS: the tiered builder only falls back to GregTech's stock
