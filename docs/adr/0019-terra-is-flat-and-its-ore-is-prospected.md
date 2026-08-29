@@ -201,3 +201,16 @@ Two further corrections found while building:
   biome-modifier feature: the palette biomes are deliberately **not** members of
   `#minecraft:is_overworld`, which is the tag those modifiers target. Mekanism, which generates from
   its own config rather than a biome modifier, is switched off in `config/Mekanism/world.toml`.
+
+## Amended in build: vein spacing is a config number, and the default makes ore continuous
+
+GregTech places veins on a grid, and `config/gtceu.yaml`'s default `oreVeinGridSize: 3` puts one
+every 48 blocks. Terra's four veins run 38–52 blocks across, so at the default they **touch**: the
+first in-world look reported ore in every chunk, which is a continuous layer rather than patches.
+
+Grid size is raised to **6** (96 blocks, wider than the largest vein) with `oreVeinRandomOffset` at
+**24**, a quarter of the cell as at the default, so patches stay off a visible lattice. This is
+empirical like the terrain constants, and it is tuned against play rather than derived.
+
+Note that **GregTech rewrites `config/gtceu.yaml` on every game load**, discarding any comment not
+its own. The reasoning cannot live next to the value; it lives here.

@@ -115,19 +115,10 @@ worldgen:
   oreVeins:
     # The grid size (in chunks) for ore vein generation
     # Default: 3
-    #
-    # Raised from 3 for ADR-0019. GT's veins run 38-52 blocks across and the default grid puts
-    # one every 48 blocks, so they touch and the ground reads as continuous ore rather than as
-    # patches. 6 chunks is 96 blocks -- wider than the largest vein, so a patch has ground
-    # around it. Finiteness is the top-ranked source of the Factorio feeling and it needs the
-    # gaps to be visible.
     oreVeinGridSize: 6
 
     # The maximum random offset (in blocks) from the grid for generating an ore vein.
     # Default: 12
-    #
-    # Scaled with the grid: a quarter of the cell, as at the default, so patches stay off a
-    # visible lattice without colliding.
     oreVeinRandomOffset: 24
 
     # Prevents regular vanilla ores from being generated outside GregTech ore veins
