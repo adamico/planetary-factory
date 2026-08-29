@@ -1,0 +1,55 @@
+{
+    "biomes": "#planetaryfactory:terra",
+    "cluster_size": {
+        "max_inclusive": 64,
+        "min_inclusive": 32,
+        "type": "minecraft:uniform"
+    },
+    "density": 0.25,
+    "dimension_filter": [
+        "minecraft:overworld"
+    ],
+    "discard_chance_on_air_exposure": 0.0,
+    "generator": {
+        "bottom": {
+            "layers": 2,
+            "targets": "gtceu:pitchblende"
+        },
+        "max_y": 24,
+        "middle": {
+            "layers": 3,
+            "targets": "gtceu:pitchblende"
+        },
+        "min_y": 6,
+        "spread": {
+            "targets": "gtceu:uraninite"
+        },
+        "top": {
+            "layers": 2,
+            "targets": "gtceu:pitchblende"
+        },
+        "type": "gtceu:cuboid"
+    },
+    "height_range": {
+        "height": {
+            "max_inclusive": {
+                "absolute": 24
+            },
+            "min_inclusive": {
+                "absolute": 6
+            },
+            "type": "minecraft:uniform"
+        }
+    },
+    "indicators": [
+        {
+            "block": "gtceu:pitchblende",
+            "density": 0.2,
+            "placement": "above",
+            "radius": 5,
+            "type": "gtceu:surface"
+        }
+    ],
+    "layer": "stone",
+    "weight": 40
+}

@@ -1,0 +1,12 @@
+{
+  "replace": false,
+  "values": [
+    "planetaryfactory:terra_grassland",
+    "planetaryfactory:terra_woodland",
+    "planetaryfactory:terra_dry_steppe",
+    "planetaryfactory:terra_desert",
+    "planetaryfactory:terra_red_desert",
+    "planetaryfactory:terra_shore",
+    "planetaryfactory:terra_sea"
+  ]
+}
