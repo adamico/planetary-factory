@@ -753,12 +753,20 @@ file = "config/yacl.json5"
 hash = "121b93764159be6fb7dab523b29a844e2bb78400ce8c48f52135a097e9b0006e"
 
 [[files]]
+file = "data/factorio/recipe.json"
+hash = "229766f2c86fc9fcfcb13ba590c047c0f38216025acc1b86d93487ba137b5f83"
+
+[[files]]
 file = "data/factorio/science_packs.json"
 hash = "68e8b230b276044c0594c6246e52c57058782c0758090cf35f9553801522bfd7"
 
 [[files]]
 file = "data/factorio/technology.json"
 hash = "fa9ac3b4ef105fc49ea6301ad8f05f35cd076c5ce634eaec58ea414bd782fa6f"
+
+[[files]]
+file = "data/pack/category-map.json"
+hash = "98a081846932c2b3b4a3111f28737b01cba71564ee33c40c55a5fc7fb4e638ab"
 
 [[files]]
 file = "defaultconfigs/ftbessentials-server.snbt"
@@ -771,6 +779,10 @@ hash = "989f3737ae4621b8ff6730bce4cbeeee756921e7e510e0c281c8a350501d98af"
 [[files]]
 file = "kubejs/assets/gcyr/lang/en_us.json"
 hash = "976f4b723d45f908789511cbc67058120993f99f30e3b3ee047edf5053fdea32"
+
+[[files]]
+file = "kubejs/assets/gtceu/lang/en_us.json"
+hash = "a8aa4789a9a6d553c0a46ae735889f5bd83c14b8c8b12debb7323d7cb79ada34"
 
 [[files]]
 file = "kubejs/assets/planetaryfactory/blockstates/jellystem_sapling.json"
@@ -1406,7 +1418,7 @@ hash = "dae099ae3be7f033c0c190ee8c3b023b42f6b235d9d0591be5926e8435dbd67f"
 
 [[files]]
 file = "kubejs/server_scripts/recipes.js"
-hash = "5bebf7a67cd34de5834d88b0608a38c38e8d816fefb1857348ce33db60939a02"
+hash = "f6d0b92f670d8dfc5f2bcfe914ff512bb8f0ffd2fe6e0e1392c4b250e6f8cd7e"
 
 [[files]]
 file = "kubejs/server_scripts/registry_dump.js"
@@ -1439,6 +1451,10 @@ hash = "6abb210db96d0bf78729b29eddd1e92c558f1fc14557a35437c75f29c0101fd9"
 [[files]]
 file = "kubejs/startup_scripts/jsconfig.json"
 hash = "6780a56ee6d1c2dfd9ec8e4e24515b692e2a65bca94145cecc6ac814caf09280"
+
+[[files]]
+file = "kubejs/startup_scripts/machines.js"
+hash = "b7bde034c1a881802a7789ba5de2ee701defc9ec93e38a59bdd159f6bb6eea81"
 
 [[files]]
 file = "kubejs/startup_scripts/main.js"
