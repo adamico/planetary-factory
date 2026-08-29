@@ -1,6 +1,14 @@
 hash-format = "sha256"
 
 [[files]]
+file = ".pytest_cache/CACHEDIR.TAG"
+hash = "37dc88ef9a0abeddbe81053a6dd8fdfb13afb613045ea1eb4a5c815a74a3bde4"
+
+[[files]]
+file = ".pytest_cache/v/cache/nodeids"
+hash = "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+
+[[files]]
 file = "config/CoroUtil/General.toml"
 hash = "6003299fd97cb6b383ca3df88a2a676c565585799b1e14bb2987617ee189c7c2"
 
@@ -34,7 +42,7 @@ hash = "a62413e8c2db427d7e2db72fc6d16d1ce3285a5a84a4913a9877378319552277"
 
 [[files]]
 file = "config/Mekanism/world.toml"
-hash = "bd928491488fc80eb803150fc83dff0487fe3218fc638dbe683dc597f91cd11f"
+hash = "d56fd55d230bc5b7a96854e4059ede7812e096fd13afd9ef932b1efbd3fdda0a"
 
 [[files]]
 file = "config/MouseTweaks.cfg"
@@ -346,7 +354,7 @@ hash = "f4e9a6ba02a2ea63337f346560da95475233310f7836e36539c268c82fabf463"
 
 [[files]]
 file = "config/fml.toml"
-hash = "447b3d485260d07ecfab53d4852aed108b87bd21b3abb02ac8390b9889b76f44"
+hash = "223d2d5a6756081346c9c17db664f8ce1bbdf578be479b2d1ad7ee2494e8f0f1"
 
 [[files]]
 file = "config/ftbchunks-world.snbt"
@@ -889,92 +897,32 @@ file = "kubejs/data/gtceu/gtceu/bedrock_fluid/lava_deposit.json"
 hash = "1ebea858da28db09511790463c9b4bdd2839551332941f57edcadca8fef7ce47"
 
 [[files]]
-file = "kubejs/data/gtceu/gtceu/ore_vein/apatite.json"
-hash = "f6ca0b831ad3a1f5d5184cc8216fef15bbf72246d62bdb38dec206433f752597"
-
-[[files]]
-file = "kubejs/data/gtceu/gtceu/ore_vein/cassiterite.json"
-hash = "7e257803a32832d6115232488f0fffe8ff35f7ee1aba452993149cd586062fe4"
-
-[[files]]
 file = "kubejs/data/gtceu/gtceu/ore_vein/coal.json"
-hash = "ade949932ca09d98184028f1cf9eb088796f95ba105df36c05f58e0d046ee786"
+hash = "4e511768398dfaf40e986bbec6d18809bb317fd2321571cec5bce93078047855"
 
 [[files]]
 file = "kubejs/data/gtceu/gtceu/ore_vein/copper.json"
-hash = "9852dbd23882c7b057bb4c8813999dac7a0ed2852abfdd35e38ae8eaf41c6db3"
-
-[[files]]
-file = "kubejs/data/gtceu/gtceu/ore_vein/copper_tin.json"
-hash = "21f423d896fc63bd92e12ddb6b89e6374044154421b33a5cb19566a26027fd2e"
-
-[[files]]
-file = "kubejs/data/gtceu/gtceu/ore_vein/diamond.json"
-hash = "3b88be54cdcdc7e84f227031a2105f7737a2d47d5047104c8be6a089a6edb9f3"
-
-[[files]]
-file = "kubejs/data/gtceu/gtceu/ore_vein/galena.json"
-hash = "1b8060285c1210c755a41f3c2972f464b4d97019411d2ab8057b9aa99c77769f"
-
-[[files]]
-file = "kubejs/data/gtceu/gtceu/ore_vein/garnet.json"
-hash = "15399bc736f8337f52d67c6c3ae8b277f557a42447f0e6816be90ebaea9e0085"
-
-[[files]]
-file = "kubejs/data/gtceu/gtceu/ore_vein/garnet_tin.json"
-hash = "ff166b9e9b7f97d16c10a83f86ef69d3d7d6732a41bef8605dcd04943ac0d804"
+hash = "e535cbb98d48466c3244b62105b566be053e4f6ecac7622006919dbb65b9e362"
 
 [[files]]
 file = "kubejs/data/gtceu/gtceu/ore_vein/iron.json"
-hash = "3450683d72efe6950bfe904dd87fdf45224e3241c09cf5cb3882019ccdfc2c4f"
+hash = "04b6fc186103551062dd678a8f5f2eabbfe37b7224ca0b53996fe8208bbfc69b"
 
 [[files]]
-file = "kubejs/data/gtceu/gtceu/ore_vein/lapis.json"
-hash = "efe8684c0a5ac92de5800c204c5864730ae2bd3036daf2ae369bc94c0939f039"
+file = "kubejs/data/gtceu/gtceu/ore_vein/uranium.json"
+hash = "167a8d625ad257195d1d1aaee1cf286808012e8da8dba6f5e3941c3752bc7fa6"
 
 [[files]]
-file = "kubejs/data/gtceu/gtceu/ore_vein/lubricant.json"
-hash = "7b292ecbe77047c6bafa3c291f6d99c0c26dbcbcbf589e5fbad988e2589b4b05"
+file = "kubejs/data/minecraft/dimension/overworld.json"
+hash = "b0d470afe03b58a5fa526c7d57093115f17d64f0f529508187c49492224f4a4f"
 
 [[files]]
-file = "kubejs/data/gtceu/gtceu/ore_vein/magnetite.json"
-hash = "b4dd2156261c7fce52cc51f18836651918e2cb4e7bba21e084b9aac3550d6184"
+file = "kubejs/data/minecraft/dimension_type/overworld.json"
+hash = "b16f3471190c81e51800b116f31226602c56d85dfea91d2c56d23ca2d4d0e680"
 
 [[files]]
-file = "kubejs/data/gtceu/gtceu/ore_vein/manganese.json"
-hash = "dec6369c4894112f6dff0bed4e5e9db70c7cfc61c6d2e60999c9ee6e8ff384eb"
-
-[[files]]
-file = "kubejs/data/gtceu/gtceu/ore_vein/mica.json"
-hash = "35c76e019c7ff175a152d97731caba7841c64c136b0500ace91179b08d75621b"
-
-[[files]]
-file = "kubejs/data/gtceu/gtceu/ore_vein/mineral_sand.json"
-hash = "6eb4ef53743b364418c9bfea0b40e1244d082c89b3109374de5b0716fbd9f7ab"
-
-[[files]]
-file = "kubejs/data/gtceu/gtceu/ore_vein/nickel.json"
-hash = "7b17e2f5bbbaa5e7a2c90c90be5e9bbfe3c745a293c190d3512d209972dcc85f"
-
-[[files]]
-file = "kubejs/data/gtceu/gtceu/ore_vein/oilsands.json"
-hash = "991f4458cf27c0f0cd91c5f14d3fca248d878a21b18c9d75cfddd0ae48f7c175"
-
-[[files]]
-file = "kubejs/data/gtceu/gtceu/ore_vein/olivine.json"
-hash = "f10cf66d4fef880907ad864edb0fbb74dd647250ba78c883a9102c4bd9ae1249"
-
-[[files]]
-file = "kubejs/data/gtceu/gtceu/ore_vein/redstone.json"
-hash = "2e2d8cd9418890dcf9a7734ad197d3cb38562fe073133cb07b3e8e9d1f386097"
-
-[[files]]
-file = "kubejs/data/gtceu/gtceu/ore_vein/salts.json"
-hash = "8a1fdc2def1a01e3d5977a18d08a08406d0c6e8aac7ace970889cd61d2b3a156"
-
-[[files]]
-file = "kubejs/data/gtceu/gtceu/ore_vein/sapphire.json"
-hash = "2e5f27e63573d7795a2033aa46a09c1fb2849191ccdfea09fd9771871a58d567"
+file = "kubejs/data/minecraft/tags/block/overworld_carver_replaceables.json"
+hash = "bef4d172fc1bfb34d342e79090726c4a0c272dd404783c3ea022b992e0e0415e"
 
 [[files]]
 file = "kubejs/data/minecraft/tags/block/saplings.json"
@@ -983,6 +931,22 @@ hash = "725d61b868b6664c6a66b3dded4bc133756a401efda784780bcd99433fc79391"
 [[files]]
 file = "kubejs/data/minecraft/tags/item/saplings.json"
 hash = "725d61b868b6664c6a66b3dded4bc133756a401efda784780bcd99433fc79391"
+
+[[files]]
+file = "kubejs/data/minecraft/tags/worldgen/world_preset/extended.json"
+hash = "f9078270b2a482c4525d4dec9f37ee417928d66164420ad6d53e537a35278aa4"
+
+[[files]]
+file = "kubejs/data/minecraft/tags/worldgen/world_preset/normal.json"
+hash = "f9078270b2a482c4525d4dec9f37ee417928d66164420ad6d53e537a35278aa4"
+
+[[files]]
+file = "kubejs/data/minecraft/world_preset/normal.json"
+hash = "df22baf260b1119b724580bea1019f54cec54b621a0ef0b8a29f3af6e2838a03"
+
+[[files]]
+file = "kubejs/data/minecraft/worldgen/noise_settings/overworld.json"
+hash = "d3e9463251c9f0410aa7f25e29db850ed7e0046b985005c6f301a7f6c7e5e02f"
 
 [[files]]
 file = "kubejs/data/planetaryfactory/dimension/aquilo.json"
@@ -1121,10 +1085,6 @@ file = "kubejs/data/planetaryfactory/gtceu/ore_vein/ignus_sulfur.json"
 hash = "30c242f669d75fbd585c23edf1e26362eb88db71c39e597d3c7a00887abc6241"
 
 [[files]]
-file = "kubejs/data/planetaryfactory/gtceu/ore_vein/sphalerite.json"
-hash = "c0ec17cc7fb08591b07aa2933e62fd2f61c194a16148f2431cd5b45b127863ad"
-
-[[files]]
 file = "kubejs/data/planetaryfactory/loot_table/blocks/copper_stromatolite.json"
 hash = "25e8709eda8276b8a38c3a4a3c15f97846baae961e2ac0095511de95d2e26939"
 
@@ -1185,6 +1145,10 @@ file = "kubejs/data/planetaryfactory/tags/worldgen/biome/is_sapros.json"
 hash = "6c56ba3fbe1db8a88208c8b74d124cf7c82c0cf5f244aac95327e45e507d5446"
 
 [[files]]
+file = "kubejs/data/planetaryfactory/tags/worldgen/biome/terra.json"
+hash = "7d45fd01e55ee40e2ff4f56697795581a9d3bf7441633a9b826f80afb716d361"
+
+[[files]]
 file = "kubejs/data/planetaryfactory/worldgen/biome/electro_barren_plateau.json"
 hash = "d2c64cb848610311de0752677361f5cde111398ee53713320c483d566f24a609"
 
@@ -1225,6 +1189,34 @@ file = "kubejs/data/planetaryfactory/worldgen/biome/ignus_eroded_plains.json"
 hash = "a7cd7d0880af83c6538f4167f8fea8b5d62721616345c0b8654b4cd2877f11bc"
 
 [[files]]
+file = "kubejs/data/planetaryfactory/worldgen/biome/terra_desert.json"
+hash = "e9156663b59513b8fed694a8a1302c17c4abd5d6112d71fa365757bbedd1d70c"
+
+[[files]]
+file = "kubejs/data/planetaryfactory/worldgen/biome/terra_dry_steppe.json"
+hash = "d6a181b627ff36b2674bdbb9d640f77f20e384135dd391d3651a6edda73a3e2d"
+
+[[files]]
+file = "kubejs/data/planetaryfactory/worldgen/biome/terra_grassland.json"
+hash = "a362b5ee1ea587981b228e2c759e6d3108ebc83b0d4b7a62679977dea1b36a6b"
+
+[[files]]
+file = "kubejs/data/planetaryfactory/worldgen/biome/terra_red_desert.json"
+hash = "e586b644b6d297e9d6be4575ec6188dbc1769dd624f3a7887784130fed96a4f9"
+
+[[files]]
+file = "kubejs/data/planetaryfactory/worldgen/biome/terra_sea.json"
+hash = "f463a068b5ff4249785143a36da66d2339e9ec0e54f5addb0149dcb06c03bb50"
+
+[[files]]
+file = "kubejs/data/planetaryfactory/worldgen/biome/terra_shore.json"
+hash = "614457ee85117c087da3f989942a7f58b99ead1a47dffe6e4da8f559e380f9c8"
+
+[[files]]
+file = "kubejs/data/planetaryfactory/worldgen/biome/terra_woodland.json"
+hash = "cd57e9b151c3f9da8edd4e45cadf4639ecd67dcbd9a92740e883354963c0a100"
+
+[[files]]
 file = "kubejs/data/planetaryfactory/worldgen/configured_feature/electro_fulgorite.json"
 hash = "d90a99227aba3e2a5b922cc62fc1a235ddf3fac46202dcc87d39b540e524f99f"
 
@@ -1247,6 +1239,18 @@ hash = "582b9a18ebfd275b29e9e808dfe3dcc8f991582e68cbb33e369c4df9f75e7cfe"
 [[files]]
 file = "kubejs/data/planetaryfactory/worldgen/configured_feature/yumako_tree.json"
 hash = "ff97a17d0d91664dbba219216eaa9286f5c15081fabf05368facc7f160db5ed8"
+
+[[files]]
+file = "kubejs/data/planetaryfactory/worldgen/density_function/terra/factor.json"
+hash = "b3aaab30eebf36c0bd3fd8a9ac08da1eaf7dd35f2ffb4630049d9a7f65e8175c"
+
+[[files]]
+file = "kubejs/data/planetaryfactory/worldgen/density_function/terra/jaggedness.json"
+hash = "f0169f9075608f9f747f7fca0ca2b95d1160e968c45e6e3fdf1c6a5dbc13676e"
+
+[[files]]
+file = "kubejs/data/planetaryfactory/worldgen/density_function/terra/offset.json"
+hash = "5cafac874d15bdfdcc9f955d25d69a6cf6d1a43b3654bac28a8122257407047e"
 
 [[files]]
 file = "kubejs/data/planetaryfactory/worldgen/noise_settings/electro.json"
@@ -1305,6 +1309,10 @@ file = "kubejs/data/remove-stock-bodies.zip"
 hash = "7c202d1fdd213e8d3b6d7ce5c585b45bee7774a836008d4cf0c5af4b5ab0db71"
 
 [[files]]
+file = "kubejs/data/remove-terra-cut-veins.zip"
+hash = "e6ad98dc7928ae0ae10bbf14e5cdeb819f975833f42abe0b56ab6ff039ac481d"
+
+[[files]]
 file = "kubejs/server_scripts/create_recipes.js"
 hash = "c5c5c9df1fd6830f7a5638be75705b23b3ea9afb9f98efbb929eea8acdf8c273"
 
@@ -1333,8 +1341,16 @@ file = "kubejs/server_scripts/registry_dump.js"
 hash = "4c4ef27a478f9007b05f64508c5407098913b69dd21de8d278e5e509bb9c2434"
 
 [[files]]
+file = "kubejs/server_scripts/research_dev_commands.js"
+hash = "5abfe0a6e6b45110691e681f9613ea1dcda6fa3bcb677a786d250fda058af21c"
+
+[[files]]
 file = "kubejs/server_scripts/researchd.js"
-hash = "b333d18bd7a0b7f1b9bd72db5b53ce943803aef1f19d1f969e6739915bb71e9d"
+hash = "29ce776a3d2951f4e86359b69efdabd49b8d38a8f61e69830920fdb4a730fed3"
+
+[[files]]
+file = "kubejs/server_scripts/researchd.js.bak"
+hash = "29ce776a3d2951f4e86359b69efdabd49b8d38a8f61e69830920fdb4a730fed3"
 
 [[files]]
 file = "kubejs/startup_scripts/_throwaway_decay_test_items.js"
@@ -1984,3 +2000,7 @@ hash = "a6b3987906ad7931ab0d711e00a66eb16a7b97cf57be97629b30319e117677ff"
 [[files]]
 file = "packs/remove-stock-bodies/pack.mcmeta"
 hash = "82bf39a093a255109cc0340a9d1f47b396697e8fefa98a63611b76fc42761336"
+
+[[files]]
+file = "packs/remove-terra-cut-veins/pack.mcmeta"
+hash = "83d66dc086cbd5c29de233f959c0ac5f75ae88f565d9e6d5e2084730f9a3ebd0"

@@ -1,0 +1,24 @@
+{
+  "_comment": "ADR-0019: Terra's column is 0..192. These numbers must match the `noise` block in worldgen/noise_settings/overworld.json.",
+  "ultrawarm": false,
+  "natural": true,
+  "piglin_safe": false,
+  "respawn_anchor_works": false,
+  "bed_works": true,
+  "has_raids": true,
+  "has_skylight": true,
+  "has_ceiling": false,
+  "effects": "minecraft:overworld",
+  "coordinate_scale": 1.0,
+  "ambient_light": 0.0,
+  "infiniburn": "#minecraft:infiniburn_overworld",
+  "min_y": 0,
+  "height": 192,
+  "logical_height": 192,
+  "monster_spawn_block_light_limit": 0,
+  "monster_spawn_light_level": {
+    "type": "minecraft:uniform",
+    "min_inclusive": 0,
+    "max_inclusive": 7
+  }
+}

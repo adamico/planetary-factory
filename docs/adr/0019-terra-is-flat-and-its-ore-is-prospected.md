@@ -173,3 +173,31 @@ terrain and close the carvers. Because Terra had no noise settings before this A
 full vanilla ore set; ADR-0021 cuts Terra's ore to iron, copper, coal and uranium across all four of
 its ore systems, and vanilla's is one of them. Vanilla ore left in place would be uncharted by
 prospecting and undepletable by a miner — a straight bypass of ADR-0020.
+
+## Amended in build: the datapack lands in `kubejs/data/`, not `datapacks/`
+
+The Mechanism section above puts the file set in an instance-root `datapacks/` folder. **Nothing in
+this jar set reads that folder.** It is not a vanilla or NeoForge load path — world datapacks live in
+`saves/<world>/datapacks/` — and the pack ships no OpenLoader-style global-datapack mod. The folder
+exists in the instance and is empty.
+
+The files therefore land in `kubejs/data/`, and the ADR's stated worry — that a wholesale replacement
+of a vanilla `minecraft:` entry depends on pack sort order rather than merge semantics — turns out to
+be already answered there: `kubejs/data/gtceu/gtceu/ore_vein/*.json` has been wholesale-replacing
+GregTech's own vein files since before this ADR. KubeJS's data pack sorts above both vanilla and the
+mods, so the override is the proven seam rather than the speculative one.
+
+Two further corrections found while building:
+
+- **The three shaping density functions must not override `minecraft:overworld/{offset,factor,
+  jaggedness}`.** Sapros, Ignus and Electro all point their noise router's `depth` at
+  `minecraft:overworld/depth`, which is built from `overworld/offset` — overriding it would flatten
+  three other bodies along with Terra, which is exactly the "flat as a pack-wide principle" option
+  this ADR rejected. They live under `planetaryfactory:terra/` instead, and Terra's `final_density`
+  inlines them.
+- **Vanilla ore needs no suppression clause in the noise settings.** Terra's palette is seven
+  pack-namespace biomes authored from scratch, so vanilla ore is absent by omission — the
+  `underground_ores` step is simply empty. The same fact closes Create's ore and every other
+  biome-modifier feature: the palette biomes are deliberately **not** members of
+  `#minecraft:is_overworld`, which is the tag those modifiers target. Mekanism, which generates from
+  its own config rather than a biome modifier, is switched off in `config/Mekanism/world.toml`.

@@ -1,5 +1,5 @@
 {
-    "biomes": "#minecraft:is_overworld",
+    "biomes": "#planetaryfactory:terra",
     "cluster_size": {
         "max_inclusive": 44,
         "min_inclusive": 38,
@@ -36,10 +36,10 @@
     "height_range": {
         "height": {
             "max_inclusive": {
-                "absolute": 140
+                "absolute": 55
             },
             "min_inclusive": {
-                "absolute": 10
+                "absolute": 30
             },
             "type": "minecraft:uniform"
         }

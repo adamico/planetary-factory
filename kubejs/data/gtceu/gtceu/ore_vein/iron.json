@@ -1,5 +1,5 @@
 {
-    "biomes": "#minecraft:is_overworld",
+    "biomes": "#planetaryfactory:terra",
     "cluster_size": {
         "max_inclusive": 52,
         "min_inclusive": 40,
@@ -18,9 +18,9 @@
         "max_edge_roundoff": 0.10000000149011612,
         "max_richness": 1.0,
         "max_richness_threshold": 0.175,
-        "max_y": 60,
+        "max_y": 48,
         "min_richness": 0.7,
-        "min_y": -10,
+        "min_y": 20,
         "ore_blocks": [
             {
                 "block": "gtceu:goethite",
@@ -47,10 +47,10 @@
     "height_range": {
         "height": {
             "max_inclusive": {
-                "absolute": 60
+                "absolute": 48
             },
             "min_inclusive": {
-                "absolute": -10
+                "absolute": 20
             },
             "type": "minecraft:uniform"
         }
