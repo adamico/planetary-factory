@@ -31,6 +31,15 @@ fixture entry, not code. See `docs/testing/worldgen-registry-check.md`.
 which marshland carries which tree and that no stromatolite drops ore — with no game launch. Run it
 after any edit to the trees, the stromatolites or the five biomes.
 
+### Starting-area geometry check
+
+`tests/worldgen/test_start_geometry.py` asserts Terra's starting area can actually deal all three
+ore fields: every hub connector sits on the face it points out of, and no two fields overlap each
+other or the hub, for every hub variant against every combination of size variants. Vanilla drops
+an overlapping jigsaw child silently, so this failure ships as "two patches instead of three" on
+some seeds and nothing in a log. Run it after any edit to `scripts/build-terra-start.py`; it reads
+the generated `.nbt` files, so it also catches forgetting to re-run the generator.
+
 ### Factorio tech tree
 
 The pack's research tree takes its shape from Factorio's, extracted rather than transcribed

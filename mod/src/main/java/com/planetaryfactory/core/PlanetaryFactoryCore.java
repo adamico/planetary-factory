@@ -1,7 +1,10 @@
 package com.planetaryfactory.core;
 
+import com.planetaryfactory.core.worldgen.PFWorldgen;
+import com.planetaryfactory.core.worldgen.TerraStartingArea;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.common.NeoForge;
 
 /**
  * The pack's first-party mod (ADR-0014).
@@ -25,6 +28,9 @@ public final class PlanetaryFactoryCore {
     public PlanetaryFactoryCore(IEventBus modBus) {
         PFBlocks.register(modBus);
         PFItems.register(modBus);
+        PFWorldgen.register(modBus);
         modBus.addListener(PFItems::addToCreativeTabs);
+        // Game bus, not the mod bus: this one fires per running server, not per mod load.
+        NeoForge.EVENT_BUS.addListener(TerraStartingArea::onServerStarted);
     }
 }

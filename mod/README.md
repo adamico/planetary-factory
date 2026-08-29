@@ -8,6 +8,17 @@ Its remit is **mechanism only** (ADR-0015). Today that is these things, none of 
 API in this pack exposes:
 
 - **Flora** — two `SaplingBlock`s and their `TreeGrower`.
+- **Terra's starting area** — `worldgen/TerraStartingArea` stamps the `terra_start` jigsaw pool
+  onto world spawn on `ServerStartedEvent`, once per world. Vanilla cannot express this: a
+  `StructurePlacement` is handed a `ChunkGeneratorStructureState` and nothing else, so no
+  placement type — custom ones included — can see world spawn. The templates, the pools and all
+  the randomisation stay datapack data; only the "put it here" is Java. ADR-0019 has the whole
+  argument, including what `concentric_rings` got wrong. The class inlines vanilla's
+  `generateJigsaw` so that it can load the chunks under the pieces first — a piece placed over an
+  unloaded chunk is written at y=-64, silently, because `Level.getHeight` does not generate. It
+  ships one structure processor with it, `planetaryfactory:ground`, which drops each column of a
+  patch onto the terrain: vanilla's `minecraft:gravity` reads a heightmap whose top is "anything
+  that is not air", so a field crossing a wood landed on the canopy.
 - **Research locks** — a mixin teaching GregTech machines to honour Researchd's `unlock_recipe`
   effects, plus the `research/` package behind it. KubeJS cannot mixin, and GregTech never asks the
   vanilla `RecipeManager`, so there is nowhere else this can live.

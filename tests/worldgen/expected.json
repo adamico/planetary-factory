@@ -1,145 +1,98 @@
 {
   "_comment": [
     "Expectations for the automated worldgen check. Add a body by adding an entry",
-    "under 'bodies' — the harness in scripts/worldgen-check.py needs no change.",
+    "under 'bodies' \u2014 the harness in scripts/worldgen-check.py needs no change.",
     "See docs/testing/worldgen-registry-check.md."
   ],
   "bodies": {
-    "terra": {
-      "dimension": "minecraft:overworld",
-      "ore_veins": {
-        "gtceu:iron": {
-          "weight": 160,
-          "layer": "stone"
-        },
-        "gtceu:copper": {
-          "weight": 140,
-          "layer": "deepslate"
-        },
-        "gtceu:coal": {
-          "weight": 130,
-          "layer": "stone"
-        },
-        "gtceu:cassiterite": {
-          "weight": 90,
-          "layer": "stone"
-        },
-        "gtceu:copper_tin": {
-          "weight": 70,
-          "layer": "stone"
-        },
-        "planetaryfactory:sphalerite": {
-          "weight": 70,
-          "layer": "stone"
-        },
-        "gtceu:galena": {
-          "weight": 60,
-          "layer": "stone"
-        },
-        "gtceu:magnetite": {
-          "weight": 60,
-          "layer": "stone"
-        },
-        "gtceu:nickel": {
-          "weight": 55,
-          "layer": "stone"
-        },
-        "gtceu:mica": {
-          "weight": 10,
-          "layer": "deepslate"
-        },
-        "gtceu:olivine": {
-          "weight": 10,
-          "layer": "deepslate"
+    "electro": {
+      "_comment": [
+        "Electro's `ore_veins` is an empty object on purpose, and the emptiness is the",
+        "assertion: no vein in the loaded registry may reach this dimension. The body is",
+        "barren by design \u2014 its economy is recycling. See docs/adr/0009-electro-registers-no-ore-veins.md.",
+        "Fulgorite and scrap piles are placed features, not veins, and so are not checked here."
+      ],
+      "bedrock_fluids": {
+        "planetaryfactory:electro_petroleum_deposit": {
+          "depleted_yield_at_least": 1,
+          "fluid": "gtceu:heavy_oil"
         }
       },
       "bedrock_ores": {
-        "planetaryfactory:terra_ferrous_deposit": {
+        "planetaryfactory:electro_scrap_deposit": {
+          "depleted_yield_at_least": 1,
           "materials": [
-            "gtceu:iron",
-            "gtceu:nickel"
-          ],
-          "depleted_yield_at_least": 1
-        },
-        "planetaryfactory:terra_cupriferous_deposit": {
-          "materials": [
-            "gtceu:copper",
-            "gtceu:tin",
-            "gtceu:zinc"
-          ],
-          "depleted_yield_at_least": 1
-        },
-        "planetaryfactory:terra_polymetallic_deposit": {
-          "materials": [
-            "gtceu:lead",
-            "gtceu:silver",
-            "gtceu:sulfur"
-          ],
-          "depleted_yield_at_least": 1
+            "planetaryfactory:scrap"
+          ]
         }
       },
-      "forbidden_ore_veins": [
-        "gtceu:scheelite",
-        "gtceu:naquadah",
-        "gtceu:sulfur"
-      ],
+      "dimension": "planetaryfactory:fulgora",
       "forbidden_bedrock_fluids": [
         "gtceu:lava_deposit"
-      ]
+      ],
+      "ore_veins": {},
+      "structures": {
+        "planetaryfactory:electro_ruin": {
+          "biomes": [
+            "planetaryfactory:electro_barren_plateau",
+            "planetaryfactory:electro_scrap_plateau"
+          ],
+          "placement": {
+            "separation": 2,
+            "spacing": 5,
+            "type": "minecraft:random_spread"
+          },
+          "set": "planetaryfactory:electro_ruins"
+        }
+      }
+    },
+    "end": {
+      "_comment": [
+        "Not a body: a vanilla dimension the pack strips of GregTech worldgen (ADR-0007, #16).",
+        "The three empty objects are assertions \u2014 the check walks the whole registry for each, so",
+        "a vein or deposit that later reaches this dimension fails here rather than silently",
+        "restoring the stock progression. Vanilla generation is untouched and is not checked."
+      ],
+      "bedrock_fluids": {},
+      "bedrock_ores": {},
+      "dimension": "minecraft:the_end",
+      "ore_veins": {}
     },
     "ignus": {
-      "dimension": "planetaryfactory:vulcanus",
-      "ore_veins": {
-        "planetaryfactory:ignus_coal": {
-          "weight": 120,
-          "layer": "ignus_rock"
+      "bedrock_fluids": {
+        "gtceu:lava_deposit": {
+          "depleted_yield_at_least": 1,
+          "fluid": "minecraft:lava"
         },
-        "planetaryfactory:ignus_sulfur": {
-          "weight": 100,
-          "layer": "ignus_rock"
-        },
-        "planetaryfactory:ignus_calcite": {
-          "weight": 90,
-          "layer": "ignus_rock"
-        },
-        "planetaryfactory:ignus_scheelite": {
-          "weight": 50,
-          "layer": "ignus_rock"
+        "planetaryfactory:ignus_sulfuric_acid_geyser": {
+          "depleted_yield_at_least": 1,
+          "fluid": "gtceu:sulfuric_acid"
         }
       },
       "bedrock_ores": {
-        "planetaryfactory:ignus_tungsten_deposit": {
-          "materials": [
-            "gtceu:tungsten",
-            "gtceu:lithium"
-          ],
-          "depleted_yield_at_least": 1
-        },
         "planetaryfactory:ignus_calcite_deposit": {
+          "depleted_yield_at_least": 1,
           "materials": [
             "gtceu:calcite",
             "gtceu:apatite"
-          ],
-          "depleted_yield_at_least": 1
+          ]
         },
         "planetaryfactory:ignus_coal_deposit": {
+          "depleted_yield_at_least": 1,
           "materials": [
             "gtceu:coal",
             "gtceu:sulfur"
-          ],
-          "depleted_yield_at_least": 1
-        }
-      },
-      "bedrock_fluids": {
-        "gtceu:lava_deposit": {
-          "fluid": "minecraft:lava",
-          "depleted_yield_at_least": 1
+          ]
         },
-        "planetaryfactory:ignus_sulfuric_acid_geyser": {
-          "fluid": "gtceu:sulfuric_acid",
-          "depleted_yield_at_least": 1
+        "planetaryfactory:ignus_tungsten_deposit": {
+          "depleted_yield_at_least": 1,
+          "materials": [
+            "gtceu:tungsten",
+            "gtceu:lithium"
+          ]
         }
       },
+      "dimension": "planetaryfactory:vulcanus",
       "forbidden_ore_veins": [
         "gtceu:iron",
         "gtceu:copper",
@@ -148,39 +101,42 @@
         "planetaryfactory:sphalerite",
         "gtceu:scheelite",
         "gtceu:sulfur"
-      ]
-    },
-    "electro": {
-      "_comment": [
-        "Electro's `ore_veins` is an empty object on purpose, and the emptiness is the",
-        "assertion: no vein in the loaded registry may reach this dimension. The body is",
-        "barren by design — its economy is recycling. See docs/adr/0009-electro-registers-no-ore-veins.md.",
-        "Fulgorite and scrap piles are placed features, not veins, and so are not checked here."
       ],
-      "dimension": "planetaryfactory:fulgora",
-      "ore_veins": {},
-      "bedrock_ores": {
-        "planetaryfactory:electro_scrap_deposit": {
-          "materials": [
-            "planetaryfactory:scrap"
-          ],
-          "depleted_yield_at_least": 1
+      "ore_veins": {
+        "planetaryfactory:ignus_calcite": {
+          "layer": "ignus_rock",
+          "weight": 90
+        },
+        "planetaryfactory:ignus_coal": {
+          "layer": "ignus_rock",
+          "weight": 120
+        },
+        "planetaryfactory:ignus_scheelite": {
+          "layer": "ignus_rock",
+          "weight": 50
+        },
+        "planetaryfactory:ignus_sulfur": {
+          "layer": "ignus_rock",
+          "weight": 100
         }
-      },
-      "bedrock_fluids": {
-        "planetaryfactory:electro_petroleum_deposit": {
-          "fluid": "gtceu:heavy_oil",
-          "depleted_yield_at_least": 1
-        }
-      },
-      "forbidden_bedrock_fluids": [
-        "gtceu:lava_deposit"
-      ]
+      }
+    },
+    "nether": {
+      "_comment": [
+        "Not a body: a vanilla dimension the pack strips of GregTech worldgen (ADR-0007, #16).",
+        "The three empty objects are assertions \u2014 the check walks the whole registry for each, so",
+        "a vein or deposit that later reaches this dimension fails here rather than silently",
+        "restoring the stock progression. Vanilla generation is untouched and is not checked."
+      ],
+      "bedrock_fluids": {},
+      "bedrock_ores": {},
+      "dimension": "minecraft:the_nether",
+      "ore_veins": {}
     },
     "sapros": {
       "_comment": [
         "Sapros is barren of veins and of both kinds of bedrock deposit, and all three empty",
-        "objects are assertions rather than omissions — the check walks the whole registry for",
+        "objects are assertions rather than omissions \u2014 the check walks the whole registry for",
         "each. It differs from Electro's emptiness: Electro has no metal at all, where Sapros has",
         "metal that arrives by Decaying a bacterium taken from a stromatolite (ADR-0016). Until the",
         "Decay engine (#17) ships, that metal is unobtainable, and that is the design.",
@@ -188,8 +144,8 @@
         "The five biomes are: a biome that parses but occupies unreachable noise space generates",
         "nowhere, and only the generator can tell the two apart."
       ],
-      "dimension": "planetaryfactory:gleba",
-      "worldgen_layer": "sapros_rock",
+      "bedrock_fluids": {},
+      "bedrock_ores": {},
       "biomes": [
         "planetaryfactory:gleba_dark_highlands",
         "planetaryfactory:gleba_midlands",
@@ -197,33 +153,116 @@
         "planetaryfactory:gleba_green_marshland",
         "planetaryfactory:gleba_red_marshland"
       ],
+      "dimension": "planetaryfactory:gleba",
       "ore_veins": {},
-      "bedrock_ores": {},
-      "bedrock_fluids": {}
+      "worldgen_layer": "sapros_rock"
     },
-    "nether": {
-      "_comment": [
-        "Not a body: a vanilla dimension the pack strips of GregTech worldgen (ADR-0007, #16).",
-        "The three empty objects are assertions — the check walks the whole registry for each, so",
-        "a vein or deposit that later reaches this dimension fails here rather than silently",
-        "restoring the stock progression. Vanilla generation is untouched and is not checked."
+    "terra": {
+      "bedrock_ores": {
+        "planetaryfactory:terra_cupriferous_deposit": {
+          "depleted_yield_at_least": 1,
+          "materials": [
+            "gtceu:copper",
+            "gtceu:tin",
+            "gtceu:zinc"
+          ]
+        },
+        "planetaryfactory:terra_ferrous_deposit": {
+          "depleted_yield_at_least": 1,
+          "materials": [
+            "gtceu:iron",
+            "gtceu:nickel"
+          ]
+        },
+        "planetaryfactory:terra_polymetallic_deposit": {
+          "depleted_yield_at_least": 1,
+          "materials": [
+            "gtceu:lead",
+            "gtceu:silver",
+            "gtceu:sulfur"
+          ]
+        }
+      },
+      "dimension": "minecraft:overworld",
+      "forbidden_bedrock_fluids": [
+        "gtceu:lava_deposit"
       ],
-      "dimension": "minecraft:the_nether",
-      "ore_veins": {},
-      "bedrock_ores": {},
-      "bedrock_fluids": {}
-    },
-    "end": {
-      "_comment": [
-        "Not a body: a vanilla dimension the pack strips of GregTech worldgen (ADR-0007, #16).",
-        "The three empty objects are assertions — the check walks the whole registry for each, so",
-        "a vein or deposit that later reaches this dimension fails here rather than silently",
-        "restoring the stock progression. Vanilla generation is untouched and is not checked."
+      "forbidden_ore_veins": [
+        "gtceu:scheelite",
+        "gtceu:naquadah",
+        "gtceu:sulfur"
       ],
-      "dimension": "minecraft:the_end",
-      "ore_veins": {},
-      "bedrock_ores": {},
-      "bedrock_fluids": {}
+      "ore_veins": {
+        "gtceu:cassiterite": {
+          "layer": "stone",
+          "weight": 90
+        },
+        "gtceu:coal": {
+          "layer": "stone",
+          "weight": 130
+        },
+        "gtceu:copper": {
+          "layer": "deepslate",
+          "weight": 140
+        },
+        "gtceu:copper_tin": {
+          "layer": "stone",
+          "weight": 70
+        },
+        "gtceu:galena": {
+          "layer": "stone",
+          "weight": 60
+        },
+        "gtceu:iron": {
+          "layer": "stone",
+          "weight": 160
+        },
+        "gtceu:magnetite": {
+          "layer": "stone",
+          "weight": 60
+        },
+        "gtceu:mica": {
+          "layer": "deepslate",
+          "weight": 10
+        },
+        "gtceu:nickel": {
+          "layer": "stone",
+          "weight": 55
+        },
+        "gtceu:olivine": {
+          "layer": "deepslate",
+          "weight": 10
+        },
+        "planetaryfactory:sphalerite": {
+          "layer": "stone",
+          "weight": 70
+        }
+      },
+      "structures": {
+        "planetaryfactory:terra_starting_area": {
+          "_comment": [
+            "No `set` and no `placement`: this structure is not placed by worldgen at all. Vanilla has",
+            "no spawn-anchored placement type and cannot have one -- a StructurePlacement decides from",
+            "ChunkGeneratorStructureState alone, which carries no world spawn -- so planetaryfactory_core",
+            "stamps the pool onto spawn on ServerStartedEvent. What is still worth asserting here is what",
+            "the stamp depends on: that the structure loaded, that its biomes are ones Terra emits, and",
+            "that the three ore ids it is built from are real registered blocks rather than plausible",
+            "near misses that would silently place air."
+          ],
+          "biomes": [
+            "planetaryfactory:terra_desert",
+            "planetaryfactory:terra_dry_steppe",
+            "planetaryfactory:terra_grassland",
+            "planetaryfactory:terra_red_desert",
+            "planetaryfactory:terra_woodland"
+          ],
+          "blocks": [
+            "gtceu:iron_ore",
+            "gtceu:copper_ore",
+            "gtceu:coal_ore"
+          ]
+        }
+      }
     }
   }
 }
