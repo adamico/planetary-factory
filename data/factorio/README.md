@@ -33,8 +33,13 @@ JSON
   --dump-data --mod-directory /tmp/fmods
 
 scripts/factorio-tech-extract.py
+scripts/factorio-recipe-extract.py
 python3 tests/factorio/test_tech_extract.py
+python3 tests/factorio/test_recipe_extract.py
 ```
+
+Both extractors read the same dump, so a single `--dump-data` run feeds them. The recipe
+extractor also reads `technology.json`, so run it second.
 
 The dump lands in `~/Library/Application Support/factorio/script-output/data-raw-dump.json`. The
 extractor finds it and the Steam install by default; both are overridable with `--dump` and
@@ -48,6 +53,23 @@ is stale.
 - **`technology.json`** — the tree. One object per technology: `name` (Factorio's kebab-case, the
   key `fromFactorio()` uses), `suggested_id`, `localised_name`, `source`, `prerequisites`,
   `cost_kind` (`packs` or `trigger`), `unit`, `research_trigger`, `effects`, `icon`.
+- **`recipe.json`** — the recipe corpus the pack's recipes are generated from (ADR-0026). One
+  object per recipe: `name`, `category` (the primary one), `categories` (all of them),
+  `unlocked_by` (the technology, or `null` for enabled-from-the-start), `energy_required`,
+  `ingredients`, `results`, `allow_productivity`, `subgroup`, `order`.
+
+  **Scope is Nauvis pre-launch**: every recipe unlocked by a technology whose pack cost is a
+  subset of ADR-0018's four rungs, closed downward through prerequisites, plus the recipes
+  enabled from the start. 164 of Factorio's 662. A later body widens it by widening
+  `RUNG_PACKS` in the script.
+
+  **Routing is on `category`, the first entry.** Factorio 2.x gives a recipe a *list* of
+  categories, and the extras are the DLC machines that may also craft it — `transport-belt`
+  is `["crafting", "metallurgy"]` because Vulcanus's foundry exists, not because a belt is a
+  metallurgy recipe. `data/pack/category-map.json` holds the routing, and running the
+  extractor reports `setMaxIOSize` per machine off this data, which is where ADR-0026's
+  numbers come from.
+
 - **`science_packs.json`** — the twelve packs in Factorio's own order. Reference only: ADR-0018
   fixes the pack's spine at four rungs.
 
