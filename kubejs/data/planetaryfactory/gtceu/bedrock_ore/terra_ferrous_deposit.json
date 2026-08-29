@@ -12,11 +12,7 @@
     "materials": [
         {
             "material": "gtceu:iron",
-            "weight": 5
-        },
-        {
-            "material": "gtceu:nickel",
-            "weight": 2
+            "weight": 1
         }
     ],
     "dimension_filter": [

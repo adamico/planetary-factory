@@ -108,6 +108,7 @@ const dumpRegistries = (server) => {
 
   return {
     biomes: sampleBiomes(server),
+    dimension_bounds: dimensionBounds(server),
     structures: dumpStructures(registryAccess),
     structure_sets: dumpStructureSets(registryAccess),
     blocks: dumpOreBlocks(),
@@ -269,6 +270,34 @@ const sampleBiomes = (server) => {
     biomes[dimensionId(level)] = Object.keys(found).sort();
   });
   return biomes;
+};
+
+// The column a dimension actually loaded with.
+//
+// ADR-0019 gives Terra a 0..192 column, and that number is written twice -- in
+// `dimension_type/overworld.json` and in the `noise` block of the dimension's noise settings.
+// The two disagreeing is silent: the world loads, and terrain is generated against a column
+// the dimension does not have. No registry entry mentions either number, so the only place to
+// read it is the loaded level.
+const dimensionBounds = (server) => {
+  const bounds = {};
+  server.getAllLevels().forEach((level) => {
+    // `var`, not `const`: Rhino hoists a `const` declared inside a `try` out of the block, so
+    // the second level through here would raise "redeclaration of var" -- the same trap
+    // encodePlacement above already fell into.
+    try {
+      var type = beanValue(level, 'dimensionType');
+      bounds[dimensionId(level)] = {
+        min_y: beanValue(type, 'minY'),
+        height: beanValue(type, 'height'),
+      };
+    } catch (error) {
+      // Said out loud rather than left as an absent entry, which a fixture asserting bounds
+      // would otherwise report as "no bounds dumped" without saying why.
+      console.warn(`dimension bounds could not be read: ${error}`);
+    }
+  });
+  return bounds;
 };
 
 const dumpRequested = () => {

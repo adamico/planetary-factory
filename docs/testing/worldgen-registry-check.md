@@ -27,7 +27,9 @@ Add an entry under `bodies` in `tests/worldgen/expected.json`. Nothing else chan
   "bedrock_fluids": { "gtceu:lava_deposit": {
       "fluid": "minecraft:lava", "depleted_yield_at_least": 1 } },
   "forbidden_ore_veins": ["gtceu:iron"],
+  "forbidden_bedrock_ores": ["planetaryfactory:terra_polymetallic_deposit"],
   "worldgen_layer": "ignus_rock",
+  "dimension_bounds": { "min_y": 0, "height": 192 },
   "biomes": ["planetaryfactory:ignus_barren_plains"]
 }
 ```
@@ -92,8 +94,17 @@ plausible-looking near miss. The `blocks` list is that answer.
 
 Bedrock ore deposits are checked for presence, dimension,
 material set, and a depleted yield above zero; bedrock fluid deposits for presence,
-dimension, the fluid they hold, and the same non-zero floor, with
-`forbidden_bedrock_fluids` as their reverse.
+dimension, the fluid they hold, and the same non-zero floor. `forbidden_bedrock_ores` and
+`forbidden_bedrock_fluids` are their reverses, and a retired deposit is what they are for:
+retiring one is deleting its file, and a file that comes back changes nothing any other row
+in the fixture reads.
+
+`dimension_bounds` asserts the body's column — `min_y` and `height`, as the loaded dimension
+type carries them. Nothing else in the dump implies it. Terra's column is written twice, in
+`dimension_type/overworld.json` and in the `noise` block of its noise settings (ADR-0019), and
+the two disagreeing is silent: the world loads, and terrain is generated against a column the
+dimension does not have. A vein's height range is clamped to whatever the column turns out to
+be, so every vein row still passes on a column that quietly reverted to vanilla's −64..320.
 
 The comparison itself has its own test, `tests/worldgen/test_compare.py`, which runs it
 against synthetic dumps in a second and needs no game:
@@ -150,3 +161,17 @@ vein yields the intended ore variant under its intended name, and that a Bedrock
 and a Fluid Drilling Rig actually draw from the body's deposits. The registries can say a
 deposit loaded, filters to the right dimension and never depletes to zero; only a rig can
 say it turns.
+
+Terra adds two of its own, both from ADR-0019 and both invisible to every registry — the
+density functions parse and load whatever shape they describe, so nothing but a look answers
+either. In a fresh world:
+
+1. **Flat.** Fly a few thousand blocks in a straight line in spectator with F3 open. `y` at the
+   surface stays inside the shallow relief band; a cliff is rare and local, never a mountain,
+   and the column stops at 192 rather than continuing into empty sky.
+2. **Cave-free.** Dig or spectate straight down to bedrock in three or four separate places.
+   The column is solid stone the whole way — no cave, no ravine, no aquifer. One cave is a
+   failure, not a rarity: Terra references the vanilla cave tree from nothing at all.
+
+Both are worth re-running whenever Terra's noise settings or density functions change, which
+the registry check will pass through in silence.
