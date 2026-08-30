@@ -24,6 +24,7 @@ import glob
 import io
 import os
 import re
+import shutil
 import subprocess
 import sys
 import zipfile
@@ -124,10 +125,30 @@ def main():
         return 1
 
     paths = [os.path.join("config", e) for e in found]
-    # git rm, not rm: config/ is tracked, so the deletion is reviewable in the
-    # diff and recoverable from history if a guess turns out wrong.
-    subprocess.run(["git", "rm", "-r", "-q", "--"] + paths, cwd=REPO, check=True)
-    print(f"Deleted {len(found)} entr(ies) with git rm. Review the diff and commit.")
+    # Most of config/ is tracked, but not all of it — .gitignore excludes the
+    # per-user client config (config/InventoryHUD/ and friends), and `git rm`
+    # fails the whole batch on the first path it does not know. So the two kinds
+    # are separated and deleted their own way.
+    tracked = set(subprocess.run(
+        ["git", "ls-files", "-z", "--"] + paths,
+        cwd=REPO, check=True, capture_output=True, text=True,
+    ).stdout.split("\0")) - {""}
+    git_paths = [p for p in paths if any(t == p or t.startswith(p + "/") for t in tracked)]
+    plain_paths = [p for p in paths if p not in git_paths]
+
+    # git rm, not rm, wherever git knows the file: the deletion is then reviewable
+    # in the diff and recoverable from history if a guess turns out wrong.
+    if git_paths:
+        subprocess.run(["git", "rm", "-r", "-q", "--"] + git_paths, cwd=REPO, check=True)
+    for p in plain_paths:
+        full = os.path.join(REPO, p)
+        shutil.rmtree(full) if os.path.isdir(full) else os.remove(full)
+
+    print(f"Deleted {len(git_paths)} tracked entr(ies) with git rm — review the diff and commit.")
+    if plain_paths:
+        print(f"Deleted {len(plain_paths)} untracked (gitignored) entr(ies) outright:")
+        for p in plain_paths:
+            print(f"  {p}")
     return 0
 
 
