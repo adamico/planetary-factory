@@ -17,8 +17,9 @@ What is checkable now, with no converter and no game:
     cross mods (a same-mod pair is one token, so the cross-mod cases stay visible)
   - a cross-mod pair explains itself: owner != process without a `cross_owner` reason is
     exactly the unexamined routing this file exists to prevent
-  - the Personal Assembler is a RULE and not a field: no row names it, and the rule's own
-    boundary still falls where Factorio puts it
+  - the Personal Assembler is a RULE and not a field: no row names it, and the rule as
+    INTENDED ("anything without a fluid, except what needs a real machine") still picks out
+    the same recipes as the rule as ENFORCED (first category `crafting`)
 """
 
 import json
@@ -61,7 +62,21 @@ PROCESSES = {
 # boundary -- Factorio withholds `engine-unit` from the hand although it needs no fluid -- so if
 # a regeneration ever moves it, the rule stops meaning what its prose says and this fails.
 HAND_CATEGORY = "crafting"
-WITHHELD = {"engine-unit"}
+
+# The exceptions, stated so they can be READ -- they are asserted below by deriving them, never
+# by matching this list, so this stays documentation and cannot rot into the source of truth.
+# All 11 are fluid-free recipes Factorio still withholds from the hand, and each already has a
+# home elsewhere in the file: the furnace is #91, the centrifuge #89, asteroids are not emitted,
+# the silo is `pack:rocket_silo`. `engine-unit` is the one that earns the care: nothing about its
+# ingredients says "machine", so "needs no fluid" alone would have swallowed it.
+WITHHELD = {
+    "iron-plate", "copper-plate", "steel-plate", "stone-brick",   # smelting
+    "uranium-processing", "nuclear-fuel-reprocessing",            # centrifuging
+    "metallic-asteroid-crushing", "carbonic-asteroid-crushing",   # crushing
+    "oxide-asteroid-crushing",
+    "rocket-part",                                               # rocket-building
+    "engine-unit",                                               # advanced-crafting
+}
 
 # (recipes, shelves touched, shelves wholly hand-craftable, shelves split down the middle).
 # The five split shelves are the point: the rule is a predicate over categories, so it crosses
@@ -72,6 +87,12 @@ EXPECTED_SPREAD = (
     24,
     ["belt", "intermediate-product", "space-interactors", "terrain", "uranium-processing"],
 )
+
+
+def takes_fluid(recipe):
+    """Factorio marks fluids on the ingredient itself; a recipe is fluid-free if none is."""
+    both = list(recipe.get("ingredients") or []) + list(recipe.get("results") or [])
+    return any(item.get("type") == "fluid" for item in both if isinstance(item, dict))
 
 
 def parse(value):
@@ -166,17 +187,21 @@ def main():
             "not a field; a row that names it reads as an exclusive claim"
         )
 
-    withheld = {r["name"] for r in recipes if r["category"] == "advanced-crafting"}
-    if withheld != WITHHELD:
+    # The rule has two formulations: INTENDED, "anything that needs no fluid except what needs a
+    # real machine", and ENFORCED, "first category is `crafting`". The second is what ships,
+    # because it needs no list maintained; the first is what it MEANS. If they ever pick out
+    # different recipes, the shipped rule has stopped saying what the prose says it says.
+    hand = {r["name"] for r in recipes if r["category"] == HAND_CATEGORY}
+    fluid_free = {r["name"] for r in recipes if not takes_fluid(r)}
+    if fluid_free - hand != WITHHELD:
         failures.append(
-            f"`advanced-crafting` recipes are {sorted(withheld)}, expected {sorted(WITHHELD)} "
-            "-- the rule's prose calls this exactly one item, and cites it as why the rule is "
-            "phrased as machine 1's categories rather than as 'takes no fluid'"
+            f"fluid-free recipes withheld from the hand are {sorted(fluid_free - hand)}, "
+            f"expected {sorted(WITHHELD)} -- the two formulations of the rule have come apart, "
+            "so `_comment`'s statement of intent no longer describes what is enforced"
         )
 
     # `_comment` cites the spread as its argument for why the rule is not a shelf field. Prose
     # that cites a number goes stale silently, so the number is pinned here.
-    hand = {r["name"] for r in recipes if r["category"] == HAND_CATEGORY}
     touched = {r["subgroup"] for r in recipes if r["name"] in hand}
     partial = {
         r["subgroup"] for r in recipes if r["name"] not in hand and r["subgroup"] in touched
