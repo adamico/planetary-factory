@@ -440,6 +440,10 @@ Sub-rules:
 - **Sapros's science pack spoils** — `planned`. The buffer-as-liability puzzle.
 - **Research consumes packs continuously while running** — `adapted`. Researchd's Lab consumes on
   completion of a pack batch rather than metering a rate; only `consumePack` reads the Lab.
+- **A lab draws power, so research competes with the factory for it** — `blocked`, #103. Researchd's
+  Lab has no energy handler at all — no class in the jar carries the concept — so research is free of
+  the grid, and being free of the grid it also emits nothing (ADR-0005 scores EU/t draw), which makes
+  researching the one industrial activity on Terra with no hazard consequence.
 
 ### The technology tree
 
