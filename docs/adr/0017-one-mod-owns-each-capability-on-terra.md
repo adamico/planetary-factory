@@ -35,7 +35,7 @@ craftable has not made the choice.
 | Power distribution (inside an area) | **Mekanism** (Universal Cables) | — |
 | Energy storage | **Electro** (Accumulator) grid-side; **Mekanism** (Energy Cube, Induction Matrix) FE-side | GT quantum batteries removed with the power layer |
 | Item logistics | **Create** (belts, chutes, trains) | Mekanism Logistical Transporters recipe-removed; GT item pipes and covers removed with the power layer |
-| Fluid logistics | **Mekanism** (Mechanical Pipes) | Create fluid pipes **kept** for short local runs — pumps and hand-placed, not a network |
+| Fluid logistics | **Create** (fluid pipes, pumps) — *amended by #101; this row read "Mekanism (Mechanical Pipes)" and kept Create's pipes as a hand-placed exception* | Mekanism Mechanical Pipes **recipe-removed** |
 | Bulk storage (item) | **Create** (Item Vault) | Mekanism Bins and QIO **cut**; GT quantum chests removed |
 | Bulk storage (fluid) | **Mekanism** (Dynamic Tank) | GT quantum tanks removed |
 | Oil processing | **The pack** — a registered **Oil Refinery** on a GT chassis (ADR-0025) | GT Distillation Tower and Distillery **recipe-removed on Terra**; Create: Petrochem and Create: Diesel Generators declined |
@@ -133,9 +133,9 @@ Electro's are the same decision made twice.
 - **Restrict the losing block by script rather than removing its recipe.** Rejected on GDD §5 — the
   pack does not restrict what a player may do with a block they hold. Removing the recipe is a
   content decision; policing the block is a rule.
-- **Keep the losing block craftable but outclassed.** Kept only as a per-block exception. Create's
-  fluid pipes are the model: hand-placed local runs are not a network and do not compete with
-  Mekanism's.
+- **Keep the losing block craftable but outclassed.** Kept only as a per-block exception. *The
+  example this bullet used to give — Create's fluid pipes, kept for hand-placed local runs — is void
+  since #101 gave Create the row outright; the exception itself stands.*
 - **Give GregTech the whole stack and use Create and Mekanism as decoration.** Rejected — it inverts
   the pack's design. GregTech is instrumental (GCyR needs it, its miners are good, it is a cheap
   chassis for custom machines), not the spine.
@@ -213,3 +213,22 @@ NBT-holding container collapses them to one.
 - **The block-level cut list is not decided here.** Electro registers 108 blocks and 44 items, and no
   block is cut until every block has been tested in game. "Adopt whole, cut as necessary" holds; the
   cutting waits for hands-on play.
+
+## Amended by #101: Create owns fluid logistics
+
+The Fluid logistics row named Mekanism's Mechanical Pipes, and kept Create's fluid pipes alive
+underneath it as a per-block exception for "short local runs — pumps and hand-placed, not a network".
+That is the shape this ADR exists to reject: two craftable answers to one capability, with the split
+drawn on how big the run is rather than on who owns it. A player laying Create pipes for a local run
+has no signal telling them where the local run ends.
+
+**Create owns fluid logistics. Mekanism's Mechanical Pipes are recipe-removed by default**, like every
+other losing block on this table.
+
+This is the fourth time the table has been corrected in the same direction — an owner named without
+checking the shape of what it actually has to do. The Refining row, the barrel shelf, the Power
+generation row (all recorded under #93 above), and now this one.
+
+**Bulk storage (fluid) is a separate row and is untouched**: Mekanism's Dynamic Tank still owns it.
+Fluid logistics and bulk fluid storage came apart here, exactly as item logistics and bulk item
+storage are already two rows.
