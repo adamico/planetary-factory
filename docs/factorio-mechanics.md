@@ -213,11 +213,21 @@ Sub-rules:
 - **Three belt tiers** — `adapted`. There is one belt, and its throughput is the RPM you drive it
   at, so belt speed is a power-and-gearing decision made per run rather than three craftable tiers
   bought from the tech tree. Faster belts are therefore never a research unlock here.
-- **Underground belts** — `unargued`, no verdict.
-- **Splitters, with filtering and priority** — `adapted`. Create's item filtering is the substitute;
-  priority has no analogue.
+- **Underground belts** — `excluded`. Create has no belt that runs under an obstacle, and the
+  routing puzzle underground belts create — weaving two lanes past each other in a fixed footprint —
+  has no substitute here.
+- **Splitters, with filtering and priority** — `adapted`. Create's tunnels are the splitter: a
+  tunnel splits a belt's output across the belts beside it and filters what goes where. It is
+  placed on the belt rather than spliced into it, so the balancer built out of splitter pairs — the
+  shape a Factorio player reaches for first — is not buildable, and there is no output priority.
 - **Two lanes per belt** — `excluded`. `by-consequence`: Create belts have no lane model, and the
   whole lane-balancing idiom goes with it.
+
+Together these empty out Factorio's belt research. `logistics-2`, `logistics-3` and
+`turbo-transport-belt` survive in `data/factorio/technology.json`, and between them they buy exactly
+a belt tier, an underground belt and a splitter tier — all three now excluded or bought with RPM
+instead. Only `logistics` is declared in `researchd.js` today; the other three are candidates for the
+prune, which is #25's call and not this ledger's.
 
 ### Inserters
 
