@@ -210,8 +210,9 @@ Three pack-authored Assembling Machines on a GT chassis. Recipe routing follows 
 
 Sub-rules:
 
-- **Three belt tiers** — `unargued`, no verdict. Create's belts are not tiered by speed the way
-  Factorio's are.
+- **Three belt tiers** — `adapted`. There is one belt, and its throughput is the RPM you drive it
+  at, so belt speed is a power-and-gearing decision made per run rather than three craftable tiers
+  bought from the tech tree. Faster belts are therefore never a research unlock here.
 - **Underground belts** — `unargued`, no verdict.
 - **Splitters, with filtering and priority** — `adapted`. Create's item filtering is the substitute;
   priority has no analogue.
