@@ -309,8 +309,9 @@ Sub-rules:
 - **verdict**: `planned`
 - **where**: all bodies
 - **via**: `electro`, `create`, `mekanism`
-- **owner**: ADR-0017 as amended by #101 (Electro owns steam and solar; Mekanism's at-scale FE
-  generation is a separate, still-unargued claim on the same row)
+- **owner**: ADR-0017 as amended by #101 (Electro owns steam and solar). **`mekanism` appears in
+  `via` only on the strength of an unargued clause — #104 decides whether the pack has an at-scale
+  generation tier at all, and if not, `via` is `electro` alone.**
 
 Sub-rules:
 
