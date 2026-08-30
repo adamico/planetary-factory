@@ -17,8 +17,8 @@ What is checkable now, with no converter and no game:
     cross mods (a same-mod pair is one token, so the cross-mod cases stay visible)
   - a cross-mod pair explains itself: owner != process without a `cross_owner` reason is
     exactly the unexamined routing this file exists to prevent
-  - the dual-surface rows are still the two the bootstrap earns, because a recipe on two
-    surfaces is a rung the player can skip
+  - the Personal Assembler is a RULE and not a field: no row names it, and the rule's own
+    boundary still falls where Factorio puts it
 """
 
 import json
@@ -41,7 +41,6 @@ TERMINALS = {
     "undecided:smelting",
     "deferred",
     "not_emitted",
-    "personal_assembler",
 }
 
 # Every recipe type the file may name. A process outside this set is either a typo or a
@@ -57,11 +56,22 @@ PROCESSES = {
     "pack:rocket_silo",
 }
 
-# Rung 1's bootstrap: the machine, and the pack that buys it. Both must exist on the
-# Personal Assembler (or the first Assembling Machine is unbuildable) and on the Assembling
-# Machine (or neither can ever be scaled). Nothing else earns two surfaces, so a third dual
-# row is a finding -- it is a rung the player can skip.
-EXPECTED_DUAL = {"assembling-machine-1", "automation-science-pack"}
+# The Personal Assembler crafts what Assembling Machine 1 crafts: first category `crafting`.
+# Stored nowhere, derived here. The corpus's one `advanced-crafting` recipe is the rule's whole
+# boundary -- Factorio withholds `engine-unit` from the hand although it needs no fluid -- so if
+# a regeneration ever moves it, the rule stops meaning what its prose says and this fails.
+HAND_CATEGORY = "crafting"
+WITHHELD = {"engine-unit"}
+
+# (recipes, shelves touched, shelves wholly hand-craftable, shelves split down the middle).
+# The five split shelves are the point: the rule is a predicate over categories, so it crosses
+# shelves instead of following them, and a shelf could not store it even if a row wanted to.
+EXPECTED_SPREAD = (
+    113,
+    29,
+    24,
+    ["belt", "intermediate-product", "space-interactors", "terrain", "uranium-processing"],
+)
 
 
 def parse(value):
@@ -86,7 +96,6 @@ def main():
     for shelf in sorted(set(shelves) - set(corpus)):
         failures.append(f"{shelf} has an owner row and is not in the corpus")
 
-    dual = set()
     counted = 0
     for shelf, entry in sorted(shelves.items()):
         if shelf not in corpus:
@@ -122,8 +131,6 @@ def main():
         for name, value in sorted(entry["per_recipe"].items()):
             counted += 1
             values = value if isinstance(value, list) else [value]
-            if isinstance(value, list):
-                dual.add(name)
             for one in values:
                 owner, process = parse(one)
                 if owner is None:
@@ -143,11 +150,42 @@ def main():
     if counted != len(recipes):
         failures.append(f"{counted} recipes assigned, the corpus has {len(recipes)}")
 
-    if dual != EXPECTED_DUAL:
+    # The rule cuts across shelves, not along them, so a shelf cannot express it and no row
+    # may try: a row naming the surface would read as "only these", which is the opposite of
+    # what the rule says.
+    named = sorted(
+        f"{shelf}/{name}"
+        for shelf, entry in shelves.items()
+        for name, value in entry.get("per_recipe", {}).items()
+        for one in (value if isinstance(value, list) else [value])
+        if one == "personal_assembler"
+    )
+    if named:
         failures.append(
-            f"dual-surface rows are {sorted(dual)}, expected {sorted(EXPECTED_DUAL)} -- a "
-            "recipe on two surfaces is a rung the player can skip; only the bootstrap "
-            "earns it, so read a new one as a finding"
+            f"{named} name the Personal Assembler as a value -- it is a rule over categories, "
+            "not a field; a row that names it reads as an exclusive claim"
+        )
+
+    withheld = {r["name"] for r in recipes if r["category"] == "advanced-crafting"}
+    if withheld != WITHHELD:
+        failures.append(
+            f"`advanced-crafting` recipes are {sorted(withheld)}, expected {sorted(WITHHELD)} "
+            "-- the rule's prose calls this exactly one item, and cites it as why the rule is "
+            "phrased as machine 1's categories rather than as 'takes no fluid'"
+        )
+
+    # `_comment` cites the spread as its argument for why the rule is not a shelf field. Prose
+    # that cites a number goes stale silently, so the number is pinned here.
+    hand = {r["name"] for r in recipes if r["category"] == HAND_CATEGORY}
+    touched = {r["subgroup"] for r in recipes if r["name"] in hand}
+    partial = {
+        r["subgroup"] for r in recipes if r["name"] not in hand and r["subgroup"] in touched
+    }
+    spread = (len(hand), len(touched), len(touched - partial), sorted(partial))
+    if spread != EXPECTED_SPREAD:
+        failures.append(
+            f"hand-craftable spread is {spread}, expected {EXPECTED_SPREAD} -- `_comment` "
+            "argues from these numbers that a shelf is the wrong granularity for the rule"
         )
 
     for number, failure in enumerate(failures, 1):
@@ -155,8 +193,8 @@ def main():
     if failures:
         return 1
     print(
-        f"ok   {len(shelves)} subgroups, {counted} recipes, every owner sourced, "
-        "every cross-mod pair explained"
+        f"ok   {len(shelves)} subgroups, {counted} recipes, {len(hand)} hand-craftable by rule, "
+        "every owner sourced, every cross-mod pair explained"
     )
     return 0
 
