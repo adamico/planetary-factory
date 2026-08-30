@@ -132,6 +132,7 @@ Sub-rules:
 - **where**: all bodies
 - **via**: `gregtech`
 - **owner**: ADR-0017
+- **ticket**: #105
 
 Sub-rules:
 
@@ -146,6 +147,7 @@ Sub-rules:
 - **via**: `create`
 - **owner**: ADR-0017 as amended by #101 (Create owns fluid handling entire — pipes and pumps for
   moving, tanks for storing; Mekanism has no fluid role)
+- **ticket**: #106
 
 Sub-rules:
 
@@ -161,6 +163,7 @@ Sub-rules:
 - **where**: Terra, Ignus, Gelida
 - **via**: `pack`
 - **owner**: ADR-0025 (the Oil Refinery and Chemical Plant are pack-authored GT machines)
+- **ticket**: #107
 
 Sub-rules:
 
@@ -174,6 +177,7 @@ Sub-rules:
 - **where**: all bodies
 - **via**: `undecided` — #91 decides which pack block each of Factorio's three furnace tiers is
 - **owner**: #91
+- **ticket**: #91
 
 Sub-rules:
 
@@ -187,6 +191,7 @@ Sub-rules:
 - **where**: all bodies
 - **via**: `pack`
 - **owner**: ADR-0026
+- **ticket**: #87 (the machines are registered; the recipe conversion is not)
 
 Three pack-authored Assembling Machines on a GT chassis. Recipe routing follows Factorio's own
 `category` (ADR-0021), not the owning mod.
@@ -197,6 +202,7 @@ Three pack-authored Assembling Machines on a GT chassis. Recipe routing follows 
 - **where**: all bodies
 - **via**: a mod of its own, not yet written
 - **owner**: `docs/gdd.md` §5
+- **ticket**: #98, #99, #100
 
 The crafting grid stays, so early handcrafting is instant rather than queued. Factorio's *queue* —
 select a recipe, wait, collect — survives only as the Personal Assembler's bootstrap tier, covering
@@ -301,6 +307,7 @@ Sub-rules:
 - **where**: Terra
 - **via**: `create`
 - **owner**: ADR-0017 (Create owns schedule-based rail networks)
+- **ticket**: #108
 
 Sub-rules:
 
@@ -403,6 +410,7 @@ Sub-rules:
 - **owner**: ADR-0017 as amended by #101 (Electro owns steam and solar). **`mekanism` appears in
   `via` only on the strength of an unargued clause — #104 decides whether the pack has an at-scale
   generation tier at all, and if not, `via` is `electro` alone.**
+- **ticket**: #104
 
 Sub-rules:
 
@@ -444,6 +452,7 @@ Sub-rules:
 - **where**: all bodies
 - **via**: `kubejs`
 - **owner**: ADR-0005
+- **ticket**: #109
 
 GTCEu 7.0.2 has no pollution system — the mod contains nothing matching `pollut` — so Emission is
 ours and none of it is built yet.
@@ -468,6 +477,7 @@ Sub-rules:
 - **where**: Terra
 - **via**: `kubejs`, `native_mechanic`
 - **owner**: `docs/gdd.md` §6
+- **ticket**: #110
 
 Nothing here is built. The intended shape, for the same reason as [Pollution](#pollution): emission
 attracts **Illager raids to an Overseer at your outpost**, not biters out of a nest you can go and
@@ -539,6 +549,7 @@ argument has not been had. [Follow-on ticket](#follow-on-tickets).
 - **where**: all bodies
 - **via**: `pack`, `kubejs`
 - **owner**: ADR-0018, ADR-0022
+- **ticket**: #66, #82, #103
 
 Four packs plus an unscienced rung 0, gated by Researchd's Research Lab, fed by pipe and consumed
 unattended.
@@ -581,6 +592,7 @@ Sub-rules:
 - **where**: all bodies
 - **via**: `electro` (GCyR)
 - **owner**: #41, ADR-0006
+- **ticket**: #25 — the map *is* this row's ticket, being Terra's flow to the first rocket launch
 
 Sub-rules:
 
@@ -631,6 +643,7 @@ whole repair loop has nothing to repair.
 - **where**: Terra
 - **via**: `pack`, `electro`
 - **owner**: #57
+- **ticket**: #116
 
 #57 decided the Radar — a pack machine on a GT chassis with its own research node — and closing that
 ticket is not the same as the mechanic being in a player's hands.
@@ -676,6 +689,7 @@ Sub-rules:
 - **where**: pack-wide
 - **via**: `electro` (GCyR)
 - **owner**: ADR-0001, ADR-0006, `docs/gdd.md` §2
+- **ticket**: #112, #54
 
 Six bodies, seven destinations.
 
@@ -693,6 +707,7 @@ Sub-rules:
 - **where**: Terra Orbit, and every body's orbit
 - **via**: `electro` (GCyR space stations)
 - **owner**: ADR-0006
+- **ticket**: #113
 
 A Platform is a static orbital factory, not a ship — no thrusters, no navigation, no interplanetary
 transit, and therefore no asteroid defence and no hull mass to manage. That is an argued divergence
@@ -714,6 +729,7 @@ Sub-rules:
 - **where**: orbits
 - **via**: `pack`
 - **owner**: `docs/gdd.md` §3, Map #25 (out of scope for the first arc)
+- **ticket**: #114
 
 Sub-rules:
 
@@ -730,6 +746,7 @@ Sub-rules:
 - **where**: pack-wide
 - **via**: `pack`
 - **owner**: `docs/gdd.md` §4
+- **ticket**: #111
 
 Launch Terminals, Receiving Terminals and Drop Hatches as pack-authored GT machines, with unattended
 cargo held as a Flight with a travel timer rather than as a moving entity.
@@ -778,6 +795,7 @@ mechanics and its absence has never been argued.
 - **where**: Electro
 - **via**: `create`
 - **owner**: `docs/gdd.md` §2, `docs/planets.md`
+- **ticket**: #13
 
 Sub-rules:
 
@@ -793,6 +811,7 @@ Sub-rules:
 - **where**: Ignus
 - **via**: `pack`, `gregtech`
 - **owner**: `docs/planets.md`
+- **ticket**: #12, then that body's `Puzzle:` ticket
 
 Sub-rules:
 
@@ -808,6 +827,7 @@ Sub-rules:
 - **where**: Electro
 - **via**: `create`, `electro`
 - **owner**: `docs/planets.md`
+- **ticket**: #13, then that body's `Puzzle:` ticket
 
 Sub-rules:
 
@@ -822,6 +842,7 @@ Sub-rules:
 - **where**: Sapros
 - **via**: `pack`
 - **owner**: `docs/planets.md`, ADR-0016
+- **ticket**: #23, then that body's `Puzzle:` ticket
 
 Sub-rules:
 
@@ -837,6 +858,7 @@ Sub-rules:
 - **where**: Gelida
 - **via**: `pack`, `gregtech`
 - **owner**: `docs/planets.md`
+- **ticket**: #15, then that body's `Puzzle:` ticket
 
 Sub-rules:
 
@@ -851,6 +873,7 @@ Sub-rules:
 - **where**: all bodies
 - **via**: `kubejs`
 - **owner**: `docs/gdd.md` §4, `docs/planets.md`
+- **ticket**: #115
 
 Foundries and big drills on Ignus, electromagnetic plants on Electro, biochambers on Sapros,
 cryogenic plants on Gelida — craftable only where they belong, which is what forces a factory on
@@ -871,6 +894,7 @@ elevated-rail tier, so the mechanic has nothing to add.
 - **where**: Gelida
 - **via**: `mekanism`
 - **owner**: `docs/planets.md`
+- **ticket**: #15, then Gelida's `Puzzle:` ticket
 
 Fusion generator and reactor, craftable only on Gelida.
 
@@ -901,6 +925,17 @@ settled inside a row. Open candidates:
 - Modules and beacons, and whether the retrofit-tradeoff mid-game exists here at all.
 - Personal transport.
 - Quality, and whether an item-quality axis is affordable at all.
+
+## Every `planned` row has a ticket
+
+A `planned` row says the pack has the mechanic and has not built it. Without a ticket that is
+indistinguishable from having forgotten it, so **every `planned` row carries a `ticket` field** and
+that is an invariant of this file: promoting a row to `planned` means filing something, or pointing
+at what already exists.
+
+Four rows point at a body ticket *and then* at a `Puzzle:` ticket that does not exist yet. That is
+deliberate and not a gap — the GDD's delivery sequence cuts a body's `Puzzle:` ticket only **after
+that body ships**, so writing them now would be inventing content for terrain nobody has built.
 
 ## How this stays honest
 
