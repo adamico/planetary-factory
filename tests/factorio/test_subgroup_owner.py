@@ -57,6 +57,15 @@ PROCESSES = {
     "pack:rocket_silo",
 }
 
+# Terminal values for the PROCESS axis, as distinct from the owner axis above. `native_mechanic`
+# means the capability is in scope and fully supported, by a mod mechanic that needs no recipe:
+# Create's Spout and Item Drain key on `IFluidHandlerItem`, so barrelling works and the pack emits
+# nothing BECAUSE it works (#93). Separate from `not_emitted`, which means cut from the corpus --
+# filing a working mechanic under that token would read to a later author as a removed feature.
+PROCESS_TERMINALS = {
+    "native_mechanic",
+}
+
 # The Personal Assembler crafts what Assembling Machine 1 crafts: first category `crafting`.
 # Stored nowhere, derived here. The corpus's one `advanced-crafting` recipe is the rule's whole
 # boundary -- Factorio withholds `engine-unit` from the hand although it needs no fluid -- so if
@@ -132,7 +141,7 @@ def main():
             if entry["owner"] not in MODS | TERMINALS:
                 failures.append(f"{shelf} has owner {entry['owner']!r}")
             process = entry.get("process")
-            if process is not None:
+            if process is not None and process not in PROCESS_TERMINALS:
                 if process not in PROCESSES:
                     failures.append(f"{shelf} has process {process!r}")
                 elif process.split(":")[0] != entry["owner"] and "cross_owner" not in entry:
@@ -155,7 +164,7 @@ def main():
             for one in values:
                 owner, process = parse(one)
                 if owner is None:
-                    if process not in PROCESSES | TERMINALS:
+                    if process not in PROCESSES | TERMINALS | PROCESS_TERMINALS:
                         failures.append(f"{shelf}/{name}: {process!r} is not a known value")
                     continue
                 if owner not in MODS:

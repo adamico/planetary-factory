@@ -140,10 +140,54 @@ Electro's are the same decision made twice.
   the pack's design. GregTech is instrumental (GCyR needs it, its miners are good, it is a cheap
   chassis for custom machines), not the spine.
 
+## Amended by #93: ownership binds the block, not the recipe
+
+The table says who owns a capability. It has been read three times as also saying which machine a
+recipe is authored on, and all three readings produced the same failure — an owner named off this
+table without checking that the mod can express the recipe. The Refining row is one (recorded in
+this ADR already), the barrel shelf's first assignment to Mekanism is another, and the Power
+generation row naming a Create Steam Engine that emits no electricity is the third. #93 is the
+inverse case — a mod that *can* express the recipe, chosen for that reason, where Factorio's own
+`category` names a different machine — and it forces the fork to be settled.
+
+**Owning a capability means supplying the blocks and the mechanics the player builds and uses. It
+does not mean a Factorio recipe is authored on one of that mod's machines.** Where the two come
+apart, the recipe follows Factorio's `category`, which is ADR-0021's fidelity axis.
+
+**Create is the proof case, not the exception.** After #93 it owns Item logistics on Terra with
+**zero** pack-authored recipes on a Create machine, and the row is satisfied entirely by what the
+player builds:
+
+- The four forming recipes — `iron-gear-wheel`, `iron-stick`, `copper-cable`, `barrel` — moved from
+  `create:pressing` to the pack's Assembling Machine. All four are `crafting` in Factorio, so the
+  hand-crafting rule makes them Personal-Assembler craftable; locking them to a Mechanical Press
+  meant hand-making an iron gear and then learning a second mod's rotational power to make two per
+  second, at the point Factorio's ramp is smoothest, on items that feed nearly everything downstream.
+- The eighteen barrel recipes are **not emitted at all, and barrelling still works**. Create's Spout
+  and Item Drain need no recipe: `GenericItemFilling.canItemBeFilled` and
+  `GenericItemEmptying.canItemBeEmptied` key on the item's `IFluidHandlerItem` capability, so any
+  fluid-holding item is fillable and drainable. The `filling`/`emptying` recipe files Create ships are
+  for items that are *not* fluid handlers. Authoring nine of each would duplicate a free mechanic;
+  routing them to a machine would put one in front of a mechanic that needs none.
+
+That second bullet is why a capability can be wholly owned with an empty recipe corpus, and it is the
+strongest available evidence for the rule: the mechanic *is* the ownership.
+
+Recorded in `data/pack/subgroup-owner.json`, which gains a `native_mechanic` process value for
+in-scope capabilities that need no recipe — deliberately distinct from `not_emitted`, which means cut.
+The consequence for `cross_owner` is that a crossing is the **normal** case rather than a confession:
+what it records is which way the recipe went and why, so a category-following route cannot be mistaken
+for a missed ownership claim.
+
+One fidelity cost is taken knowingly: Factorio has nine distinct filled-barrel items, and one
+NBT-holding container collapses them to one.
+
 ## Consequences
 
 - **Every new recipe is checked against this table.** A recipe that gives a mod a capability it does
-  not own here is a bug, whatever it costs.
+  not own here is a bug, whatever it costs. **But the check is on the capability, not on the machine**
+  — see *Amended by #93*: which machine a Factorio recipe is authored on follows Factorio's own
+  `category`, and a recipe crafted on another mod's machine is not by itself an ownership breach.
 - **Recipe removal is a large, ongoing edit** across three mods, and it is where most of the pack's
   KubeJS recipe work lives. Which specific blocks earn an exception is the pre-launch cut list
   (`#28`), not this table.
