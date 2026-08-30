@@ -754,7 +754,7 @@ hash = "121b93764159be6fb7dab523b29a844e2bb78400ce8c48f52135a097e9b0006e"
 
 [[files]]
 file = "data/factorio/recipe.json"
-hash = "229766f2c86fc9fcfcb13ba590c047c0f38216025acc1b86d93487ba137b5f83"
+hash = "9f63c4c3063e5be44ef179df0356903afcfbb6ecd669afd270540c9ed559ddee"
 
 [[files]]
 file = "data/factorio/science_packs.json"
@@ -767,6 +767,10 @@ hash = "fa9ac3b4ef105fc49ea6301ad8f05f35cd076c5ce634eaec58ea414bd782fa6f"
 [[files]]
 file = "data/pack/category-map.json"
 hash = "98a081846932c2b3b4a3111f28737b01cba71564ee33c40c55a5fc7fb4e638ab"
+
+[[files]]
+file = "data/pack/subgroup-owner.json"
+hash = "0bcae9759041a1a00c3f79c2144b5c177bfa051a68b257d34e8e5d8dad755ac7"
 
 [[files]]
 file = "defaultconfigs/ftbessentials-server.snbt"
@@ -886,7 +890,7 @@ hash = "ecafbd0c6b1dd0019e31731a53239f055684eb32fde4480e1ea8c382d365314e"
 
 [[files]]
 file = "kubejs/client_scripts/jsconfig.json"
-hash = "7a35742648f2a720e0d03033f9367692f6e645cafec74ac0d0dd5dcc96019d21"
+hash = "0c60643d199e74195bcdf18fdba7ad24f8fb6b6f3e0c6641886447699361d63b"
 
 [[files]]
 file = "kubejs/client_scripts/main.js"
@@ -898,7 +902,7 @@ hash = "e00a67922942660d77c213379b5128a46c5abc894178b0be04006d325ff5f6b3"
 
 [[files]]
 file = "kubejs/config/probe-settings.json"
-hash = "d2e9f52ca99d4a283eb59e76253c6bec3f77837026165b09128926d8bbeecf15"
+hash = "629e4628f8dfba27a5f8439fa2376d84b8381579d26b02f2d2651f31bf1baa7d"
 
 [[files]]
 file = "kubejs/config/web_server.json"
@@ -1410,7 +1414,7 @@ hash = "47972e66bd49718ba1fb5c1eca6628f867028f5300bfc4a7d9a9f0939e97a5e7"
 
 [[files]]
 file = "kubejs/server_scripts/jsconfig.json"
-hash = "5b67e28813abfe6ff91f1725d874a049874f09833c9b292bad443b592c868313"
+hash = "f15c97d8f27ee4fd7b51c3a5843723da5cc1d241b1d21d1a1de4baeea6c1bc90"
 
 [[files]]
 file = "kubejs/server_scripts/main.js"
@@ -1430,7 +1434,7 @@ hash = "5abfe0a6e6b45110691e681f9613ea1dcda6fa3bcb677a786d250fda058af21c"
 
 [[files]]
 file = "kubejs/server_scripts/researchd.js"
-hash = "fcf1e45cf3ab86f82de7eb8289eb4983f911a5802c1a38af6d5f8b92008881fb"
+hash = "29ce776a3d2951f4e86359b69efdabd49b8d38a8f61e69830920fdb4a730fed3"
 
 [[files]]
 file = "kubejs/server_scripts/researchd.js.bak"
@@ -1450,7 +1454,7 @@ hash = "6abb210db96d0bf78729b29eddd1e92c558f1fc14557a35437c75f29c0101fd9"
 
 [[files]]
 file = "kubejs/startup_scripts/jsconfig.json"
-hash = "6780a56ee6d1c2dfd9ec8e4e24515b692e2a65bca94145cecc6ac814caf09280"
+hash = "f6b498b9b5e4999f7113aecbf35a6afa62a1f657816d9504bdc4869a39ba0a4f"
 
 [[files]]
 file = "kubejs/startup_scripts/machines.js"
@@ -1558,11 +1562,6 @@ hash = "a471ec05d756850dfea0763087dbd1852727e0c00ab06dcd2a3ae8e38e76f8e0"
 metafile = true
 
 [[files]]
-file = "mods/charm-of-undying.pw.toml"
-hash = "a5a04d39791ce824b7b0b78fd1fa4f08d1584c77c9c52edcb7210439f8917e98"
-metafile = true
-
-[[files]]
 file = "mods/chunky-pregenerator-forge.pw.toml"
 hash = "7be63eaec6a70605f2f21cc30f0889fb27978c2e2fe62ee4584210502289e77d"
 metafile = true
@@ -1585,11 +1584,6 @@ metafile = true
 [[files]]
 file = "mods/collective.pw.toml"
 hash = "e95dae6d96a6fd51e34a470f3950e543434007afb9d07c3adc07507bbea33219"
-metafile = true
-
-[[files]]
-file = "mods/comforts.pw.toml"
-hash = "b66c76dd9148686b0bccc5166839892b2442197504510bd9cca1306755a18ad1"
 metafile = true
 
 [[files]]
@@ -1630,16 +1624,6 @@ metafile = true
 [[files]]
 file = "mods/coroutil.pw.toml"
 hash = "8ff227007d3ea2f499193f04410000892bcc35b87572ae74d3f19494c6572368"
-metafile = true
-
-[[files]]
-file = "mods/crafting-on-a-stick.pw.toml"
-hash = "9e1fd510d8a87878dd151638ca19474493c814e3576ad3900006b265c28a02df"
-metafile = true
-
-[[files]]
-file = "mods/crafting-tweaks.pw.toml"
-hash = "6ad424af2b8614fe9547f622a5b3d84d003eeffc6284a517aea90e377958a17a"
 metafile = true
 
 [[files]]
@@ -1758,11 +1742,6 @@ hash = "167e16c3a9bce43fa315af831930487448833b9c5a5f00676532df8a193e27b0"
 metafile = true
 
 [[files]]
-file = "mods/functional-storage.pw.toml"
-hash = "55c21e0159f5509b84d1e1fa42c2e478a3600c43007ede829cad5839aaa1b8da"
-metafile = true
-
-[[files]]
 file = "mods/fusion-connected-textures.pw.toml"
 hash = "c8c107f100252cb671a295df94432980e9b5d8c496c0fd196fda428a48932ef2"
 metafile = true
@@ -1787,18 +1766,8 @@ hash = "6424aa354655682483ec2a0db6b6f24b1f09b349d93d9e6bfeeb73733fdfa759"
 metafile = true
 
 [[files]]
-file = "mods/guideme.pw.toml"
-hash = "9163b1128300a4a9e8a021276fb16544d7e0e7e85f776dc3f59c1a54ec22e598"
-metafile = true
-
-[[files]]
 file = "mods/in-control.pw.toml"
 hash = "313ec73e545755e5cb1ea72dd38b632587e32a9e0d5e73b714d00fe4feb9a0d4"
-metafile = true
-
-[[files]]
-file = "mods/inventory-hud-forge.pw.toml"
-hash = "bacbda049bf918a3a048f017a23e3197a91d31ab905e25f7a811d69d55344ca6"
 metafile = true
 
 [[files]]
@@ -1992,11 +1961,6 @@ hash = "c9291e44e1fd34eddbc1a2a9d69a90cb6c29d214abe4d3f282d9eaed62fa3416"
 metafile = true
 
 [[files]]
-file = "mods/sophisticated-backpacks-create-integration.pw.toml"
-hash = "f56e0c23ba34fcbb889c396b99f31a5f33365e00202b7728846e449825d58e03"
-metafile = true
-
-[[files]]
 file = "mods/sophisticated-backpacks.pw.toml"
 hash = "41343a364eeff7106d903f2bb658b91ae8b0ce216ddba103e1be5edb1a27649f"
 metafile = true
@@ -2047,11 +2011,6 @@ hash = "652bc2a41a85b48d4b4e8103b4be578326b42afad1cdcfb8257a114dd713f1bb"
 metafile = true
 
 [[files]]
-file = "mods/torchmaster.pw.toml"
-hash = "4acd0daed52188d2ccd8277953e697113aebf89c1bd6b1049a1e859f8eb26ce3"
-metafile = true
-
-[[files]]
 file = "mods/trade-cycling.pw.toml"
 hash = "4c00caba57fa2aa18ebf941fbe897ab444252f6baf816f5d1fea9430ac5b3779"
 metafile = true
@@ -2064,11 +2023,6 @@ metafile = true
 [[files]]
 file = "mods/tree-harvester.pw.toml"
 hash = "acaf6d5f5cc298e92fd1a9598330661aefdb6721447e23300b2adc54433be57e"
-metafile = true
-
-[[files]]
-file = "mods/xp-tome.pw.toml"
-hash = "9bcbe02b08ed5615447959152d7c2bd21c859a37b7d6dad4605e2e97a64a6321"
 metafile = true
 
 [[files]]

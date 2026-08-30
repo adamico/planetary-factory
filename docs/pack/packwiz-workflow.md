@@ -86,6 +86,7 @@ see ADR-0024 and the publish ticket.
 ```sh
 scripts/pack-check.sh          # fail if installed jars differ from the manifest
 scripts/pack-check.sh --fix    # keep the refreshed manifest, when the drift is intended
+scripts/pack-check.sh --prune  # drop the metafiles whose jar is gone, then --fix
 ```
 
 It checks three things, because none alone is enough:
@@ -113,6 +114,34 @@ which is its own ticket.
 **It needs the jars, not just the manifest.** The metafiles are tracked, so `mods/` exists in every
 checkout — but a git worktree has the manifest and none of the jars it describes. The check detects
 that by the absence of jars and exits 2, rather than reporting 121 false failures.
+
+## Removing a mod, and the CurseForge client
+
+The jars are managed in the CurseForge client, which knows nothing about the manifest. packwiz's own
+CurseForge integration does not close that loop: `cf import` and `cf detect` are one-way and
+**additive** — they only ever add — and `cf detect` additionally *deletes* every jar it fingerprints
+(see ADR-0024), so neither is a sync. There is no two-way sync command, in packwiz or anywhere else.
+
+Removal is therefore the manifest's own business, and `--prune` is it:
+
+```sh
+scripts/pack-check.sh --prune
+```
+
+It is the MISSING check wired to `packwiz remove`: every metafile naming a jar that is not installed
+is dropped, then the run continues as an ordinary `--fix`. Review and commit the deleted metafiles
+along with the changed `index.toml` and `pack.toml`.
+
+Only prune when the jars really are gone on purpose. A jar missing because a download failed, or
+because you are in a worktree, is the same MISSING signal — `--prune` cannot tell the two apart, and
+will happily delete the manifest entry for a mod you meant to keep. Plain `scripts/pack-check.sh`
+first, if you are not sure which you are looking at.
+
+Removing a mod leaves its `config/` behind; that is not the manifest's problem, but it is worth a
+sweep now and then.
+
+Adding still goes the other way by hand — see below. A mod added in the CurseForge client shows up
+as STRAY, and `packwiz cf install <slug>` writes the metafile the jar needs.
 
 ## Adding a mod
 

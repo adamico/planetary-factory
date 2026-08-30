@@ -18,9 +18,18 @@
 # packwiz has no author-side check of its own — upstream's cmd/update.go still
 # carries `// TODO: --check flag?` — so this is the substitute.
 #
-# Usage: scripts/pack-check.sh [--fix]
+# Usage: scripts/pack-check.sh [--fix|--prune]
 #   (default)  fail on drift, leaving the manifest as git has it
 #   --fix      keep the refreshed manifest, for when the drift is intended
+#   --prune    drop the metafiles whose jar is gone, then --fix
+#
+# --prune exists because the jars are managed in the CurseForge client, which
+# knows nothing about the manifest. packwiz's own CurseForge integration is
+# one-way and additive — `cf import` and `cf detect` only ever add — so a mod
+# removed in the client leaves its metafile behind with nothing to notice it but
+# the MISSING check below. --prune is that check wired to `packwiz remove`.
+# Adding still goes the other way by hand: STRAY names the jar, and
+# `packwiz cf install <slug>` writes the metafile for it.
 
 set -uo pipefail
 
@@ -35,11 +44,13 @@ REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$REPO_ROOT" || exit 1
 
 FIX=0
+PRUNE=0
 case "${1:-}" in
     "")      ;;
     --fix)   FIX=1 ;;
+    --prune) FIX=1; PRUNE=1 ;;
     *)       echo "unknown argument: $1" >&2
-             echo "Usage: scripts/pack-check.sh [--fix]" >&2
+             echo "Usage: scripts/pack-check.sh [--fix|--prune]" >&2
              exit 2 ;;
 esac
 
@@ -61,6 +72,35 @@ if ! compgen -G 'mods/*.jar' >/dev/null; then
 fi
 
 TRACKED=(index.toml pack.toml)
+
+# Prune runs before the snapshot below, so the metafiles it deletes are already
+# gone from every later comparison: what follows is an ordinary --fix over a
+# manifest that no longer names the removed mods. `packwiz remove` takes the
+# metafile's slug, which is its basename.
+if [[ "$PRUNE" -eq 1 ]]; then
+    GONE="$(python3 - <<'PRUNEPY'
+import glob, os, re
+for meta in sorted(glob.glob("mods/*.pw.toml")):
+    m = re.search(r'^filename\s*=\s*"(.+)"', open(meta).read(), re.M)
+    if m and not os.path.exists(os.path.join("mods", m.group(1))):
+        print(os.path.basename(meta)[:-len(".pw.toml")])
+PRUNEPY
+)"
+    if [[ -z "$GONE" ]]; then
+        echo "Nothing to prune — every metafile names an installed jar."
+    else
+        echo "Pruning $(printf '%s\n' "$GONE" | wc -l | tr -d ' ') metafile(s) whose jar is gone:"
+        while IFS= read -r slug; do
+            [[ -z "$slug" ]] && continue
+            echo "  $slug"
+            if ! "$PACKWIZ" remove "$slug" >/dev/null; then
+                echo "packwiz remove failed for '$slug'." >&2
+                exit 2
+            fi
+        done <<< "$GONE"
+        echo
+    fi
+fi
 
 # Metafiles this run creates must be distinguishable from ones the user wrote and
 # has not committed yet — `packwiz cf install <slug>` followed by this check must
