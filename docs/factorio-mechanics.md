@@ -238,6 +238,10 @@ prune, which is #25's call and not this ledger's.
 - **via**: `create`
 - **owner**: ADR-0017, #93
 
+The notice above is written against funnels and chutes. **#102 asks whether Create's Mechanical Arm
+is the inserter instead** — an Arm is a swing arm, which is a much closer fit — and will rewrite this
+row's losses to whatever actually survives.
+
 ### Logistic robots
 
 - **verdict**: `excluded`
