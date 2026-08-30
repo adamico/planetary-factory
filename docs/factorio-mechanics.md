@@ -54,7 +54,7 @@ text and commits to no jar; **`pack` is admissible as a candidate only with a na
 | [Logistic robots](#logistic-robots) | `excluded` | — |
 | [Construction robots and blueprints](#construction-robots-and-blueprints) | `adapted` | all bodies |
 | [Trains](#trains) | `planned` | Terra |
-| [Circuit network](#circuit-network) | `blocked` | — |
+| [Circuit network](#circuit-network) | `adapted` | all bodies |
 | [Electric network and transmission](#electric-network-and-transmission) | `planned` | all bodies |
 | [Power generation](#power-generation) | `planned` | all bodies |
 | [Nuclear fission](#nuclear-fission) | `blocked` | Terra |
@@ -300,16 +300,48 @@ Sub-rules:
 
 ### Circuit network
 
-- **verdict**: `blocked`
-- **where**: —
-- **owner**: `by-consequence`
+- **verdict**: `adapted`
+- **notice**: the wires are redstone, so a signal is a strength from 0 to 15 on a block-to-block
+  circuit rather than a named channel on a coloured wire — there is no reading a whole belt's contents
+  off one wire, and no arithmetic on a signal beyond what a comparator does.
+- **where**: all bodies
+- **via**: `native_mechanic`, `create`
+- **owner**: `unargued`
 
-No ADR-0017 row, no installed mod owns it, and #58 cut redstone from Terra entirely — no vein, empty
-`underground_ores` step — so the idiom has no source on the planet. `subgroup-owner.json` parks the
-shelf `undecided` and says outright that the decision is not one that table can take.
+**Factorio's circuit network is Minecraft's redstone system**, and this row belongs to redstone
+rather than to a missing mod. Vanilla supplies the wire, the comparator, the repeater and the
+observer; **Create ships its own redstone line on top** — Redstone Link, Powered Latch, Pulse
+Repeater, Threshold and Stockpile Switches, Smart Observer, Display Link and Nixie Tubes — which
+between them cover most of what Factorio's combinators, lamps and display panels are for.
 
-Filed `blocked` rather than `excluded` deliberately: nobody has argued that this pack should not have
-a circuit network. That argument is [a follow-on grilling ticket](#follow-on-tickets).
+An earlier version of this row read `blocked` on the grounds that no installed mod owns a circuit
+network. That was a category error: it looked for one mod's capability and missed the mechanic
+sitting in the base game.
+
+Sub-rules:
+
+- **Read a machine's or container's contents as a signal** — `adapted`. Comparators and Create's
+  Stockpile Switch, per container, rather than one wire carrying every item type at once.
+- **Combinator logic — arithmetic, decider, constant** — `adapted`. Create's latches, switches and
+  gearshifts plus vanilla redstone logic. Arithmetic on a signal is the weakest part of the
+  substitution.
+- **Wireless signal over distance** — `shipped`, and better than Factorio's: Create's Redstone Link
+  needs no wire and no relay, where Factorio needs a wire or a radar-linked circuit.
+- **Lamps and display panels as readouts** — `adapted`. Nixie Tubes and the Display Link.
+- **Two independent networks on one wire (red and green)** — `excluded`. Redstone has one channel;
+  the whole trick of running two circuits down one pole has no analogue.
+- **Circuit-controlled inserters and belts** — `unargued`, no verdict, and it depends on #102's
+  answer about the Mechanical Arm.
+
+**The supply question is separate and still open.** #58 cut redstone from Terra entirely — no vein,
+empty `underground_ores` step — so the mechanic exists while its crafting material does not, and
+#62 already records the same problem hitting the authored green circuit. That is a resource question
+for #25, not a verdict on the mechanic, and the two were previously conflated in this row.
+
+`subgroup-owner.json` still parks `logistics/circuit-network` `undecided` with a note guessing
+`not_emitted`. **That is the other axis and this row does not settle it**: whether Factorio's eight
+combinator-and-lamp recipes are emitted is a routing decision, and a mechanic supplied by vanilla and
+Create needs no emitted recipe to exist.
 
 ### Electric network and transmission
 
@@ -801,7 +833,7 @@ Sub-rules:
 Load-bearing `by-consequence` and `blocked` rows get their own `Grilling:` issue rather than being
 settled inside a row. Open candidates:
 
-- Does the pack have a circuit network?
+- Where does redstone come from, now that #58 has cut it from Terra and the circuit network needs it?
 - Does the pack have combat — biters, turrets, walls — or did Military science take them?
 - Modules and beacons, and whether the retrofit-tradeoff mid-game exists here at all.
 - Personal transport.
