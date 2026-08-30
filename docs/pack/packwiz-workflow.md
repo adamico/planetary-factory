@@ -137,8 +137,25 @@ because you are in a worktree, is the same MISSING signal — `--prune` cannot t
 will happily delete the manifest entry for a mod you meant to keep. Plain `scripts/pack-check.sh`
 first, if you are not sure which you are looking at.
 
-Removing a mod leaves its `config/` behind; that is not the manifest's problem, but it is worth a
-sweep now and then.
+Removing a mod leaves its `config/` behind, and `config/` *is* tracked, so the orphans accumulate in
+the repo forever. `scripts/config-orphans.py` sweeps them:
+
+```sh
+scripts/config-orphans.py         # report entries matching no installed mod
+scripts/config-orphans.py --fix   # git rm them, after you have read the report
+```
+
+Nothing records which mod wrote which config file, so the name is the only evidence and the match is
+a heuristic: the modIds and display names declared by the installed jars (including the ones they
+nest as jar-in-jar, whose libraries write configs while having no jar of their own), plus the jar
+filenames, matched as a prefix either way round — `sodium-mixins.properties` extends its owner's
+name, `ae2-client.toml` truncates `appliedenergistics2`.
+
+That heuristic has a failure mode, which is why the report is the default and `--fix` is a second
+step: a mod whose config is named after neither its modId nor its jar reads as an orphan while it is
+still installed. `yacl.json5` for YetAnotherConfigLib is the example, and the fix for one of those is
+an `IGNORE` entry in the script, not a deletion. `--fix` uses `git rm`, so a wrong guess is visible
+in the diff and recoverable from history.
 
 Adding still goes the other way by hand — see below. A mod added in the CurseForge client shows up
 as STRAY, and `packwiz cf install <slug>` writes the metafile the jar needs.
