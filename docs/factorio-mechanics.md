@@ -52,7 +52,7 @@ text and commits to no jar; **`pack` is admissible as a candidate only with a na
 | [Transport belts](#transport-belts) | `planned` | all bodies |
 | [Inserters](#inserters) | `adapted` | all bodies |
 | [Logistic robots](#logistic-robots) | `excluded` | — |
-| [Construction robots and blueprints](#construction-robots-and-blueprints) | `blocked` | — |
+| [Construction robots and blueprints](#construction-robots-and-blueprints) | `adapted` | all bodies |
 | [Trains](#trains) | `planned` | Terra |
 | [Circuit network](#circuit-network) | `blocked` | — |
 | [Electric network and transmission](#electric-network-and-transmission) | `planned` | all bodies |
@@ -254,13 +254,35 @@ once every planet's puzzle is done — it is not a logistic-robot analogue and i
 
 ### Construction robots and blueprints
 
-- **verdict**: `blocked`
-- **where**: —
+- **verdict**: `adapted`
+- **notice**: you copy a shape and paste it yourself, paying for it out of your own inventory on the
+  spot — there is no ghost to leave behind, nothing builds it while you are elsewhere, and nothing
+  rebuilds or repairs it later.
+- **where**: all bodies
+- **via**: `native_mechanic` (Building Gadgets 2)
 - **owner**: `unargued`
 
-Wanted — blueprint-and-paste is a large part of what late Factorio *feels* like — and no mod in the
-stack provides it. Create's Schematicannon is the nearest thing in the mod ecosystem but is not
-installed, and installing it would be an ADR-0017 capability decision.
+Building Gadgets 2 is installed (`mods/building-gadgets.pw.toml`, indexed) and is the pack's closest
+thing to a blueprint: copy a region, paste it elsewhere. That covers the *shape* half of a blueprint
+and none of the *logistics* half.
+
+**Create's Schematicannon is not this row.** It is vanilla Create and therefore already in the pack,
+but a Schematicannon prints a structure block-by-block from a chest at a fixed position — it is a
+building tool with a hopper, not a construction network, and the two mechanics are not
+interchangeable with Factorio's.
+
+Sub-rules:
+
+- **Copy a built shape and stamp it down again** — `adapted`, via Building Gadgets.
+- **A blueprint is an item you can hand to another player, or keep in a library** — `unargued`,
+  no verdict.
+- **Pasting leaves ghosts that something else fills in** — `excluded`. This is the half that makes
+  blueprints a logistics mechanic rather than a building tool, and nothing in the stack has it.
+- **Construction robots build, repair and rebuild from a roboport's range** — `excluded`.
+  `by-consequence` of [Logistic robots](#logistic-robots): ADR-0017 cuts the routing mods, and a
+  construction network is that decision applied to building. It is also, with no biters, a network
+  with nothing to repair — see [Repair and entity damage](#repair-and-entity-damage).
+- **Deconstruction planner** — `unargued`, no verdict.
 
 ### Trains
 
