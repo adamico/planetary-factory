@@ -48,8 +48,8 @@ text and commits to no jar; **`pack` is admissible as a candidate only with a na
 | [Oil processing](#oil-processing) | `planned` | Terra, Ignus, Gelida |
 | [Smelting](#smelting) | `planned` | all bodies |
 | [Assembling machines and recipe categories](#assembling-machines-and-recipe-categories) | `planned` | all bodies |
-| [Handcrafting and the crafting queue](#handcrafting-and-the-crafting-queue) | `adapted` | all bodies |
-| [Transport belts](#transport-belts) | `planned` | all bodies |
+| [Handcrafting and the crafting queue](#handcrafting-and-the-crafting-queue) | `planned` | all bodies |
+| [Transport belts](#transport-belts) | `adapted` | all bodies |
 | [Inserters](#inserters) | `adapted` | all bodies |
 | [Logistic robots](#logistic-robots) | `excluded` | — |
 | [Construction robots and blueprints](#construction-robots-and-blueprints) | `adapted` | all bodies |
@@ -57,9 +57,9 @@ text and commits to no jar; **`pack` is admissible as a candidate only with a na
 | [Circuit network](#circuit-network) | `adapted` | all bodies |
 | [Electric network and transmission](#electric-network-and-transmission) | `adapted` | all bodies |
 | [Power generation](#power-generation) | `planned` | all bodies |
-| [Nuclear fission](#nuclear-fission) | `blocked` | Terra |
-| [Pollution](#pollution) | `adapted` | all bodies |
-| [Enemies and evolution](#enemies-and-evolution) | `adapted` | Terra |
+| [Nuclear fission](#nuclear-fission) | `adapted` | Terra |
+| [Pollution](#pollution) | `planned` | all bodies |
+| [Enemies and evolution](#enemies-and-evolution) | `planned` | Terra |
 | [Combat: guns, ammo, turrets, walls](#combat-guns-ammo-turrets-walls) | `excluded` | — |
 | [Armor and the equipment grid](#armor-and-the-equipment-grid) | `excluded` | — |
 | [Capsules](#capsules) | `excluded` | — |
@@ -70,7 +70,7 @@ text and commits to no jar; **`pack` is admissible as a candidate only with a na
 | [Personal transport](#personal-transport) | `blocked` | — |
 | [Terrain modification](#terrain-modification) | `excluded` | — |
 | [Repair and entity damage](#repair-and-entity-damage) | `excluded` | — |
-| [Radar and map exploration](#radar-and-map-exploration) | `shipped` | Terra |
+| [Radar and map exploration](#radar-and-map-exploration) | `planned` | Terra |
 | [The logistic request and trash system](#the-logistic-request-and-trash-system) | `excluded` | — |
 | [Day and night cycle](#day-and-night-cycle) | `shipped` | Terra, Sapros |
 
@@ -79,7 +79,7 @@ text and commits to no jar; **`pack` is admissible as a candidate only with a na
 | mechanic | verdict | where |
 | --- | --- | --- |
 | [Interplanetary travel](#interplanetary-travel) | `planned` | pack-wide |
-| [Space platforms](#space-platforms) | `adapted` | Terra Orbit and every orbit |
+| [Space platforms](#space-platforms) | `planned` | Terra Orbit and every orbit |
 | [Asteroid mining and reprocessing](#asteroid-mining-and-reprocessing) | `planned` | orbits |
 | [Interplanetary logistics](#interplanetary-logistics) | `planned` | pack-wide |
 | [Spoilage](#spoilage) | `adapted` | Sapros, pack-wide |
@@ -193,17 +193,28 @@ Three pack-authored Assembling Machines on a GT chassis. Recipe routing follows 
 
 ### Handcrafting and the crafting queue
 
-- **verdict**: `adapted`
-- **notice**: the crafting grid stays, so early handcrafting is instant rather than queued; the timed
-  queue survives only as the Personal Assembler's bootstrap tier, which has nothing left to make once
-  real machines exist.
+- **verdict**: `planned`
 - **where**: all bodies
-- **via**: `kubejs`
+- **via**: a mod of its own, not yet written
 - **owner**: `docs/gdd.md` §5
+
+The crafting grid stays, so early handcrafting is instant rather than queued. Factorio's *queue* —
+select a recipe, wait, collect — survives only as the Personal Assembler's bootstrap tier, covering
+the components of the first machines: the things with nowhere to go once their recipes leave the grid
+and before any machine exists to make them.
+
+**The Assembler ships as its own mod**, not as pack scripting. Note that `docs/gdd.md` §5 still
+describes it as a KubeJS implementation — an FTB Library UI, a `persistentData` queue and a
+`PlayerEvents.tick` engine — and ADR-0015's ownership table decides where pack content lives. Moving
+it to a mod is a decision neither document records yet.
 
 ### Transport belts
 
-- **verdict**: `planned`
+- **verdict**: `adapted`
+- **notice**: there is one belt and you buy its speed with RPM, so the belt ladder is a
+  power-and-gearing problem rather than three tiers and two research nodes — and with no underground
+  belts, no lanes and tunnels in place of splitters, none of the routing patterns a Factorio player
+  has memorised transfer.
 - **where**: all bodies
 - **via**: `create`
 - **owner**: ADR-0017, #93
@@ -404,31 +415,44 @@ Sub-rules:
 
 ### Nuclear fission
 
-- **verdict**: `blocked`
+- **verdict**: `adapted`
+- **notice**: fission is Mekanism's reactor, so it is a built multiblock with its own meltdown and
+  waste model rather than Factorio's tile-and-neighbour puzzle — you engineer one reactor instead of
+  laying out many.
 - **where**: Terra
+- **via**: `mekanism`
 - **owner**: #89
 
-#58 gives uranium's first step an owner — Factorio's sulfuric-acid gate as an authored
-`mekanism:dissolution` recipe at rung 3 — but nothing owns enrichment, fuel cells, reactors, heat
-pipes or reprocessing, and ADR-0017 has no fission row. Carved out to #89, which decides whether the
-nuclear chapter ships at all.
+**This verdict is provisional and #89 may retire it.** Mekanism's fission reactor is what the pack
+has today, and it is a whole chapter rather than a gap. What has no owner is the chain around it:
+#58 gives uranium's first step one — Factorio's sulfuric-acid gate as an authored
+`mekanism:dissolution` recipe at rung 3 — but nothing owns enrichment, fuel cells or reprocessing,
+ADR-0017 has no fission row, and `subgroup-owner.json` defers four recipes to #89. #89 decides
+whether the nuclear chapter ships at all, and if it does not, this row becomes `excluded`.
 
 Sub-rules:
 
 - **Kovarex enrichment** — `blocked`.
-- **Reactor neighbour bonus** — `blocked`.
-- **Heat pipes and heat exchangers as a separate transport network** — `blocked`.
+- **Reactor neighbour bonus** — `excluded`. `by-consequence` of adopting a multiblock reactor: there
+  is nothing to place next to anything, so the layout puzzle has no board.
+- **Heat pipes and heat exchangers as a separate transport network** — `blocked`, deferred to #89
+  with the rest of the chapter.
 
 ### Pollution
 
-- **verdict**: `adapted`
-- **notice**: Emission is scored per chunk off the EU/t draw of running GT machines, not per recipe,
-  so a machine idling is free and there is no pollution-per-craft number to read on a recipe tooltip.
+- **verdict**: `planned`
 - **where**: all bodies
 - **via**: `kubejs`
 - **owner**: ADR-0005
 
-GTCEu 7.0.2 has no pollution system, so Emission is ours.
+GTCEu 7.0.2 has no pollution system — the mod contains nothing matching `pollut` — so Emission is
+ours and none of it is built yet.
+
+Its shape already differs from Factorio's in a way worth recording before it lands: Emission is
+scored per chunk off the **EU/t draw of running GT machines**, not per recipe, so a machine idling is
+free and there is no pollution-per-craft number on a recipe tooltip. Power draw is the one number
+every GT machine already exposes, which is why no per-recipe tagging is needed. Expect this row to
+become `adapted` with that as its notice once it ships.
 
 Sub-rules:
 
@@ -440,12 +464,15 @@ Sub-rules:
 
 ### Enemies and evolution
 
-- **verdict**: `adapted`
-- **notice**: pollution attracts Illager raids to an Overseer at your outpost, not biters out of a
-  nest you can go and clear; there is no nest to destroy, no expansion, and no evolution factor.
+- **verdict**: `planned`
 - **where**: Terra
 - **via**: `kubejs`, `native_mechanic`
 - **owner**: `docs/gdd.md` §6
+
+Nothing here is built. The intended shape, for the same reason as [Pollution](#pollution): emission
+attracts **Illager raids to an Overseer at your outpost**, not biters out of a nest you can go and
+clear — no nest to destroy, no expansion, no evolution factor. Vanilla raid pathfinding is the
+substrate, and raids are Terra's alone.
 
 Sub-rules:
 
@@ -600,10 +627,17 @@ whole repair loop has nothing to repair.
 
 ### Radar and map exploration
 
-- **verdict**: `shipped`
+- **verdict**: `planned`
 - **where**: Terra
 - **via**: `pack`, `electro`
 - **owner**: #57
+
+#57 decided the Radar — a pack machine on a GT chassis with its own research node — and closing that
+ticket is not the same as the mechanic being in a player's hands.
+
+**This row is the proof case for the two axes never reading each other.** `combat/defensive-structure`
+is `not_emitted` in `subgroup-owner.json`, and a ledger that read its verdicts out of that file would
+have recorded "radar: excluded" — which is wrong whatever this row's verdict turns out to be.
 
 Sub-rules:
 
@@ -655,12 +689,15 @@ Sub-rules:
 
 ### Space platforms
 
-- **verdict**: `adapted`
-- **notice**: a Platform is a static orbital factory, not a ship — no thrusters, no navigation, no
-  interplanetary transit, and therefore no asteroid defence and no hull mass to manage.
+- **verdict**: `planned`
 - **where**: Terra Orbit, and every body's orbit
 - **via**: `electro` (GCyR space stations)
 - **owner**: ADR-0006
+
+A Platform is a static orbital factory, not a ship — no thrusters, no navigation, no interplanetary
+transit, and therefore no asteroid defence and no hull mass to manage. That is an argued divergence
+(ADR-0006) rather than an unbuilt one, so expect this row to become `adapted` with it as the notice
+once Platforms exist.
 
 Sub-rules:
 
