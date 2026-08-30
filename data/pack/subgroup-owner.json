@@ -1,0 +1,439 @@
+{
+  "_comment": [
+    "Which mod owns a Factorio subgroup's capability on Terra, and where known, which machine crafts it (#88).",
+    "",
+    "Factorio's group/subgroup is its inventory shelf -- items sorted by what they are FOR. ADR-0017",
+    "assigns capabilities by the same axis, so the two taxonomies line up and a subgroup can name an",
+    "owner. A shelf is NOT a machine: `intermediate-product` holds a gear wheel, an advanced circuit",
+    "and a rocket fuel on one shelf.",
+    "",
+    "TWO FIELDS, TWO AXES.",
+    "  `owner`   -- whose capability this is, read off ADR-0017's table. Never invented here.",
+    "  `process` -- the recipe type that crafts it, `mod:process`, present only where it is known.",
+    "               A LIST where the recipe must be authored on more than one surface. Exactly two",
+    "               rows are: `assembling-machine-1` and `automation-science-pack`, rung 1's",
+    "               bootstrap pair -- the machine and the pack that buys it. A third is a finding.",
+    "",
+    "They are not the same question and they routinely disagree. A Drilling Rig is GregTech's item",
+    "built in the pack's Assembling Machine, because ADR-0026 removed GT's Assembler and its corpus.",
+    "Create's belts are the same. Where they disagree, `cross_owner` says why -- and that field is the",
+    "point of the file, because a disagreement nobody wrote down is how `crafting` -> `assembling`",
+    "became wholesale in the first place. Where owner and machine ARE the same mod (`create:pressing`",
+    "on a gear wheel, `create:filling` on a barrel), the recipe is genuinely Create's end to end and",
+    "that is what keeps Create in series on the ladder rather than decorative.",
+    "",
+    "Electro never yields an `electro:` process: the mod ships no machine, and its own recipes use",
+    "Create's `compacting`, `mixing`, `mechanical_crafting` and `sequenced_assembly` types in the",
+    "`electroenergetics` namespace. An owner with no machine of its own is not a contradiction.",
+    "",
+    "THIS FILE ROUTES NOTHING. It is the guard rail `process-map.json` is checked against: every",
+    "emitted recipe's process must belong to the mod its subgroup names, and must equal `process`",
+    "where this file states one. That is what makes ADR-0017 a machine-checked invariant rather than",
+    "prose nobody re-reads. An unmapped recipe is still a hard failure, never a fallback to this file.",
+    "",
+    "THE PERSONAL ASSEMBLER IS THE CRAFTING TABLE. The vanilla table and the equivalent grid blocks are",
+    "removed from the pack; the Personal Assembler replaces them rather than sitting beside them. So",
+    "`personal_assembler` here is not 'the grid' as distinct from a machine -- it is the pack's ONLY",
+    "hand-crafting surface, which is what makes it a real routing destination rather than a fallback.",
+    "#42's 'grid recipes stay forbidden at every rung' is therefore moot rather than enforced: there is",
+    "no other grid left to forbid. Which blocks the removal takes, what it costs the two mods #45",
+    "screened clean, and the player's un-removable 2x2 inventory grid are #90.",
+    "",
+    "`owner` values: `gregtech`, `create`, `mekanism`, `electro`, `pack` (a machine this pack registers",
+    "on a GT chassis -- ADR-0025's Oil Refinery and Chemical Plant, ADR-0026's Assembling Machines),",
+    "`split` (the shelf straddles a seam; see `per_recipe`, written `owner / process` where the two",
+    "differ), `undecided` (ADR-0017 has no row for this capability -- a decision, not an oversight),",
+    "`deferred` (carved out to its own ticket; see `ticket`), `not_emitted` (out of the corpus's emit",
+    "scope; #87 owns that scope, this records why), `personal_assembler` (#42's rung-1 surface),"
+  ],
+  "subgroups": {
+    "logistics/belt": {
+      "owner": "create",
+      "process": "pack:assembling",
+      "adr_row": "Item logistics -- Create (belts, chutes, trains)",
+      "cross_owner": "Create's belts, built in the pack's Assembling Machine. Create ships no machine that assembles a multi-part device; `mechanical_crafting` is a grid, not a machine, and Factorio builds belts in an assembler.",
+      "count": 9
+    },
+    "logistics/inserter": {
+      "owner": "create",
+      "process": "pack:assembling",
+      "adr_row": "Item logistics -- Create",
+      "cross_owner": "As `logistics/belt`.",
+      "count": 5
+    },
+    "logistics/logistic-network": {
+      "owner": "create",
+      "process": "pack:assembling",
+      "adr_row": "Item logistics -- Create",
+      "cross_owner": "As `logistics/belt`.",
+      "note": "#28 gates Create 6's package logistics to the `logistic` rung; AE2 is endgame and not this shelf's answer.",
+      "count": 5
+    },
+    "logistics/train-transport": {
+      "owner": "create",
+      "process": "pack:assembling",
+      "adr_row": "Item logistics -- Create (belts, chutes, trains)",
+      "cross_owner": "As `logistics/belt`.",
+      "note": "`rail-signal` and `rail-chain-signal` are circuit items on a Create shelf; they follow the shelf, not their ingredients.",
+      "count": 7
+    },
+    "intermediate-products/fill-barrel": {
+      "owner": "create",
+      "process": "create:filling",
+      "adr_row": "Item logistics -- Create (belts, chutes, trains)",
+      "note": [
+        "A barrel is not fluid logistics. It is the opposite: it takes a fluid OFF the pipe network and",
+        "puts it on the belt, which is Factorio's own reason for the item. ADR-0017's fluid rows never",
+        "applied to it.",
+        "",
+        "It is also the only assignment any installed mod can express. `create:filling` is the Spout;",
+        "Mekanism has no fluid-into-item recipe type at all (its Rotary Condensentrator is fluid to",
+        "chemical). Assigning this shelf to Mekanism repeated ADR-0017's own recorded mistake on the",
+        "Refining row -- an owner read off the capability table without checking the mod can express",
+        "the recipe.",
+        "",
+        "Mekanism's part is the container, not the process: the Spout fills a Mekanism portable tank,",
+        "which carries far more per item than a vanilla bucket. Which container the eighteen `*-barrel`",
+        "items map to is #87's item map, not this file's routing."
+      ],
+      "count": 9
+    },
+    "intermediate-products/empty-barrel": {
+      "owner": "create",
+      "process": "create:emptying",
+      "adr_row": "Item logistics -- Create (belts, chutes, trains)",
+      "note": "`create:emptying`, the Item Drain. Same argument as `fill-barrel`.",
+      "count": 9
+    },
+    "production/extraction-machine": {
+      "owner": "gregtech",
+      "process": "pack:assembling",
+      "adr_row": "Extraction (ore) and Extraction (fluid) -- GregTech",
+      "cross_owner": "The one shelf GregTech still owns, and it does not craft its own machines: GT's stock Assembler and its whole corpus are removed (ADR-0026), so a Drilling Rig is built in the pack's Assembling Machine. Owner and machine differ here by design.",
+      "note": "`offshore-pump` and `pumpjack` are the fluid rig; the two mining drills are the ore ladder.",
+      "count": 4
+    },
+    "production/production-machine": {
+      "owner": "pack",
+      "adr_row": "Assembly -- the pack (ADR-0026)",
+      "reason": "The shelf is uniformly the pack's, but one row on it has to exist on two surfaces at once.",
+      "per_recipe": {
+        "assembling-machine-1": [
+          "personal_assembler",
+          "pack:assembling"
+        ],
+        "assembling-machine-2": "pack:assembling",
+        "assembling-machine-3": "pack:assembling",
+        "chemical-plant": "pack:assembling",
+        "oil-refinery": "pack:assembling",
+        "lab": "pack:assembling",
+        "centrifuge": "deferred"
+      },
+      "note": [
+        "`assembling-machine-1` is dual-surface: it is an Assembling Machine recipe like every other machine",
+        "on this shelf -- II is built in an Assembling Machine, and so is III -- but if that is its ONLY",
+        "surface the first one is unbuildable and the ladder never starts.",
+        "",
+        "It pairs with `automation-science-pack` in `intermediate-products/science-pack`. Those two rows are",
+        "rung 1's whole bootstrap -- the machine, and the pack that buys it -- and they are the only",
+        "dual-surface recipes in the corpus. A third is a finding, not a pattern: a recipe on two surfaces",
+        "is a rung the player can skip, and only the bootstrap earns it.",
+        "",
+        "`centrifuge` is the machine that runs `centrifuging`, which is #89's chapter end to end -- deferred",
+        "with the chapter rather than assigned a build machine for a machine that may not ship.",
+        "",
+        "Researchd's Research Lab replaces Factorio's `lab` (#45); the row stays so the item map has",
+        "something to point at."
+      ],
+      "count": 7
+    },
+    "intermediate-products/fluid-recipes": {
+      "owner": "split",
+      "reason": "Two oil-processing rows and seven chemistry rows; both are already one-to-one by category, so the qualifier is read off `category-map.json` rather than decided.",
+      "adr_row": "Oil processing / Chemistry / Refining -- the pack (ADR-0025)",
+      "per_recipe": {
+        "advanced-oil-processing": "pack:oil_refinery",
+        "basic-oil-processing": "pack:oil_refinery",
+        "heavy-oil-cracking": "pack:chemical_plant",
+        "light-oil-cracking": "pack:chemical_plant",
+        "lubricant": "pack:chemical_plant",
+        "solid-fuel-from-heavy-oil": "pack:chemical_plant",
+        "solid-fuel-from-light-oil": "pack:chemical_plant",
+        "solid-fuel-from-petroleum-gas": "pack:chemical_plant",
+        "sulfuric-acid": "pack:chemical_plant"
+      },
+      "count": 9
+    },
+    "intermediate-products/science-pack": {
+      "owner": "split",
+      "reason": "#26 keeps four rungs and drops the rest, and #42 puts the first pack on a surface that is not a machine at all.",
+      "adr_row": "Assembly -- the pack (ADR-0026)",
+      "per_recipe": {
+        "automation-science-pack": [
+          "personal_assembler",
+          "pack:assembling"
+        ],
+        "logistic-science-pack": "pack:assembling",
+        "chemical-science-pack": "pack:assembling",
+        "production-science-pack": "pack:assembling",
+        "military-science-pack": "not_emitted",
+        "utility-science-pack": "not_emitted",
+        "space-science-pack": "not_emitted"
+      },
+      "note": [
+        "`automation-science-pack` is dual-surface, and it is the bootstrap's other half: the Personal",
+        "Assembler is the only surface that can make the pack that BUYS the first Assembling Machine, and",
+        "the Assembling Machine is the only surface that can scale it afterwards. The two dual rows in this",
+        "file -- this and `assembling-machine-1` -- are one decision seen from both ends, which is why",
+        "there are exactly two and why a third would be a finding.",
+        "",
+        "THIS AMENDS #42, which reads `automation` is Personal Assembler only and 'stays there forever',",
+        "on the argument that slow hand-crafting is Factorio's own signature and that scaling it is why you",
+        "want the Assembler. That argument holds for the BOOTSTRAP and over-reaches past it. In Factorio,",
+        "red science is the canonical first thing a player automates -- an assembling machine feeding a lab",
+        "is the opening tutorial -- so forbidding it on the machine is the un-Factorio half of the rule,",
+        "and ADR-0021's fidelity axis settles which half survives. What #42 was actually protecting is that",
+        "rung 1 cannot REQUIRE the Assembler, and the Personal Assembler entry keeps that intact.",
+        "",
+        "#26's dropped Military and reserved Utility and Space make three of the seven `not_emitted`.",
+        "#42 reads 'grid recipes for packs stay forbidden at every rung'. That clause is now moot rather than enforced: the vanilla crafting table and the equivalent grid blocks are REMOVED, and the Personal Assembler is what stands in their place. There is no third surface to forbid."
+      ],
+      "count": 7
+    },
+    "logistics/energy-pipe-distribution": {
+      "owner": "split",
+      "reason": "The shelf straddles ADR-0017's transmission/fluid-logistics seam -- Factorio files poles and pipes together because both carry stuff between machines; the pack does not.",
+      "per_recipe": {
+        "small-electric-pole": "electro / pack:assembling",
+        "medium-electric-pole": "electro / pack:assembling",
+        "big-electric-pole": "electro / pack:assembling",
+        "substation": "electro / pack:assembling",
+        "pipe": "mekanism / pack:assembling",
+        "pipe-to-ground": "mekanism / pack:assembling",
+        "pump": "mekanism / pack:assembling"
+      },
+      "note": "Written `owner / process`. Electro ships no machine of its own -- its own recipes use Create's `compacting`, `mixing`, `mechanical_crafting` and `sequenced_assembly` types in the `electroenergetics` namespace -- so an `electro` owner can never yield an `electro:` process.",
+      "count": 7
+    },
+    "logistics/storage": {
+      "owner": "split",
+      "reason": "ADR-0017 splits bulk storage by item vs fluid; Factorio does not.",
+      "per_recipe": {
+        "wooden-chest": "create / pack:assembling",
+        "iron-chest": "create / pack:assembling",
+        "steel-chest": "create / pack:assembling",
+        "storage-tank": "mekanism / pack:assembling"
+      },
+      "count": 4
+    },
+    "production/energy": {
+      "owner": "split",
+      "reason": "ADR-0017's Power generation row is a three-way split (Create generates first, Mekanism at scale, Electro carries), half this shelf is the nuclear chapter, and the row's Create half does not survive contact with the mod -- see the note.",
+      "per_recipe": {
+        "boiler": "gregtech / pack:assembling",
+        "steam-engine": "deferred",
+        "solar-panel": "electro / pack:assembling",
+        "accumulator": "electro / pack:assembling",
+        "heat-exchanger": "deferred",
+        "heat-pipe": "deferred",
+        "steam-turbine": "deferred",
+        "nuclear-reactor": "deferred"
+      },
+      "note": [
+        "THE BOILER IS GREGTECH'S. #37 puts steam at rung 0, two machines wide -- LP Solid Boiler plus LP",
+        "Steam Miner -- so Factorio's `boiler` is GT's boiler, not a Create block. That is one of the two",
+        "things GregTech still does on Terra outside extraction, and it is why this row reads `gregtech`",
+        "rather than following ADR-0017's Power generation row.",
+        "",
+        "`steam-engine` IS #92, AND IT REOPENS ADR-0017. That row reads 'Create generates first",
+        "(Steam Engine, rung 0)', but Create's Steam Engine emits ROTATIONAL FORCE, not FE. Factorio's",
+        "`steam-engine` is an electricity generator. So the two are not the same machine and the ADR names",
+        "an owner for a capability that mod cannot express -- the same failure ADR-0017 already recorded",
+        "against its own Refining row ('written without checking that Mekanism can express the recipe. It",
+        "cannot.'). What actually turns Terra's rung-0 steam into FE is an open question: Electro's",
+        "Alternator takes SU and emits watts and is called a generation SYSTEM in ADR-0017's own prose, but",
+        "it is explicitly not counted as generation in the table, and the grid is granted at a rung rather",
+        "than available at rung 0.",
+        "",
+        "The four nuclear rows -- `heat-exchanger`, `heat-pipe`, `steam-turbine`, `nuclear-reactor` -- are",
+        "`deferred` to #89 with `intermediate-products/uranium-processing`: one chapter, one decision.",
+        "`steam-engine` is NOT among them: it is #92, Terra's first electricity generator."
+      ],
+      "count": 8,
+      "cross_owner": "Every row here is an item of one mod built in the pack's Assembling Machine (ADR-0026); no owner on this shelf crafts its own machines.",
+      "ticket": 92
+    },
+    "production/smelting-machine": {
+      "owner": "undecided",
+      "reason": "The three furnaces are the machines that run `smelting`, and no ADR-0017 row owns smelting. Their build machine is `pack:assembling` like every other machine; what is undecided is which pack block each of Factorio's three tiers IS, which is #91 -- the same question as the plate rows in `intermediate-products/raw-material`.",
+      "process": "pack:assembling",
+      "note": "Previously `split-by-rung` on ADR-0017's Ore processing row -- the same misfiling as the plates; see that shelf's note. #42 names the Energized Smelter in the `production` pack's slot list, which is a data point for the furnace question and not an answer to it.",
+      "count": 3,
+      "cross_owner": "The two questions come apart completely here. WHICH furnace these three map to is undecided -- ADR-0017 has no smelting row -- but whichever it is, a furnace is a machine and machines are built in the pack's Assembling Machine (ADR-0026). Settling the owner will not move the process.",
+      "ticket": 91
+    },
+    "intermediate-products/raw-material": {
+      "owner": "split",
+      "reason": "Four chemistry recipes and three smelting recipes on one shelf; the categories route them to different destinations.",
+      "per_recipe": {
+        "battery": "pack:chemical_plant",
+        "explosives": "pack:chemical_plant",
+        "plastic-bar": "pack:chemical_plant",
+        "sulfur": "pack:chemical_plant",
+        "iron-plate": "undecided:smelting",
+        "copper-plate": "undecided:smelting",
+        "steel-plate": "undecided:smelting"
+      },
+      "note": [
+        "FACTORIO SMELTS ORE STRAIGHT TO PLATE, and the pack does not get to add a step. All four",
+        "`smelting` recipes in the corpus are one hop -- `iron-ore` 1:1 to `iron-plate`, `copper-ore` 1:1 to",
+        "`copper-plate`, `steel-plate` from 5 iron plates, `stone-brick` from 2 stone. There is no ingot in",
+        "Factorio's chain at all: the PLATE is the base metal item, and an ore -> ingot -> plate ladder is a",
+        "Minecraft-mod idiom that ADR-0021's fidelity axis rules out.",
+        "",
+        "These rows previously read `split-by-rung`, deferring to ADR-0017's Ore processing row (Create at",
+        "rung 0, Mekanism from rung 1). That was the wrong row. Ore PROCESSING in ADR-0017 means",
+        "multiplication -- crushing, enrichment, the 5x ladder -- and smelting is ore REDUCTION, which has",
+        "no rung structure. Reading one off the other turned three one-step recipes into a progression the",
+        "converter could not emit, which was an artefact of the misfiling and not a real problem.",
+        "",
+        "`#69` (does the pack keep ore multiplication at all?) is therefore ORTHOGONAL to these rows, not",
+        "blocking them: it decides YIELD -- whether a side chain exists that turns 1 ore into more than 1",
+        "plate -- and never the shape or the destination of the smelting recipe itself. Nauvis has no ore",
+        "multiplication whatsoever, so the fidelity axis has an opinion there too, but that is #69's call.",
+        "",
+        "What is still open is narrow and is a furnace, not a ladder: WHICH mod's smelter runs these four.",
+        "ADR-0017 has no smelting row -- `category-map.json` leaves `smelting.recipe_type` null for the same",
+        "reason -- so answering it ADDS a row to ADR-0017. That is #91; `undecided:smelting` retires with it."
+      ],
+      "count": 7
+    },
+    "intermediate-products/intermediate-product": {
+      "owner": "split",
+      "reason": "The shelf that proves a subgroup is not a machine. Twelve recipes, four destinations, and the largest non-barrel `crafting` shelf in the corpus.",
+      "per_recipe": {
+        "iron-gear-wheel": "create:pressing",
+        "iron-stick": "create:pressing",
+        "copper-cable": "create:pressing",
+        "barrel": "create:pressing",
+        "electronic-circuit": "pack:assembling",
+        "advanced-circuit": "pack:assembling",
+        "engine-unit": "pack:assembling",
+        "electric-engine-unit": "pack:assembling",
+        "flying-robot-frame": "pack:assembling",
+        "low-density-structure": "pack:assembling",
+        "processing-unit": "pack:chemical_plant",
+        "rocket-fuel": "pack:chemical_plant"
+      },
+      "note": [
+        "The four `create:pressing` rows are single-material forming -- one plate in, a shaped thing",
+        "out -- which is the Mechanical Press by shape, and the one place on this shelf where owner and",
+        "machine are the same mod. `processing-unit` takes 5x sulfuric acid and `rocket-fuel` takes",
+        "10x light oil, so both are Chemical Plant rather than Assembling Machine even though the owner",
+        "reads `pack` either way -- which is exactly why the qualifier exists. The circuit rows are",
+        "#55's authored three-tier ladder, not Factorio's items."
+      ],
+      "count": 12
+    },
+    "space/space-interactors": {
+      "owner": "split",
+      "reason": "The Rocket Silo is decided (#41); the cargo landing pad is the post-launch arc.",
+      "per_recipe": {
+        "rocket-part": "pack:rocket_silo",
+        "rocket-silo": "pack:assembling",
+        "cargo-landing-pad": "not_emitted"
+      },
+      "note": "#41 makes the Rocket Part a cycle in a Rocket Silo multiblock rather than an item, 50 per launch. `rocket-building` is already one-to-one in `category-map.json`.",
+      "count": 3
+    },
+    "intermediate-products/uranium-processing": {
+      "owner": "deferred",
+      "ticket": 89,
+      "reason": "Carved out to `Terra's uranium past the acid gate, and whether the nuclear chapter ships` (#89). #58 gives uranium's FIRST step an owner -- Factorio's sulfuric-acid gate as an authored `mekanism:dissolution` recipe at rung 3 -- but nothing owns enrichment, fuel cells or reprocessing, and ADR-0017 has no fission row to read one off.",
+      "count": 3
+    },
+    "logistics/circuit-network": {
+      "owner": "undecided",
+      "reason": "ADR-0017 has no row for a circuit network, and no installed mod owns one as a capability. #58 cut redstone from Terra entirely -- no vein, empty `underground_ores` step -- so the shelf's whole idiom has no source on the planet.",
+      "note": "Eight recipes: five combinators, a power switch, a display panel, a programmable speaker, a small lamp. Most likely `not_emitted`, but that is a decision this table cannot take from ADR-0017.",
+      "count": 8
+    },
+    "logistics/terrain": {
+      "owner": "undecided",
+      "reason": "ADR-0017 has no terrain row. `concrete` is stone brick plus water, which is `create:mixing` by shape, but nothing in the table says Create owns terrain.",
+      "note": "Six recipes: concrete, refined concrete, the two hazard variants, landfill, stone-brick. `stone-brick` is `smelting` -- 2 stone to 1 brick, one step -- and follows the furnace question in `intermediate-products/raw-material`, NOT ADR-0017's Ore processing row; it was briefly filed there by the same error. Landfill has no meaning on a flat, sea-bearing Terra (ADR-0019) and may be the clearest cut on this shelf.",
+      "count": 6
+    },
+    "logistics/transport": {
+      "owner": "undecided",
+      "reason": "One recipe, `car`. Personal transport is not an ADR-0017 capability and no rung grants it.",
+      "count": 1
+    },
+    "production/module": {
+      "owner": "undecided",
+      "reason": "One recipe, `beacon`. Factorio's module system has no pack analogue; #42 names a Mekanism upgrade in the `production` pack's slot list, which is the nearest thing and is not this.",
+      "count": 1
+    },
+    "production/tool": {
+      "owner": "undecided",
+      "reason": "One recipe, `repair-pack`. Nothing on Terra takes damage the way a Factorio entity does.",
+      "count": 1
+    },
+    "combat/ammo": {
+      "owner": "not_emitted",
+      "reason": "#26 dropped Military science -- its ingredients feed nothing downstream.",
+      "count": 3
+    },
+    "combat/armor": {
+      "owner": "not_emitted",
+      "reason": "#26 dropped Military science -- its ingredients feed nothing downstream.",
+      "count": 4
+    },
+    "combat/capsule": {
+      "owner": "not_emitted",
+      "reason": "#26 dropped Military science -- its ingredients feed nothing downstream.",
+      "count": 1
+    },
+    "combat/equipment": {
+      "owner": "not_emitted",
+      "reason": "#26 dropped Military science -- its ingredients feed nothing downstream.",
+      "count": 2
+    },
+    "combat/gun": {
+      "owner": "not_emitted",
+      "reason": "#26 dropped Military science -- its ingredients feed nothing downstream.",
+      "count": 2
+    },
+    "combat/turret": {
+      "owner": "not_emitted",
+      "reason": "#26 dropped Military science -- its ingredients feed nothing downstream.",
+      "count": 1
+    },
+    "combat/utility-equipment": {
+      "owner": "not_emitted",
+      "reason": "#26 dropped Military science -- its ingredients feed nothing downstream.",
+      "count": 4
+    },
+    "combat/defensive-structure": {
+      "owner": "not_emitted",
+      "reason": "#26 dropped Military science.",
+      "note": "Contains `radar`. #57 decided a continuous FE Radar as a `gtceu:machine` KubeJS registration with the mechanism in `planetaryfactory_core`, unlocked by its own research node -- a pack machine, not Factorio's item, so this row stays cut and the Radar is authored rather than converted.",
+      "count": 3
+    },
+    "space/space-crushing": {
+      "owner": "not_emitted",
+      "reason": "Map #25 Out of scope -- Space Science and the asteroid economy are the next arc, past the destination. Already `!asteroids-are-post-launch` in `category-map.json`.",
+      "count": 3
+    },
+    "space/space-platform": {
+      "owner": "not_emitted",
+      "reason": "Map #25 Out of scope -- post-launch.",
+      "count": 4
+    },
+    "space/space-rocket": {
+      "owner": "not_emitted",
+      "reason": "Map #25 Out of scope -- post-launch.",
+      "count": 1
+    }
+  }
+}
