@@ -30,7 +30,7 @@ craftable has not made the choice.
 | Extraction (fluid) | **GregTech** — Fluid Drilling Rig, **rung 2** (was rung 4; moved with the oil chapter, ADR-0025) | — |
 | Mining automation | **GregTech** — LP Steam Miner (rung 0) → Basic Ore Drilling Rig → Advanced, one rig per rung, each granted by a science tier | as above |
 | Ore processing | **Create** at rung 0 (Crushing Wheels, Millstone); **Mekanism** from rung 1 (enrichment → 5x) — **this row is under review, `#69`** | GT's ore-processing line recipe-removed (ADR pending, `#37`) |
-| Power generation | **Create** generates first (Steam Engine, rung 0); **Mekanism** generates at scale as FE; **Electro carries what either makes** | GT's power layer removed entire |
+| Power generation (steam, solar) | **Electro** — *amended by #101; this row read "**Create** generates first (Steam Engine, rung 0); **Mekanism** generates at scale as FE"*. Create's Steam Engine is the prime mover and emits SU, not electricity; the **Alternator** is what makes power. Solar is Electro's outright | GT's power layer removed entire |
 | Power transmission (between areas) | **Create: Electro Energetics** — poles, wire, catenary | GT cables removed with the power layer |
 | Power distribution (inside an area) | **Mekanism** (Universal Cables) | — |
 | Energy storage | **Electro** (Accumulator) grid-side; **Mekanism** (Energy Cube, Induction Matrix) FE-side | GT quantum batteries removed with the power layer |
@@ -102,10 +102,12 @@ The transmission row was written in pencil until Create: Electro Energetics was 
   dial-able — and flattening resistance to the config floor would delete the wire-tier ladder that is
   the reason to adopt the mod at all.
 
-The **Alternator** takes Create SU and emits watts. It is not counted as generation in the table
-above, but it is a generation *system* in Factorio's sense — prime mover plus alternator, as boiler
-plus steam engine is — and its distinctive value is **cross-body**: an SU-driven alternator is a power
-answer on a body where sun and steam are not available. Terra does not need that; later bodies may.
+The **Alternator** takes Create SU and emits watts. *This paragraph used to say it was "not counted
+as generation in the table above" and that its value was cross-body, on a body where sun and steam
+are not available — "Terra does not need that". #101 corrects both halves: the Alternator is the
+generation row, and Terra needs it from the first watt.* It is a generation *system* in Factorio's
+sense — prime mover plus alternator, as boiler plus steam engine is — and the prime mover being
+swappable is what makes it cross-body as well: any SU source drives it, on any body.
 
 **Plant Oil and Transformer Oil are kept and read as lubricant, not petroleum.** Seed oil is
 renewable, so transformers are craftable at whatever rung grants the grid without borrowing rung 4's
@@ -235,3 +237,30 @@ recipe-removed. Both fluid rows are Create's, so unlike the item rows — where 
 and Create owns bulk storage too — there is no seam here to get wrong: **Mekanism has no fluid role
 on Terra at all.** It keeps power distribution, energy storage, ore processing from rung 1 and the
 chemistry the oil chapter does not reach; none of those is a fluid capability.
+
+## Amended by #101: Electro owns steam and solar, and the Steam Engine is a prime mover
+
+The Power generation row named Create as generating first, off the Steam Engine at rung 0. #93
+already caught that a Create Steam Engine **emits no electricity** and listed it as one of three rows
+written without checking what the block actually does — but it recorded the error without fixing the
+row.
+
+Fixed here. **Terra's first power is a three-step chain and Electro owns it:**
+
+    Create Steam Engine (burns fuel, emits SU) → Electro Alternator (SU in, watts out) → the grid
+
+**Solar is Electro's outright** — panel and Accumulator, on the same grid, with no Create step in
+front of it.
+
+The three-step chain is the point rather than an inconvenience. Factorio's first power is boiler plus
+steam engine, two blocks and a pipe, and the player learns that electricity is *made from* something
+before it is wired. Create's SU standing between the fuel and the watts teaches the same lesson in
+one more hop, and it is the hop that makes the grid a distinct thing to be granted at a rung rather
+than something that arrives with the first furnace.
+
+The Alternator paragraph above said Terra did not need it. Terra needs nothing else.
+
+**Mekanism's at-scale FE generation is untouched by this amendment.** It was on the same row and is
+a different claim — Electro owning the steam and solar path does not say what generates at scale, and
+nobody has argued that one. If Mekanism's generators are also to go, that is its own row and its own
+losing blocks.

@@ -308,14 +308,17 @@ Sub-rules:
 
 - **verdict**: `planned`
 - **where**: all bodies
-- **via**: `create`, `mekanism`, `electro`
-- **owner**: ADR-0017 (a three-way split — Create generates first, Mekanism at scale, Electro carries
-  its own)
+- **via**: `electro`, `create`, `mekanism`
+- **owner**: ADR-0017 as amended by #101 (Electro owns steam and solar; Mekanism's at-scale FE
+  generation is a separate, still-unargued claim on the same row)
 
 Sub-rules:
 
-- **Boiler and steam engine as the first power** — `planned`.
-- **Solar panels and accumulators** — `planned`, and Electro's identity.
+- **Boiler and steam engine as the first power** — `adapted`. The chain is three steps, not two:
+  a Create Steam Engine burns fuel and emits SU, an Electro Alternator turns SU into watts, and the
+  grid carries them. A Factorio player's boiler-and-engine pair has a rotational stage wedged in the
+  middle of it, and the grid is granted at a rung rather than arriving with the first fire.
+- **Solar panels and accumulators** — `planned`, Electro's outright, and Electro's identity.
 - **Steam as a stored, pipeable intermediate** — `planned`.
 
 ### Nuclear fission
