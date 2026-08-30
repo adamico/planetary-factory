@@ -55,7 +55,7 @@ text and commits to no jar; **`pack` is admissible as a candidate only with a na
 | [Construction robots and blueprints](#construction-robots-and-blueprints) | `adapted` | all bodies |
 | [Trains](#trains) | `planned` | Terra |
 | [Circuit network](#circuit-network) | `adapted` | all bodies |
-| [Electric network and transmission](#electric-network-and-transmission) | `planned` | all bodies |
+| [Electric network and transmission](#electric-network-and-transmission) | `adapted` | all bodies |
 | [Power generation](#power-generation) | `planned` | all bodies |
 | [Nuclear fission](#nuclear-fission) | `blocked` | Terra |
 | [Pollution](#pollution) | `adapted` | all bodies |
@@ -345,17 +345,43 @@ Create needs no emitted recipe to exist.
 
 ### Electric network and transmission
 
-- **verdict**: `planned`
+- **verdict**: `adapted`
+- **notice**: the grid is a modelled electrical system rather than an abstract pool — poles carry a
+  real voltage over wire with a real gauge, the run loses power over distance, and a bad circuit
+  damages components instead of merely underfeeding them.
 - **where**: all bodies
-- **via**: `gregtech`
+- **via**: `electro`, `mekanism`
 - **owner**: ADR-0017
+
+**Create: Electro Energetics owns the grid** — poles, wire and catenary — and GregTech's power layer
+was removed entire to make room for it, cables included. Mekanism's Universal Cables distribute
+inside an area, which is the one seam: the grid moves power between places, Mekanism moves it inside
+one.
+
+The mod runs at **shipped physics defaults** (ADR-0017), which is the decision this row turns on:
+voltage drop, per-material wire gauge, grounding, fuses, brownouts and component damage are all on.
+Flattening resistance to the config floor would delete the wire-tier ladder that is the reason to
+adopt the mod at all.
+
+An earlier version of this row named GregTech and called brownout `excluded` on the grounds that GT
+machines stall rather than derate. Both halves were wrong — GT has no power layer here, and the mod
+that replaced it models brownouts natively.
 
 Sub-rules:
 
-- **Voltage tiers** — `adapted`. GregTech's EU tiers are far more granular than Factorio's flat grid,
-  and stepping up a tier is a real gate rather than a wire.
-- **Brownout: insufficient supply slows every consumer** — `excluded`. `by-consequence`: GT machines
-  stall or explode rather than derate, and the whole read-the-graph-and-add-boilers loop goes with it.
+- **Brownout: insufficient supply degrades what is running** — `shipped`. On by default, and it is
+  the read-the-graph-and-add-generation loop Factorio teaches, arriving with more electrical detail
+  rather than less.
+- **Voltage tiers** — `adapted`. Factorio steps low to medium to high voltage at the transformer;
+  Electro's ladder is wire gauge and material, so upgrading a run means rewiring it rather than
+  swapping a pole tier.
+- **Power poles have a supply area and a wire reach** — `planned`.
+- **Transformers between voltage levels** — `planned`. Kept craftable early because Transformer Oil
+  is seed oil and renewable, on the one-way rule that it must never become an input to the oil
+  chapter (ADR-0017).
+- **A separate FE side, bridged by a Converter** — `adapted`, and a pack addition Factorio has no
+  need for: Factorio has one kind of electricity and this pack has two, so the Converter is a
+  boundary the player must learn.
 - **The power graph as a diagnostic surface** — `unargued`, no verdict.
 
 ### Power generation
