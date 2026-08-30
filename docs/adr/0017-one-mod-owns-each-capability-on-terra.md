@@ -37,7 +37,7 @@ craftable has not made the choice.
 | Item logistics | **Create** (belts, chutes, trains) | Mekanism Logistical Transporters recipe-removed; GT item pipes and covers removed with the power layer |
 | Fluid logistics | **Create** (fluid pipes, pumps) — *amended by #101; this row read "Mekanism (Mechanical Pipes)" and kept Create's pipes as a hand-placed exception* | Mekanism Mechanical Pipes **recipe-removed** |
 | Bulk storage (item) | **Create** (Item Vault) | Mekanism Bins and QIO **cut**; GT quantum chests removed |
-| Bulk storage (fluid) | **Mekanism** (Dynamic Tank) | GT quantum tanks removed |
+| Bulk storage (fluid) | **Create** (Fluid Tanks) — *amended by #101; this row read "Mekanism (Dynamic Tank)"* | Mekanism Dynamic Tank **recipe-removed**; GT quantum tanks removed |
 | Oil processing | **The pack** — a registered **Oil Refinery** on a GT chassis (ADR-0025) | GT Distillation Tower and Distillery **recipe-removed on Terra**; Create: Petrochem and Create: Diesel Generators declined |
 | Chemistry | **The pack** — a registered **Chemical Plant** on a GT chassis (ADR-0025), carrying Factorio's whole chemical-plant list | Mekanism keeps chemistry only where the oil chapter does not reach it; GT's chem line is not Terra's |
 | Refining | **The pack** (ADR-0025) — *this row was "Mekanism, by pack-authored recipes on machines it owns" and was written without checking that Mekanism can express the recipe. It cannot: advanced oil processing is two fluids in and three out, and no Mekanism machine has that shape.* | as above |
@@ -222,13 +222,16 @@ That is the shape this ADR exists to reject: two craftable answers to one capabi
 drawn on how big the run is rather than on who owns it. A player laying Create pipes for a local run
 has no signal telling them where the local run ends.
 
-**Create owns fluid logistics. Mekanism's Mechanical Pipes are recipe-removed by default**, like every
-other losing block on this table.
+**Create owns fluid handling entire — pipes and pumps for moving, tanks for storing. Mekanism's
+Mechanical Pipes and Dynamic Tank are recipe-removed by default**, like every other losing block on
+this table.
 
 This is the fourth time the table has been corrected in the same direction — an owner named without
 checking the shape of what it actually has to do. The Refining row, the barrel shelf, the Power
 generation row (all recorded under #93 above), and now this one.
 
-**Bulk storage (fluid) is a separate row and is untouched**: Mekanism's Dynamic Tank still owns it.
-Fluid logistics and bulk fluid storage came apart here, exactly as item logistics and bulk item
-storage are already two rows.
+**Bulk storage (fluid) moves with it.** Create's Fluid Tanks own it and the Dynamic Tank is
+recipe-removed. Both fluid rows are Create's, so unlike the item rows — where Create owns logistics
+and Create owns bulk storage too — there is no seam here to get wrong: **Mekanism has no fluid role
+on Terra at all.** It keeps power distribution, energy storage, ore processing from rung 1 and the
+chemistry the oil chapter does not reach; none of those is a fluid capability.

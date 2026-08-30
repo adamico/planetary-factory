@@ -259,8 +259,9 @@ grid-side** — or rung 3 silently gates the Converter.
 - **ADR-0017's Chemistry row moves to the pack.** The Chemical Plant takes Factorio's whole
   chemical-plant list, sulfuric acid and batteries included. A half-taken list would leave the player
   with a Chemical Plant that mysteriously cannot make sulfuric acid and Mekanism with a chemistry
-  topic full of holes. Mekanism keeps ore processing, fluid logistics, bulk fluid storage and
-  power-at-scale.
+  topic full of holes. Mekanism keeps ore processing and power-at-scale. *(The fluid logistics and
+  bulk fluid storage named here went to Create under #101's amendment to ADR-0017, after this ADR
+  was accepted; read that table, not this sentence.)*
 - **`#39` is partly superseded**: its gate is re-argued, its ownership findings stand, its fuel
   decisions become execution. **`#40` is superseded** on the polymer's identity. Both get comments;
   neither is reopened.

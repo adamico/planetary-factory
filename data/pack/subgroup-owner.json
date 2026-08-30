@@ -233,27 +233,27 @@
     },
     "logistics/energy-pipe-distribution": {
       "owner": "split",
-      "reason": "The shelf straddles ADR-0017's transmission/fluid-logistics seam -- Factorio files poles and pipes together because both carry stuff between machines; the pack does not.",
+      "reason": "The shelf straddles ADR-0017's transmission/fluid-handling seam -- Factorio files poles and pipes together because both carry stuff between machines; the pack does not. The pipes moved from `mekanism` to `create` with #101's amendment to ADR-0017; the seam is unchanged, only which side the pipes sit on.",
       "per_recipe": {
         "small-electric-pole": "electro / pack:assembling",
         "medium-electric-pole": "electro / pack:assembling",
         "big-electric-pole": "electro / pack:assembling",
         "substation": "electro / pack:assembling",
-        "pipe": "mekanism / pack:assembling",
-        "pipe-to-ground": "mekanism / pack:assembling",
-        "pump": "mekanism / pack:assembling"
+        "pipe": "create / pack:assembling",
+        "pipe-to-ground": "create / pack:assembling",
+        "pump": "create / pack:assembling"
       },
       "note": "Written `owner / process`. Electro ships no machine of its own -- its own recipes use Create's `compacting`, `mixing`, `mechanical_crafting` and `sequenced_assembly` types in the `electroenergetics` namespace -- so an `electro` owner can never yield an `electro:` process.",
       "count": 7
     },
     "logistics/storage": {
-      "owner": "split",
-      "reason": "ADR-0017 splits bulk storage by item vs fluid; Factorio does not.",
+      "owner": "create",
+      "reason": "Was `split` because ADR-0017 split bulk storage by item vs fluid and Factorio does not. #101 gave Create the fluid rows too, so the shelf has one owner and the split is retired.",
       "per_recipe": {
         "wooden-chest": "create / pack:assembling",
         "iron-chest": "create / pack:assembling",
         "steel-chest": "create / pack:assembling",
-        "storage-tank": "mekanism / pack:assembling"
+        "storage-tank": "create / pack:assembling"
       },
       "count": 4
     },

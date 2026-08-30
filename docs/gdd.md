@@ -22,7 +22,8 @@ This document describes intended design. Decisions that are hard to reverse are 
   tracking, flight simulation, planetary arrival. Pinned to the build GTCEu 7.0.2 compiles against;
   `kubejs-create` is not installed.
 - **Pre-AE2 logistics — Create and Mekanism, and nothing else.** Create owns item logistics and
-  bulk item storage; Mekanism owns fluid logistics and bulk fluid storage (ADR-0017). The
+  bulk item storage; Create owns fluid handling too — pipes and pumps for moving, tanks for storing
+  (ADR-0017 as amended by #101), and Mekanism has no fluid role. The
   dedicated routing mods — Modular Routers, Integrated Dynamics, LaserIO, XNet, SFM, Pipez, Flux
   Networks, Functional Storage and Sophisticated Storage — are cut from the pack, because one mod
   owns each capability and a substitute routing idiom is a straight bypass of the ladder. Only two

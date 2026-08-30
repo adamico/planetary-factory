@@ -143,8 +143,9 @@ Sub-rules:
 
 - **verdict**: `planned`
 - **where**: all bodies
-- **via**: `create`, `mekanism`
-- **owner**: ADR-0017 as amended by #101 (Create owns fluid logistics; Mekanism keeps bulk fluid storage)
+- **via**: `create`
+- **owner**: ADR-0017 as amended by #101 (Create owns fluid handling entire — pipes and pumps for
+  moving, tanks for storing; Mekanism has no fluid role)
 
 Sub-rules:
 
