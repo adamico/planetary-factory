@@ -7,6 +7,15 @@ planets, and KubeJS binds them into a stationary, automation-first loop.
 
 ## Language
 
+### Naming exceptions
+
+The _Avoid_ lists below govern the pack's own prose. Two places quote Factorio deliberately and are
+exempt: `data/factorio/*.json`, which is an extracted dump of Factorio's own prototypes, and
+`docs/factorio-mechanics.md`, whose row keys are `Nauvis` and `Gleba` because the ledger's value is
+being diffable against Factorio. Both carry the `factorio-` or `data/factorio/` marker that says so.
+The pack's name for the same thing appears alongside, in the ledger's `where` field. See ADR-0028 —
+this is not drift to be tidied up.
+
 ### Places
 
 **Terra**:

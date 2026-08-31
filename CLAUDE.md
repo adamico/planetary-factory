@@ -40,6 +40,16 @@ an overlapping jigsaw child silently, so this failure ships as "two patches inst
 some seeds and nothing in a log. Run it after any edit to `scripts/build-terra-start.py`; it reads
 the generated `.nbt` files, so it also catches forgetting to re-run the generator.
 
+### Factorio mechanic ledger
+
+`docs/factorio-mechanics.md` is the tracked list of every Factorio mechanic — base game and Space
+Age — and what the pack does about it: one of `planned`, `shipped`, `adapted`, `blocked`,
+`excluded`, never `undecided`. Read it before deciding a mechanic is out of scope, and update the
+rows a ticket touches; a mechanic dropped without a row is exactly the failure it exists to catch.
+It is not derived from `data/pack/subgroup-owner.json` and does not derive it — `not_emitted` there
+is never evidence for `excluded` here — and it places nothing on a progression ladder, which is
+#25's call. Row keys are Factorio's names by declared exception (ADR-0028).
+
 ### Factorio tech tree
 
 The pack's research tree takes its shape from Factorio's, extracted rather than transcribed

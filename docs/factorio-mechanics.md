@@ -505,8 +505,7 @@ nothing downstream, and seven `combat/*` shelves went `not_emitted` behind it �
 armor, capsules, equipment and walls. Nobody decided this pack has no combat; a science-pack pruning
 decided it for them.
 
-Owned by this ledger, not handed back to #26. Whether the pack has turret defence at all is
-[a follow-on grilling ticket](#follow-on-tickets).
+Owned by this ledger, not handed back to #26. Whether the pack has turret defence at all is #118.
 
 Note that `not_emitted` did **not** settle the shelf: `combat/defensive-structure` is `not_emitted`
 and #57 still shipped a Radar. That is the proof case for the two axes never reading each other.
@@ -537,7 +536,7 @@ Same #26 cascade.
 
 `production/module` is `undecided` in `subgroup-owner.json` on one recipe, `beacon`. Factorio's module
 system has no pack analogue; #42 names a Mekanism upgrade in the `production` pack's slot list, which
-is a data point and not an answer.
+is a data point and not an answer. Follow-on: #120.
 
 Speed/productivity/efficiency as a three-way tradeoff you retrofit into an existing factory is a large
 part of Factorio's mid-game, and nothing in the stack reproduces it. `blocked`, not `excluded` — the
@@ -610,7 +609,7 @@ Sub-rules:
 `logistics/transport` is `undecided` on one recipe, `car`. Personal transport is not an ADR-0017
 capability and no rung grants it. Factorio's car, tank and spidertron have no pack answer, and
 Minecraft's own movement options (elytra, horses, boats) are neither gated nor factory-produced.
-[Follow-on ticket](#follow-on-tickets).
+Follow-on: #121.
 
 ### Terrain modification
 
@@ -918,13 +917,14 @@ Sub-rules:
 ## Follow-on tickets
 
 Load-bearing `by-consequence` and `blocked` rows get their own `Grilling:` issue rather than being
-settled inside a row. Open candidates:
+settled inside a row. Filed:
 
-- Where does redstone come from, now that #58 has cut it from Terra and the circuit network needs it?
-- Does the pack have combat — biters, turrets, walls — or did Military science take them?
-- Modules and beacons, and whether the retrofit-tradeoff mid-game exists here at all.
-- Personal transport.
-- Quality, and whether an item-quality axis is affordable at all.
+- #119 — where does redstone come from, now that #58 has cut it from Terra and the circuit network
+  needs it? A resource question for #25; the row stays `adapted` whatever the answer.
+- #118 — does the pack have combat — biters, turrets, walls — or did Military science take them?
+- #120 — modules and beacons, and whether the retrofit-tradeoff mid-game exists here at all.
+- #121 — personal transport.
+- #122 — quality, and whether an item-quality axis is affordable at all.
 
 ## Every `planned` row has a ticket
 
