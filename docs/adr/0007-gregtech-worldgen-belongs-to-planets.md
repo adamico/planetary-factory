@@ -52,7 +52,8 @@ final body ticket.
 The Nether becomes a mob-and-vanilla-materials dimension rather than a resource tier. Its worldgen
 still exists; nothing GregTech generates does.
 
-Atlantis gains a candidate purpose. `docs/gdd.md` §8 leaves its mechanics deliberately open, and
+Atlantis gains a candidate purpose. The Shattered Planet row in `docs/factorio-mechanics.md` leaves
+its mechanics deliberately open, and
 "the only source of naquadah" is a puzzle-shaped hole an orbit-only endgame destination could fill.
 This ADR does not decide that — it notes that the option now exists.
 

@@ -215,17 +215,13 @@ GCyR ships four satellite types, all adopted:
 
 ## 8. Open Questions
 
-- **Atlantis mechanics.** Deferred pending a closer look at Factorio's Shattered Planet. It is
-  currently a named, orbit-only endgame destination with no defined puzzle, resource or attrition
-  model.
-- **Per-planet emission consequences.** Named in principle (§6), unspecified in detail.
 - **Cross-mod recipe audit.** The specific Create and Mekanism shortcuts that undercut GT routing
   have not been enumerated.
 - **Per-planet Vanguard Kit variants.** Deferred to a later upgrade tier.
 
 ## 9. Resource substitution policy
 
-Per-body content is drawn from `docs/scratch/planets.md`, a scratch transcription of Factorio's own
+Per-body content is drawn from `docs/planets.md`, a transcription of Factorio's own
 resource lists organised under Factorio's names. Every resource named there is resolved by this rule,
 applied in order:
 
@@ -253,7 +249,7 @@ Specs are cut per slice from this document, in this order. Bodies land one at a 
 before the next, and each body is two tickets: a **`Body:`** ticket delivers terrain, stone, ore
 veins, fluid deposits, surface indicators, dimension marker and sky — everything that makes arriving
 there complete — and a **`Puzzle:`** ticket, cut after its body ships, delivers that body's processing
-chains, machine restrictions and craft gating from `docs/scratch/planets.md`.
+chains, machine restrictions and craft gating from `docs/planets.md`.
 
 1. **Planet definitions** — six bodies, IDs, lang files. Blocks the space stack.
 2. **Body: Terra** — ore layout reweighted for the early recipes, a bedrock deposit for GregTech's
