@@ -34,12 +34,15 @@ JSON
 
 scripts/factorio-tech-extract.py
 scripts/factorio-recipe-extract.py
+scripts/factorio-machine-extract.py
 python3 tests/factorio/test_tech_extract.py
 python3 tests/factorio/test_recipe_extract.py
+python3 tests/factorio/test_machine_extract.py
 ```
 
-Both extractors read the same dump, so a single `--dump-data` run feeds them. The recipe
-extractor also reads `technology.json`, so run it second.
+All three extractors read the same dump, so a single `--dump-data` run feeds them. Order
+matters: the recipe extractor reads `technology.json`, and the machine extractor reads
+`recipe.json` for its scope.
 
 The dump lands in `~/Library/Application Support/factorio/script-output/data-raw-dump.json`. The
 extractor finds it and the Steam install by default; both are overridable with `--dump` and
@@ -76,6 +79,36 @@ is stale.
   metallurgy recipe. `data/pack/category-map.json` holds the routing, and running the
   extractor reports `setMaxIOSize` per machine off this data, which is where ADR-0026's
   numbers come from.
+
+- **`machine.json`** — the machines the conversion rule reads, and the fluid anchors it
+  derives from. Three sections:
+
+  `machines`, one object per crafting machine: `name`, `type` (`assembling-machine`,
+  `furnace`, `rocket-silo`, `lab`), `crafting_speed`, `energy_usage` (W), `energy_type`,
+  `drain` (W), `drain_source`, `module_slots`, `crafting_categories`, `fluid_boxes` and the
+  tile footprint. A lab has no `crafting_speed`; its `researching_speed` is extracted into
+  that field, and its `inputs` into `crafting_categories`, because the pack reads both the
+  same way.
+
+  **Scope is the recipe corpus's scope, not a second one**: a machine is kept when its own
+  item recipe is in `recipe.json`. Twelve of the game's nineteen survive; the foundry, the
+  biochamber, the recycler, the biolab, the cryogenic and electromagnetic plants and the
+  captive biter spawner are the seven that do not. Widening `RUNG_PACKS` in the recipe
+  extractor widens this file with it.
+
+  **`drain` is derived.** Not one crafting machine in the game sets `drain` — the ten
+  prototypes that do are inserters, pumps, turrets and lightning rods — so the figure is
+  the engine's default of `energy_usage / 30` on an electric source, and nothing at all on
+  a burner one. `drain_source` records which. #126 excludes drain from the conversion
+  deliberately; this is the number that exclusion is quoted against.
+
+  `containers`, the fluid anchors for the 1 unit = 1 mB derivation: a storage tank holds
+  25 000 units over 3×3 tiles, a pipe 100 over 1×1.
+
+  `categories`, every recipe category in the game and every entity declaring it — the
+  authority `data/pack/category-map.json`'s left-hand side is checked against.
+  `hand-crafting` belongs to the character rather than to a machine, and `parameters` to
+  nothing at all.
 
 - **`science_packs.json`** — the twelve packs in Factorio's own order. Reference only: ADR-0018
   fixes the pack's spine at four rungs.

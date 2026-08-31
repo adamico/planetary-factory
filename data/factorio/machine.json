@@ -1,0 +1,345 @@
+{
+  "machines": [
+    {
+      "name": "assembling-machine-1",
+      "type": "assembling-machine",
+      "crafting_speed": 0.5,
+      "energy_usage": 75000.0,
+      "energy_type": "electric",
+      "drain": 2500.0,
+      "drain_source": "default",
+      "module_slots": 0,
+      "crafting_categories": [
+        "crafting",
+        "advanced-crafting"
+      ],
+      "fluid_boxes": [],
+      "tile_width": 3,
+      "tile_height": 3
+    },
+    {
+      "name": "assembling-machine-2",
+      "type": "assembling-machine",
+      "crafting_speed": 0.75,
+      "energy_usage": 150000.0,
+      "energy_type": "electric",
+      "drain": 5000.0,
+      "drain_source": "default",
+      "module_slots": 2,
+      "crafting_categories": [
+        "crafting",
+        "advanced-crafting",
+        "crafting-with-fluid"
+      ],
+      "fluid_boxes": [
+        {
+          "production_type": "input",
+          "volume": 1000
+        },
+        {
+          "production_type": "output",
+          "volume": 1000
+        }
+      ],
+      "tile_width": 3,
+      "tile_height": 3
+    },
+    {
+      "name": "assembling-machine-3",
+      "type": "assembling-machine",
+      "crafting_speed": 1.25,
+      "energy_usage": 375000.0,
+      "energy_type": "electric",
+      "drain": 12500.0,
+      "drain_source": "default",
+      "module_slots": 4,
+      "crafting_categories": [
+        "crafting",
+        "advanced-crafting",
+        "crafting-with-fluid"
+      ],
+      "fluid_boxes": [
+        {
+          "production_type": "input",
+          "volume": 1000
+        },
+        {
+          "production_type": "output",
+          "volume": 1000
+        }
+      ],
+      "tile_width": 3,
+      "tile_height": 3
+    },
+    {
+      "name": "centrifuge",
+      "type": "assembling-machine",
+      "crafting_speed": 1,
+      "energy_usage": 350000.0,
+      "energy_type": "electric",
+      "drain": 11666.666666666666,
+      "drain_source": "default",
+      "module_slots": 2,
+      "crafting_categories": [
+        "centrifuging"
+      ],
+      "fluid_boxes": [],
+      "tile_width": 3,
+      "tile_height": 3
+    },
+    {
+      "name": "chemical-plant",
+      "type": "assembling-machine",
+      "crafting_speed": 1,
+      "energy_usage": 210000.0,
+      "energy_type": "electric",
+      "drain": 7000.0,
+      "drain_source": "default",
+      "module_slots": 3,
+      "crafting_categories": [
+        "chemistry"
+      ],
+      "fluid_boxes": [
+        {
+          "production_type": "input",
+          "volume": 1000
+        },
+        {
+          "production_type": "input",
+          "volume": 1000
+        },
+        {
+          "production_type": "output",
+          "volume": 100
+        },
+        {
+          "production_type": "output",
+          "volume": 100
+        }
+      ],
+      "tile_width": 3,
+      "tile_height": 3
+    },
+    {
+      "name": "crusher",
+      "type": "assembling-machine",
+      "crafting_speed": 1,
+      "energy_usage": 540000.0,
+      "energy_type": "electric",
+      "drain": 18000.0,
+      "drain_source": "default",
+      "module_slots": 2,
+      "crafting_categories": [
+        "crushing"
+      ],
+      "fluid_boxes": [],
+      "tile_width": 2,
+      "tile_height": 3
+    },
+    {
+      "name": "oil-refinery",
+      "type": "assembling-machine",
+      "crafting_speed": 1,
+      "energy_usage": 420000.0,
+      "energy_type": "electric",
+      "drain": 14000.0,
+      "drain_source": "default",
+      "module_slots": 3,
+      "crafting_categories": [
+        "oil-processing"
+      ],
+      "fluid_boxes": [
+        {
+          "production_type": "input",
+          "volume": 1000
+        },
+        {
+          "production_type": "input",
+          "volume": 1000
+        },
+        {
+          "production_type": "output",
+          "volume": 100
+        },
+        {
+          "production_type": "output",
+          "volume": 100
+        },
+        {
+          "production_type": "output",
+          "volume": 100
+        }
+      ],
+      "tile_width": 5,
+      "tile_height": 5
+    },
+    {
+      "name": "electric-furnace",
+      "type": "furnace",
+      "crafting_speed": 2,
+      "energy_usage": 180000.0,
+      "energy_type": "electric",
+      "drain": 6000.0,
+      "drain_source": "default",
+      "module_slots": 2,
+      "crafting_categories": [
+        "smelting"
+      ],
+      "fluid_boxes": [],
+      "tile_width": 3,
+      "tile_height": 3
+    },
+    {
+      "name": "steel-furnace",
+      "type": "furnace",
+      "crafting_speed": 2,
+      "energy_usage": 90000.0,
+      "energy_type": "burner",
+      "drain": null,
+      "drain_source": "none",
+      "module_slots": 0,
+      "crafting_categories": [
+        "smelting"
+      ],
+      "fluid_boxes": [],
+      "tile_width": 2,
+      "tile_height": 2
+    },
+    {
+      "name": "stone-furnace",
+      "type": "furnace",
+      "crafting_speed": 1,
+      "energy_usage": 90000.0,
+      "energy_type": "burner",
+      "drain": null,
+      "drain_source": "none",
+      "module_slots": 0,
+      "crafting_categories": [
+        "smelting"
+      ],
+      "fluid_boxes": [],
+      "tile_width": 2,
+      "tile_height": 2
+    },
+    {
+      "name": "rocket-silo",
+      "type": "rocket-silo",
+      "crafting_speed": 1,
+      "energy_usage": 250000.0,
+      "energy_type": "electric",
+      "drain": 8333.333333333334,
+      "drain_source": "default",
+      "module_slots": 4,
+      "crafting_categories": [
+        "rocket-building"
+      ],
+      "fluid_boxes": [],
+      "tile_width": 9,
+      "tile_height": 9
+    },
+    {
+      "name": "lab",
+      "type": "lab",
+      "crafting_speed": 1,
+      "energy_usage": 60000.0,
+      "energy_type": "electric",
+      "drain": 2000.0,
+      "drain_source": "default",
+      "module_slots": 2,
+      "crafting_categories": [
+        "automation-science-pack",
+        "logistic-science-pack",
+        "military-science-pack",
+        "chemical-science-pack",
+        "production-science-pack",
+        "utility-science-pack",
+        "space-science-pack",
+        "metallurgic-science-pack",
+        "agricultural-science-pack",
+        "electromagnetic-science-pack",
+        "cryogenic-science-pack",
+        "promethium-science-pack"
+      ],
+      "fluid_boxes": [],
+      "tile_width": 3,
+      "tile_height": 3
+    }
+  ],
+  "containers": [
+    {
+      "name": "storage-tank",
+      "type": "storage-tank",
+      "volume": 25000,
+      "tile_width": 3,
+      "tile_height": 3
+    },
+    {
+      "name": "pipe",
+      "type": "pipe",
+      "volume": 100,
+      "tile_width": 1,
+      "tile_height": 1
+    }
+  ],
+  "categories": {
+    "advanced-crafting": [
+      "assembling-machine/assembling-machine-1",
+      "assembling-machine/assembling-machine-2",
+      "assembling-machine/assembling-machine-3"
+    ],
+    "captive-spawner-process": [
+      "assembling-machine/captive-biter-spawner"
+    ],
+    "centrifuging": [
+      "assembling-machine/centrifuge"
+    ],
+    "chemistry": [
+      "assembling-machine/chemical-plant"
+    ],
+    "crafting": [
+      "assembling-machine/assembling-machine-1",
+      "assembling-machine/assembling-machine-2",
+      "assembling-machine/assembling-machine-3",
+      "character/character",
+      "god-controller/default"
+    ],
+    "crafting-with-fluid": [
+      "assembling-machine/assembling-machine-2",
+      "assembling-machine/assembling-machine-3"
+    ],
+    "crushing": [
+      "assembling-machine/crusher"
+    ],
+    "cryogenics": [
+      "assembling-machine/cryogenic-plant"
+    ],
+    "electromagnetics": [
+      "assembling-machine/electromagnetic-plant"
+    ],
+    "hand-crafting": [
+      "character/character",
+      "god-controller/default"
+    ],
+    "metallurgy": [
+      "assembling-machine/foundry"
+    ],
+    "oil-processing": [
+      "assembling-machine/oil-refinery"
+    ],
+    "organic": [
+      "assembling-machine/biochamber"
+    ],
+    "parameters": [],
+    "recycling": [
+      "furnace/recycler"
+    ],
+    "rocket-building": [
+      "rocket-silo/rocket-silo"
+    ],
+    "smelting": [
+      "furnace/electric-furnace",
+      "furnace/steel-furnace",
+      "furnace/stone-furnace"
+    ]
+  }
+}
