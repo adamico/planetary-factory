@@ -8,6 +8,15 @@ Issues live in this repo's GitHub Issues, managed with the `gh` CLI. See `docs/a
 
 The five canonical triage roles, used verbatim as label strings. See `docs/agents/triage-labels.md`.
 
+### Rejected scope
+
+`.out-of-scope/` holds one file per rejected enhancement, so a `wontfix` keeps its reasoning and a
+repeat request is recognised rather than re-argued. `/triage` reads it while gathering context. Only
+rejected enhancements go there — never bugs, never something already built, never a deferral. A
+Factorio mechanic the pack does not reproduce belongs in `docs/factorio-mechanics.md` instead, which
+distinguishes `excluded` from `blocked`; a decision with a considered alternative belongs in an ADR.
+See `.out-of-scope/README.md`.
+
 ### Domain docs
 
 Single-context — `CONTEXT.md` and `docs/adr/` at the repo root. See `docs/agents/domain.md`.
