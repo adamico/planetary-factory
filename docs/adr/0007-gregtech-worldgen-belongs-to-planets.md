@@ -15,7 +15,7 @@ scheelite, sheldonite, bauxite and magnetite. The single bedrock lava deposit is
 
 Left alone, that is a complete parallel endgame behind two portals. It collides with the planetary
 design at the exact points the design is built on: scheelite is GregTech's tungsten ore and the End
-has it, while `docs/scratch/planets.md` makes tungsten the reason Ignus exists; the Nether holds
+has it, while `docs/planets.md` makes tungsten the reason Ignus exists; the Nether holds
 the infinite lava that Ignus's thermal puzzle is built around; and the End's naquadah and platinum
 group are the endgame materials that reaching Atlantis is supposed to be about.
 

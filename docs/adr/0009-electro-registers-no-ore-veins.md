@@ -4,7 +4,7 @@ status: accepted
 
 # Electro registers no ore veins, and the test fixture asserts that against the whole registry
 
-`docs/gdd.md` §2 and `docs/scratch/planets.md` both give Fulgora no natural ores. Its economy is
+`docs/gdd.md` §2 and `docs/planets.md` both give Fulgora no natural ores. Its economy is
 recycling: scrap in, a spread of unrelated outputs back. A body with veins would have a second,
 duller way to get materials, and the recycling chain would become optional decoration.
 
