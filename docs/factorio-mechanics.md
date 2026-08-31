@@ -2,7 +2,7 @@
 
 Every mechanic Factorio has — base game and Space Age — and what this pack does about it.
 
-**Row keys are Factorio's own names** (`Gleba`, not Sapros; `Nauvis`, not Terra). This is a declared
+**Row keys are Factorio's own names** (`Gleba`, not Sapros; `Vulcanus`, not Ignus). This is a declared
 exception to `CONTEXT.md`'s _Avoid_ lists, on the same footing as `data/factorio/*.json`: the ledger's
 value is being diffable against Factorio, so it must speak Factorio. The pack's name for the same
 thing appears in `where`. See ADR-0028.
@@ -540,7 +540,7 @@ is a data point and not an answer. Follow-on: #120.
 
 Speed/productivity/efficiency as a three-way tradeoff you retrofit into an existing factory is a large
 part of Factorio's mid-game, and nothing in the stack reproduces it. `blocked`, not `excluded` — the
-argument has not been had. [Follow-on ticket](#follow-on-tickets).
+argument has not been had.
 
 ### Research and science packs
 

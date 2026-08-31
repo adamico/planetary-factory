@@ -83,11 +83,11 @@ inventing a decision it never took.
 
 ## Factorio's names are the row keys, as a declared exception
 
-Row keys are `Gleba` and `Nauvis`, not Sapros and Terra — names `CONTEXT.md`'s _Avoid_ lists
+Row keys are `Gleba` and `Vulcanus`, not Sapros and Ignus — names `CONTEXT.md`'s _Avoid_ lists
 otherwise forbid. The exception stands on the same footing as `data/factorio/*.json`: Factorio's
 vocabulary is legitimate when quoting Factorio, and the ledger's value is being diffable against
-Factorio by someone holding the wiki open. The pack's own name for the thing appears in `where`, so
-no row is untranslatable. The `factorio-` filename prefix mirrors `data/factorio/` and carries the
+Factorio by someone holding the wiki open. Every body row carries the pack's own name for it in `where` — `Gleba` is `Sapros`, `Aquilo` is
+`Gelida` — so no row is untranslatable. The `factorio-` filename prefix mirrors `data/factorio/` and carries the
 same signal. The exception is recorded in `CONTEXT.md` itself so that a later agent tidying names
 does not "fix" it.
 
