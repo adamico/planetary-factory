@@ -33,6 +33,7 @@ EXPECTED_IO = {
     "oil_refinery": (0, 0, 2, 3),
     "rocket_silo": (3, 1, 0, 0),
     "smelting": (1, 1, 0, 0),
+    "centrifuge": (1, 2, 0, 0),
 }
 
 # Factorio's own taxonomy, resolved through each recipe's main product. `enemies`,

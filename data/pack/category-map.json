@@ -18,7 +18,7 @@
     "oil-processing": "oil_refinery",
     "smelting": "smelting",
     "rocket-building": "rocket_silo",
-    "centrifuging": "!uranium-is-mekanism-dissolution",
+    "centrifuging": "centrifuge",
     "crushing": "!asteroids-are-post-launch",
     "metallurgy": "!vulcanus",
     "cryogenics": "!aquilo",
@@ -44,7 +44,11 @@
     },
     "smelting": {
       "recipe_type": null,
-      "note": "Plates and stone brick. The surface is not decided here -- ADR-0017 splits ore processing between Create at rung 0 and Mekanism from rung 1, and smelting rides that split."
+      "note": "Plates and stone brick, vanilla `minecraft:smelting` on #91's three furnace tiers. ADR-0032 deleted ADR-0017's Ore processing row -- ore is 1:1, so smelting rides nothing and is the whole of ore-to-plate."
+    },
+    "centrifuge": {
+      "recipe_type": "planetaryfactory:centrifuge",
+      "note": "ADR-0033. Uranium processing and nuclear fuel reprocessing; Kovarex when the post-launch map reaches it."
     },
     "rocket_silo": {
       "recipe_type": null,

@@ -86,9 +86,11 @@ So the cut is applied to all four:
   the existing Chemical Dissolution Chamber, with uranium's non-acid processing paths removed —
   **no custom machine**. Mekanism already ships `processing/uranium/slurry/`, and science rung 3
   already sits on Mekanism's dissolution tier, so the gate lands out of parts the pack had already
-  committed to. **Amended by ADR-0032**: that last clause is spent — the ore chain is cut, so the
-  Dissolution Chamber's only remaining job is this gate. The recipe stands as written; whether the
-  block survives at all now rides on whether uranium does, which is `#89`.
+  committed to. **Amended by ADR-0032, then settled by ADR-0033**: the ore chain is cut, so the
+  Dissolution Chamber's only remaining job was this gate — and the pack now registers five machines,
+  so *"no custom machine"* is spent rather than wrong. The gate moves onto the pack's **Chemical
+  Plant** and the **Chemical Dissolution Chamber is cut**. Uranium itself stays, and the nuclear
+  chapter it feeds ships at rungs 3 and 4.
 - **Uranium is not a starting patch**, on the same fidelity grounds: Factorio never places it in the
   starting area.
 - **No zinc exception.** It was considered explicitly — zinc surviving as a *processing yield* from

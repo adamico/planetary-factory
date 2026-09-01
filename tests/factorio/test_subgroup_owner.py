@@ -55,6 +55,7 @@ PROCESSES = {
     "pack:chemical_plant",
     "pack:oil_refinery",
     "pack:rocket_silo",
+    "pack:centrifuge",
 }
 
 # Terminal values for the PROCESS axis, as distinct from the owner axis above. `native_mechanic`

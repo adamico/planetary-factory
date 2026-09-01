@@ -98,7 +98,9 @@ deleted rather than handed to anyone.
 already bought". That argument is spent — with the ore chain cut, the gate is the block's *only*
 remaining job, and whether the block survives now depends entirely on whether uranium does.
 
-That is `#89`'s question, and it is not answered here. Until it resolves, the Dissolution Chamber is
+That is `#89`'s question, and it is not answered here. **Answered since, by ADR-0033**: uranium
+stays and the nuclear chapter ships, but the gate moves onto the pack's own Chemical Plant and the
+**Dissolution Chamber is cut** — so Mekanism's ore chain reaches zero blocks after all. Until it resolves, the Dissolution Chamber is
 neither cut nor placed on a row: ADR-0021's uranium recipe stands as written, and `#89` inherits a
 clean lever — cut uranium and the block goes with it, keep uranium and the block needs a home under
 **Chemistry** with a recorded note that it leaches rather than multiplies.

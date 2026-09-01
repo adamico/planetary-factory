@@ -26,8 +26,8 @@ Four packs plus an unscienced rung 0 (`#26`):
 | 0 | *(none)* | Steam and Create kinetics. LP Solid Boiler, LP Steam Miner, the Furnace, Create's belts and the Steam Engine. **ADR-0032 removed Crushing Wheels from this row** — ore smelts 1:1, so the chain is Miner → Furnace → plate, one hop. |
 | 1 | `automation` | **Electricity, and the first assembler** — the Alternator, the FE grid and Assembling Machine I (`#34`). *This row read "First machines and Mekanism enrichment"; ADR-0032 cut enrichment, and `#34` had already hung the grid on the Assembler so the rung's reward did not depend on it.* |
 | 2 | `logistic` | Movement at scale — Create 6 package logistics — **plus the Oil Refinery, the Chemical Plant, basic oil processing, solid fuel, sulfur, sulfuric acid and plastic** (ADR-0025), **and the red circuit, which plastic makes** (`#125`). |
-| 3 | `chemical` | **Advanced oil processing, heavy and light cracking, lubricant** (ADR-0025), the blue circuit and the Electric Furnace (`#91`). *The 5x dissolution tier is gone — ADR-0032.* |
-| 4 | `production` | **Rocket fuel, rocket control units, rocket parts and the silo.** |
+| 3 | `chemical` | **Advanced oil processing, heavy and light cracking, lubricant** (ADR-0025), the blue circuit and the Electric Furnace (`#91`), and **the nuclear chapter** — `uranium-mining`, `uranium-processing` and `nuclear-power` are all chemical science in Factorio (ADR-0033). *The 5x dissolution tier is gone — ADR-0032.* |
+| 4 | `production` | **Rocket fuel, rocket control units, rocket parts and the silo**, plus `nuclear-fuel-reprocessing` (ADR-0033). Kovarex costs **space** science and is post-launch, so Terra's reactors run at raw 0.7% U-235 — Factorio's own inefficiency, not a pack nerf. |
 
 **Rungs 2–4 were re-cut by ADR-0025.** Rung 4 was "the oil chapter entire"; the chapter now starts
 at rung 2. The cause is sulfur: making it petroleum-derived, as Factorio does, puts it and sulfuric

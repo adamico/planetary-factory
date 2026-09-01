@@ -164,6 +164,7 @@ circuits are 5 per silo cycle, 50 cycles per launch.
 | Cracking. Heavy → light → gas, and suddenly the ratios are yours to choose. | machine |
 | Lubricant. | machine |
 | Blue circuits, on acid. | machine |
+| Uranium past the acid gate, then the Centrifuge, then a reactor. Superheated steam, and the Turbine that drinks it (ADR-0033). | machine |
 | Electric Furnace. Fuel stops being a constraint, one rung after it started being one. | machine |
 
 **The chapter's thesis**: *the same barrel, split finer.* Cracking is the first beat in the pack
@@ -205,7 +206,9 @@ contents belong to the orbital platform, and this arc stops at the pad.
   1:1, every multiplier is cut pack-wide, and the chain written above (Miner → Furnace → plate, one
   hop) is now what the ADRs say too. ADR-0017's Ore processing row is deleted.
 - **Which fractions come out of Terra's bedrock** — `#86`.
-- **Whether the nuclear chapter ships** — `#89`.
+- ~~**Whether the nuclear chapter ships**~~ — **settled by ADR-0033**: it does, at rungs 3 and 4,
+  pack-authored. Kovarex is space science and stays post-launch, so Terra runs at 0.7% U-235.
+  **Rung 3's 4–5 hour budget does not survive this** and the chapter needs re-cutting.
 - **Emission's pre-launch readout** — it keys on a metric ADR-0018 leaves open, so placing a beat
   for it now would be placing a beat to delete later. Decided with the Emission work.
 - **Every quantity on this page**, because there are none.

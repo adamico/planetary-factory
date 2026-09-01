@@ -163,7 +163,7 @@
         "chemical-plant": "pack:assembling",
         "oil-refinery": "pack:assembling",
         "lab": "pack:assembling",
-        "centrifuge": "deferred"
+        "centrifuge": "pack:assembling"
       },
       "note": [
         "`assembling-machine-1` needed a hand surface or the ladder never starts -- the first Assembling",
@@ -172,8 +172,8 @@
         "the rule now, not an exception carved out beside it, and that is the better shape -- an exception",
         "would have needed defending every time the corpus was regenerated.",
         "",
-        "`centrifuge` is the machine that runs `centrifuging`, which is #89's chapter end to end -- deferred",
-        "with the chapter rather than assigned a build machine for a machine that may not ship.",
+        "`centrifuge` is the machine that runs `centrifuging`. #89 shipped the chapter (ADR-0033), so the",
+        "Centrifuge is a pack machine on the GT chassis and its own build recipe is ordinary `pack:assembling`.",
         "",
         "Researchd's Research Lab replaces Factorio's `lab` (#45); the row stays so the item map has",
         "something to point at."
@@ -265,10 +265,10 @@
         "steam-engine": "electro / pack:assembling",
         "solar-panel": "electro / pack:assembling",
         "accumulator": "electro / pack:assembling",
-        "heat-exchanger": "deferred",
-        "heat-pipe": "deferred",
-        "steam-turbine": "deferred",
-        "nuclear-reactor": "deferred"
+        "heat-exchanger": "not_emitted",
+        "heat-pipe": "not_emitted",
+        "steam-turbine": "pack:assembling",
+        "nuclear-reactor": "pack:assembling"
       },
       "note": [
         "THE BOILER IS GREGTECH'S. #37 puts steam at rung 0, two machines wide -- LP Solid Boiler plus LP",
@@ -283,8 +283,20 @@
         "is Factorio's `steam-engine`. ADR-0017's amendment records the fix; the row it broke is the",
         "one #93 had already flagged and left standing.",
         "",
-        "The four nuclear rows -- `heat-exchanger`, `heat-pipe`, `steam-turbine`, `nuclear-reactor` -- are",
-        "`deferred` to #89 with `intermediate-products/uranium-processing`: one chapter, one decision.",
+        "THE FOUR NUCLEAR ROWS ARE SETTLED BY ADR-0033 (#89), AND THEY SPLIT TWO AND TWO.",
+        "",
+        "`nuclear-reactor` and `steam-turbine` are pack machines on the GT chassis, owned by ADR-0017's new",
+        "Power generation (superheated steam) row. `heat-pipe` and `heat-exchanger` are `not_emitted`:",
+        "Terra's reactor emits superheated steam directly, so there is no heat layer for them to sit in.",
+        "Factorio's real heat network -- temperature, capacity, adjacency conduction, differential flow --",
+        "is deferred to Gelida, whose freezing puzzle is what actually needs it.",
+        "",
+        "THE TURBINE IS NOT A PARALLEL ESCAPE. Superheated steam is its own GT material and the Turbine is",
+        "the only machine that accepts it; ordinary steam keeps the rung-0 chain (GT boiler -> Create Steam",
+        "Engine -> Electro Alternator), which the Turbine will not take. That is Factorio's own model --",
+        "turbine output is a property of the steam, not the building -- with the continuum flattened to the",
+        "two values the game actually uses. Ignus's acid neutralisation is the Turbine's second consumer.",
+        "",
         "`steam-engine` is NOT among them: it is the Alternator, settled above."
       ],
       "count": 8,
@@ -388,9 +400,28 @@
       "count": 3
     },
     "intermediate-products/uranium-processing": {
-      "owner": "deferred",
+      "owner": "pack",
       "ticket": 89,
-      "reason": "Carved out to `Terra's uranium past the acid gate, and whether the nuclear chapter ships` (#89). #58 gives uranium's FIRST step an owner -- Factorio's sulfuric-acid gate as an authored `mekanism:dissolution` recipe at rung 3 -- but nothing owns enrichment, fuel cells or reprocessing, and ADR-0017 has no fission row to read one off.",
+      "reason": "Settled by ADR-0033: the nuclear chapter ships on Terra, pack-authored. Factorio's own costs put it pre-launch -- `nuclear-power` is automation+logistic+chemical, so rung 3; `nuclear-fuel-reprocessing` adds production, so rung 4; and `kovarex-enrichment-process` costs SPACE science, so it is post-launch and Terra's uranium runs at raw 0.7% U-235 exactly as Nauvis's does.",
+      "per_recipe": {
+        "uranium-processing": "pack:centrifuge",
+        "nuclear-fuel-reprocessing": "pack:centrifuge",
+        "uranium-fuel-cell": "pack:assembling"
+      },
+      "note": [
+        "`uranium-processing` is a TRIGGER technology in Factorio 2.x -- `cost_kind: trigger`, no packs at",
+        "all -- so it ships as packless research at rung 3 on Researchd's `CheckItemPresenceResearchMethod`,",
+        "which #42 already sanctioned at any rung.",
+        "",
+        "`uranium-fuel-cell` is `crafting` and fluid-free, so #88's rule makes it Personal-Assembler",
+        "craftable with no judgement call: nothing here carves an exception.",
+        "",
+        "The ACID GATE MOVED. #58 and ADR-0021 put it on Mekanism's Chemical Dissolution Chamber arguing",
+        "`no custom machine`; the pack now has five, so ADR-0033 moves it onto the pack's Chemical Plant and",
+        "CUTS the Dissolution Chamber -- closing the lever ADR-0032 left open and emptying Mekanism's ore",
+        "chain to zero blocks. Factorio puts the acid in the mining drill, not in a machine hop; #58 chose",
+        "the hop and ADR-0033 only changes which machine performs it."
+      ],
       "count": 3
     },
     "logistics/circuit-network": {

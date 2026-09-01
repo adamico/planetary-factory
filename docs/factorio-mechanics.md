@@ -452,27 +452,37 @@ Sub-rules:
 ### Nuclear fission
 
 - **verdict**: `adapted`
-- **notice**: fission is Mekanism's reactor, so it is a built multiblock with its own meltdown and
-  waste model rather than Factorio's tile-and-neighbour puzzle — you engineer one reactor instead of
-  laying out many.
+- **notice**: the reactor emits **superheated steam** directly and there is no heat layer, so
+  Factorio's reactor-to-exchanger ratio and heat-pipe layout puzzles do not exist here. The chapter
+  is fuel chemistry and a steam budget, not a thermal one.
 - **where**: Terra
-- **via**: `mekanism`
-- **owner**: #89
+- **via**: `pack`
+- **owner**: ADR-0033
+- **ticket**: #89 (closed)
 
-**This verdict is provisional and #89 may retire it.** Mekanism's fission reactor is what the pack
-has today, and it is a whole chapter rather than a gap. What has no owner is the chain around it:
-#58 gives uranium's first step one — Factorio's sulfuric-acid gate as an authored
-`mekanism:dissolution` recipe at rung 3 — but nothing owns enrichment, fuel cells or reprocessing,
-ADR-0017 has no fission row, and `subgroup-owner.json` defers four recipes to #89. #89 decides
-whether the nuclear chapter ships at all, and if it does not, this row becomes `excluded`.
+**Settled by ADR-0033: the chapter ships, pack-authored.** Factorio's own tech costs place it —
+`uranium-mining`, `uranium-processing` and `nuclear-power` are all chemical science, so rung 3;
+`nuclear-fuel-reprocessing` adds production, so rung 4; **Kovarex costs space science** and is
+post-launch, so Terra runs at raw 0.7% U-235 exactly as Nauvis does. Three pack machines on a GT
+chassis — Centrifuge, Nuclear Reactor, Steam Turbine.
+
+**Mekanism was refused, and the earlier `via: mekanism` was a mistake of fact**: the Fission Reactor
+lives in **MekanismGenerators**, which this pack does not install. Adopting it would have brought six
+further generators onto ADR-0017's Power generation row.
 
 Sub-rules:
 
-- **Kovarex enrichment** — `blocked`.
+- **Kovarex enrichment** — `blocked`, and correctly so: it costs **space science** in Factorio, so it
+  belongs to the post-launch map rather than to Terra. Terra's 0.7% yield is the fidelity, not a gap.
 - **Reactor neighbour bonus** — `excluded`. `by-consequence` of adopting a multiblock reactor: there
   is nothing to place next to anything, so the layout puzzle has no board.
-- **Heat pipes and heat exchangers as a separate transport network** — `blocked`, deferred to #89
-  with the rest of the chapter.
+- **Heat pipes and heat exchangers as a separate transport network** — `blocked`, **moved to Gelida**
+  by ADR-0033. Terra's reactor needs no heat layer, and Aquilo's mechanic is the one that actually
+  requires the real thing: buildings freeze by **adjacency** (one tile, orthogonal or diagonal, above
+  30 °C) rather than by plumbing, with per-entity draw and an immunity list, while heat pipes buffer
+  1 MJ/°C over 500–1000 °C and flow only down a differential. A fluid cannot express coverage.
+  Factorio's own two thresholds — **≥500 °C for a heat exchanger, ≥30 °C to keep a building warm** —
+  are the seam: the conduction layer is one build, the freezing layer another. Both are Gelida's.
 
 ### Pollution
 
@@ -844,7 +854,8 @@ Sub-rules:
 
 - **Lava is an infinite fluid resource** — `planned`. Needs a mechanism to treat lava as infinite.
 - **Molten metal as a fluid intermediate, and the foundry** — `planned`.
-- **Sulfuric acid geysers, and acid neutralisation to water** — `planned`.
+- **Sulfuric acid geysers, and acid neutralisation to water** — `planned`. Its steam output is the
+  second consumer of ADR-0033's **Steam Turbine**, which is why that row is not Terra-only.
 - **Demolishers as territorial obstacles** — `blocked`. No enemy model outside Terra, and this is the
   one place Space Age puts a boss between you and a resource.
 
@@ -923,7 +934,9 @@ elevated-rail tier, so the mechanic has nothing to add.
 - **owner**: `docs/planets.md`
 - **ticket**: #15, then Gelida's `Puzzle:` ticket
 
-Fusion generator and reactor, craftable only on Gelida.
+Fusion generator and reactor, craftable only on Gelida. **`via: mekanism` here means
+  MekanismGenerators, which the pack does not install** — the same absent jar ADR-0033 refused for
+  Terra's fission. Adopting it is a manifest decision Gelida's puzzle must argue, not inherit.
 
 ### The Shattered Planet
 
