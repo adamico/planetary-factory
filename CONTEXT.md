@@ -153,7 +153,7 @@ _Avoid_: abstraction, going virtual
 ### Making things
 
 **Personal Assembler**:
-The portable device, with its own recipe type, that turns a bootstrap-tier craft into a queued request completing after a duration. It supplements the crafting grid rather than replacing it, and covers only the components of the first machines.
+The portable device that turns a bootstrap-tier craft into a queued request completing after a duration. It is a surface, not a machine — it has no recipe type of its own, and runs the **Assembling Machine**'s recipes that Factorio marks hand-craftable, one at a time (ADR-0029). It supplements the crafting grid rather than replacing it, and covers only the components of the first machines.
 _Avoid_: crafting table, hand crafter, personal crafter
 
 **Assembling Machine**:

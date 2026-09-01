@@ -24,7 +24,7 @@ Four packs plus an unscienced rung 0 (`#26`):
 | --- | --- | --- |
 | 0 | *(none)* | Steam and Create kinetics. LP Solid Boiler, LP Steam Miner, Crushing Wheels, Steam Engine. |
 | 1 | `automation` | First machines and Mekanism enrichment. |
-| 2 | `logistic` | Movement at scale — Create 6 package logistics — **plus the Oil Refinery, the Chemical Plant, basic oil processing, solid fuel, sulfur, sulfuric acid and plastic** (ADR-0025). |
+| 2 | `logistic` | Movement at scale — Create 6 package logistics — **plus the Oil Refinery, the Chemical Plant, basic oil processing, solid fuel, sulfur, sulfuric acid and plastic** (ADR-0025), **and the red circuit, which plastic makes** (`#125`). |
 | 3 | `chemical` | **Advanced oil processing, heavy and light cracking, lubricant** (ADR-0025). The 5x dissolution tier's placement is under review, `#69`. |
 | 4 | `production` | **Rocket fuel, rocket control units, rocket parts and the silo.** |
 
@@ -36,6 +36,12 @@ red+green while `Advanced oil processing` costs blue.
 
 The spine rule survives the move intact: rung 2's sulfur buys rung 3's science pack, rung 3's
 advanced processing buys rung 4's launch fuel, and rung 4's fuel buys the silo.
+
+**The red circuit moved with the oil chapter** (`#125`). `#55` granted it at rung 1, reasoning from
+Factorio's own tech tree, where red circuits come from plastics and plastics are affordable then.
+ADR-0025 had already moved plastic to rung 2, so rung 1 would have granted a recipe the player
+cannot build. Red is a rung 2 grant; blue stays at rung 3, where sulfuric acid gives it a rung of
+headroom, and `#42`'s red circuit in the `chemical` pack is bought a rung after red is standing.
 
 **Rung 4's gate is re-argued.** `#39` justified the rung on the polymer, since every GCyR fuel tank
 and rocket motor is an Assembler recipe taking `plate KaptonK ×6`. The polymer is now rung 2, so
