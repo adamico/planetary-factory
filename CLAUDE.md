@@ -49,6 +49,15 @@ an overlapping jigsaw child silently, so this failure ships as "two patches inst
 some seeds and nothing in a log. Run it after any edit to `scripts/build-terra-start.py`; it reads
 the generated `.nbt` files, so it also catches forgetting to re-run the generator.
 
+### ADR back-links
+
+An ADR that contradicts a closed ticket's stated answer declares it as `supersedes: [55, 62]` in
+frontmatter, and each named ticket gets a comment containing the literal `ADR-00NN`. Tickets are the
+route and the ADRs are the state; without the back-link a closed ticket keeps asserting an answer an
+ADR has overridden. Run `scripts/adr-backlink-check.sh` after committing an ADR that declares the
+key — it needs an authenticated `gh`, so it is not part of any offline check. See
+`docs/agents/domain.md`.
+
 ### Factorio mechanic ledger
 
 `docs/factorio-mechanics.md` is the tracked list of every Factorio mechanic — base game and Space

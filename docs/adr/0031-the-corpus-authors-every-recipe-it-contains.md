@@ -1,5 +1,6 @@
 ---
 status: accepted
+supersedes: [55, 62]
 ---
 
 # The corpus authors every recipe it contains, and an override needs a recorded reason

@@ -1,5 +1,6 @@
 ---
 status: accepted
+supersedes: [55]
 ---
 
 # Factorio science is Terra's progression spine, and Researchd is the lab

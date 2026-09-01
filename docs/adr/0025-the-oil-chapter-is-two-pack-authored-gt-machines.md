@@ -1,5 +1,6 @@
 ---
 status: accepted
+supersedes: [39, 40]
 ---
 
 # The oil chapter is two pack-authored GT machines, and it moves off rung 4
