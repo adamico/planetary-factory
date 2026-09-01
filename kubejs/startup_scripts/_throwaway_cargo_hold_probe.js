@@ -22,7 +22,11 @@
 //                          Note it writes `BlockBuilder.rightClick`, so a block using this
 //                          cannot also carry a custom right-click callback.
 //
-// 9x3 -- a single chest exactly. The width argument is NOT free: `CustomChestMenu` lays the
+// 9x5 -- two rows past a single chest, so the screen reads as a wreck's hold and not a chest
+// someone placed. Height is capped at 6: `CustomChestMenu.TYPES` is GENERIC_9x1..9x6, indexed
+// by row count, so a seventh row would run off the end of the array.
+//
+// The width argument is NOT free: `CustomChestMenu` lays the
 // container slots out nine per row with a hardcoded 9, while `KubeJSGUI` sizes the window from
 // the attachment's `height`. Any width but 9 desyncs the two -- a 3x3 draws as one row of nine
 // under a window sized for three, with the player inventory floating below the gap.
@@ -35,7 +39,7 @@ StartupEvents.registry('block', (event) => {
     .resistance(3600000)
     .requiresTool(false)
     .blockEntity((be) => {
-      be.inventory('cargo', [], 9, 3);
+      be.inventory('cargo', [], 9, 5);
       be.rightClickOpensInventory('cargo');
     });
 });
