@@ -1,5 +1,6 @@
 ---
 status: accepted
+supersedes: [90]
 ---
 
 # One mod owns each capability on Terra, and the losing block is recipe-removed
@@ -42,6 +43,7 @@ craftable has not made the choice.
 | Chemistry | **The pack** — a registered **Chemical Plant** on a GT chassis (ADR-0025), carrying Factorio's whole chemical-plant list | Mekanism keeps chemistry only where the oil chapter does not reach it; GT's chem line is not Terra's |
 | Refining | **The pack** (ADR-0025) — *this row was "Mekanism, by pack-authored recipes on machines it owns" and was written without checking that Mekanism can express the recipe. It cannot: advanced oil processing is two fluids in and three out, and no Mekanism machine has that shape.* | as above |
 | Assembly | **The pack** — three registered Assembling Machines on a GT chassis (ADR-0026) | GT's stock Assembler and its whole recipe corpus removed |
+| Hand-crafting surface | **The pack** — the Personal Assembler, a panel on the inventory screen (`#90`, `#95`) | vanilla Crafting Table, Crafting on a Stick and CraftingTweaks **cut**; Sophisticated Backpacks' Crafting Upgrade and AE2's terminals recipe-removed; **Create's Mechanical Crafter and Mekanism's Formulaic Assemblicator cut** — *amended by `#34`, which supersedes `#90`'s decision to keep the two executors* |
 
 GregTech is left with exactly extraction, plus the fluid rig that is extraction by another name.
 Nothing was added to its share, and **the Assembly row has since left it** (ADR-0026): the stock
@@ -74,6 +76,24 @@ granted by a science tier. That ladder is the reason two blocks die rather than 
   break needs exactly the scripted restriction GDD §5 rules out. A gantry quarry costs build effort,
   not progression, so the player pays it at rung 1 and never touches a Drilling Rig. Tunnel-boring
   for trains is the real loss; it is scenery, not a capability the spine needs.
+
+## The two crafting executors are cut, not kept
+
+`#90` cut every *manual* crafting grid and deliberately kept the two *executors* — Create's
+Mechanical Crafter and Mekanism's Formulaic Assemblicator — on the reasoning that they stop being
+duplicate hand-crafting and become the only surface that can run their own mods' shaped recipes.
+`#34` reverses that: **neither is one of this pack's crafting machines, so neither ships.**
+
+The consequence `#90` identified is real and is simply paid rather than avoided. Create's casings
+and Mekanism's internal circuits lose their last executor, and they fall through to where every
+other fluid-free `crafting` row already goes (`#88`): the Personal Assembler, and the Assembling
+Machines above it. They become ordinary corpus recipes with no special beat, which is why
+`docs/spec/terra-progression.md` never mentions them.
+
+The alternative — keeping two blocks whose only remaining job is to run recipes the pack would
+otherwise author itself — buys a small amount of authoring work at the price of two extra crafting
+idioms the player must learn, in a pack whose whole thesis is that there is one place you craft by
+hand.
 
 ## Almost Unified stays, restricted to raw materials
 

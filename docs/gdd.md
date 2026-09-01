@@ -152,6 +152,9 @@ physically requires. The gate is **Researchd's Research Lab**, fed by pipe and c
 FTB Quests keeps the book and the reward surface but does not gate. GregTech is instrumental rather
 than the ladder. The spine is recorded in ADR-0018; which mod owns each rung is ADR-0017.
 
+The beat-by-beat arc from spawn to the first launch — chapters, hour budget and what each rung
+grants — is `docs/spec/terra-progression.md` (`#34`).
+
 **Terra's science packs are inert items. Sapros's science pack decays** — the buffer-as-liability
 puzzle belongs to that body and is specified with it, not here.
 
