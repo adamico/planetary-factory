@@ -950,6 +950,9 @@ settled inside a row. Filed:
 - #120 — modules and beacons, and whether the retrofit-tradeoff mid-game exists here at all.
 - #121 — personal transport.
 - #122 — quality, and whether an item-quality axis is affordable at all.
+- #131 — the Shattered Planet: is Atlantis a mechanic, or a name on the map? The attrition half is
+  `by-consequence` of ADR-0006's static platforms, so what is open is whether the destination
+  survives without the journey.
 
 ## Every `planned` row has a ticket
 
