@@ -69,6 +69,12 @@ Oxygen supply and the return trip are deliberately left to the player — that p
 Per-planet Kit variants (heat shielding for Ignus, thermal plant for Gelida) are a later upgrade
 tier, not part of the baseline Kit.
 
+**The Kit predates the fidelity standard, and is suspect** (`#100`). Terra's own arrival is now
+Factorio's — a crash landing, an engineer stranded, a wreck to loot — and Factorio's *later*
+arrivals are Space Age's: a platform overhead and a cargo drop, not a deployable kit. The Kit is
+neither. Its fate is not this map's to decide, since `#25` stops at the first launch from Terra;
+it is recorded there as out of scope rather than settled.
+
 ### Orbital presence — the Orbital Starter Kit
 
 A Platform is a GCyR space station (ADR-0006). The Orbital Starter Kit is GCyR's station package
@@ -151,16 +157,19 @@ puzzle belongs to that body and is specified with it, not here.
 
 ### The Personal Assembler
 
-A portable device with its own recipe type, covering the bootstrap tier only: the components of the
-first machines, which have nowhere to go once their recipes leave the grid and before any machine
-exists to make them.
+A panel on the inventory screen, covering the bootstrap tier only: the components of the first
+machines, which have nowhere to go once the crafting grid is removed and before any machine exists
+to make them. It is not an item — there is nothing to craft, nothing to lose and nothing to grant.
 
-- **Trigger** — Right-clicking opens an FTB Library UI.
-- **State** — A selected recipe pushes a queue entry to the player's `persistentData`.
-- **Engine** — A `PlayerEvents.tick` script decrements the timer and delivers the item at zero.
+- **Trigger** — A tab on the inventory screen, present from the first tick (`#95`).
+- **Recipes** — The Assembling Machine's own, filtered to those Factorio marks hand-craftable; it
+  has no recipe type of its own (ADR-0029).
+- **Rate** — One at a time, at speed 1, so a craft is a request that completes rather than an
+  instant.
 
 It is unpowered, works anywhere, and is deliberately slow. Once real machines exist it has nothing
-left to make.
+left to make. Because it can never be missing, the opening's job is to **teach** it — Terra's
+wreckage and the quest book's tooltip hint, not a grant (`#100`).
 
 ## 6. Hazards and the Overseer System
 
