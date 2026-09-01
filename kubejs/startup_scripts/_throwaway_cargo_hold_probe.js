@@ -22,7 +22,10 @@
 //                          Note it writes `BlockBuilder.rightClick`, so a block using this
 //                          cannot also carry a custom right-click callback.
 //
-// Nine slots in a 3x3 so the screen is unmistakably a chest view rather than a hopper's row.
+// 9x3 -- a single chest exactly. The width argument is NOT free: `CustomChestMenu` lays the
+// container slots out nine per row with a hardcoded 9, while `KubeJSGUI` sizes the window from
+// the attachment's `height`. Any width but 9 desyncs the two -- a 3x3 draws as one row of nine
+// under a window sized for three, with the player inventory floating below the gap.
 StartupEvents.registry('block', (event) => {
   event.create('planetaryfactory:cargo_hold_probe')
     .displayName('Cargo Hold Probe')
@@ -32,7 +35,7 @@ StartupEvents.registry('block', (event) => {
     .resistance(3600000)
     .requiresTool(false)
     .blockEntity((be) => {
-      be.inventory('cargo', [], 3, 3);
+      be.inventory('cargo', [], 9, 3);
       be.rightClickOpensInventory('cargo');
     });
 });
