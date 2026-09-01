@@ -61,8 +61,9 @@ Two consequences bind every recipe author:
 
 - **Assembling Machine I/II/III** (GT's LV/MV/HV Assemblers, renamed) are **granted by a rung,
   speed-only, and gate nothing**.
-- **Every GT recipe is authored at LV `EUt`**, or machine tier becomes a recipe gate by accident and
-  the pack grows a second ladder underneath the first.
+- **No GT recipe carries an `EUt` at all** — ADR-0029 puts energy on the machine, so a recipe cannot
+  encode a tier gate even by accident. This supersedes the original rider, "every GT recipe is
+  authored at LV `EUt`", which asked a recipe author to remember what is now structural.
 
 ## Researchd is the lab, and the quest book teaches
 

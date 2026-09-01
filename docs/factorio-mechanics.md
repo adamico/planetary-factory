@@ -190,11 +190,29 @@ Sub-rules:
 - **verdict**: `planned`
 - **where**: all bodies
 - **via**: `pack`
-- **owner**: ADR-0026
+- **owner**: ADR-0026, ADR-0029
 - **ticket**: #87 (the machines are registered; the recipe conversion is not)
 
 Three pack-authored Assembling Machines on a GT chassis. Recipe routing follows Factorio's own
 `category` (ADR-0021), not the owning mod.
+
+Sub-rules:
+
+- **`crafting_speed` as a machine property** — `planned`. ADR-0029 puts it on the machine, at
+  Factorio's raw values (0.5 / 0.75 / 1.25), which is what makes `energy_required x 20` produce
+  Factorio's own felt durations. It is also the only thing that makes the three tiers differ, since
+  overclocking never fires above base tier.
+- **`energy_usage` as a machine property** — `planned`. ADR-0029 emits no `EUt` on a recipe at all;
+  a machine modifier supplies it, scaled so the Oil Refinery's 420 kW lands on LV's 32 EU/t.
+- **Machine idle draw** — `excluded`. A Factorio machine consumes power while idle: the
+  [Electric system](https://wiki.factorio.com/Electric_system) page notes *"an active assembling
+  machine 2 will consume 155 kW (150 kW energy consumption + 5 kW drain)"*, about a thirtieth of the
+  draw, and the engine default is `energy_usage / 30` since no crafting machine sets the field.
+  GregTech has no equivalent -- an idle GT machine consumes nothing -- and reproducing it means real
+  idle draw built in `planetaryfactory_core` for a lesson (*don't over-build*) that ore depletion
+  (ADR-0020) and Emission already teach more cheaply. Folding it into `EUt` is worse than either: it
+  looks like fidelity and behaves as a flat tax. Called **idle draw** in pack prose, never "drain",
+  which `CONTEXT.md` owns for an unrelated Sapros mechanic.
 
 ### Handcrafting and the crafting queue
 
@@ -213,6 +231,13 @@ and before any machine exists to make them.
 describes it as a KubeJS implementation — an FTB Library UI, a `persistentData` queue and a
 `PlayerEvents.tick` engine — and ADR-0015's ownership table decides where pack content lives. Moving
 it to a mod is a decision neither document records yet.
+
+**The queue's slowness is serial, not a multiplier.** The character prototype sets no
+`crafting_speed` at all -- it is not a crafting machine -- so Factorio hand-crafting runs at exactly
+`energy_required` seconds. What makes it slow is that the queue is serial: one craft at a time, no
+modules, no parallelism. `#95` already gave the Personal Assembler a timed queue, so the pack
+reproduces the mechanism rather than approximating it with a penalty, and ADR-0029 gives the
+Assembler speed 1 with durations of `energy_required x 20` unmodified.
 
 ### Transport belts
 

@@ -47,7 +47,8 @@ const ASSEMBLING = GTRecipeTypes.register('assembling', GTRecipeTypes.ELECTRIC)
 //
 // ADR-0018 makes the tiers speed-only and says they gate nothing, so there is no per-tier
 // fluid restriction -- Factorio's assembling-machine-1-cannot-craft-fluids rule is exactly
-// the accidental gate that line exists to prevent -- and every recipe is authored at LV EUt.
+// the accidental gate that line exists to prevent. No recipe carries an EUt at all: ADR-0029
+// puts energy and speed on the machine, so a recipe cannot encode a tier gate even by accident.
 // Two parts of a stock GT machine's GUI are welded into `SimpleTieredMachine` rather than read
 // off the recipe type, so no builder call reaches them: the programmed-circuit configurator
 // (`isCircuitSlotEnabled()` returns a hardcoded `true`) and the charger slot (built into that

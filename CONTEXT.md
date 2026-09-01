@@ -242,7 +242,8 @@ The player-built route by which Spoilage leaves a Clogged machine. Terminal Spoi
 terminal Spoilage, may be pulled out of a bus that otherwise refuses extraction, so a hopper under an
 input bus clears a Clog while leaving every un-Decayed stage locked inside. There is no dedicated
 bus and no automatic removal: the Drain is something the player builds, or does not.
-_Avoid_: purge, trash, trash slot, reject, waste output, eject
+_Avoid_: purge, trash, trash slot, reject, waste output, eject, idle draw (Factorio's `drain`, an
+unrelated mechanic -- ADR-0029)
 
 ### Hazards
 
