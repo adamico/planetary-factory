@@ -66,7 +66,12 @@ fromFactorio('automation-science-pack', {
 
 fromFactorio('logistics', {
   icon: 'create:belt_connector',
-  unlocks: ['create:crafting/kinetics/belt_connector']
+  // TEMPORARY -- scaffold for the in-world checks of #75, #76 and #79. Do not commit.
+  // The tree gates no GT recipe (#80), so RecipeLogicMixin has nothing to fire on in normal play
+  // and none of those three issues is reproducible without a lock like this one. This pairing --
+  // gtceu:assembler/sticky_piston_slime behind logistics -- is the one #74 and #76 were both
+  // observed against, so results stay comparable to what is already written down.
+  unlocks: ['create:crafting/kinetics/belt_connector', 'gtceu:assembler/sticky_piston_slime']
 });
 
 fromFactorio('logistic-science-pack', {

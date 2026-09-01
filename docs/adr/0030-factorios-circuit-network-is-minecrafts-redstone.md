@@ -49,7 +49,7 @@ looking for a capability one mod owns can miss a mechanic the game already has.*
 an empty `underground_ores` step — so the mechanic exists while its crafting material does not.
 `#62` records the same problem hitting the authored green circuit. That is a resource question for
 `#25`, not a verdict on the mechanic, and the two were conflated in the row before this ADR split
-them.
+them. It is tracked as `#119`, and the row stays `adapted` whatever the answer.
 
 **Whether the combinator recipes are emitted is the other axis.** ADR-0028 keeps the ledger and
 `subgroup-owner.json` from reading each other, and this is the case that shows why: a mechanic
