@@ -297,11 +297,18 @@
         "turbine output is a property of the steam, not the building -- with the continuum flattened to the",
         "two values the game actually uses. Ignus's acid neutralisation is the Turbine's second consumer.",
         "",
-        "`steam-engine` is NOT among them: it is the Alternator, settled above."
+        "`steam-engine` is NOT among them: it is the Alternator, settled above.",
+        "",
+        "MEKANISM OWNS NOTHING ON THIS SHELF, AND #104 MAKES THAT DELIBERATE RATHER THAN INCIDENTAL.",
+        "ADR-0017's Power generation row carried a clause reading `Mekanism generates at scale as FE`; the",
+        "pack installs base Mekanism, which registers NO GENERATOR BLOCK -- every generator and the",
+        "Industrial Turbine are in MekanismGenerators, the jar ADR-0033 refused. The eight rows here were",
+        "already Mekanism-free; the clause was the last place the claim survived. `split` is unchanged and",
+        "was never split on a Mekanism side."
       ],
       "count": 8,
       "cross_owner": "Every row here is an item of one mod built in the pack's Assembling Machine (ADR-0026); no owner on this shelf crafts its own machines.",
-      "ticket": 92
+      "ticket": 104
     },
     "production/smelting-machine": {
       "owner": "undecided",

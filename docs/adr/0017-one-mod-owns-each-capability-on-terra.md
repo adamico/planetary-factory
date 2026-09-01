@@ -31,7 +31,7 @@ craftable has not made the choice.
 | Extraction (fluid) | **GregTech** — Fluid Drilling Rig, **rung 2** (was rung 4; moved with the oil chapter, ADR-0025) | — |
 | Mining automation | **GregTech** — LP Steam Miner (rung 0) → Basic Ore Drilling Rig → Advanced, one rig per rung, each granted by a science tier | as above |
 | ~~Ore processing~~ | **Row deleted by ADR-0032** — ore smelts 1:1 and no block in the pack multiplies it, so there is no capability between extraction and smelting to own. This row read "**Create** at rung 0 (Crushing Wheels, Millstone); **Mekanism** from rung 1 (enrichment → 5x)" | Mekanism's Purification, Injection, Washer and Crystallizer **recipe-removed**; Create's and Mekanism's ore recipes removed; GT's ore-processing line was already removed (`#37`) |
-| Power generation (steam, solar) | **Electro** — *amended by #101; this row read "**Create** generates first (Steam Engine, rung 0); **Mekanism** generates at scale as FE"*. Create's Steam Engine is the prime mover and emits SU, not electricity; the **Alternator** is what makes power. Solar is Electro's outright | GT's power layer removed entire |
+| Power generation (steam, solar) | **Electro** — *amended by #101, then by #104; this row read "**Create** generates first (Steam Engine, rung 0); **Mekanism** generates at scale as FE"*. Create's Steam Engine is the prime mover and emits SU, not electricity; the **Alternator** is what makes power. Solar is Electro's outright. **#104 struck the Mekanism clause as a mistake of fact**: the pack installs base Mekanism, which registers **no generator block at all** — every generator and the Industrial Turbine live in MekanismGenerators, the jar ADR-0033 refused *for this row*. Terra's chain is four steps, not three: **GT boiler → Create Steam Engine (SU) → Electro Alternator (W) → grid** | GT's power layer removed entire. **No Mekanism generator is recipe-removed, because none exists** — the default below removes a *losing block*, and Mekanism supplies none here |
 | Power generation (superheated steam) | **The pack** (ADR-0033) — a registered Nuclear Reactor and Steam Turbine on a GT chassis. Named for the fluid, not for fission: Terra's reactor and Ignus's acid neutralisation are the same row | **MekanismGenerators not adopted** — it brings six other generators onto the row above; GT's own Steam Turbines stay removed with the rest of its power layer (`#37`) |
 | Power transmission (between areas) | **Create: Electro Energetics** — poles, wire, catenary | GT cables removed with the power layer |
 | Power distribution (inside an area) | **Mekanism** (Universal Cables) | — |
@@ -282,7 +282,15 @@ than something that arrives with the first furnace.
 
 The Alternator paragraph above said Terra did not need it. Terra needs nothing else.
 
-**Mekanism's at-scale FE generation is untouched by this amendment.** It was on the same row and is
-a different claim — Electro owning the steam and solar path does not say what generates at scale, and
-nobody has argued that one. If Mekanism's generators are also to go, that is its own row and its own
-losing blocks.
+**Mekanism's clause was left untouched by this amendment, and #104 has since struck it.** *This
+paragraph read: "Mekanism's at-scale FE generation is untouched by this amendment. It was on the same
+row and is a different claim... If Mekanism's generators are also to go, that is its own row and its
+own losing blocks."* It got its own row, and the row turned out to have no blocks in it: **base
+Mekanism registers no generator**, so there was never a losing block to remove and never an at-scale
+tier to argue. The phrase **"generates at scale" is retired** — it named no rung, no block and no
+threshold, and a tier is named here by its blocks and its rung or not at all.
+
+The pack's generation tiers are Nauvis's three, and none of them is Mekanism's: the four-step boiler
+chain, Electro's solar and accumulators, and ADR-0033's Nuclear Reactor feeding the **Steam
+Turbine** — which is the pack's only FE-side generator, fenced from the rung-0 chain by the
+superheated-steam fluid rather than by the Converter.

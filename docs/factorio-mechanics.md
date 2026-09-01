@@ -434,20 +434,32 @@ Sub-rules:
 
 - **verdict**: `planned`
 - **where**: all bodies
-- **via**: `electro`, `create`, `mekanism`
-- **owner**: ADR-0017 as amended by #101 (Electro owns steam and solar). **`mekanism` appears in
-  `via` only on the strength of an unargued clause — #104 decides whether the pack has an at-scale
-  generation tier at all, and if not, `via` is `electro` alone.**
+- **via**: `gregtech`, `create`, `electro`, `pack`
+- **owner**: ADR-0017 as amended by #101 (Electro owns steam and solar) and #104. `via` is ordered
+  along the chain: GregTech's boiler, Create's Steam Engine, Electro's Alternator, the pack's Steam
+  Turbine. **`mekanism` was struck by #104** — the pack installs base Mekanism, which registers no
+  generator block at all, so the clause naming it never named anything.
 - **ticket**: #104
 
 Sub-rules:
 
-- **Boiler and steam engine as the first power** — `adapted`. The chain is three steps, not two:
-  a Create Steam Engine burns fuel and emits SU, an Electro Alternator turns SU into watts, and the
-  grid carries them. A Factorio player's boiler-and-engine pair has a rotational stage wedged in the
-  middle of it, and the grid is granted at a rung rather than arriving with the first fire.
+- **Boiler and steam engine as the first power** — `adapted`. The chain is **four** steps, not two:
+  **#37's LP Solid Boiler burns fuel and makes steam**, a Create Steam Engine turns that steam into
+  SU, an Electro Alternator turns SU into watts, and the grid carries them. A Factorio player's
+  boiler-and-engine pair has a rotational stage wedged in the middle of it, and the grid is granted
+  at a rung rather than arriving with the first fire. *(#104 corrects "three steps" and "a Create
+  Steam Engine burns fuel": the Steam Engine burns nothing — it is the prime mover, and the boiler
+  is GregTech's.)*
 - **Solar panels and accumulators** — `planned`, Electro's outright, and Electro's identity.
 - **Steam as a stored, pipeable intermediate** — `planned`.
+- **The Steam Turbine, on superheated steam** — `planned`, the pack's, and **the pack's only FE-side
+  generator**. *Moved here from [Nuclear fission](#nuclear-fission) by #104*: ADR-0033 names the row
+  **for the fluid, not for fission**, and the Turbine has two producers on two bodies — Terra's
+  Nuclear Reactor and Ignus's acid neutralisation. Filing a cross-body generator under Terra's
+  fission chapter hid what it is. Superheated steam is its own GT material and **only the Turbine
+  accepts it**; ordinary steam keeps the four-step chain above, which the Turbine will not take, and
+  that fluid split — not the Converter — is what stops it retiring the rung-0 Alternator. **Not
+  registered yet** (#107's siblings): ADR-0033's stated design, unbuilt.
 
 ### Nuclear fission
 
@@ -468,7 +480,13 @@ chassis — Centrifuge, Nuclear Reactor, Steam Turbine.
 
 **Mekanism was refused, and the earlier `via: mekanism` was a mistake of fact**: the Fission Reactor
 lives in **MekanismGenerators**, which this pack does not install. Adopting it would have brought six
-further generators onto ADR-0017's Power generation row.
+further generators onto ADR-0017's Power generation row. **#104 later struck that row's Mekanism
+clause on the same fact**, and the refusal here is why: base Mekanism registers no generator block.
+
+**The Steam Turbine is not on this row.** #104 moved it to [Power generation](#power-generation),
+where ADR-0033's own framing puts it — the row is named for the fluid, not for fission, and the
+Turbine's second producer is Ignus's acid neutralisation, on a body with no reactor. This row keeps
+the Reactor, the Centrifuge and the fuel chain.
 
 Sub-rules:
 
