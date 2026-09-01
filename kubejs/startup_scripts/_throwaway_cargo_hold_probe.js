@@ -7,9 +7,11 @@
 //   1. Unbreakable      -- hardness(-1), the same knob `blocks.js` already turns.
 //   2. Automatable      -- `inventory(...)` attaches an InventoryAttachment, which reports
 //                          ITEM_HANDLER on the listed faces, so hoppers, Create funnels and
-//                          GT pipes all see it. A null direction set means EVERY face:
-//                          KubeEntityCapabilityProvider short-circuits on an empty EnumSet
-//                          and answers the capability regardless of side.
+//                          GT pipes all see it. An EMPTY direction set means EVERY face:
+//                          `attach` branches on `Set.isEmpty()` and the capability provider
+//                          short-circuits on an empty EnumSet, answering whatever the side.
+//                          It must be `[]`, not `null` -- Rhino coerces the argument through
+//                          `Set.of(...)`, which NPEs on null before `attach` is ever entered.
 //   3. Persistent       -- InventoryAttachment has serialize/deserialize, so KubeBlockEntity
 //                          writes it into the chunk. Claimed by the jar, unverified in a world.
 //   4. Player-openable  -- `rightClickOpensInventory('cargo')`, a first-class BlockEntityInfo
@@ -30,7 +32,7 @@ StartupEvents.registry('block', (event) => {
     .resistance(3600000)
     .requiresTool(false)
     .blockEntity((be) => {
-      be.inventory('cargo', null, 3, 3);
+      be.inventory('cargo', [], 3, 3);
       be.rightClickOpensInventory('cargo');
     });
 });
