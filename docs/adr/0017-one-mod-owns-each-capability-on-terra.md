@@ -23,6 +23,21 @@ separate documents for the same reason ADR-0015 split from ADR-0014.
 component of something kept or is purely decorative. A curated pack that leaves the rejected idiom
 craftable has not made the choice.
 
+**The column has three values, not two — amended by ADR-0034.** *Cut* and *—* were the only two this
+table admitted, and they cannot express the case `#91` actually produced: the Electric Furnace is
+Mekanism's Energized Smelter, kept, renamed, and **granted at rung 3**. It is not cut, and it is not
+freely available either. The third value is **gated**: the recipe ships, and a science rung decides
+when.
+
+Gated is not a softer cut. It is the *opposite* claim — a cut block is one the pack decided against,
+a gated block is one the pack wants and is spending a rung on. Reading a gated row as "kept but
+outclassed" files a deliberate grant as an unargued exception; reading it as cut deletes a block the
+ladder is built on.
+
+The direction that does not reverse: **gated is not kept, either.** ADR-0034 is the authority there —
+a recipe reachable only past a rung is still a recipe that must be named by a decision, with its
+crafting surface named too. Late is not an argument for shipping something nobody chose.
+
 ## The table
 
 | Capability | Owner | The losing blocks |
