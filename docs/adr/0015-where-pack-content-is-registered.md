@@ -73,6 +73,19 @@ Recorded because it was assumed wrong once in each direction, and the assumption
   what made `/place feature` reachable, and ADR-0014 rejected that route on other grounds.
 - **KubeJS cannot register a GregTech material** — see `#18`. Materials are data files read by the
   GCyR fork.
+- **A block entity with a persistent, automatable, player-openable inventory is KubeJS's**, verified
+  in a world by `#133`. `blockEntity(be => { be.inventory(name, [], 9, rows); be.rightClickOpensInventory(name) })`
+  gives a container that hoppers and pipes see, that survives save and reload, and that opens as a
+  chest screen. So a container with a screen is **not** mechanism in the sense that sends a block to
+  the mod — the table's second row already covers it, and no new row is needed. Three constraints
+  come with it, all read off `2101.7.1-build.181` and all silent when broken:
+  - **Every face is the empty set `[]`, never `null`.** Rhino coerces the argument through
+    `Set.of(...)`, which throws before KubeJS's `attach` can branch on `isEmpty()`.
+  - **The width is 9 or the screen is wrong.** `CustomChestMenu` lays slots out nine per row
+    regardless of the attachment's `width`, while `KubeJSGUI` sizes the window from its `height`.
+  - **Six rows is the ceiling** — `CustomChestMenu.TYPES` is `GENERIC_9x1..9x6`, indexed by row count.
+  - `rightClickOpensInventory` **writes `BlockBuilder.rightClick`**, so such a block cannot also
+    carry a custom right-click callback.
 
 ## Create integration comes free if the tags are right
 
