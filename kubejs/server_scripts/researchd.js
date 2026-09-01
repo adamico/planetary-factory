@@ -24,57 +24,8 @@ ResearchdEvents.registerResearchPacks(event => {
     .literalName('Chemical Science Pack')
     .color(60, 60, 200)
     .sortingValue(102);
-});
 
-ServerEvents.recipes(event => {
-  event.shapeless(
-    Item.of('researchd:research_pack[researchd:research_pack="planetary_factory:automation_science_pack"]'),
-    [
-      'create:copper_sheet',
-      'create:cogwheel'
-    ]
-  ).id('planetary_factory:automation_science_pack');
-  event.shapeless(
-    Item.of('researchd:research_pack[researchd:research_pack="planetary_factory:logistic_science_pack"]'),
-    [
-      'create:smart_chute',
-      'create:brass_funnel'
-    ]
-  ).id('planetary_factory:logistic_science_pack');
-  event.shapeless(
-    Item.of('researchd:research_pack[researchd:research_pack="planetary_factory:chemical_science_pack"]'),
-    [
-      'create:smart_chute',
-      'create:brass_funnel'
-    ]
-  ).id('planetary_factory:chemical_science_pack');
-});
-
-fromFactorio('steam-power', {
-  icon: 'gtceu:lp_steam_solid_boiler',
-  has: ['create:iron_sheet', 50],
-  unlocks: ['kubejs:shaped/lp_steam_solid_boiler']
-});
-
-// Factorio: craft-item lab. Parent `electronics` is undeclared, so the DSL resolves
-// through it and this lands on steam-power alone.
-fromFactorio('automation-science-pack', {
-  iconPack: 'planetary_factory:automation_science_pack',
-  has: ['researchd:research_lab', 1],
-  unlocks: ['planetary_factory:automation_science_pack']
-});
-
-fromFactorio('logistics', {
-  icon: 'create:belt_connector',
-  // TEMPORARY -- scaffold for the in-world checks of #75, #76 and #79. Do not commit.
-  // The tree gates no GT recipe (#80), so RecipeLogicMixin has nothing to fire on in normal play
-  // and none of those three issues is reproducible without a lock like this one. This pairing --
-  // gtceu:assembler/sticky_piston_slime behind logistics -- is the one #74 and #76 were both
-  // observed against, so results stay comparable to what is already written down.
-  unlocks: ['create:crafting/kinetics/belt_connector', 'gtceu:assembler/sticky_piston_slime']
-});
-
-fromFactorio('logistic-science-pack', {
-  iconPack: 'planetary_factory:logistic_science_pack',
-  unlocks: ['planetary_factory:logistic_science_pack']
+  // when using the packs in recipes
+  // a data component is needed:
+  // Item.of('researchd:research_pack[researchd:research_pack="planetary_factory:automation_science_pack"]')
 });
