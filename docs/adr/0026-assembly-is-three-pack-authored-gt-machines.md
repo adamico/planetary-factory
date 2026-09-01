@@ -42,11 +42,23 @@ the *argument* it used for the science packs: a body is scenery the pack wants t
 is a citation. An Assembling Machine is a citation. A Factorio player has to recognise the block on
 sight, or the tier ladder teaches nothing.
 
-**No voltage ladder in the ADR-0025 sense, and no fluid restriction either.** Factorio's assembling
-machine 1 cannot craft fluid recipes; 2 and 3 can. That distinction is **dropped**, because ADR-0018
-already forbids it in as many words — tiers are "granted by a rung, speed-only, and **gate nothing**"
-— and a fluid restriction is exactly the accidental gate that line exists to prevent. Recovering the
-beat is an amendment to ADR-0018, argued there.
+**No voltage ladder in the ADR-0025 sense. ~~And no fluid restriction either.~~** Factorio's
+assembling machine 1 cannot craft fluid recipes; 2 and 3 can. This ADR **dropped** that distinction,
+reading ADR-0018's "granted by a rung, speed-only, and **gate nothing**" as forbidding it, and said
+recovering the beat would be an amendment to ADR-0018.
+
+**Amended by `#125`: the fluid restriction is recovered, and ADR-0018 carries the amendment.**
+Assembling Machine I has no fluid tanks and therefore cannot match a recipe with a fluid input —
+structurally, with no flag and no second recipe type. The original reading was too broad: ADR-0018's
+rider bans *accidental* gates, the invisible kind a recipe author creates by writing an `EUt` or
+picking a tier, which is why its sibling rider is about `EUt`. An absent tank is not accidental. It
+is visible on the block, it is Factorio's own ramp, and oil reaches the player at rung 2 with the
+tier that can drink it.
+
+The distinction that does **not** become a machine capability is `advanced-crafting`: `machine.json`
+has all three assembling machines crafting it, so Factorio excludes only the character. It rides on
+the emitted recipe as its source category (`#125`), which is what lets the Personal Assembler refuse
+`engine-unit` while accepting `iron-gear-wheel`.
 
 **ADR-0025's "no voltage ladder" rule does not reach this row.** That rule was argued about machines
 Factorio does not tier: there is one refinery and one chemical plant. Factorio tiers the assembler,
@@ -201,8 +213,9 @@ Cover buttons are unchanged and still dead chrome, for the reason this ADR alrea
   inherit**, and is worth more care than one table row.
 - **ADR-0017's Assembly row changes owner** from GregTech to the pack. It becomes the third row whose
   owner is "the pack" rather than a mod.
-- **ADR-0018 is untouched** and was the deciding authority twice — for speed-only tiers and for
-  dropping the fluid restriction.
+- **ADR-0018 was the deciding authority twice** — for speed-only tiers and for dropping the fluid
+  restriction. **It is no longer untouched**: `#125` amended it to carry Assembling Machine I's
+  missing fluid tanks, so the second of those two rulings is reversed. The first stands.
 - **`gtceu:lv_assembler`'s craft is removed now**, along with the `kubejs:shaped/assembling_machine_1`
   id it was authored under. **This makes the interim pack unplayable past rung 0**, not merely
   rocketless: in stock GT the Drilling Rig controllers and most machine blocks are themselves

@@ -65,8 +65,15 @@ block.
 
 Two consequences bind every recipe author:
 
-- **Assembling Machine I/II/III** (GT's LV/MV/HV Assemblers, renamed) are **granted by a rung,
-  speed-only, and gate nothing**.
+- **Assembling Machine I/II/III** (GT's LV/MV/HV Assemblers, renamed) are **granted by a rung and
+  differ by speed**, with **one exception, amended in by `#125`: Assembling Machine I has no fluid
+  tanks**, so it cannot run the corpus's 26 `crafting-with-fluid` rows. ADR-0026 dropped that
+  restriction on this line's authority and said recovering it was an amendment here; this is that
+  amendment. The rider is narrowed rather than broken — the ban was on *accidental* gates,
+  invisible ones a recipe author creates by writing an `EUt` or picking a tier. A machine with no
+  tank gates nothing by fiat: it is the machine's visible shape, it is Factorio's own ramp, and oil
+  arrives at rung 2 alongside the tier that can drink it. `advanced-crafting` stays ungated — all
+  three machines run it, and Factorio excludes only the character.
 - **No GT recipe carries an `EUt` at all** — ADR-0029 puts energy on the machine, so a recipe cannot
   encode a tier gate even by accident. This supersedes the original rider, "every GT recipe is
   authored at LV `EUt`", which asked a recipe author to remember what is now structural.
