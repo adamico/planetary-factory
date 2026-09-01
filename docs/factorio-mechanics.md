@@ -349,7 +349,7 @@ Sub-rules:
   off one wire, and no arithmetic on a signal beyond what a comparator does.
 - **where**: all bodies
 - **via**: `native_mechanic`, `create`
-- **owner**: `unargued`
+- **owner**: ADR-0030
 
 **Factorio's circuit network is Minecraft's redstone system**, and this row belongs to redstone
 rather than to a missing mod. Vanilla supplies the wire, the comparator, the repeater and the
@@ -359,7 +359,7 @@ between them cover most of what Factorio's combinators, lamps and display panels
 
 An earlier version of this row read `blocked` on the grounds that no installed mod owns a circuit
 network. That was a category error: it looked for one mod's capability and missed the mechanic
-sitting in the base game.
+sitting in the base game. ADR-0030 records the decision and that lesson.
 
 Sub-rules:
 
