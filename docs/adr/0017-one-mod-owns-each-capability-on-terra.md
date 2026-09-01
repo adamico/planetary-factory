@@ -30,7 +30,7 @@ craftable has not made the choice.
 | Extraction (ore) | **GregTech** | Create Mechanical Drill **cut**; Mekanism Digital Miner **cut** |
 | Extraction (fluid) | **GregTech** — Fluid Drilling Rig, **rung 2** (was rung 4; moved with the oil chapter, ADR-0025) | — |
 | Mining automation | **GregTech** — LP Steam Miner (rung 0) → Basic Ore Drilling Rig → Advanced, one rig per rung, each granted by a science tier | as above |
-| Ore processing | **Create** at rung 0 (Crushing Wheels, Millstone); **Mekanism** from rung 1 (enrichment → 5x) — **this row is under review, `#69`** | GT's ore-processing line recipe-removed (ADR pending, `#37`) |
+| ~~Ore processing~~ | **Row deleted by ADR-0032** — ore smelts 1:1 and no block in the pack multiplies it, so there is no capability between extraction and smelting to own. This row read "**Create** at rung 0 (Crushing Wheels, Millstone); **Mekanism** from rung 1 (enrichment → 5x)" | Mekanism's Purification, Injection, Washer and Crystallizer **recipe-removed**; Create's and Mekanism's ore recipes removed; GT's ore-processing line was already removed (`#37`) |
 | Power generation (steam, solar) | **Electro** — *amended by #101; this row read "**Create** generates first (Steam Engine, rung 0); **Mekanism** generates at scale as FE"*. Create's Steam Engine is the prime mover and emits SU, not electricity; the **Alternator** is what makes power. Solar is Electro's outright | GT's power layer removed entire |
 | Power transmission (between areas) | **Create: Electro Energetics** — poles, wire, catenary | GT cables removed with the power layer |
 | Power distribution (inside an area) | **Mekanism** (Universal Cables) | — |
@@ -70,8 +70,9 @@ granted by a science tier. That ladder is the reason two blocks die rather than 
   idiom, and AE2 is endgame. It would end the extraction ladder the moment it appeared.
 - **Create's Mechanical Drill is cut.** Stock Create 6.0.10 is the only Create in the pack and no
   addon extends the drill, so its one function is breaking the block in front of it on a
-  contraption. It is **not** part of ore processing — Crushing Wheels and the Millstone are, and
-  they are kept. That leaves the drill with no non-extraction job: a gantry or train-mounted drill
+  contraption. It is **not** part of ore processing — *this sentence continued "Crushing Wheels and
+  the Millstone are, and they are kept", which **ADR-0032 makes wrong on both halves**: there is no
+  ore-processing capability any more, and those two blocks are kept for their non-ore work only.* That leaves the drill with no non-extraction job: a gantry or train-mounted drill
   array over a GT ore vein *is* automated ore extraction, and restricting what a block breaker may
   break needs exactly the scripted restriction GDD §5 rules out. A gantry quarry costs build effort,
   not progression, so the player pays it at rung 1 and never touches a Drilling Rig. Tunnel-boring

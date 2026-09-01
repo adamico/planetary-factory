@@ -183,7 +183,10 @@ Sub-rules:
 
 - **Ore smelts one-to-one straight to plate, with no intermediate step** — `planned`. Recorded in
   `subgroup-owner.json`; the pack does not get to add a hop.
-- **No ore multiplication** — `planned`, subject to #69.
+- **No ore multiplication** — `planned`, settled by ADR-0032: cut pack-wide, Mekanism's ladder and
+  Create's rung-0 Crushing Wheels alike. Yield gain by research or module is `blocked`, not
+  `excluded` — the lab cannot express levelled research (ADR-0022 prunes 106 such technologies) and
+  Terra is deliberately not compensated for its scarcity (ADR-0020). See #120.
 
 ### Assembling machines and recipe categories
 

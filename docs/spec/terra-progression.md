@@ -100,7 +100,7 @@ argument for rung 1, made by the game rather than by the book.
 
 **Why the grid arrives here**: the Alternator turns Create's rotation into watts (`#92`), and
 Assembling Machine I is FE-native (`#37`) — the grid arrives with its first customer and not one
-rung earlier. This holds whatever `#69` decides about ore multiplication.
+rung earlier. This holds whatever `#69` decided about ore multiplication — and ADR-0032 cut it entirely.
 
 **What rung 2 needs it for**: the belt-and-package build-out is an assembly problem, and everything
 past here is assembled.
@@ -201,10 +201,9 @@ contents belong to the orbital platform, and this arc stops at the pad.
 
 ## What this document does not decide
 
-- **Ore processing at rung 0 and enrichment at rung 1** — `#69`. Note that ADR-0018's rung-0 row
-  names Crushing Wheels and ADR-0017 gives Create "rung-0 ore processing", while the chain written
-  above is Miner → Furnace → plate, one hop, per `#91`. Those rows want revisiting with `#69`,
-  either way it goes.
+- ~~**Ore processing at rung 0 and enrichment at rung 1**~~ — **settled by ADR-0032**: ore smelts
+  1:1, every multiplier is cut pack-wide, and the chain written above (Miner → Furnace → plate, one
+  hop) is now what the ADRs say too. ADR-0017's Ore processing row is deleted.
 - **Which fractions come out of Terra's bedrock** — `#86`.
 - **Whether the nuclear chapter ships** — `#89`.
 - **Emission's pre-launch readout** — it keys on a metric ADR-0018 leaves open, so placing a beat

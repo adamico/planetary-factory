@@ -270,7 +270,7 @@ grid-side** — or rung 3 silently gates the Converter.
   `gtceu:oilsands` vein become a **mid-game** blocker rather than a late one — and `tests/worldgen/
   expected.json` still has no `bedrock_fluids` block for Terra at all, while `#59`/`#60` are
   rewriting Terra as a flat, cave-free world. This is the most likely way the chapter breaks.
-- **Ore multiplication is out of scope and unresolved.** Deleting the 5x dissolution tier follows
+- **Ore multiplication is out of scope and unresolved.** *Resolved by ADR-0032: all of it is cut, pack-wide.* Deleting the 5x dissolution tier follows
   from sulfuric acid moving to rung 2, and the fidelity argument that kills 5x kills 4x, 3x and
   Create's rung-0 2x with it — rewriting ADR-0017's Ore processing row and emptying ADR-0018's rung
   1. Split to `#69`. **This ADR does not depend on the answer.**
