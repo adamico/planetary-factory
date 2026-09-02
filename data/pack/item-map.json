@@ -607,13 +607,14 @@
     },
     "rail-chain-signal": {
       "status": "undecided",
-      "note": "Create ships one signal block; whether the chain signal is a second item or nothing is undecided."
+      "note": "Create ships one signal block. Whether it can carry Factorio's chain-signal behaviour, or whether chain signals are `excluded` the way underground belts are, is a question for #108 -- and it is not answerable by emitting a second recipe for the same block, which is what the identical ingredient list would produce.",
+      "ticket": 108
     },
     "rail-signal": {
       "kind": "item",
       "target": "create:track_signal",
       "source": "borrowed",
-      "note": "As `rail`. It follows its shelf rather than its ingredients (subgroup-owner.json)."
+      "note": "Create's track signal, placed ON the track rather than spliced into it -- the same affordance as Factorio's, which is also placed beside the rail. It follows its shelf rather than its ingredients (subgroup-owner.json). Create's own recipe is `railway_casing` + `electron_tube`, and the electron tube is redstone-bound, so on Terra that recipe is unbuildable and this one replaces it (#62, #143)."
     },
     "refined-concrete": {
       "status": "undecided",
@@ -761,7 +762,7 @@
       "kind": "item",
       "target": "create:fluid_tank",
       "source": "borrowed",
-      "note": "Create owns bulk fluid storage on Terra (ADR-0017, #106)."
+      "note": "Create owns bulk fluid storage on Terra (ADR-0017, #106). FIDELITY NOTE: a Factorio storage tank is one 3x3 unit of a fixed size, while Create's tanks are stacked into a multiblock whose capacity is however many blocks you place -- so one craft is one block, not one tank. Accepted: the recipe is the corpus's, and the capacity model is Create's."
     },
     "submachine-gun": {
       "status": "undecided",
@@ -792,7 +793,7 @@
       "kind": "item",
       "target": "create:track_station",
       "source": "borrowed",
-      "note": "As `rail`."
+      "note": "Create's station: the block a train is routed to and scheduled at, which is what a Factorio train stop is. Create's own recipe is `railway_casing` + a compass and goes with the stock sweep (#143)."
     },
     "transport-belt": {
       "kind": "item",
@@ -848,7 +849,7 @@
       "kind": "item",
       "target": "minecraft:chest",
       "source": "borrowed",
-      "note": "Vanilla's chest is Factorio's wooden chest with no argument to have about it."
+      "note": "Vanilla's chest is Factorio's wooden chest with no argument to have about it. Vanilla's OWN shaped recipe still exists until the stock-recipe sweep (#143) removes it; leaving both would be two ways to make one thing, which ADR-0017's losing-recipe-is-removed idiom forbids. This recipe is not itself a vanilla shaped recipe, so #97 is satisfied either way."
     }
   }
 }
