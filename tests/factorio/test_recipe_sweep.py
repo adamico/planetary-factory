@@ -133,7 +133,7 @@ def main():
                   "recipes" % (name, machine["recipe_type"]))
 
     admitted = {entry["type"] for entry in entries}
-    for path in sorted(EMITTED.glob("*.json")):
+    for path in sorted(EMITTED.rglob("*.json")):
         emitted_type = json.loads(path.read_text())["type"]
         check(emitted_type not in GRID_TYPES,
               "%s is a vanilla grid recipe (#97)" % path.name)
@@ -146,7 +146,7 @@ def main():
     if failures:
         print("\n%d failure(s)" % len(failures))
         return 1
-    print("ok: %d survivor(s), %d emitted recipe(s)" % (len(entries), len(list(EMITTED.glob("*.json")))))
+    print("ok: %d survivor(s), %d emitted recipe(s)" % (len(entries), len(list(EMITTED.rglob("*.json")))))
     return 0
 
 

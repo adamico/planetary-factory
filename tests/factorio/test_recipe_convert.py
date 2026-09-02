@@ -119,7 +119,7 @@ def check_emitted(items, recipe_types, failures):
     Two shapes reach this directory: GregTech's, and vanilla's furnace for the 1:1 smelts (#91).
     """
     targets = {row["target"] for row in items.values() if "target" in row}
-    for path in sorted((ROOT / "kubejs/data/planetaryfactory/recipe").glob("*.json")):
+    for path in sorted((ROOT / "kubejs/data/planetaryfactory/recipe").rglob("*.json")):
         recipe = json.loads(path.read_text())
         if recipe.get("type") == "minecraft:smelting":
             named = [recipe["ingredient"].get("item") or recipe["ingredient"].get("tag"),
@@ -175,7 +175,7 @@ def main():
         return 1
     decided = sum(1 for row in items.values() if "target" in row)
     print(f"ok   {len(items)} item-map rows ({decided} decided), "
-          f"{len(list((ROOT / 'kubejs/data/planetaryfactory/recipe').glob('*.json')))} "
+          f"{len(list((ROOT / 'kubejs/data/planetaryfactory/recipe').rglob('*.json')))} "
           "recipes emitted and current")
     return 0
 

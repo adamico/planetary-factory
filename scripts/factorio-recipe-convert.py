@@ -150,6 +150,20 @@ def convert(recipe, recipe_type, items, override):
     return out
 
 
+def emitted_path(recipe_type, name):
+    """Where a GregTech recipe's file has to sit, which is not a free choice (#87).
+
+    GregTech re-registers every GTRecipe the datapack loaded: `RecipeManagerLateMixin` strips
+    everything before the first `/` of the id's path and `GTRecipeBuilder.save` puts the recipe
+    type's own path back on the front. The round trip closes only for a file already under a
+    directory named after its recipe type -- a flat `recipe/copper_cable.json` is loaded as
+    `planetaryfactory:copper_cable` and re-registered as `planetaryfactory:assembling/copper_cable`,
+    leaving BOTH ids in the recipe manager with identical inputs and outputs. Vanilla types are
+    not GTRecipes, are not cloned, and stay flat.
+    """
+    return "%s/%s" % (recipe_type.split(":", 1)[1], name.replace("-", "_"))
+
+
 def apply_override(recipe, override):
     if not ({"ingredients", "results"} & set(override)):
         return recipe
@@ -240,7 +254,8 @@ def main():
                 continue
             emitted[name.replace("-", "_")] = convert_smelting(recipe, items, override)
         else:
-            emitted[name.replace("-", "_")] = convert(recipe, recipe_type, items, override)
+            emitted[emitted_path(recipe_type, name)] = convert(recipe, recipe_type, items,
+                                                              override)
 
     if failures:
         for failure in failures:
@@ -248,8 +263,8 @@ def main():
         return 1
 
     if args.check:
-        written = {p.stem: json.loads(p.read_text()) for p in OUT_DIR.glob("*.json")} \
-            if OUT_DIR.exists() else {}
+        written = {p.relative_to(OUT_DIR).with_suffix("").as_posix(): json.loads(p.read_text())
+                   for p in OUT_DIR.rglob("*.json")} if OUT_DIR.exists() else {}
         if written != emitted:
             added = sorted(set(emitted) - set(written))
             removed = sorted(set(written) - set(emitted))
@@ -265,7 +280,9 @@ def main():
             shutil.rmtree(OUT_DIR)
         OUT_DIR.mkdir(parents=True)
         for stem, body in emitted.items():
-            (OUT_DIR / f"{stem}.json").write_text(json.dumps(body, indent=2) + "\n")
+            path = OUT_DIR / f"{stem}.json"
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(json.dumps(body, indent=2) + "\n")
 
     if not args.quiet:
         reasons = Counter(reason for _, reason, _ in skipped)
