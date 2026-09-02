@@ -72,7 +72,7 @@ def check_item_map(items, corpus, failures):
     registered = first_party_items()
     for name, row in sorted(items.items()):
         status = row.get("status")
-        if status in ("undecided", "native_mechanic"):
+        if status in ("undecided", "native_mechanic", "not_emitted"):
             if not row.get("note"):
                 failures.append(f"{name} is {status} with no note saying what decides it")
             continue

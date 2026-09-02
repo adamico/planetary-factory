@@ -215,6 +215,7 @@ def main():
         # A `native_mechanic` row is reported under its own name: the capability is fully
         # supported and the recipe is not a cut, so it must never read as a blocked decision (#93).
         for status, label in (("native_mechanic", "native mechanic"),
+                              ("not_emitted", "not_emitted item-map row"),
                               ("undecided", "undecided item-map row")):
             blocked = sorted({e["name"] for e in recipe["ingredients"] + recipe["results"]
                               if items[e["name"]].get("status") == status})

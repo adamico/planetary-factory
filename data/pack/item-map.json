@@ -545,10 +545,8 @@
       "note": "As `storage-tank`."
     },
     "pipe-to-ground": {
-      "kind": "item",
-      "target": "create:encased_fluid_pipe",
-      "source": "borrowed",
-      "note": "Create's encased pipe is the buried run; Factorio's pipe-to-ground is the same affordance."
+      "status": "not_emitted",
+      "note": "No row is needed: the recipe is `not_emitted` (subgroup-owner.json) because underground pipes are `excluded` -- a Create pipe routes freely in three dimensions, and `create:encased_fluid_pipe` is decoration rather than a buried run."
     },
     "plastic-bar": {
       "kind": "item",

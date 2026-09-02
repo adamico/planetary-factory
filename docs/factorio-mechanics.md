@@ -153,6 +153,10 @@ Sub-rules:
 
 - **Barrelling and unbarrelling** — `shipped` as `native_mechanic`; `subgroup-owner.json`'s barrel
   shelves emit nothing because the mechanic already works (#93).
+- **Underground pipes** — `excluded`. The same argument as underground belts, one level up: a
+  Create pipe routes freely in three dimensions, so the crossing problem Factorio's pipe-to-ground
+  exists to solve does not arise, and `create:encased_fluid_pipe` is decoration rather than a
+  buried run. `subgroup-owner.json` marks `pipe-to-ground` `not_emitted` on that reasoning.
 - **Fluid mixing is forbidden in a pipe network** — `excluded`. `by-consequence`: no mod in the stack
   enforces single-fluid pipe networks, and adding it would be a pack mechanism nobody asked for.
 - **Pumps and flow rate over distance** — `unargued`, no verdict.
