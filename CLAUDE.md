@@ -90,6 +90,16 @@ that machine — so a machine landing later without a survivor entry fails
 check after editing either script, the category map or the emitted recipes; whether the sweep
 removed the right things in a running game is a world load, not a static check.
 
+### Research unlock check
+
+`tests/factorio/test_research_unlocks.py` asserts every recipe id a research grants is a recipe the
+pack emits. Researchd gates by recipe id and a recipe's id follows its type, so re-surfacing a
+recipe leaves the research locked to an id nothing emits — with no error, no failed recipe and no
+log line, reaching the player as a research that unlocks nothing. Run it after editing
+`researchd.js` or after re-running the converter. It is the second half of #97; the first half —
+nothing emitted or admitted is a vanilla grid recipe — lives in the sweep check. See
+`docs/testing/research-unlock-check.md`.
+
 ### Factorio tech tree
 
 The pack's research tree takes its shape from Factorio's, extracted rather than transcribed
