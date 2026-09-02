@@ -1,9 +1,18 @@
 # PlanetaryFactory
 
 A Minecraft 1.21.1 / NeoForge modpack that reproduces the progression, logistics puzzles and
-interplanetary scope of Factorio's Space Age expansion. Create supplies mechanical logistics,
-GregTech CEu Modern supplies resource generation and processing, GCyR supplies rockets and
-planets, and KubeJS binds them into a stationary, automation-first loop.
+interplanetary scope of Factorio's Space Age expansion.
+
+**Factorio is the subject; the mods are the implementation.** What the pack reproduces, adapts or
+drops is the ledger in `docs/factorio-mechanics.md`, written in Factorio's terms and privileging no
+mod. Which mod owns each capability is ADR-0017's table, and exactly one does: Create owns logistics
+and fluids, Create: Electro Energetics owns the grid, GregTech owns extraction and lends its machine
+chassis, GCyR owns rockets, planets and orbits, Researchd owns the tech tree, and the pack registers
+its own machines where no installed mod can express Factorio's recipe shape. KubeJS binds them into
+a stationary, automation-first loop.
+
+No mod is the spine. Naming one where the concept, the Factorio mechanic or another mod's capability
+is what is actually meant is the drift this file exists to prevent (`#94`).
 
 ## Language
 
@@ -248,7 +257,7 @@ unrelated mechanic -- ADR-0029)
 ### Hazards
 
 **Emission**:
-The per-chunk score accumulated from the EU/t draw of running GT machines, which decays over time and spreads to neighbouring chunks. It is the pack's own construct — GTCEu has no pollution system.
+The per-chunk score accumulated from the EU/t draw of every running machine, which decays over time and spreads to neighbouring chunks. EU/t is the input because it is the one number a machine on a GregTech chassis already exposes, not because the mechanic is GregTech's — it is the pack's own construct, and GTCEu has no pollution system (ADR-0005).
 _Avoid_: pollution, smog, contamination
 
 **Overseer**:

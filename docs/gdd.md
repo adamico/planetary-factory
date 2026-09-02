@@ -7,28 +7,53 @@ together by KubeJS into a stationary, automation-first loop.
 This document describes intended design. Decisions that are hard to reverse are recorded as ADRs in
 `docs/adr/`; domain vocabulary is defined in `CONTEXT.md` and used here verbatim.
 
+**The design is Factorio's, and the mods implement it.** Which mechanics the pack reproduces, adapts
+or drops is `docs/factorio-mechanics.md`, ordered by Factorio's own structure and describing the
+pack in Factorio's terms. This document describes the pack's own shape on top of that; where it
+names a mod it should be because that mod owns the capability under discussion, not because the mod
+is the pack's subject. **None of them is.**
+
 ## 1. Core Technology Stack
 
-- **Create** — Mechanical logistics: bulk transport, item filtering, schedule-based rail networks.
-- **GregTech CEu Modern (GT:M) 7.0.2** — Resource generation and custom multiblock machines. Chunk-aligned ore
-  veins, bedrock fluid and ore extraction, multiblocks, and the machine and recipe-type registries
-  the pack extends.
-- **Mekanism** - normal resource processing, spacesuit via MekaSuit
+Exactly one mod owns each capability (ADR-0017), and this list says which. No mod on it is the
+ladder — the ladder is Factorio's science packs (ADR-0018).
+
+- **Create 6.0.10** — Item logistics and fluid handling entire: belts, chutes, trains, filtering,
+  pipes, pumps, tanks and bulk storage, plus the Steam Engine that is Terra's first prime mover
+  (ADR-0017 as amended by #101). Pinned; see ADR-0017 for why the pin is harder than the declared
+  range says.
+- **Create: Electro Energetics 1.1.1** — The electrical grid: poles, wire, catenary, Alternator,
+  solar, Accumulator, and the Converter that is the mandatory boundary between grid and machine
+  (`#46`). Terra's generation row is Electro's, not GregTech's — GregTech's power layer was removed
+  entire (`#37`).
+- **GregTech CEu Modern (GT:M) 7.0.2** — Two things, and only two. **Extraction**: chunk-aligned ore
+  veins, bedrock fluid and ore extraction, and the Drilling Rig ladder. **A chassis**: the machine
+  and recipe-type registries the pack registers its own machines on, and the material system that
+  supplies dusts, plates, fluids and ore variants as data. It is instrumental on both counts, and
+  its own tech tree is not the pack's.
 - **Gregicality Rocketry (GCyR)** — Rockets, planets, orbit dimensions, space stations, satellites,
   oxygen and temperature systems. Built from source against GTCEu 7.0.2 (ADR-0001); the released
   jar is permanently incompatible. Stellaris is a disabled fallback, not part of the design
   (ADR-0002).
-- **KubeJS 2101.7.1-build.181** — Scripting glue: custom GT machines and recipe types, emission
+- **Researchd** — The research tree and the Research Lab that gates it (ADR-0022). The tree's shape
+  is Factorio's, extracted rather than transcribed. FTB Quests keeps the book and the reward
+  surface, and gates nothing.
+- **KubeJS 2101.7.1-build.181** — Scripting glue: the pack's own machines and recipe types, emission
   tracking, flight simulation, planetary arrival. Pinned to the build GTCEu 7.0.2 compiles against;
   `kubejs-create` is not installed.
-- **Pre-AE2 logistics — Create and Mekanism, and nothing else.** Create owns item logistics and
-  bulk item storage; Create owns fluid handling too — pipes and pumps for moving, tanks for storing
-  (ADR-0017 as amended by #101), and Mekanism has no fluid role. The
+- **`planetaryfactory_core`** — The pack's own mod, for mechanism no other mod supplies (ADR-0015).
+- **Pre-AE2 logistics — Create, and nothing else.** Create owns item logistics, bulk item storage
+  and fluid handling alike — pipes and pumps for moving, tanks for storing (ADR-0017 as amended by
+  #101). The
   dedicated routing mods — Modular Routers, Integrated Dynamics, LaserIO, XNet, SFM, Pipez, Flux
   Networks, Functional Storage and Sophisticated Storage — are cut from the pack, because one mod
   owns each capability and a substitute routing idiom is a straight bypass of the ladder. Only two
   routing capabilities are gated rather than cut: **AE2**, unlocked at endgame once every planet's
   puzzle is done, and **Create 6's package logistics**, granted at the `logistic` science rung.
+
+**Mekanism is not in the pack.** ADR-0035 removed it: fifteen months of amendments took back all
+seven of its ADR-0017 rows one at a time, and nothing was left underneath. Prose anywhere in the
+corpus describing a four-mod pack predates that decision.
 
 ## 2. The Solar System
 
@@ -79,8 +104,8 @@ it is recorded there as out of scope rather than settled.
 
 A Platform is a GCyR space station (ADR-0006). The Orbital Starter Kit is GCyR's station package
 item, crafted on Terra and launched to orbit, where GCyR's own station creation builds the
-foundational Platform. The player then travels up by rocket and expands it by hand, placing GT
-machinery shipped from the surface to capture and process asteroid chunks.
+foundational Platform. The player then travels up by rocket and expands it by hand, placing machinery
+shipped up from the surface to capture and process asteroid chunks.
 
 Platforms are **static**. They are orbital factories, not vehicles: no thrusters, no navigation
 computer, no interplanetary platform transit, and consequently no asteroid defence or hull mass
@@ -104,9 +129,10 @@ Unattended cargo flights are held as data — a Flight with a remaining travel t
 moving entities, and pay their own cheaper fuel curve. A continuous export loop at crewed-rocket
 prices would be punishing rather than interesting.
 
-Launch Terminals, Receiving Terminals and Drop Hatches are custom GT machines registered through
-GTCEu's KubeJS machine builders, which supply UI, power, JEI integration and recipe types without
-bespoke block code, and keep fuel costs in one place.
+Launch Terminals, Receiving Terminals and Drop Hatches are the pack's own machines, registered on a
+GregTech chassis through GTCEu's KubeJS machine builders — the chassis supplies UI, power, JEI
+integration and recipe types without bespoke block code, and keeps fuel costs in one place. The
+capability is the pack's; only the chassis is GregTech's (ADR-0017).
 
 - **Standard transit** — Cargo and fuel loaded into a Launch Terminal become a Flight subject to a
   travel timer.
@@ -135,22 +161,26 @@ player-declared per Platform, not automatic on chunk unload.
 
 ## 5. Crafting and Recipe Routing
 
-The crafting grid, workbenches and portable crafting stay intact. Automation pressure comes from
-which recipe type each product uses — a recipe is craftable wherever its type is, and that routing
-is inherent to the recipe system rather than something to script.
+**The crafting grid is removed** (`#90`), and the Personal Assembler replaces it for the bootstrap
+tier. Automation pressure comes from which recipe type each product uses — a recipe is craftable
+wherever its type is, and that routing is inherent to the recipe system rather than something to
+script.
 
-Policy: follow GTCEu's stock recipe-type assignments, re-authoring only for the pack's own items
-and where a cross-mod shortcut undercuts GT. Create and Mekanism both offer grid recipes for things
-GT expects to be machined, and Almost Unified is installed, so those shortcuts will be live and need
-auditing.
+Policy: **the corpus authors every recipe it contains** (ADR-0031). Factorio's own `category` decides
+which machine a recipe lands on (ADR-0021), not any mod's stock assignment, and a stock recipe ships
+only where a decision names it and names the surface it is crafted on — everything else is swept
+(ADR-0034). Almost Unified is installed and unifies raw materials only, never recipe types: a
+cross-mod grid recipe standing in for a machine step collapses the ladder whichever mod offers it,
+so the audit is of surviving stock recipes generally, not of one mod's shortcuts past another's.
 
 ### Science and research
 
 Progression is **Factorio's science packs** — four packs plus an unscienced rung 0 (`automation`,
 `logistic`, `chemical`, `production`), each rung granting a capability the next rung's production
 physically requires. The gate is **Researchd's Research Lab**, fed by pipe and consumed unattended;
-FTB Quests keeps the book and the reward surface but does not gate. GregTech is instrumental rather
-than the ladder. The spine is recorded in ADR-0018; which mod owns each rung is ADR-0017.
+FTB Quests keeps the book and the reward surface but does not gate. No tech mod's own tree is the
+ladder — GregTech's least of all, since it is in the pack for extraction and for its chassis
+(ADR-0017). The spine is recorded in ADR-0018; which mod owns each rung is ADR-0017.
 
 The beat-by-beat arc from spawn to the first launch — chapters, hour budget and what each rung
 grants — is `docs/spec/terra-progression.md` (`#34`).
@@ -178,11 +208,12 @@ wreckage and the quest book's tooltip hint, not a grant (`#100`).
 
 ### Emission
 
-GTCEu 7.0.2 has **no pollution system** — the mod contains nothing matching `pollut`. Emission is
-therefore ours (ADR-0005): a per-chunk score derived from the EU/t draw of running GT machines,
-decaying over time and spreading to neighbouring chunks. Power draw is the one number every GT
-machine already exposes, so no per-recipe tagging is needed, and spread plus decay makes outpost
-placement a real decision rather than a counter.
+No installed mod ships a pollution system — GTCEu 7.0.2, the nearest candidate, contains nothing
+matching `pollut`. Emission is therefore ours (ADR-0005): a per-chunk score derived from the EU/t
+draw of every running machine, decaying over time and spreading to neighbouring chunks. EU/t is the
+input because power draw is the one number a machine on a GregTech chassis already exposes, so no
+per-recipe tagging is needed, and spread plus decay makes outpost placement a real decision rather
+than a counter.
 
 ### Raids and the Overseer — Terra only
 
@@ -194,9 +225,10 @@ is the substrate; exporting it to alien worlds would cost work for a less distin
 - **The Attack** — High emission triggers raids; Illagers path toward the Overseer.
 - **The Kill-Switch** — The Command Center checks for its Overseer continuously. If the Overseer
   dies, the Command Center stops emitting its signal and the outpost halts.
-- **Manufacturing** — Overseers are made, not bred: Sapros biomass and nutrient fluids in a GT
-  Bio-Vat yield a Cryo-Pod, which deploys into an Overseer on an empty Command Center. Outpost
-  defence on Terra therefore depends on an organics chain on another planet.
+- **Manufacturing** — Overseers are made, not bred: Sapros biomass and nutrient fluids in a
+  **Biochamber** yield a Cryo-Pod, which deploys into an Overseer on an empty Command Center — every
+  recipe involving a spoilable material runs in a Biochamber, and there is no alternative path.
+  Outpost defence on Terra therefore depends on an organics chain on another planet.
 
 ### Emission elsewhere
 
@@ -227,8 +259,9 @@ GCyR ships four satellite types, all adopted:
 
 ## 8. Open Questions
 
-- **Cross-mod recipe audit.** The specific Create and Mekanism shortcuts that undercut GT routing
-  have not been enumerated.
+- **Cross-mod recipe audit.** The specific stock recipes that let a player skip a machine step have
+  not been enumerated. ADR-0034's sweep removes everything unnamed, so the audit is over the
+  survivor list rather than over any one mod's catalogue.
 - **Per-planet Vanguard Kit variants.** Deferred to a later upgrade tier.
 
 ## 9. Resource substitution policy
@@ -237,15 +270,22 @@ Per-body content is drawn from `docs/planets.md`, a transcription of Factorio's 
 resource lists organised under Factorio's names. Every resource named there is resolved by this rule,
 applied in order:
 
-1. **An existing GregTech material.** Always preferred — the material system supplies dusts, plates,
-   fluids, ore variants and recipe integration for free.
-2. **A Mekanism or Create equivalent**, where GregTech has none.
-3. **A custom KubeJS material**, only where the puzzle depends on the thing existing separately from
-   anything that already exists.
+1. **An existing GregTech material.** Always preferred, and this one *is* about GregTech: the
+   material system is the pack's material registry, and it supplies dusts, plates, fluids, ore
+   variants and recipe integration for free.
+2. **An equivalent from whichever mod owns the capability it serves**, where the material system has
+   none.
+3. **A material the pack declares itself**, only where the puzzle depends on the thing existing
+   separately from anything that already exists. It is declared as
+   `data/<namespace>/gt_materials/<name>.json`, read by the fork at registration (ADR-0003) — a
+   material is data, and KubeJS cannot register one.
 
-GregTech already covers most of the source document: `tungsten`, `scheelite`, `calcite`, `lithium`,
-`fluorine`, `ammonia`, `holmium`, `sulfuric_acid`, `apatite`, `rock_salt` and `salt_water` all exist
-as materials. That list is recorded here so the next reader does not re-derive it. Scrap on Electro is
+The rule ranks *sources of an item*; it says nothing about which mod owns the capability the item
+feeds, which is ADR-0017's table.
+
+The material system already covers most of the source document: `tungsten`, `scheelite`, `calcite`,
+`lithium`, `fluorine`, `ammonia`, `holmium`, `sulfuric_acid`, `apatite`, `rock_salt` and `salt_water`
+all exist as materials. That list is recorded here so the next reader does not re-derive it. Scrap on Electro is
 the clearest candidate for tier 3, its whole role being to be a distinct thing that recycles into a
 spread of outputs.
 
@@ -284,5 +324,6 @@ chains, machine restrictions and craft gating from `docs/planets.md`.
 12. **Personal Assembler** — plus the cross-mod recipe audit. Largely independent.
 13. **Emission** — per-chunk scoring, decay, diffusion.
 14. **Overseer loop** — Command Center, Cryo-Pod, Dormant Siege. Depends on Emission and Sapros.
-15. **Cargo terminals** — Launch/Receiving/Drop Hatch as GT machines, plus the Flight timer model.
+15. **Cargo terminals** — Launch/Receiving/Drop Hatch as pack-registered machines, plus the Flight
+    timer model.
 16. **Vanguard Kit** — arrival intercept, beachhead paste, Gateway Flag.
