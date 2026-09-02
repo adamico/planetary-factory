@@ -20,7 +20,7 @@ ladder — the ladder is Factorio's science packs (ADR-0018).
 
 - **Create 6.0.10** — Item logistics and fluid handling entire: belts, chutes, trains, filtering,
   pipes, pumps, tanks and bulk storage, plus the Steam Engine that is Terra's first prime mover
-  (ADR-0017 as amended by #101). Pinned; see ADR-0017 for why the pin is harder than the declared
+  (ADR-0017 as amended by `#101`). Pinned; see ADR-0017 for why the pin is harder than the declared
   range says.
 - **Create: Electro Energetics 1.1.1** — The electrical grid: poles, wire, catenary, Alternator,
   solar, Accumulator, and the Converter that is the mandatory boundary between grid and machine
@@ -44,16 +44,18 @@ ladder — the ladder is Factorio's science packs (ADR-0018).
 - **`planetaryfactory_core`** — The pack's own mod, for mechanism no other mod supplies (ADR-0015).
 - **Pre-AE2 logistics — Create, and nothing else.** Create owns item logistics, bulk item storage
   and fluid handling alike — pipes and pumps for moving, tanks for storing (ADR-0017 as amended by
-  #101). The
-  dedicated routing mods — Modular Routers, Integrated Dynamics, LaserIO, XNet, SFM, Pipez, Flux
-  Networks, Functional Storage and Sophisticated Storage — are cut from the pack, because one mod
+  `#101`). The dedicated routing mods — Modular Routers, Integrated Dynamics, LaserIO, XNet, SFM,
+  Pipez, Flux Networks, Functional Storage and Sophisticated Storage — are cut from the pack, because one mod
   owns each capability and a substitute routing idiom is a straight bypass of the ladder. Only two
   routing capabilities are gated rather than cut: **AE2**, unlocked at endgame once every planet's
   puzzle is done, and **Create 6's package logistics**, granted at the `logistic` science rung.
 
-**Mekanism is not in the pack.** ADR-0035 removed it: fifteen months of amendments took back all
-seven of its ADR-0017 rows one at a time, and nothing was left underneath. Prose anywhere in the
-corpus describing a four-mod pack predates that decision.
+**Mekanism is decided out of the pack, and the manifest has not caught up.** ADR-0035 removed it:
+fifteen months of amendments took back all seven of its ADR-0017 rows one at a time, and nothing was
+left underneath. The two `mods/*.pw.toml` entries the ADR says go are still tracked, so
+`scripts/pack-check.sh` still sees a mod this document does not. Prose anywhere in the corpus
+describing a four-mod pack predates the decision; the jars are execution ADR-0035 asks for and this
+document does not perform.
 
 ## 2. The Solar System
 
@@ -167,9 +169,9 @@ wherever its type is, and that routing is inherent to the recipe system rather t
 script.
 
 Policy: **the corpus authors every recipe it contains** (ADR-0031). Factorio's own `category` decides
-which machine a recipe lands on (ADR-0021), not any mod's stock assignment, and a stock recipe ships
-only where a decision names it and names the surface it is crafted on — everything else is swept
-(ADR-0034). Almost Unified is installed and unifies raw materials only, never recipe types: a
+which machine a recipe lands on (ADR-0017 as amended by `#93`), not any mod's stock assignment, and
+a stock recipe ships only where a decision names it and names the surface it is crafted on —
+everything else is swept (ADR-0034). Almost Unified is installed and unifies raw materials only, never recipe types: a
 cross-mod grid recipe standing in for a machine step collapses the ladder whichever mod offers it,
 so the audit is of surviving stock recipes generally, not of one mod's shortcuts past another's.
 
@@ -226,8 +228,7 @@ is the substrate; exporting it to alien worlds would cost work for a less distin
 - **The Kill-Switch** — The Command Center checks for its Overseer continuously. If the Overseer
   dies, the Command Center stops emitting its signal and the outpost halts.
 - **Manufacturing** — Overseers are made, not bred: Sapros biomass and nutrient fluids in a
-  **Biochamber** yield a Cryo-Pod, which deploys into an Overseer on an empty Command Center — every
-  recipe involving a spoilable material runs in a Biochamber, and there is no alternative path.
+  **Biochamber** yield a Cryo-Pod, which deploys into an Overseer on an empty Command Center.
   Outpost defence on Terra therefore depends on an organics chain on another planet.
 
 ### Emission elsewhere
@@ -273,15 +274,16 @@ applied in order:
 1. **An existing GregTech material.** Always preferred, and this one *is* about GregTech: the
    material system is the pack's material registry, and it supplies dusts, plates, fluids, ore
    variants and recipe integration for free.
-2. **An equivalent from whichever mod owns the capability it serves**, where the material system has
-   none.
+2. **An item an installed mod already registers**, where the material system has none — Create's,
+   Electro's or GCyR's alike, chosen for having the item rather than for owning anything.
 3. **A material the pack declares itself**, only where the puzzle depends on the thing existing
    separately from anything that already exists. It is declared as
    `data/<namespace>/gt_materials/<name>.json`, read by the fork at registration (ADR-0003) — a
    material is data, and KubeJS cannot register one.
 
-The rule ranks *sources of an item*; it says nothing about which mod owns the capability the item
-feeds, which is ADR-0017's table.
+All three tiers rank *where an item comes from*. None of them says which mod owns the capability the
+item feeds, or which machine its recipe lands on — those are ADR-0017's table and Factorio's own
+`category`, and neither follows from an item's source.
 
 The material system already covers most of the source document: `tungsten`, `scheelite`, `calcite`,
 `lithium`, `fluorine`, `ammonia`, `holmium`, `sulfuric_acid`, `apatite`, `rock_salt` and `salt_water`
