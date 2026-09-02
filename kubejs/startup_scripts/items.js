@@ -13,6 +13,12 @@ StartupEvents.registry('item', event => {
   // as `researchd:research_pack` carrying a `researchd:research_pack` data component. Registering
   // an item of the same name here would have shipped a second, inert pack the Lab cannot read.
   //
+  // EVERY TEXTURE MUST BE A FILE THAT EXISTS. GregTech generates its MATERIAL items (plates,
+  // gears, dusts, most batteries) at runtime from a material set, so `gtceu:item/<material>_plate`
+  // and `gtceu:item/max_battery` name no PNG in the jar and render as the missing-texture checker
+  // with no error anywhere. Every path below was checked against
+  // `assets/gtceu/textures/item/` in `gtceu-1.21.1-7.0.2.jar`, or is vanilla's.
+  //
   // EVERY TEXTURE HERE IS A PLACEHOLDER -- one borrowed GregTech icon on all four items. Art is a
   // "looks or feels right" check (docs/testing/what-to-check.md) and lands with the quest book,
   // not with the converter.
@@ -50,15 +56,15 @@ StartupEvents.registry('item', event => {
   // from solid fuel and light oil; GregTech's is the FLUID the GCyR rocket entity burns (#41).
   event.create('planetaryfactory:solid_fuel')
     .displayName('Solid Fuel')
-    .texture('gtceu:item/coal_coke')
+    .texture('minecraft:item/charcoal')
 
   event.create('planetaryfactory:rocket_fuel')
     .displayName('Rocket Fuel')
-    .texture('gtceu:item/carbon_fibers')
+    .texture('minecraft:item/blaze_powder')
 
   event.create('planetaryfactory:low_density_structure')
     .displayName('Low Density Structure')
-    .texture('gtceu:item/aluminium_plate')
+    .texture('gtceu:item/carbon_fiber_plate')
 
   // Factorio's battery is a crafting INTERMEDIATE, not a placed power store: GregTech's batteries
   // are tiered chargeable hulls and Electro's capacitor is a different thing, so borrowing either
@@ -66,17 +72,17 @@ StartupEvents.registry('item', event => {
   // one battery, and a ladder that never arrives costs nothing to leave unnamed.
   event.create('planetaryfactory:battery')
     .displayName('Battery')
-    .texture('gtceu:item/max_battery')
+    .texture('gtceu:item/lv_lithium_battery')
 
   // The engine units author because no installed mod ships Factorio's engine as one item, and
   // they feed recipes the pack wants. ADR-0031's author case at its plainest: no borrow candidate.
   event.create('planetaryfactory:engine_unit')
     .displayName('Engine Unit')
-    .texture('gtceu:item/steel_gear')
+    .texture('gtceu:item/lv_electric_motor')
 
   event.create('planetaryfactory:electric_engine_unit')
     .displayName('Electric Engine Unit')
-    .texture('gtceu:item/steel_rotor')
+    .texture('gtceu:item/hv_electric_motor')
 
   // Sapros
   event.create('planetaryfactory:yumako_fresh')
