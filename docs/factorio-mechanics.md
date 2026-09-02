@@ -113,8 +113,13 @@ Sub-rules:
 - **Patches are finite and run out** — `shipped`. ADR-0020: the fix for exhaustion is another planet.
 - **Ore is prospected, not stumbled on** — `adapted`. ADR-0019; a Factorio player reads a patch off
   the map, a player here reads surface indicators and later an Ore Finder satellite.
-- **Infinite late-game resource (oil-style yield decay)** — `blocked`. No mechanic in the stack
-  models a patch that decays to a floor rather than to zero.
+- **Infinite late-game resource (oil-style yield decay)** — `adapted`. #86: GregTech's bedrock
+  fluid deposit decays to a floor rather than to zero, and Terra's crude deposit is one. `adapted`
+  rather than `shipped` because the form is wrong in two ways — the deposit is a per-chunk roll
+  under the bedrock rather than a patch you can see on the surface, and it is tapped by a Fluid
+  Drilling Rig rather than by a pumpjack sat on a visible well. **Oil is the only resource that
+  gets this**, which is the point: bedrock *ore* deposits would be infinite ore patches, so Terra
+  carries none (ADR-0020 as amended, ADR-0021 as amended).
 - **Resource richness varies per patch** — `unargued`, no verdict. Nobody has thought about it.
 
 ### Manual mining
