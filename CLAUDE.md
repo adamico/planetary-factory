@@ -79,6 +79,17 @@ hand-edited; re-run the converter. A Factorio name with no item-map row is a har
 runs the converter's `--check`; the recipe *shape* needs one world load. See
 `docs/testing/recipe-conversion-check.md`.
 
+### Stock-recipe sweep
+
+`kubejs/server_scripts/recipes.js` removes every recipe the pack does not admit by name, and
+`recipe_survivors.js` is the allowlist it negates (ADR-0034: a stock recipe ships only if a
+decision names it and names the surface it is crafted on). A survivor is a *surface*, not a
+recipe, and its filter's recipe type must be the one `data/pack/category-map.json` registers for
+that machine — so a machine landing later without a survivor entry fails
+`tests/factorio/test_recipe_sweep.py` rather than having its recipes swept in silence. Run that
+check after editing either script, the category map or the emitted recipes; whether the sweep
+removed the right things in a running game is a world load, not a static check.
+
 ### Factorio tech tree
 
 The pack's research tree takes its shape from Factorio's, extracted rather than transcribed

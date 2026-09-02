@@ -191,11 +191,19 @@ grep is empty apart from ADR-0016's Sapros loot tables, which are about the oppo
   their dimensions"*, and `kubejs/data/minecraft/world_preset/normal.json:101` still declares
   `minecraft:the_nether`. Noted here because this ADR quotes that cost estimate as its motivating
   failure and the estimate is still standing in the file.
-- **Nothing in this ADR is implemented.** There is no recipe removal anywhere in the repo — see the
-  section below. This is a rule for work that has not started, which is the cheapest moment to write
-  it and the reason it is worth writing now.
+- **Nothing in this ADR is implemented.** ~~There is no recipe removal anywhere in the repo~~ —
+  **no longer true as of [`#143`](https://github.com/adamico/planetary-factory/issues/143)**, which
+  ships the sweep and its survivor allowlist. See the section below, amended. As written this was a
+  rule for work that had not started, which is the cheapest moment to write it and the reason it was
+  worth writing then.
 
 ## The state on the ground, recorded because it is not what the docs imply
+
+**Amended by [`#143`](https://github.com/adamico/planetary-factory/issues/143): the first two
+bullets below are no longer true.** `kubejs/server_scripts/recipes.js` is the default-deny sweep
+and `kubejs/server_scripts/recipe_survivors.js` is the allowlist it re-admits by name; the
+corpus emits into `kubejs/data/planetaryfactory/recipe/` (`#87`). The rest of the section stands,
+and it is left as written because it is this ADR's motivating evidence.
 
 Verified across `kubejs/`, `mod/`, `data/` and `scripts/`:
 
