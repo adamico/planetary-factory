@@ -166,9 +166,20 @@
         "that comes back reverts the decision without touching anything this fixture would",
         "otherwise read. ADR-0019's other two claims -- the terrain is flat, no caves generate --",
         "are invisible to every registry and are checked by a human on delivery.",
-        "Terra's bedrock fluids are deliberately unasserted: #58 calls for a Terra oil deposit and",
-        "none exists yet, and which deposits the body carries is still open."
+        "Terra's bedrock carries oil and nothing else (#86). The only depleting-but-never-gone",
+        "resource in Factorio is oil, so the bedrock set is one authored crude deposit -- the",
+        "coal and uranium bedrock deposits ADR-0021 once named are not built, and that ADR is",
+        "amended. The fractions are the Oil Refinery's job (ADR-0025), so the six stock GregTech",
+        "fluid deposits that shipped to the overworld are narrowed to nowhere by an override",
+        "carrying an empty `dimension_filter`, and each is named in `forbidden_bedrock_fluids`",
+        "-- an override that goes missing restores GregTech's whole spread in silence."
       ],
+      "bedrock_fluids": {
+        "planetaryfactory:terra_crude_oil_deposit": {
+          "depleted_yield_at_least": 1,
+          "fluid": "gtceu:raw_oil"
+        }
+      },
       "bedrock_ores": {
         "planetaryfactory:terra_cupriferous_deposit": {
           "depleted_yield_at_least": 1,
@@ -198,7 +209,13 @@
         "min_y": 0
       },
       "forbidden_bedrock_fluids": [
-        "gtceu:lava_deposit"
+        "gtceu:heavy_oil_deposit",
+        "gtceu:lava_deposit",
+        "gtceu:light_oil_deposit",
+        "gtceu:natural_gas_deposit",
+        "gtceu:oil_deposit",
+        "gtceu:raw_oil_deposit",
+        "gtceu:salt_water_deposit"
       ],
       "forbidden_bedrock_ores": [
         "planetaryfactory:terra_polymetallic_deposit"

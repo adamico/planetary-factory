@@ -1,0 +1,12 @@
+{
+    "fluid": "gtceu:salt_water",
+    "weight": 0,
+    "yield": {
+        "min": 50,
+        "max": 100
+    },
+    "depletion_amount": 1,
+    "depletion_chance": 100,
+    "depleted_yield": 15,
+    "dimension_filter": []
+}

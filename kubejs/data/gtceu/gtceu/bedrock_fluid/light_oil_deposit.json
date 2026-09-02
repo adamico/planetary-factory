@@ -1,0 +1,12 @@
+{
+    "fluid": "gtceu:light_oil",
+    "weight": 25,
+    "yield": {
+        "min": 175,
+        "max": 300
+    },
+    "depletion_amount": 1,
+    "depletion_chance": 100,
+    "depleted_yield": 25,
+    "dimension_filter": []
+}

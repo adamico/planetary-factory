@@ -73,9 +73,16 @@ So the cut is applied to all four:
   route: routing a cut metal through Sapros's organics would make decay a mining alternative and
   dissolve the puzzle ADR-0016 exists to pose. Each body keeps its own Factorio identity, which is
   the same rule read from the other end.
-- **Oil is a bedrock fluid deposit on Terra**, alongside the iron, copper, coal and uranium bedrock
-  deposits. `terra_polymetallic` is retired — it is definitionally the grab-bag fidelity rejects —
-  and `terra_ferrous` and `terra_cupriferous` are stripped to their headline material.
+- **Oil is a bedrock fluid deposit on Terra**, ~~alongside the iron, copper, coal and uranium bedrock
+  deposits~~. `terra_polymetallic` is retired — it is definitionally the grab-bag fidelity rejects —
+  and `terra_ferrous` and `terra_cupriferous` are stripped to their headline material. **Amended by
+  #86: the coal and uranium bedrock deposits are not built.** Factorio's depleting-but-never-exhausted
+  resource is oil, and only oil; an ore patch runs dry. A bedrock coal or uranium deposit would be an
+  infinite ore patch, which is the shape this ADR exists to refuse. The bedrock set is therefore one
+  authored crude deposit — `planetaryfactory:terra_crude_oil_deposit`, on `gtceu:raw_oil` — plus the
+  iron and copper deposits, which ADR-0020 argued separately as the exhausted-planet tail and which
+  this amendment does not touch. GregTech's own six overworld fluid deposits are narrowed to nowhere:
+  four of them are refined fractions, and shipping those would void the Oil Refinery of ADR-0025.
 - **Stone is ambient terrain, never a patch.** This is the one place fidelity deliberately loses. A
   stone patch in a world made of stone reads as a joke; Factorio's stone patch exists because
   Nauvis's surface is *not* stone. The function — a bulk feedstock you must build production for —

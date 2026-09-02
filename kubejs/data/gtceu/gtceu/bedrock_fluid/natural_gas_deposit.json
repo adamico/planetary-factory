@@ -1,0 +1,12 @@
+{
+    "fluid": "gtceu:natural_gas",
+    "weight": 15,
+    "yield": {
+        "min": 100,
+        "max": 175
+    },
+    "depletion_amount": 1,
+    "depletion_chance": 100,
+    "depleted_yield": 20,
+    "dimension_filter": []
+}
