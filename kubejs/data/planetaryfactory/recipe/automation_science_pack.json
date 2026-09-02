@@ -25,7 +25,11 @@
       {
         "content": {
           "ingredient": {
-            "item": "planetaryfactory:automation_science_pack"
+            "type": "neoforge:components",
+            "items": "researchd:research_pack",
+            "components": {
+              "researchd:research_pack": "planetary_factory:automation_science_pack"
+            }
           },
           "count": 1
         }

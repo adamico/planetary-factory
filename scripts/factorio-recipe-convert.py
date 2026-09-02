@@ -96,7 +96,15 @@ def content(entry, row):
     """
     if row["kind"] == "fluid":
         return {"content": {"ingredient": {"fluid": row["target"]}, "amount": entry["amount"]}}
-    ingredient = {"tag": row["target"]} if row["kind"] == "tag" else {"item": row["target"]}
+    if row.get("components"):
+        # NeoForge's DataComponentIngredient: one item told apart by the components it carries.
+        # The science packs are the case -- one `researchd:research_pack` item, four variants.
+        ingredient = {"type": "neoforge:components", "items": row["target"],
+                      "components": row["components"]}
+    elif row["kind"] == "tag":
+        ingredient = {"tag": row["target"]}
+    else:
+        ingredient = {"item": row["target"]}
     return {"content": {"ingredient": ingredient, "count": entry["amount"]}}
 
 

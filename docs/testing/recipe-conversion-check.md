@@ -32,6 +32,12 @@ Factorio's source category rides on the emitted recipe, in GregTech's `data` com
 Assembler needs the distinction back — it is a filtered view of the Assembling Machine's recipes,
 not a machine of its own (#125).
 
+An item-map row may carry `components`, and the converter emits a `neoforge:components`
+ingredient for it. The science packs are the case: they are Researchd research packs, so the
+player holds one `researchd:research_pack` item told apart by a data component, not four items.
+On the OUTPUT side that leans on GregTech resolving a `SizedIngredient` back into stacks, which
+is one more thing the world load has to confirm.
+
 ## What stops a recipe being emitted
 
 In the order the converter checks: a `!`-routed category; a `not_emitted` shelf; a

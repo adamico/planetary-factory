@@ -1,16 +1,21 @@
 StartupEvents.registry('item', event => {
-  // The circuit ladder, and the four rungs' science packs.
+  // The circuit ladder, and plastic.
   //
-  // Both sets are first-party by ADR-0031's borrow/author rule: borrow an existing item unless
-  // the row sits on a rung boundary or a mod's competing line would give a parallel escape.
-  // The circuits carry progression and #62 removed GregTech's and Mekanism's competing lines;
-  // the science packs ARE the progression spine (ADR-0018) and nothing in the manifest is
-  // Factorio science. `copper-cable` is the counter-example and borrows
+  // First-party by ADR-0031's borrow/author rule: borrow an existing item unless the row sits on
+  // a rung boundary or a mod's competing line would give a parallel escape. The circuits carry
+  // progression and #62 removed GregTech's and Mekanism's competing lines; plastic gates rung 2
+  // (ADR-0025). `copper-cable` is the counter-example and borrows
   // (`electroenergetics:copper_wire`) -- see `data/pack/item-map.json`.
   //
-  // EVERY TEXTURE HERE IS A PLACEHOLDER -- one borrowed GregTech icon on all eight items, so the
-  // science packs currently wear the circuit's face. Art is a "looks or feels right" check
-  // (docs/testing/what-to-check.md) and lands with the quest book, not with the converter.
+  // THE SCIENCE PACKS ARE NOT HERE. They are Researchd research packs, not plain items:
+  // `kubejs/server_scripts/researchd.js` declares them with `registerResearchPacks` under
+  // `planetary_factory:` (an underscore, and not this pack's item namespace), and they are held
+  // as `researchd:research_pack` carrying a `researchd:research_pack` data component. Registering
+  // an item of the same name here would have shipped a second, inert pack the Lab cannot read.
+  //
+  // EVERY TEXTURE HERE IS A PLACEHOLDER -- one borrowed GregTech icon on all four items. Art is a
+  // "looks or feels right" check (docs/testing/what-to-check.md) and lands with the quest book,
+  // not with the converter.
   //
   // Their recipes are not written here: they are the corpus's, emitted by
   // `scripts/factorio-recipe-convert.py` into `kubejs/data/planetaryfactory/recipe/`.
@@ -34,21 +39,9 @@ StartupEvents.registry('item', event => {
     .displayName('Plastic Bar')
     .texture('gtceu:item/quantum_processor_assembly')
 
-  event.create('planetaryfactory:automation_science_pack')
-    .displayName('Automation Science Pack')
-    .texture('gtceu:item/quantum_processor_assembly')
 
-  event.create('planetaryfactory:logistic_science_pack')
-    .displayName('Logistic Science Pack')
-    .texture('gtceu:item/quantum_processor_assembly')
 
-  event.create('planetaryfactory:chemical_science_pack')
-    .displayName('Chemical Science Pack')
-    .texture('gtceu:item/quantum_processor_assembly')
 
-  event.create('planetaryfactory:production_science_pack')
-    .displayName('Production Science Pack')
-    .texture('gtceu:item/quantum_processor_assembly')
 
   // Sapros
   event.create('planetaryfactory:yumako_fresh')

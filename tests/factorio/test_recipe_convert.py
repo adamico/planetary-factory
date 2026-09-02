@@ -42,7 +42,10 @@ STARTUP = ROOT / "kubejs/startup_scripts"
 NAMESPACES = {"minecraft", "planetaryfactory", "gtceu", "create", "electroenergetics",
               # `c:` is the common tag namespace, which belongs to no mod and is how a row
               # survives Almost Unified deciding which mod's item the player actually holds.
-              "c"}
+              "c",
+              # Researchd owns the research-pack item; `planetary_factory:` (an underscore) is the
+              # id space its packs are declared in, and is not this pack's item namespace.
+              "researchd", "planetary_factory"}
 
 
 def first_party_items():
@@ -87,6 +90,10 @@ def check_item_map(items, corpus, failures):
         namespace = target.split(":", 1)[0]
         if namespace not in NAMESPACES:
             failures.append(f"{name} maps onto {target}, whose namespace the pack does not ship")
+        for component, value in (row.get("components") or {}).items():
+            for id_ in (component, value):
+                if id_.split(":", 1)[0] not in NAMESPACES:
+                    failures.append(f"{name} names {id_}, whose namespace the pack does not ship")
         if row.get("source") == "authored" and namespace != "planetaryfactory":
             failures.append(f"{name} is authored but maps onto {target}")
         if namespace == "planetaryfactory" and row.get("kind") == "item" \
@@ -134,7 +141,7 @@ def check_emitted(items, recipe_types, failures):
                 for entry in contents:
                     ingredient = entry["content"]["ingredient"]
                     target = ingredient.get("item") or ingredient.get("tag") \
-                        or ingredient.get("fluid")
+                        or ingredient.get("fluid") or ingredient.get("items")
                     if target not in targets:
                         failures.append(
                             f"{path.name}: {field} names {target}, which no item-map row gives")

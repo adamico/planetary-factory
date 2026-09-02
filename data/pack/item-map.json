@@ -25,6 +25,7 @@
     "on a tag row cannot be emitted, because a result has to be one item.",
     "",
     "Quantities are NOT here. Nothing is scaled: item counts transfer 1:1 and 1 mB is one Factorio",
+    "A row may carry `components`, a data-component patch on the target item -- the science packs are one `researchd:research_pack` item told apart by a component, not four items. The converter emits those as a `neoforge:components` ingredient.",
     "fluid unit (#126, rewriting ADR-0025's table)."
   ],
   "items": {
@@ -68,9 +69,12 @@
     },
     "automation-science-pack": {
       "kind": "item",
-      "target": "planetaryfactory:automation_science_pack",
-      "source": "authored",
-      "note": "ADR-0018's rung 1. The spine is the pack's own; nothing in the manifest is Factorio science."
+      "target": "researchd:research_pack",
+      "source": "borrowed",
+      "components": {
+        "researchd:research_pack": "planetary_factory:automation_science_pack"
+      },
+      "note": "ADR-0018's rung 1. A Researchd RESEARCH PACK, not an item of this pack's own: `kubejs/server_scripts/researchd.js` declares it with `registerResearchPacks` and the player holds `researchd:research_pack` carrying a `researchd:research_pack` data component. The declared id is `planetary_factory:` -- an underscore, and not this pack's item namespace. Registering a plain item of the same name would ship a second, inert pack the Lab cannot read."
     },
     "barrel": {
       "status": "undecided",
@@ -161,9 +165,12 @@
     },
     "chemical-science-pack": {
       "kind": "item",
-      "target": "planetaryfactory:chemical_science_pack",
-      "source": "authored",
-      "note": "ADR-0018's rung 3."
+      "target": "researchd:research_pack",
+      "source": "borrowed",
+      "components": {
+        "researchd:research_pack": "planetary_factory:chemical_science_pack"
+      },
+      "note": "ADR-0018's rung 3. A Researchd RESEARCH PACK, not an item of this pack's own: `kubejs/server_scripts/researchd.js` declares it with `registerResearchPacks` and the player holds `researchd:research_pack` carrying a `researchd:research_pack` data component. The declared id is `planetary_factory:` -- an underscore, and not this pack's item namespace. Registering a plain item of the same name would ship a second, inert pack the Lab cannot read."
     },
     "coal": {
       "kind": "item",
@@ -437,9 +444,12 @@
     },
     "logistic-science-pack": {
       "kind": "item",
-      "target": "planetaryfactory:logistic_science_pack",
-      "source": "authored",
-      "note": "ADR-0018's rung 2."
+      "target": "researchd:research_pack",
+      "source": "borrowed",
+      "components": {
+        "researchd:research_pack": "planetary_factory:logistic_science_pack"
+      },
+      "note": "ADR-0018's rung 2. A Researchd RESEARCH PACK, not an item of this pack's own: `kubejs/server_scripts/researchd.js` declares it with `registerResearchPacks` and the player holds `researchd:research_pack` carrying a `researchd:research_pack` data component. The declared id is `planetary_factory:` -- an underscore, and not this pack's item namespace. Registering a plain item of the same name would ship a second, inert pack the Lab cannot read."
     },
     "long-handed-inserter": {
       "status": "undecided",
@@ -562,10 +572,9 @@
       "note": "As `electronic-circuit`."
     },
     "production-science-pack": {
-      "kind": "item",
-      "target": "planetaryfactory:production_science_pack",
-      "source": "authored",
-      "note": "ADR-0018's rung 4."
+      "status": "undecided",
+      "ticket": 42,
+      "note": "ADR-0018's rung 4, and `researchd.js` declares only three research packs -- automation, logistic and chemical. Until the fourth is declared there is nothing for this row to name, and the research tree is provisional besides."
     },
     "productivity-module": {
       "status": "undecided",
