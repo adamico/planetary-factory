@@ -135,7 +135,18 @@ cannot lie about a patch, because the map is reporting the world rather than a b
 Manual marking alone was rejected as clerical, and an unmarked dead vein is exactly the trap this
 section exists to prevent.
 
-## Bedrock deposits keep their tail
+## ~~Bedrock deposits keep their tail~~ Terra's bedrock ore tail is cut
+
+> **Amended by #86.** Terra carries **no bedrock ore deposits at all**. `terra_ferrous_deposit` and
+> `terra_cupriferous_deposit` are deleted along with `terra_polymetallic_deposit`; the only thing
+> under Terra's bedrock is oil. The section below is kept because its argument is still live on
+> Ignus and Electro, whose deposits are unchanged — but on Terra the tail loses to the rule it was
+> arguing against. **The exception is what made the rule leaky.** A bedrock iron deposit is an
+> infinite iron patch, and Factorio has no such thing: oil is the one resource that depletes toward
+> a floor instead of running dry, which is exactly why oil is what Terra keeps. Leaving iron and
+> copper as forever-trickles would have said, in the one place a player can actually farm, that
+> Terra's ore does *not* run out — undercutting the departure pressure this whole ADR exists to
+> build. `infiniteBedrockOresFluids` stays `false`. See ADR-0021 as amended.
 
 The three `terra_*` deposits are unchanged: `terra_ferrous_deposit` starts at a 24–48 yield, loses 1
 per extraction at a 20% chance, and floors at `depleted_yield: 4` forever. `infiniteBedrockOresFluids`
@@ -164,8 +175,13 @@ safe. Raise it and it stops being a consolation and starts being a reason to sta
 - **Tuning scarcity through thin patches rather than lossy processing.** Rejected: it cannot satisfy
   the no-wall constraint. Thin patches leave a player empty-handed; a bad ratio leaves them slow,
   and slow is recoverable.
-- **Hard-exhausting the bedrock deposits too, for consistency.** Rejected — the tail is what makes
-  an old outpost a decision rather than a regret, and 4 is too small to undermine departure.
+- **Hard-exhausting the bedrock deposits too, for consistency.** ~~Rejected — the tail is what makes
+  an old outpost a decision rather than a regret, and 4 is too small to undermine departure.~~
+  **#86 went further on Terra than this option proposed**: rather than exhausting the bedrock ore
+  deposits, it removes them. The consistency argument won, and the reason it won is the one this
+  bullet did not weigh — fidelity, not balance. An infinite ore patch is not a Factorio object at
+  any yield, so the size of the trickle was never the deciding number. Ignus and Electro keep
+  theirs; the tail was never wrong there.
 - **Adopting a map mod for the readout.** Moot, and nearly a mistake: FTB Chunks is already in the
   pack and GregTech already renders into it. Checked before deciding.
 - **Manual "Mark as Depleted" only.** Rejected as clerical, though it remains available and costs

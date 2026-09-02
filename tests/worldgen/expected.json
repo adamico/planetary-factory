@@ -167,9 +167,13 @@
         "otherwise read. ADR-0019's other two claims -- the terrain is flat, no caves generate --",
         "are invisible to every registry and are checked by a human on delivery.",
         "Terra's bedrock carries oil and nothing else (#86). The only depleting-but-never-gone",
-        "resource in Factorio is oil, so the bedrock set is one authored crude deposit -- the",
-        "coal and uranium bedrock deposits ADR-0021 once named are not built, and that ADR is",
-        "amended. The fractions are the Oil Refinery's job (ADR-0025), so the six stock GregTech",
+        "resource in Factorio is oil, so the bedrock set is one authored crude deposit and no ore",
+        "at all -- the coal and uranium deposits ADR-0021 named are not built, and the iron and",
+        "copper ones that did exist are deleted, an infinite ore patch being no more a Factorio",
+        "object at a yield of 4 than at 40. Both ADR-0021 and ADR-0020's tail are amended.",
+        "`bedrock_ores` is an empty object on purpose and the emptiness is the assertion: the",
+        "check walks the whole registry, so a deposit that later reaches the overworld without",
+        "naming itself here fails. The fractions are the Oil Refinery's job (ADR-0025), so the six stock GregTech",
         "fluid deposits that shipped to the overworld are narrowed to nowhere by an override",
         "carrying an empty `dimension_filter`, and each is named in `forbidden_bedrock_fluids`",
         "-- an override that goes missing restores GregTech's whole spread in silence."
@@ -180,20 +184,7 @@
           "fluid": "gtceu:raw_oil"
         }
       },
-      "bedrock_ores": {
-        "planetaryfactory:terra_cupriferous_deposit": {
-          "depleted_yield_at_least": 1,
-          "materials": [
-            "gtceu:copper"
-          ]
-        },
-        "planetaryfactory:terra_ferrous_deposit": {
-          "depleted_yield_at_least": 1,
-          "materials": [
-            "gtceu:iron"
-          ]
-        }
-      },
+      "bedrock_ores": {},
       "biomes": [
         "planetaryfactory:terra_desert",
         "planetaryfactory:terra_dry_steppe",
@@ -218,6 +209,8 @@
         "gtceu:salt_water_deposit"
       ],
       "forbidden_bedrock_ores": [
+        "planetaryfactory:terra_cupriferous_deposit",
+        "planetaryfactory:terra_ferrous_deposit",
         "planetaryfactory:terra_polymetallic_deposit"
       ],
       "forbidden_ore_veins": [

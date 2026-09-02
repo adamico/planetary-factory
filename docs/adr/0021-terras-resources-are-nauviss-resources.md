@@ -79,9 +79,10 @@ So the cut is applied to all four:
   #86: the coal and uranium bedrock deposits are not built.** Factorio's depleting-but-never-exhausted
   resource is oil, and only oil; an ore patch runs dry. A bedrock coal or uranium deposit would be an
   infinite ore patch, which is the shape this ADR exists to refuse. The bedrock set is therefore one
-  authored crude deposit — `planetaryfactory:terra_crude_oil_deposit`, on `gtceu:raw_oil` — plus the
-  iron and copper deposits, which ADR-0020 argued separately as the exhausted-planet tail and which
-  this amendment does not touch. GregTech's own six overworld fluid deposits are narrowed to nowhere:
+  authored crude deposit — `planetaryfactory:terra_crude_oil_deposit`, on `gtceu:raw_oil` — and
+  nothing else. `terra_ferrous_deposit` and `terra_cupriferous_deposit` are deleted too: the same
+  argument reaches them, and ADR-0020's tail section is amended to say so. Terra's bedrock carries
+  oil and no ore. GregTech's own six overworld fluid deposits are narrowed to nowhere:
   four of them are refined fractions, and shipping those would void the Oil Refinery of ADR-0025.
 - **Stone is ambient terrain, never a patch.** This is the one place fidelity deliberately loses. A
   stone patch in a world made of stone reads as a joke; Factorio's stone patch exists because
