@@ -7,9 +7,20 @@ worldgen layer registries the game actually loaded, and compares them to
 
 ```bash
 scripts/worldgen-check.py                # launch, dump, compare, tear the world down
+scripts/worldgen-check.py --headless     # the same, with no display attached (see below)
 scripts/worldgen-check.py --keep-world   # leave saves/WorldgenCheck for inspection
 scripts/worldgen-check.py --dump-only    # re-compare the last dump without launching
 ```
+
+**`--headless` is mandatory whenever nothing owns a display** — an agent-started run, a
+background process, ssh, CI. FML's early loading window insists on a primary monitor and the
+game dies about a second in with `Failed to find a primary monitor` /
+`glfwGetPrimaryMonitor failed`, long before mod loading. What that costs is not the second: the
+harness has no idea the launch is dead and waits out its whole `--timeout` (600s by default)
+before reporting `no registry dump after 600s`, which reads exactly like a hang or a slow load.
+A ten-minute wait that proves nothing is the failure mode, so pass the flag rather than
+diagnosing it afterwards. `--headless` patches `config/fml.toml` for the run and restores it
+after, because a player at a keyboard wants the splash screen.
 
 Exit codes: `0` everything matched, `1` expectations failed (each one printed), `2` no dump
 was produced — the game failed to reach world load, so read `logs/latest.log` first.
