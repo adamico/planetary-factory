@@ -27,21 +27,17 @@ StartupEvents.registry('item', event => {
 
   event.create('planetaryfactory:advanced_circuit')
     .displayName('Advanced Circuit')
-    .texture('gtceu:item/quantum_processor_assembly')
+    .texture('gtceu:item/wetware_processor_assembly')
 
   event.create('planetaryfactory:processing_unit')
     .displayName('Processing Unit')
-    .texture('gtceu:item/quantum_processor_assembly')
+    .texture('gtceu:item/crystal_processor_assembly')
 
   // Plastic authors for the same reason: it gates rung 2 (ADR-0025), and a rung-boundary row
   // authors rather than borrows. Its recipe is the Chemical Plant's and arrives with #107.
   event.create('planetaryfactory:plastic_bar')
     .displayName('Plastic Bar')
-    .texture('gtceu:item/quantum_processor_assembly')
-
-
-
-
+    .texture('gtceu:item/plastic_circuit_board')
 
   // Sapros
   event.create('planetaryfactory:yumako_fresh')
