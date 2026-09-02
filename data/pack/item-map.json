@@ -43,7 +43,8 @@
     },
     "arithmetic-combinator": {
       "status": "undecided",
-      "note": "As `small-lamp`: the `logistics/circuit-network` shelf, ADR-0030."
+      "note": "Create: Power Grid ships the counterpart -- lamps, CRT and Modular Display, LV/MV/HV switches, relays and the Alarm Bell -- so the whole `logistics/circuit-network` shelf is decided by the Electro-to-Power-Grid swap, not before it. ADR-0030 keeps the MECHANIC (vanilla redstone plus Create's redstone line); what waits here is which block each row names.",
+      "ticket": 148
     },
     "assembling-machine-1": {
       "kind": "item",
@@ -65,7 +66,8 @@
     },
     "asteroid-collector": {
       "status": "undecided",
-      "note": "Post-launch, and `not_emitted` on its shelf; #113 and #114 own the space chapter."
+      "note": "Post-launch, and `not_emitted` on its shelf; #113 and #114 own the space chapter.",
+      "ticket": 114
     },
     "automation-science-pack": {
       "kind": "item",
@@ -82,8 +84,10 @@
       "ticket": 106
     },
     "battery": {
-      "status": "undecided",
-      "note": "GregTech's battery items are tiered hulls rather than Factorio's intermediate, and Electro's `capacitor` is a different thing. Needs the borrow/author test."
+      "kind": "item",
+      "target": "planetaryfactory:battery",
+      "source": "authored",
+      "note": "Factorio's battery is a crafting intermediate, not a placed power store: GregTech's batteries are tiered chargeable hulls and Electro's capacitor is a different thing, so borrowing either would put an EU container inside a recipe that wants lead and acid. Texture borrows `gtceu:max_battery`. No tier suffix -- there is one battery."
     },
     "battery-equipment": {
       "status": "undecided",
@@ -107,8 +111,8 @@
     },
     "boiler": {
       "status": "undecided",
-      "note": "#37 puts steam at rung 0 on GregTech's LP boiler; which GT block that is has no row anywhere yet.",
-      "ticket": 37
+      "note": "#37 removed GregTech's power layer and ADR-0036 puts the grid on a pack-authored pole, so the GT boiler's only remaining justification is the steam mining drill -- which makes this the drill ladder's row, not the generation chain's.",
+      "ticket": 105
     },
     "bulk-inserter": {
       "status": "undecided",
@@ -142,11 +146,13 @@
     },
     "cargo-bay": {
       "status": "undecided",
-      "note": "Post-launch, and `not_emitted` on its shelf; #113 and #114 own the space chapter."
+      "note": "Post-launch, and `not_emitted` on its shelf; #113 and #114 own the space chapter.",
+      "ticket": 113
     },
     "cargo-landing-pad": {
       "status": "undecided",
-      "note": "`not_emitted` shelf."
+      "note": "`not_emitted` shelf.",
+      "ticket": 113
     },
     "cargo-wagon": {
       "status": "undecided",
@@ -159,9 +165,10 @@
       "ticket": 135
     },
     "chemical-plant": {
-      "status": "undecided",
-      "note": "ADR-0025's Chemical Plant; #107 registers it, and the item is that machine.",
-      "ticket": 107
+      "kind": "item",
+      "target": "gtceu:lv_chemical_plant",
+      "source": "borrowed",
+      "note": "ADR-0025's Chemical Plant, registered by #107 through GregTech's registrate -- so the id is `gtceu:` and the tier is a prefix. There is no second tier to add (ADR-0025: one tier, one recipe set); the prefix is the chassis's, not a ladder."
     },
     "chemical-science-pack": {
       "kind": "item",
@@ -179,12 +186,15 @@
       "note": "One of Terra's four ores (ADR-0021)."
     },
     "concrete": {
-      "status": "undecided",
-      "note": "`logistics/terrain` is `undecided` in subgroup-owner.json."
+      "kind": "item",
+      "target": "minecraft:gray_concrete",
+      "source": "borrowed",
+      "note": "Vanilla concrete. Factorio's concrete is a walking-speed floor; Block Runner supplies that mechanic and the colour carries the hazard fiction the texture already has."
     },
     "constant-combinator": {
       "status": "undecided",
-      "note": "As `small-lamp`: the `logistics/circuit-network` shelf, ADR-0030."
+      "note": "Create: Power Grid ships the counterpart -- lamps, CRT and Modular Display, LV/MV/HV switches, relays and the Alarm Bell -- so the whole `logistics/circuit-network` shelf is decided by the Electro-to-Power-Grid swap, not before it. ADR-0030 keeps the MECHANIC (vanilla redstone plus Create's redstone line); what waits here is which block each row names.",
+      "ticket": 148
     },
     "construction-robot": {
       "status": "undecided",
@@ -210,9 +220,10 @@
       "note": "As `iron-plate`."
     },
     "crude-oil": {
-      "status": "undecided",
-      "note": "The oil chapter's fluids arrive with #107's two machines; which GregTech fluid each is has no row yet.",
-      "ticket": 107
+      "kind": "fluid",
+      "target": "gtceu:raw_oil",
+      "source": "borrowed",
+      "note": "ADR-0025's fluid-id table, which the pack takes from GregTech. Lang override to \"Crude Oil\"."
     },
     "crude-oil-barrel": {
       "status": "native_mechanic",
@@ -220,11 +231,13 @@
     },
     "crusher": {
       "status": "undecided",
-      "note": "Post-launch, and `not_emitted` on its shelf; #113 and #114 own the space chapter."
+      "note": "Post-launch, and `not_emitted` on its shelf; #113 and #114 own the space chapter.",
+      "ticket": 114
     },
     "decider-combinator": {
       "status": "undecided",
-      "note": "As `small-lamp`: the `logistics/circuit-network` shelf, ADR-0030."
+      "note": "Create: Power Grid ships the counterpart -- lamps, CRT and Modular Display, LV/MV/HV switches, relays and the Alarm Bell -- so the whole `logistics/circuit-network` shelf is decided by the Electro-to-Power-Grid swap, not before it. ADR-0030 keeps the MECHANIC (vanilla redstone plus Create's redstone line); what waits here is which block each row names.",
+      "ticket": 148
     },
     "depleted-uranium-fuel-cell": {
       "status": "undecided",
@@ -233,10 +246,13 @@
     },
     "display-panel": {
       "status": "undecided",
-      "note": "As `small-lamp`: the `logistics/circuit-network` shelf, ADR-0030."
+      "note": "Create: Power Grid ships the counterpart -- lamps, CRT and Modular Display, LV/MV/HV switches, relays and the Alarm Bell -- so the whole `logistics/circuit-network` shelf is decided by the Electro-to-Power-Grid swap, not before it. ADR-0030 keeps the MECHANIC (vanilla redstone plus Create's redstone line); what waits here is which block each row names.",
+      "ticket": 148
     },
     "electric-engine-unit": {
-      "status": "undecided",
+      "kind": "item",
+      "target": "planetaryfactory:electric_engine_unit",
+      "source": "authored",
       "note": "As `engine-unit`."
     },
     "electric-furnace": {
@@ -256,8 +272,10 @@
       "note": "Registered in `kubejs/startup_scripts/items.js`. #62 removed GregTech's and Mekanism's competing lines; the tier carries progression, so it authors rather than borrows."
     },
     "engine-unit": {
-      "status": "undecided",
-      "note": "Factorio's engine is an intermediate no mod ships as one item."
+      "kind": "item",
+      "target": "planetaryfactory:engine_unit",
+      "source": "authored",
+      "note": "Factorio's engine is an intermediate no installed mod ships as one item, and it feeds recipes the pack wants. ADR-0031's author case: no borrow candidate exists."
     },
     "exoskeleton-equipment": {
       "status": "undecided",
@@ -266,19 +284,20 @@
     },
     "explosives": {
       "status": "undecided",
-      "note": "No consumer in the emittable set; the recipe is `pack:chemical_plant` and waits on #107."
+      "note": "Every consumer is military -- grenades, mines, artillery -- so whether this row exists at all is the combat question, not the oil chapter's. The Chemical Plant that crafts it now exists (#107).",
+      "ticket": 118
     },
     "express-splitter": {
-      "status": "undecided",
-      "note": "As `splitter` and `fast-transport-belt`."
+      "status": "native_mechanic",
+      "note": "Create owns item logistics (ADR-0017) and ships ONE belt: speed comes from the drivetrain's RPM, not from a faster belt item, so Factorio's three-tier ladder has no item to land on. A splitter is a funnel-and-belt arrangement and an underground belt is a belt under a block -- both are shapes the player builds, not blocks the player crafts."
     },
     "express-transport-belt": {
-      "status": "undecided",
-      "note": "As `fast-transport-belt`."
+      "status": "native_mechanic",
+      "note": "Create owns item logistics (ADR-0017) and ships ONE belt: speed comes from the drivetrain's RPM, not from a faster belt item, so Factorio's three-tier ladder has no item to land on. A splitter is a funnel-and-belt arrangement and an underground belt is a belt under a block -- both are shapes the player builds, not blocks the player crafts."
     },
     "express-underground-belt": {
-      "status": "undecided",
-      "note": "As `underground-belt` and `fast-transport-belt`."
+      "status": "native_mechanic",
+      "note": "Create owns item logistics (ADR-0017) and ships ONE belt: speed comes from the drivetrain's RPM, not from a faster belt item, so Factorio's three-tier ladder has no item to land on. A splitter is a funnel-and-belt arrangement and an underground belt is a belt under a block -- both are shapes the player builds, not blocks the player crafts."
     },
     "fast-inserter": {
       "status": "undecided",
@@ -286,16 +305,16 @@
       "ticket": 102
     },
     "fast-splitter": {
-      "status": "undecided",
-      "note": "As `splitter` and `fast-transport-belt`."
+      "status": "native_mechanic",
+      "note": "Create owns item logistics (ADR-0017) and ships ONE belt: speed comes from the drivetrain's RPM, not from a faster belt item, so Factorio's three-tier ladder has no item to land on. A splitter is a funnel-and-belt arrangement and an underground belt is a belt under a block -- both are shapes the player builds, not blocks the player crafts."
     },
     "fast-transport-belt": {
-      "status": "undecided",
-      "note": "Create ships one belt. Whether Terra has a three-tier belt ladder at all is undecided."
+      "status": "native_mechanic",
+      "note": "Create owns item logistics (ADR-0017) and ships ONE belt: speed comes from the drivetrain's RPM, not from a faster belt item, so Factorio's three-tier ladder has no item to land on. A splitter is a funnel-and-belt arrangement and an underground belt is a belt under a block -- both are shapes the player builds, not blocks the player crafts."
     },
     "fast-underground-belt": {
-      "status": "undecided",
-      "note": "As `underground-belt` and `fast-transport-belt`."
+      "status": "native_mechanic",
+      "note": "Create owns item logistics (ADR-0017) and ships ONE belt: speed comes from the drivetrain's RPM, not from a faster belt item, so Factorio's three-tier ladder has no item to land on. A splitter is a funnel-and-belt arrangement and an underground belt is a belt under a block -- both are shapes the player builds, not blocks the player crafts."
     },
     "firearm-magazine": {
       "status": "undecided",
@@ -308,16 +327,16 @@
       "ticket": 108
     },
     "fluoroketone-cold": {
-      "status": "undecided",
-      "note": "Aquilo's fluid; it reaches the corpus only through a barrel recipe, and barrelling is `native_mechanic` (#93)."
+      "status": "not_emitted",
+      "note": "Aquilo's fluid. It reaches the corpus only through a barrel recipe, and barrelling is `native_mechanic` (#93), so nothing emitted references it."
     },
     "fluoroketone-cold-barrel": {
       "status": "native_mechanic",
       "note": "One container, filled by Create's Spout and drained by its Item Drain (#93). Which container is the same question as `barrel`, and is #106's."
     },
     "fluoroketone-hot": {
-      "status": "undecided",
-      "note": "As `fluoroketone-cold`."
+      "status": "not_emitted",
+      "note": "Aquilo's fluid. It reaches the corpus only through a barrel recipe, and barrelling is `native_mechanic` (#93), so nothing emitted references it."
     },
     "fluoroketone-hot-barrel": {
       "status": "native_mechanic",
@@ -344,8 +363,10 @@
       "ticket": 118
     },
     "hazard-concrete": {
-      "status": "undecided",
-      "note": "As `concrete`."
+      "kind": "item",
+      "target": "minecraft:yellow_concrete",
+      "source": "borrowed",
+      "note": "As `concrete`. Yellow is Factorio's hazard stripe."
     },
     "heat-exchanger": {
       "status": "undecided",
@@ -363,9 +384,10 @@
       "ticket": 118
     },
     "heavy-oil": {
-      "status": "undecided",
-      "note": "As `crude-oil`.",
-      "ticket": 107
+      "kind": "fluid",
+      "target": "gtceu:heavy_oil",
+      "source": "borrowed",
+      "note": "ADR-0025's fluid-id table, which the pack takes from GregTech. Lang already verbatim Factorio. ADR-0009 binds Electro's oceans to this fluid."
     },
     "heavy-oil-barrel": {
       "status": "native_mechanic",
@@ -382,8 +404,10 @@
       "ticket": 102
     },
     "iron-chest": {
-      "status": "undecided",
-      "note": "Vanilla has one chest and the pack ships no chest ladder; the three-tier shelf is a decision nobody has taken."
+      "kind": "item",
+      "target": "planetaryfactory:iron_chest",
+      "source": "authored",
+      "note": "Authored in `kubejs/startup_scripts/blocks.js`, the shape #133 proved: `InventoryAttachment` plus `CustomChestMenu`, width 9 or the screen lays out wrong, six rows the ceiling, every face `[]` and never `null`. Vanilla ships one chest and no mod here ships a ladder, so Factorio's capacity progression is authored or absent. 9x4 = 36 slots."
     },
     "iron-gear-wheel": {
       "kind": "item",
@@ -415,8 +439,8 @@
       "ticket": 103
     },
     "landfill": {
-      "status": "undecided",
-      "note": "As `concrete`. Terra is flat (ADR-0019), so it may have no job here at all."
+      "status": "not_emitted",
+      "note": "Terra is flat (ADR-0019) and has no water to fill, so the mechanic has no job here."
     },
     "light-armor": {
       "status": "undecided",
@@ -424,9 +448,10 @@
       "ticket": 118
     },
     "light-oil": {
-      "status": "undecided",
-      "note": "As `crude-oil`.",
-      "ticket": 107
+      "kind": "fluid",
+      "target": "gtceu:light_oil",
+      "source": "borrowed",
+      "note": "ADR-0025's fluid-id table, which the pack takes from GregTech. Lang already verbatim Factorio."
     },
     "light-oil-barrel": {
       "status": "native_mechanic",
@@ -457,13 +482,16 @@
       "ticket": 102
     },
     "low-density-structure": {
-      "status": "undecided",
-      "note": "A rocket intermediate; #29 and #41 own what a launch consumes."
+      "kind": "item",
+      "target": "planetaryfactory:low_density_structure",
+      "source": "authored",
+      "note": "Factorio fidelity: the Rocket Silo's cycle consumes Factorio's own rocket intermediates. This REVISES #41, which had the cycle take HDPE sheets directly (and whose HDPE was itself superseded by ADR-0035 -- plastic is `gtceu:polyethylene`)."
     },
     "lubricant": {
-      "status": "undecided",
-      "note": "As `crude-oil`.",
-      "ticket": 107
+      "kind": "fluid",
+      "target": "gtceu:lubricant",
+      "source": "borrowed",
+      "note": "ADR-0025's fluid-id table, which the pack takes from GregTech. Lang unchanged."
     },
     "lubricant-barrel": {
       "status": "native_mechanic",
@@ -505,9 +533,10 @@
       "ticket": 105
     },
     "oil-refinery": {
-      "status": "undecided",
-      "note": "ADR-0025's Oil Refinery; #107 registers it.",
-      "ticket": 107
+      "kind": "item",
+      "target": "kubejs:oil_refinery",
+      "source": "borrowed",
+      "note": "ADR-0025's Oil Refinery, a MULTIBLOCK (#107) -- and GregTech's model provider does not serve the `kubejs:` namespace the multiblock builder lands in, which is why this id differs from the Chemical Plant's. Not tiered."
     },
     "oxide-asteroid-chunk": {
       "status": "undecided",
@@ -525,9 +554,10 @@
       "ticket": 118
     },
     "petroleum-gas": {
-      "status": "undecided",
-      "note": "As `crude-oil`.",
-      "ticket": 107
+      "kind": "fluid",
+      "target": "gtceu:oil",
+      "source": "borrowed",
+      "note": "ADR-0025's fluid-id table, which the pack takes from GregTech. Lang override to \"Petroleum Gas\". Registered `.liquid()`; fluid state has no mechanical consequence here."
     },
     "petroleum-gas-barrel": {
       "status": "native_mechanic",
@@ -561,7 +591,8 @@
     },
     "power-switch": {
       "status": "undecided",
-      "note": "As `small-lamp`: the `logistics/circuit-network` shelf, ADR-0030."
+      "note": "Create: Power Grid ships the counterpart -- lamps, CRT and Modular Display, LV/MV/HV switches, relays and the Alarm Bell -- so the whole `logistics/circuit-network` shelf is decided by the Electro-to-Power-Grid swap, not before it. ADR-0030 keeps the MECHANIC (vanilla redstone plus Create's redstone line); what waits here is which block each row names.",
+      "ticket": 148
     },
     "processing-unit": {
       "kind": "item",
@@ -570,9 +601,13 @@
       "note": "As `electronic-circuit`."
     },
     "production-science-pack": {
-      "status": "undecided",
-      "ticket": 42,
-      "note": "ADR-0018's rung 4, and `researchd.js` declares only three research packs -- automation, logistic and chemical. Until the fourth is declared there is nothing for this row to name, and the research tree is provisional besides."
+      "kind": "item",
+      "target": "researchd:research_pack",
+      "source": "borrowed",
+      "components": {
+        "researchd:research_pack": "planetary_factory:production_science_pack"
+      },
+      "note": "ADR-0018's rung 4. A Researchd RESEARCH PACK, not an item of this pack's own: `kubejs/server_scripts/researchd.js` declares it with `registerResearchPacks` and the player holds `researchd:research_pack` carrying a `researchd:research_pack` data component. The declared id is `planetary_factory:` -- an underscore, and not this pack's item namespace. Registering a plain item of the same name would ship a second, inert pack the Lab cannot read."
     },
     "productivity-module": {
       "status": "undecided",
@@ -581,7 +616,8 @@
     },
     "programmable-speaker": {
       "status": "undecided",
-      "note": "As `small-lamp`: the `logistics/circuit-network` shelf, ADR-0030."
+      "note": "Create: Power Grid ships the counterpart -- lamps, CRT and Modular Display, LV/MV/HV switches, relays and the Alarm Bell -- so the whole `logistics/circuit-network` shelf is decided by the Electro-to-Power-Grid swap, not before it. ADR-0030 keeps the MECHANIC (vanilla redstone plus Create's redstone line); what waits here is which block each row names.",
+      "ticket": 148
     },
     "pump": {
       "kind": "item",
@@ -595,9 +631,11 @@
       "ticket": 105
     },
     "radar": {
-      "status": "undecided",
-      "note": "#57 authors a pack Radar machine rather than converting Factorio's item; the shelf is `not_emitted`.",
-      "ticket": 57
+      "kind": "item",
+      "target": "planetaryfactory:radar",
+      "source": "authored",
+      "note": "#57: a continuous FE-powered block charting chunks nobody has visited, calling `ServerCache.prospectAllInChunk`. Mechanism, so `planetaryfactory_core`'s (ADR-0015). Built by #116, which registers the block and the surface ore indicators.",
+      "blocked_by": 116
     },
     "rail": {
       "kind": "item",
@@ -617,16 +655,20 @@
       "note": "Create's track signal, placed ON the track rather than spliced into it -- the same affordance as Factorio's, which is also placed beside the rail. It follows its shelf rather than its ingredients (subgroup-owner.json). Create's own recipe is `railway_casing` + `electron_tube`, and the electron tube is redstone-bound, so on Terra that recipe is unbuildable and this one replaces it (#62, #143)."
     },
     "refined-concrete": {
-      "status": "undecided",
-      "note": "As `concrete`."
+      "kind": "item",
+      "target": "minecraft:light_gray_concrete",
+      "source": "borrowed",
+      "note": "As `concrete`, one shade up."
     },
     "refined-hazard-concrete": {
-      "status": "undecided",
-      "note": "As `concrete`."
+      "kind": "item",
+      "target": "minecraft:orange_concrete",
+      "source": "borrowed",
+      "note": "As `hazard-concrete`, one shade up."
     },
     "repair-pack": {
-      "status": "undecided",
-      "note": "`production/tool` is `undecided` in subgroup-owner.json -- ADR-0017 has no repair row."
+      "status": "not_emitted",
+      "note": "Factorio's repair pack repairs BLOCKS -- damaged entities in the world. Minecraft has no block damage to repair, and item repair is the anvil's. The mechanic has no referent here."
     },
     "roboport": {
       "status": "undecided",
@@ -634,8 +676,10 @@
       "ticket": 145
     },
     "rocket-fuel": {
-      "status": "undecided",
-      "note": "As `low-density-structure`."
+      "kind": "item",
+      "target": "planetaryfactory:rocket_fuel",
+      "source": "authored",
+      "note": "As `low-density-structure`: a solid item, Factorio's own, made from `solid-fuel` and light oil. Distinct from `gtceu:rocket_fuel`, the FLUID the GCyR rocket entity burns (#41)."
     },
     "rocket-part": {
       "status": "undecided",
@@ -649,7 +693,8 @@
     },
     "selector-combinator": {
       "status": "undecided",
-      "note": "As `small-lamp`: the `logistics/circuit-network` shelf, ADR-0030."
+      "note": "Create: Power Grid ships the counterpart -- lamps, CRT and Modular Display, LV/MV/HV switches, relays and the Alarm Bell -- so the whole `logistics/circuit-network` shelf is decided by the Electro-to-Power-Grid swap, not before it. ADR-0030 keeps the MECHANIC (vanilla redstone plus Create's redstone line); what waits here is which block each row names.",
+      "ticket": 148
     },
     "shotgun": {
       "status": "undecided",
@@ -668,7 +713,8 @@
     },
     "small-lamp": {
       "status": "undecided",
-      "note": "`logistics/circuit-network` is `undecided`; ADR-0030 makes Factorio's circuit network Minecraft's redstone, which may leave the whole shelf `not_emitted`."
+      "note": "Create: Power Grid ships the counterpart -- lamps, CRT and Modular Display, LV/MV/HV switches, relays and the Alarm Bell -- so the whole `logistics/circuit-network` shelf is decided by the Electro-to-Power-Grid swap, not before it. ADR-0030 keeps the MECHANIC (vanilla redstone plus Create's redstone line); what waits here is which block each row names.",
+      "ticket": 148
     },
     "solar-panel": {
       "status": "undecided",
@@ -681,21 +727,25 @@
       "ticket": 118
     },
     "solid-fuel": {
-      "status": "undecided",
-      "note": "The oil chapter's solid fuel; its three recipes are `pack:chemical_plant` and wait on #107.",
-      "ticket": 107
+      "kind": "item",
+      "target": "planetaryfactory:solid_fuel",
+      "source": "authored",
+      "note": "GregTech ships no solid fuel item and borrowing `minecraft:coal` would have the oil chapter print an ore the pack mines, which ADR-0032's 1:1 stance forbids. Burnable, made from the oil fractions in the Chemical Plant. Feeds `rocket-fuel`."
     },
     "space-platform-foundation": {
       "status": "undecided",
-      "note": "Post-launch, and `not_emitted` on its shelf; #113 and #114 own the space chapter."
+      "note": "Post-launch, and `not_emitted` on its shelf; #113 and #114 own the space chapter.",
+      "ticket": 113
     },
     "space-platform-starter-pack": {
       "status": "undecided",
-      "note": "Post-launch, and `not_emitted` on its shelf; #113 and #114 own the space chapter."
+      "note": "Post-launch, and `not_emitted` on its shelf; #113 and #114 own the space chapter.",
+      "ticket": 113
     },
     "space-science-pack": {
       "status": "undecided",
-      "note": "Post-launch, and `not_emitted` on its shelf; #113 and #114 own the space chapter."
+      "note": "Post-launch, and `not_emitted` on its shelf; #113 and #114 own the space chapter.",
+      "ticket": 113
     },
     "speed-module": {
       "status": "undecided",
@@ -703,8 +753,8 @@
       "ticket": 120
     },
     "splitter": {
-      "status": "undecided",
-      "note": "Create's belt has no splitter item; the shape is a funnel-and-belt arrangement, not one block."
+      "status": "native_mechanic",
+      "note": "Create owns item logistics (ADR-0017) and ships ONE belt: speed comes from the drivetrain's RPM, not from a faster belt item, so Factorio's three-tier ladder has no item to land on. A splitter is a funnel-and-belt arrangement and an underground belt is a belt under a block -- both are shapes the player builds, not blocks the player crafts."
     },
     "steam-engine": {
       "status": "undecided",
@@ -717,13 +767,17 @@
       "ticket": 135
     },
     "steel-chest": {
-      "status": "undecided",
-      "note": "As `iron-chest`."
+      "kind": "item",
+      "target": "planetaryfactory:steel_chest",
+      "source": "authored",
+      "note": "Authored in `kubejs/startup_scripts/blocks.js`, the shape #133 proved: `InventoryAttachment` plus `CustomChestMenu`, width 9 or the screen lays out wrong, six rows the ceiling, every face `[]` and never `null`. Vanilla ships one chest and no mod here ships a ladder, so Factorio's capacity progression is authored or absent. 9x6 = 54 slots, the ceiling."
     },
     "steel-furnace": {
-      "status": "undecided",
-      "note": "#91 defines what a Steel Furnace is here; the shelf is `undecided` in subgroup-owner.json.",
-      "ticket": 91
+      "kind": "item",
+      "target": "planetaryfactory:steel_furnace",
+      "source": "authored",
+      "note": "The furnace ladder is `planetaryfactory_core`'s: three blocks reading BOTH vanilla `minecraft:smelting` and a pack `planetaryfactory:smelting` type that allows an ingredient count, because vanilla's furnace consumes exactly one item and Factorio's steel is 5 plates. Speed and fuel only, gating nothing (#91). Fuel-burning, faster. Blast furnace texture. Registered by #155, which builds the ladder and its recipe type.",
+      "blocked_by": 155
     },
     "steel-plate": {
       "kind": "item",
@@ -733,20 +787,22 @@
     },
     "stone": {
       "kind": "item",
-      "target": "minecraft:stone",
+      "target": "minecraft:cobblestone",
       "source": "borrowed",
-      "note": "Terra is `minecraft:overworld` (ADR-0019); its stone is vanilla stone."
+      "note": "Factorio's stone is the MINED rock, and Minecraft's mined rock is cobblestone. Amends the earlier reading (`minecraft:stone`), which took the smelted block for the raw one and left `stone-brick` nowhere faithful to land."
     },
     "stone-brick": {
       "kind": "item",
-      "target": "minecraft:stone_bricks",
+      "target": "minecraft:stone",
       "source": "borrowed",
-      "note": "Factorio's building block, and vanilla's is the same shape. The RECIPE is `smelting` and waits on #91."
+      "note": "Factorio smelts 2 stone into 1 stone brick, its building block; Minecraft smelts cobblestone into stone, which is the same move. So the RECIPE is vanilla smelting at 1:1 and needs no ingredient count -- amending the earlier `minecraft:stone_bricks` reading, which did."
     },
     "stone-furnace": {
-      "status": "undecided",
-      "note": "As `steel-furnace`.",
-      "ticket": 91
+      "kind": "item",
+      "target": "planetaryfactory:stone_furnace",
+      "source": "authored",
+      "note": "The furnace ladder is `planetaryfactory_core`'s: three blocks reading BOTH vanilla `minecraft:smelting` and a pack `planetaryfactory:smelting` type that allows an ingredient count, because vanilla's furnace consumes exactly one item and Factorio's steel is 5 plates. Speed and fuel only, gating nothing (#91). Rung 0, fuel-burning. Vanilla's furnace recipe goes with the stock sweep. Registered by #155, which builds the ladder and its recipe type.",
+      "blocked_by": 155
     },
     "stone-wall": {
       "status": "undecided",
@@ -781,9 +837,10 @@
       "note": "GregTech's dust. Its RECIPE is `pack:chemical_plant` and waits on #107."
     },
     "sulfuric-acid": {
-      "status": "undecided",
-      "note": "As `crude-oil`.",
-      "ticket": 107
+      "kind": "fluid",
+      "target": "gtceu:sulfuric_acid",
+      "source": "borrowed",
+      "note": "ADR-0025's fluid-id table, which the pack takes from GregTech. GregTech's acid."
     },
     "sulfuric-acid-barrel": {
       "status": "native_mechanic",
@@ -802,8 +859,8 @@
       "note": "Create's belt item. ADR-0017 gives Create item logistics; #93 keeps the recipe on `pack:assembling`."
     },
     "underground-belt": {
-      "status": "undecided",
-      "note": "As `splitter`."
+      "status": "native_mechanic",
+      "note": "Create owns item logistics (ADR-0017) and ships ONE belt: speed comes from the drivetrain's RPM, not from a faster belt item, so Factorio's three-tier ladder has no item to land on. A splitter is a funnel-and-belt arrangement and an underground belt is a belt under a block -- both are shapes the player builds, not blocks the player crafts."
     },
     "uranium-235": {
       "status": "undecided",
@@ -827,7 +884,8 @@
     },
     "utility-science-pack": {
       "status": "undecided",
-      "note": "Post-launch, and `not_emitted` on its shelf; #113 and #114 own the space chapter."
+      "note": "Post-launch, and `not_emitted` on its shelf; #113 and #114 own the space chapter.",
+      "ticket": 113
     },
     "water": {
       "kind": "fluid",

@@ -1,0 +1,31 @@
+{
+  "type": "gtceu:assembling",
+  "inputs": {
+    "item": [
+      {
+        "content": {
+          "ingredient": {
+            "item": "minecraft:light_gray_concrete"
+          },
+          "count": 10
+        }
+      }
+    ]
+  },
+  "outputs": {
+    "item": [
+      {
+        "content": {
+          "ingredient": {
+            "item": "minecraft:orange_concrete"
+          },
+          "count": 10
+        }
+      }
+    ]
+  },
+  "duration": 5,
+  "data": {
+    "factorio_category": "crafting"
+  }
+}

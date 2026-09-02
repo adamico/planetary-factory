@@ -1,0 +1,41 @@
+{
+  "type": "gtceu:chemical_plant",
+  "inputs": {
+    "item": [
+      {
+        "content": {
+          "ingredient": {
+            "item": "planetaryfactory:solid_fuel"
+          },
+          "count": 10
+        }
+      }
+    ],
+    "fluid": [
+      {
+        "content": {
+          "ingredient": {
+            "fluid": "gtceu:light_oil"
+          },
+          "amount": 10
+        }
+      }
+    ]
+  },
+  "outputs": {
+    "item": [
+      {
+        "content": {
+          "ingredient": {
+            "item": "planetaryfactory:rocket_fuel"
+          },
+          "count": 1
+        }
+      }
+    ]
+  },
+  "duration": 300,
+  "data": {
+    "factorio_category": "crafting-with-fluid"
+  }
+}

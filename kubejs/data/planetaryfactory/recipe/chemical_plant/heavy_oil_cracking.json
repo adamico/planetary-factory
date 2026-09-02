@@ -1,0 +1,39 @@
+{
+  "type": "gtceu:chemical_plant",
+  "inputs": {
+    "fluid": [
+      {
+        "content": {
+          "ingredient": {
+            "fluid": "minecraft:water"
+          },
+          "amount": 30
+        }
+      },
+      {
+        "content": {
+          "ingredient": {
+            "fluid": "gtceu:heavy_oil"
+          },
+          "amount": 40
+        }
+      }
+    ]
+  },
+  "outputs": {
+    "fluid": [
+      {
+        "content": {
+          "ingredient": {
+            "fluid": "gtceu:light_oil"
+          },
+          "amount": 30
+        }
+      }
+    ]
+  },
+  "duration": 40,
+  "data": {
+    "factorio_category": "chemistry"
+  }
+}

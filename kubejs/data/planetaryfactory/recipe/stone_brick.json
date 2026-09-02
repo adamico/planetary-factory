@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "minecraft:cobblestone"
+  },
+  "result": {
+    "id": "minecraft:stone",
+    "count": 1
+  },
+  "experience": 0.0,
+  "cookingtime": 64
+}

@@ -39,6 +39,45 @@ StartupEvents.registry('item', event => {
     .displayName('Plastic Bar')
     .texture('gtceu:item/plastic_circuit_board')
 
+  // The oil chapter's two solids and the rocket's two intermediates.
+  //
+  // `solid-fuel` authors because GregTech ships no solid fuel item and borrowing `minecraft:coal`
+  // would have the oil chapter PRINT an ore the pack mines, which ADR-0032's 1:1 stance forbids.
+  // The rocket pair authors on Factorio fidelity (#87): the Rocket Silo's cycle consumes
+  // Factorio's own intermediates, which revises #41's HDPE-and-circuits triple.
+  //
+  // `planetaryfactory:rocket_fuel` is NOT `gtceu:rocket_fuel`. This is Factorio's solid item, made
+  // from solid fuel and light oil; GregTech's is the FLUID the GCyR rocket entity burns (#41).
+  event.create('planetaryfactory:solid_fuel')
+    .displayName('Solid Fuel')
+    .texture('gtceu:item/coal_coke')
+
+  event.create('planetaryfactory:rocket_fuel')
+    .displayName('Rocket Fuel')
+    .texture('gtceu:item/carbon_fibers')
+
+  event.create('planetaryfactory:low_density_structure')
+    .displayName('Low Density Structure')
+    .texture('gtceu:item/aluminium_plate')
+
+  // Factorio's battery is a crafting INTERMEDIATE, not a placed power store: GregTech's batteries
+  // are tiered chargeable hulls and Electro's capacitor is a different thing, so borrowing either
+  // would put an EU container inside a recipe that wants lead and acid. No tier suffix -- there is
+  // one battery, and a ladder that never arrives costs nothing to leave unnamed.
+  event.create('planetaryfactory:battery')
+    .displayName('Battery')
+    .texture('gtceu:item/max_battery')
+
+  // The engine units author because no installed mod ships Factorio's engine as one item, and
+  // they feed recipes the pack wants. ADR-0031's author case at its plainest: no borrow candidate.
+  event.create('planetaryfactory:engine_unit')
+    .displayName('Engine Unit')
+    .texture('gtceu:item/steel_gear')
+
+  event.create('planetaryfactory:electric_engine_unit')
+    .displayName('Electric Engine Unit')
+    .texture('gtceu:item/steel_rotor')
+
   // Sapros
   event.create('planetaryfactory:yumako_fresh')
     .displayName('Yumako')

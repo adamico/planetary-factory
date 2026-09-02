@@ -5,15 +5,7 @@
       {
         "content": {
           "ingredient": {
-            "item": "minecraft:cobblestone"
-          },
-          "count": 1
-        }
-      },
-      {
-        "content": {
-          "ingredient": {
-            "item": "gtceu:iron_rod"
+            "item": "planetaryfactory:engine_unit"
           },
           "count": 1
         }
@@ -25,6 +17,14 @@
           },
           "count": 1
         }
+      },
+      {
+        "content": {
+          "ingredient": {
+            "item": "create:fluid_pipe"
+          },
+          "count": 1
+        }
       }
     ]
   },
@@ -33,14 +33,14 @@
       {
         "content": {
           "ingredient": {
-            "item": "create:track"
+            "item": "create:mechanical_pump"
           },
-          "count": 2
+          "count": 1
         }
       }
     ]
   },
-  "duration": 10,
+  "duration": 40,
   "data": {
     "factorio_category": "crafting"
   }

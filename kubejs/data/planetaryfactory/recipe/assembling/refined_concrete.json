@@ -5,9 +5,9 @@
       {
         "content": {
           "ingredient": {
-            "item": "minecraft:cobblestone"
+            "item": "minecraft:gray_concrete"
           },
-          "count": 1
+          "count": 20
         }
       },
       {
@@ -15,7 +15,7 @@
           "ingredient": {
             "item": "gtceu:iron_rod"
           },
-          "count": 1
+          "count": 8
         }
       },
       {
@@ -26,6 +26,16 @@
           "count": 1
         }
       }
+    ],
+    "fluid": [
+      {
+        "content": {
+          "ingredient": {
+            "fluid": "minecraft:water"
+          },
+          "amount": 100
+        }
+      }
     ]
   },
   "outputs": {
@@ -33,15 +43,15 @@
       {
         "content": {
           "ingredient": {
-            "item": "create:track"
+            "item": "minecraft:light_gray_concrete"
           },
-          "count": 2
+          "count": 10
         }
       }
     ]
   },
-  "duration": 10,
+  "duration": 300,
   "data": {
-    "factorio_category": "crafting"
+    "factorio_category": "crafting-with-fluid"
   }
 }

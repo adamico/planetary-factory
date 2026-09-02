@@ -46,6 +46,42 @@ StartupEvents.registry('block', (event) => {
     .resistance(1.5)
     .requiresTool(false)
     .tagBlock('minecraft:mineable/pickaxe');
+
+  // Factorio's chest ladder, which no installed mod supplies: vanilla ships one chest, and the
+  // capacity progression is authored or absent (#87). `wooden-chest` borrows `minecraft:chest`;
+  // these two are the rungs above it.
+  //
+  // THE SHAPE IS #133'S, and every constraint here was found in a world rather than in the jar
+  // (ADR-0015): the width is 9 or `CustomChestMenu` lays the slots out wrong under a window
+  // `KubeJSGUI` sized from the height; six rows is the ceiling, because `CustomChestMenu.TYPES`
+  // is `GENERIC_9x1..9x6` indexed by row count; and every face is `[]` and never `null`, since
+  // Rhino coerces the argument through `Set.of(...)` and NPEs before `attach` can branch on it.
+  //
+  // 36 and 54 slots: a real progression above vanilla's 27, under the six-row ceiling, with the
+  // wreck's own 9x5 hold sitting between them.
+  event.create('planetaryfactory:iron_chest')
+    .displayName('Iron Chest')
+    .texture('gtceu:block/casings/solid/machine_casing_solid_steel')
+    .hardness(2.5)
+    .resistance(2.5)
+    .requiresTool(true)
+    .tagBlock('minecraft:mineable/pickaxe')
+    .blockEntity((be) => {
+      be.inventory('inventory', [], 9, 4);
+      be.rightClickOpensInventory('inventory');
+    });
+
+  event.create('planetaryfactory:steel_chest')
+    .displayName('Steel Chest')
+    .texture('gtceu:block/casings/solid/machine_casing_clean_stainless_steel')
+    .hardness(3)
+    .resistance(3)
+    .requiresTool(true)
+    .tagBlock('minecraft:mineable/pickaxe')
+    .blockEntity((be) => {
+      be.inventory('inventory', [], 9, 6);
+      be.rightClickOpensInventory('inventory');
+    });
 });
 
 // Sapros's two trees, minus the two saplings: those are `planetaryfactory_core`'s, because

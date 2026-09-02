@@ -47,13 +47,16 @@ OUT_DIR = ROOT / "kubejs/data/planetaryfactory/recipe"
 # recipe type itself, and the ticket that registers one that does not exist yet, are read from the
 # map rather than kept in a table of this script's own.
 #
-# `undecided:smelting` is the one process whose prefix is not an owner: #91 has not settled which
-# furnaces Terra has, but the recipe TYPE it routes to is vanilla and needs no registration.
-MACHINE_OF_PROCESS = {"undecided:smelting": "smelting"}
+# `pack:smelting` is the pack's three furnace tiers (#91, #149) -- `planetaryfactory_core` blocks
+# reading vanilla `minecraft:smelting`, which needs no registration. A recipe vanilla's furnace
+# cannot express still skips below: the pack's own furnace type is the furnace ticket's, not this
+# script's.
+MACHINE_OF_PROCESS = {"pack:smelting": "smelting"}
 
-# Factorio smelts one item into one item. Vanilla's furnace consumes exactly one, so a `smelting`
-# recipe asking for more has no vanilla shape at all -- `steel-plate` is 5 iron plates and
-# `stone-brick` is 2 stone. Those two are reported, not silently emitted as 1:1.
+# Vanilla's furnace consumes exactly one item -- `SmeltingRecipe` holds a bare `Ingredient` with
+# no count, while its result carries one -- so a `smelting` recipe asking for more has no vanilla
+# shape. `stone-brick` is overridden to the vanilla 1:1 shape (cobblestone to stone); `steel-plate`
+# is 5 plates to 1 and waits on the pack furnace's own recipe type. Reported, never emitted as 1:1.
 VANILLA_SMELTING = "minecraft:smelting"
 
 # Factorio's `crafting` / `advanced-crafting` / `crafting-with-fluid` all collapse to one

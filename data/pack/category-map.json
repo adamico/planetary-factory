@@ -45,7 +45,7 @@
     },
     "smelting": {
       "recipe_type": "minecraft:smelting",
-      "note": "Plates and stone brick, vanilla `minecraft:smelting` on #91's three furnace tiers. ADR-0032 deleted ADR-0017's Ore processing row -- ore is 1:1, so smelting rides nothing and is the whole of ore-to-plate. The TYPE is vanilla and needs no registration; what waits on #91 is which furnaces exist, which is why `subgroup-owner.json` still reads `undecided:smelting`."
+      "note": "Plates and stone brick, vanilla `minecraft:smelting` on #91's three furnace tiers -- `planetaryfactory_core` blocks (Stone, Steel, Electric), which is why `subgroup-owner.json` now reads `pack:smelting`. ADR-0032 deleted ADR-0017's Ore processing row -- ore is 1:1, so smelting rides nothing and is the whole of ore-to-plate. The TYPE is vanilla and needs no registration. `steel-plate` is 5 plates to 1, which no vanilla smelting recipe can express: it waits on the pack furnace's own count-bearing recipe type."
     },
     "centrifuge": {
       "recipe_type": null,

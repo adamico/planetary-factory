@@ -5,25 +5,17 @@
       {
         "content": {
           "ingredient": {
-            "item": "minecraft:cobblestone"
+            "item": "gtceu:iron_plate"
           },
-          "count": 1
+          "count": 2
         }
       },
       {
         "content": {
           "ingredient": {
-            "item": "gtceu:iron_rod"
+            "item": "planetaryfactory:battery"
           },
-          "count": 1
-        }
-      },
-      {
-        "content": {
-          "ingredient": {
-            "item": "gtceu:steel_plate"
-          },
-          "count": 1
+          "count": 5
         }
       }
     ]
@@ -33,14 +25,14 @@
       {
         "content": {
           "ingredient": {
-            "item": "create:track"
+            "item": "electroenergetics:accumulator"
           },
-          "count": 2
+          "count": 1
         }
       }
     ]
   },
-  "duration": 10,
+  "duration": 200,
   "data": {
     "factorio_category": "crafting"
   }

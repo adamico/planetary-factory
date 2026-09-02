@@ -311,13 +311,12 @@
       "ticket": 104
     },
     "production/smelting-machine": {
-      "owner": "undecided",
-      "reason": "The three furnaces are the machines that run `smelting`, and no ADR-0017 row owns smelting. Their build machine is `pack:assembling` like every other machine; what is undecided is which pack block each of Factorio's three tiers IS, which is #91 -- the same question as the plate rows in `intermediate-products/raw-material`.",
+      "owner": "pack",
+      "reason": "#91, as amended by ADR-0035 and #87: the three furnace tiers are `planetaryfactory_core` blocks -- Stone and Steel fuel-burning, Electric on FE (#149) -- reading vanilla `minecraft:smelting` alongside a pack recipe type that allows an ingredient count. Their build machine is `pack:assembling`, like every other machine.",
       "process": "pack:assembling",
-      "note": "Previously `split-by-rung` on ADR-0017's Ore processing row -- the same misfiling as the plates; see that shelf's note. #42 names the Energized Smelter in the `production` pack's slot list, which is a data point for the furnace question and not an answer to it.",
+      "note": "The ladder is speed-and-fuel only and gates nothing (#91). Mekanism's Energized Smelter left with the mod (ADR-0035); #42's slot conflict dissolved with it. The pack type exists because vanilla's furnace consumes exactly one item and Factorio's steel is 5 plates -- see `intermediate-products/raw-material`.",
       "count": 3,
-      "cross_owner": "The two questions come apart completely here. WHICH furnace these three map to is undecided -- ADR-0017 has no smelting row -- but whichever it is, a furnace is a machine and machines are built in the pack's Assembling Machine (ADR-0026). Settling the owner will not move the process.",
-      "ticket": 91
+      "cross_owner": "The two questions come apart completely here. WHICH furnace these three map to is undecided -- ADR-0017 has no smelting row -- but whichever it is, a furnace is a machine and machines are built in the pack's Assembling Machine (ADR-0026). Settling the owner will not move the process."
     },
     "intermediate-products/raw-material": {
       "owner": "split",
@@ -327,9 +326,9 @@
         "explosives": "pack:chemical_plant",
         "plastic-bar": "pack:chemical_plant",
         "sulfur": "pack:chemical_plant",
-        "iron-plate": "undecided:smelting",
-        "copper-plate": "undecided:smelting",
-        "steel-plate": "undecided:smelting"
+        "iron-plate": "pack:smelting",
+        "copper-plate": "pack:smelting",
+        "steel-plate": "pack:smelting"
       },
       "note": [
         "FACTORIO SMELTS ORE STRAIGHT TO PLATE, and the pack does not get to add a step. All four",
@@ -351,7 +350,7 @@
         "",
         "What is still open is narrow and is a furnace, not a ladder: WHICH mod's smelter runs these four.",
         "ADR-0017 has no smelting row -- `category-map.json` leaves `smelting.recipe_type` null for the same",
-        "reason -- so answering it ADDS a row to ADR-0017. That is #91; `undecided:smelting` retires with it."
+        "reason -- so answering it ADDS a row to ADR-0017. That is #91, now answered: the three furnaces are `planetaryfactory_core` blocks, so the process is `pack:smelting` and `undecided:smelting` has retired. `steel-plate` is 5 plates to 1, which vanilla's furnace cannot express -- it waits on the pack furnace's own recipe type, not on the shelf."
       ],
       "count": 7
     },
@@ -434,14 +433,35 @@
     "logistics/circuit-network": {
       "owner": "undecided",
       "reason": "ADR-0017 has no row for a circuit network, and no installed mod owns one as a capability. #58 cut redstone from Terra entirely -- no vein, empty `underground_ores` step -- so the shelf's whole idiom has no source on the planet.",
-      "note": "Eight recipes: five combinators, a power switch, a display panel, a programmable speaker, a small lamp. Most likely `not_emitted`, but that is a decision this table cannot take from ADR-0017.",
-      "count": 8
+      "note": "Eight recipes: five combinators, a power switch, a display panel, a programmable speaker, a small lamp. ADR-0030 settled the MECHANIC -- the pack has Factorio's circuit network, `adapted`, on vanilla redstone plus Create's redstone line -- so this shelf is not a cut. What is open is which BLOCK each row names, and Create: Power Grid ships candidates for most of them (lamps, CRT and Modular Display, LV/MV/HV switches, relays, the Alarm Bell). That makes the swap the decider.",
+      "count": 8,
+      "ticket": 148
     },
     "logistics/terrain": {
-      "owner": "undecided",
-      "reason": "ADR-0017 has no terrain row. `concrete` is stone brick plus water, which is `create:mixing` by shape, but nothing in the table says Create owns terrain.",
-      "note": "Six recipes: concrete, refined concrete, the two hazard variants, landfill, stone-brick. `stone-brick` is `smelting` -- 2 stone to 1 brick, one step -- and follows the furnace question in `intermediate-products/raw-material`, NOT ADR-0017's Ore processing row; it was briefly filed there by the same error. Landfill has no meaning on a flat, sea-bearing Terra (ADR-0019) and may be the clearest cut on this shelf.",
-      "count": 6
+      "owner": "pack",
+      "reason": "ADR-0017 has no terrain row and none is needed: the four concretes are vanilla's own blocks (#87), Block Runner supplies the walking-speed mechanic Factorio's concrete exists for, and the shelf's other two recipes go different ways -- so the shelf splits.",
+      "note": [
+        "Six recipes. The four concretes are `crafting-with-fluid` and route to the Assembling",
+        "Machine like every other fluid craft; their items are vanilla concrete, coloured to carry",
+        "the hazard stripe (#87).",
+        "",
+        "`stone-brick` is `smelting`, and the pack takes a deliberate fidelity loss on it: Factorio",
+        "smelts 2 stone to 1 brick, Minecraft smelts 1 cobblestone to 1 stone, and the pack ships the",
+        "vanilla shape. So `stone` is `minecraft:cobblestone` -- the MINED rock -- and `stone-brick` is",
+        "`minecraft:stone`. Recorded in `recipe-overrides.json`, which is where a departure belongs.",
+        "",
+        "LANDFILL IS CUT. Terra is flat (ADR-0019) with no water to fill, so the mechanic has no",
+        "referent -- not a deferral and not a gap, the clearest cut on this shelf."
+      ],
+      "count": 6,
+      "per_recipe": {
+        "concrete": "pack:assembling",
+        "hazard-concrete": "pack:assembling",
+        "refined-concrete": "pack:assembling",
+        "refined-hazard-concrete": "pack:assembling",
+        "stone-brick": "pack:smelting",
+        "landfill": "not_emitted"
+      }
     },
     "logistics/transport": {
       "owner": "undecided",

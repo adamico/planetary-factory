@@ -5,25 +5,25 @@
       {
         "content": {
           "ingredient": {
-            "item": "minecraft:cobblestone"
-          },
-          "count": 1
-        }
-      },
-      {
-        "content": {
-          "ingredient": {
-            "item": "gtceu:iron_rod"
-          },
-          "count": 1
-        }
-      },
-      {
-        "content": {
-          "ingredient": {
             "item": "gtceu:steel_plate"
           },
           "count": 1
+        }
+      },
+      {
+        "content": {
+          "ingredient": {
+            "item": "gtceu:iron_gear"
+          },
+          "count": 1
+        }
+      },
+      {
+        "content": {
+          "ingredient": {
+            "item": "create:fluid_pipe"
+          },
+          "count": 2
         }
       }
     ]
@@ -33,15 +33,15 @@
       {
         "content": {
           "ingredient": {
-            "item": "create:track"
+            "item": "planetaryfactory:engine_unit"
           },
-          "count": 2
+          "count": 1
         }
       }
     ]
   },
-  "duration": 10,
+  "duration": 200,
   "data": {
-    "factorio_category": "crafting"
+    "factorio_category": "advanced-crafting"
   }
 }

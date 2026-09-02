@@ -1,11 +1,21 @@
 {
-  "type": "gtceu:assembling",
+  "type": "gtceu:chemical_plant",
   "inputs": {
+    "fluid": [
+      {
+        "content": {
+          "ingredient": {
+            "fluid": "gtceu:sulfuric_acid"
+          },
+          "amount": 20
+        }
+      }
+    ],
     "item": [
       {
         "content": {
           "ingredient": {
-            "item": "minecraft:cobblestone"
+            "item": "gtceu:iron_plate"
           },
           "count": 1
         }
@@ -13,15 +23,7 @@
       {
         "content": {
           "ingredient": {
-            "item": "gtceu:iron_rod"
-          },
-          "count": 1
-        }
-      },
-      {
-        "content": {
-          "ingredient": {
-            "item": "gtceu:steel_plate"
+            "item": "gtceu:copper_plate"
           },
           "count": 1
         }
@@ -33,15 +35,15 @@
       {
         "content": {
           "ingredient": {
-            "item": "create:track"
+            "item": "planetaryfactory:battery"
           },
-          "count": 2
+          "count": 1
         }
       }
     ]
   },
-  "duration": 10,
+  "duration": 80,
   "data": {
-    "factorio_category": "crafting"
+    "factorio_category": "chemistry"
   }
 }

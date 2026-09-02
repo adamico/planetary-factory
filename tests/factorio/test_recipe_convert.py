@@ -40,6 +40,10 @@ STARTUP = ROOT / "kubejs/startup_scripts"
 # capabilities ADR-0017 puts on Terra. Mekanism is deliberately absent -- ADR-0035 takes it out
 # of the pack, so a row pointing at it would be a row written against a mod that is leaving.
 NAMESPACES = {"minecraft", "planetaryfactory", "gtceu", "create", "electroenergetics",
+              # GregTech's multiblock builder lands in `kubejs:`, not `gtceu:` -- the tiered
+              # builder and the multiblock builder disagree about the namespace, which is why
+              # the Oil Refinery's id differs from the Chemical Plant's (#107, machines.js).
+              "kubejs",
               # `c:` is the common tag namespace, which belongs to no mod and is how a row
               # survives Almost Unified deciding which mod's item the player actually holds.
               "c",
@@ -52,6 +56,10 @@ def first_party_items():
     """The `planetaryfactory:` items and machines the startup scripts actually register."""
     items = set(re.findall(r"event\.create\('(planetaryfactory:[a-z0-9_]+)'",
                            (STARTUP / "items.js").read_text()))
+    # A block registers an item too, and the chest ladder is a block (#133): its rows would
+    # otherwise read as unregistered while sitting three lines away in `blocks.js`.
+    items |= set(re.findall(r"event\.create\('(planetaryfactory:[a-z0-9_]+)'",
+                            (STARTUP / "blocks.js").read_text()))
     machines = (STARTUP / "machines.js").read_text()
     for name in re.findall(r"event\.create\('([a-z0-9_]+)'\)", machines):
         # KJSTieredMachineBuilder registers through GregTech's registrate, so the ids come out
@@ -75,6 +83,15 @@ def check_item_map(items, corpus, failures):
         if status in ("undecided", "native_mechanic", "not_emitted"):
             if not row.get("note"):
                 failures.append(f"{name} is {status} with no note saying what decides it")
+            # AN UNDECIDED ROW MUST NAME THE TICKET THAT DECIDES IT. Without this, a row can sit
+            # `undecided` with a note pointing at prose -- an ADR, a closed ticket, another row --
+            # and nothing ever comes back to it. #87 found 40 such rows, a quarter of the map:
+            # eight of them cited an ADR that had already been accepted and had decided them.
+            # `native_mechanic` and `not_emitted` are terminal and need no ticket; `undecided` is
+            # a promise that someone will decide, and a promise needs an owner.
+            if status == "undecided" and not isinstance(row.get("ticket"), int):
+                failures.append(f"{name} is undecided and names no ticket -- say who decides it, "
+                                "or the row is a decision nobody is coming back to")
             continue
         if status is not None:
             failures.append(f"{name} has unknown status {status!r}")
@@ -94,11 +111,25 @@ def check_item_map(items, corpus, failures):
             for id_ in (component, value):
                 if id_.split(":", 1)[0] not in NAMESPACES:
                     failures.append(f"{name} names {id_}, whose namespace the pack does not ship")
+        if "blocked_by" in row:
+            if not isinstance(row["blocked_by"], int):
+                failures.append(f"{name} has blocked_by {row['blocked_by']!r}, not a ticket number")
+            if row.get("source") != "authored":
+                failures.append(f"{name} is blocked_by a ticket but is not authored -- a borrowed "
+                                "item exists already, so nothing can be waiting on it")
         if row.get("source") == "authored" and namespace != "planetaryfactory":
             failures.append(f"{name} is authored but maps onto {target}")
         if namespace == "planetaryfactory" and row.get("kind") == "item" \
-                and target not in registered:
+                and target not in registered and "blocked_by" not in row:
             failures.append(f"{name} maps onto {target}, which no startup script registers")
+        # `blocked_by` is the one escape, and it is narrow: a row whose item is DECIDED but is
+        # `planetaryfactory_core`'s to register, naming the ticket that builds it. KubeJS cannot
+        # register a furnace with a fuel slot or a chunk-charting block, so without this the map
+        # could not record a decision the mod has not caught up with -- and the alternative,
+        # leaving the row `undecided`, would say nobody had decided rather than nobody had built.
+        if "blocked_by" in row and target in registered:
+            failures.append(f"{name} is blocked_by #{row['blocked_by']} and is already "
+                            "registered -- drop the field, the ticket landed")
         if target.startswith("gtceu:") and row.get("kind") == "item" \
                 and target.endswith("_assembling_machine") and target not in registered:
             failures.append(f"{name} maps onto {target}, which machines.js does not register")

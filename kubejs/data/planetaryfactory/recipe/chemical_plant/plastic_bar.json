@@ -1,0 +1,41 @@
+{
+  "type": "gtceu:chemical_plant",
+  "inputs": {
+    "fluid": [
+      {
+        "content": {
+          "ingredient": {
+            "fluid": "gtceu:oil"
+          },
+          "amount": 20
+        }
+      }
+    ],
+    "item": [
+      {
+        "content": {
+          "ingredient": {
+            "item": "minecraft:coal"
+          },
+          "count": 1
+        }
+      }
+    ]
+  },
+  "outputs": {
+    "item": [
+      {
+        "content": {
+          "ingredient": {
+            "item": "planetaryfactory:plastic_bar"
+          },
+          "count": 2
+        }
+      }
+    ]
+  },
+  "duration": 20,
+  "data": {
+    "factorio_category": "chemistry"
+  }
+}

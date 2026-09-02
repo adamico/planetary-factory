@@ -25,9 +25,23 @@
     "  - a `not_emitted` shelf, or an `undecided` item-map row -- both are recorded where the",
     "    decision lives, and both already report themselves in the converter's summary.",
     "",
-    "The file is deliberately empty of entries. Every departure known today is one of the three",
     "kinds above, and an entry here would be the pack overruling Factorio on a recipe's contents --",
-    "which nothing has yet had a reason to do."
+    "which nothing has yet had a reason to do.",
+    "",
+    "ONE ENTRY TODAY. `stone-brick` takes Minecraft's shape rather than Factorio's, because the two",
+    "recipes are the same move at different ratios and vanilla's furnace cannot express Factorio's.",
+    "Every other departure known today is a `!`-routed category, a `native_mechanic` shelf, a",
+    "`not_emitted` shelf or an `undecided` item-map row -- none of which belong here."
   ],
-  "recipes": {}
+  "recipes": {
+    "stone-brick": {
+      "ingredients": [
+        {
+          "name": "stone",
+          "amount": 1
+        }
+      ],
+      "reason": "Factorio smelts 2 stone into 1 stone brick; Minecraft smelts 1 cobblestone into 1 stone, and the pack ships the vanilla shape (`stone` is `minecraft:cobblestone`, `stone-brick` is `minecraft:stone`). A knowing 2:1 to 1:1 fidelity loss, taken because vanilla's `SmeltingRecipe` holds an `Ingredient` with no count and the alternative -- a pack recipe type for a recipe vanilla already has -- buys nothing. `steel-plate` is the m:n recipe worth paying for, and it is not here."
+    }
+  }
 }

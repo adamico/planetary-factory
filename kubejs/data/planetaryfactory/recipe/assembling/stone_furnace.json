@@ -7,23 +7,7 @@
           "ingredient": {
             "item": "minecraft:cobblestone"
           },
-          "count": 1
-        }
-      },
-      {
-        "content": {
-          "ingredient": {
-            "item": "gtceu:iron_rod"
-          },
-          "count": 1
-        }
-      },
-      {
-        "content": {
-          "ingredient": {
-            "item": "gtceu:steel_plate"
-          },
-          "count": 1
+          "count": 5
         }
       }
     ]
@@ -33,9 +17,9 @@
       {
         "content": {
           "ingredient": {
-            "item": "create:track"
+            "item": "planetaryfactory:stone_furnace"
           },
-          "count": 2
+          "count": 1
         }
       }
     ]

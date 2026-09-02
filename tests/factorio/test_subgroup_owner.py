@@ -34,12 +34,11 @@ ROOT = Path(__file__).resolve().parent.parent.parent
 MODS = {"gregtech", "create", "mekanism", "electro", "pack"}
 
 # Terminal values: not a machine, and deliberately so. `undecided` means ADR-0017 has no row
-# for the capability -- a decision nobody has taken, not an oversight. `undecided:smelting`
-# is narrower: Factorio smelts ore straight to plate in one hop, so the shape is settled and
-# only the furnace's owner is open.
+# for the capability -- a decision nobody has taken, not an oversight. `undecided:smelting` was
+# here while #91 was open; the furnaces are `planetaryfactory_core` blocks now, so smelting is
+# `pack:smelting` on the process axis and the terminal has retired.
 TERMINALS = {
     "undecided",
-    "undecided:smelting",
     "deferred",
     "not_emitted",
 }
@@ -56,6 +55,7 @@ PROCESSES = {
     "pack:oil_refinery",
     "pack:rocket_silo",
     "pack:centrifuge",
+    "pack:smelting",
 }
 
 # Terminal values for the PROCESS axis, as distinct from the owner axis above. `native_mechanic`

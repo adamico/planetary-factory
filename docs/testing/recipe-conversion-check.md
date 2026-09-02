@@ -46,10 +46,19 @@ eighteen barrel recipes, #93); a process whose machine is not registered yet (th
 the ticket); an `undecided` item-map row (the row names what decides it); an override that says
 `skip`.
 
-One more, found while building: **`smelting` has no vanilla shape above 1:1.** A vanilla furnace
-consumes exactly one item, and Factorio's `steel-plate` is 5 iron plates while `stone-brick` is 2
-stone. The two 1:1 smelts emit as `minecraft:smelting`; the other two are reported and wait on a
-decision — a departure recorded in the overrides file, or a machine that is not the furnace.
+One more, found while building: **`smelting` has no vanilla shape above 1:1.** Vanilla's
+`SmeltingRecipe` holds a bare `Ingredient` with no count field, while its result is an `ItemStack`
+that has one — so 1:n emits and m:n cannot be written at all. Factorio's `steel-plate` is 5 iron
+plates and `stone-brick` is 2 stone. Both were reported here until #87 resolved them differently,
+and the split is worth reading as a pair:
+
+- **`stone-brick` takes Minecraft's shape.** 1 cobblestone to 1 stone is the same move at a
+  different ratio, so `stone` is `minecraft:cobblestone` (the mined rock) and `stone-brick` is
+  `minecraft:stone`. A knowing fidelity loss, recorded in `recipe-overrides.json` — which is what
+  that file is for.
+- **`steel-plate` is worth paying for.** It is the only surviving alloy on Terra (#72), so it gets
+  a count-bearing `planetaryfactory:smelting` recipe type on the pack's three furnaces (#155),
+  read alongside vanilla smelting. Until that lands it stays a reported skip.
 
 A Factorio name with **no item-map row at all** is none of those. It is a hard failure (#72): a
 name nobody has looked at must never be quietly skipped.
@@ -58,7 +67,9 @@ name nobody has looked at must never be quietly skipped.
 
 **`tests/factorio/test_recipe_convert.py`** — static, no game. The item map covers the corpus and
 nothing else; every row is a target or a recorded reason; every target names a namespace the pack
-ships and every first-party target is registered in `kubejs/startup_scripts/`; every override has
+ships and every first-party target is registered in `kubejs/startup_scripts/` (items and blocks
+both) or carries `blocked_by`, the ticket that will register it; every `undecided` row names the
+ticket that decides it; every override has
 a `reason` and names a real recipe; every emitted recipe resolves through the map and carries a
 registered recipe type; and the emitted files are exactly what the converter emits today, because
 generated output is never hand-edited.
@@ -69,8 +80,21 @@ registry, and a wrong shape NPEs at datapack load rather than reporting anything
 failure is exactly what ADR-0026 was written about. Load a world and confirm **0 failed recipes**
 in the log, and that the emitted recipes appear in the Assembling Machine's JEI page.
 
-That second check cannot be run honestly until #107 and #135 register the remaining machines: a
-partial emit reports zero failures for recipes that were never written.
+That second check cannot be run honestly until the remaining machines are registered: a partial
+emit reports zero failures for recipes that were never written. #107 has landed; #135's Centrifuge
+and the Rocket Silo (#41) have not.
+
+### Two rules the map earns by having been wrong
+
+**`undecided` must name a ticket.** #87 found 40 rows — a quarter of the map — sitting `undecided`
+with a note pointing at prose rather than at an owner. Eight of them cited ADR-0030 as the thing
+that *might* decide them, and ADR-0030 was already accepted and had decided them. A status that
+means "someone will decide this" needs to say who.
+
+**`blocked_by` is the narrow escape for a decided row whose item does not exist yet.** KubeJS
+cannot register a furnace with a fuel slot or a chunk-charting block, so those belong to
+`planetaryfactory_core` and arrive with their ticket. The field names that ticket, and the check
+fails once the item *is* registered — so the map cannot keep pointing at a ticket that closed.
 
 ## Re-running it
 

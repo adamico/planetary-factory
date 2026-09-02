@@ -5,25 +5,25 @@
       {
         "content": {
           "ingredient": {
-            "item": "minecraft:cobblestone"
-          },
-          "count": 1
-        }
-      },
-      {
-        "content": {
-          "ingredient": {
-            "item": "gtceu:iron_rod"
-          },
-          "count": 1
-        }
-      },
-      {
-        "content": {
-          "ingredient": {
             "item": "gtceu:steel_plate"
           },
-          "count": 1
+          "count": 2
+        }
+      },
+      {
+        "content": {
+          "ingredient": {
+            "item": "gtceu:copper_plate"
+          },
+          "count": 20
+        }
+      },
+      {
+        "content": {
+          "ingredient": {
+            "item": "planetaryfactory:plastic_bar"
+          },
+          "count": 5
         }
       }
     ]
@@ -33,14 +33,14 @@
       {
         "content": {
           "ingredient": {
-            "item": "create:track"
+            "item": "planetaryfactory:low_density_structure"
           },
-          "count": 2
+          "count": 1
         }
       }
     ]
   },
-  "duration": 10,
+  "duration": 300,
   "data": {
     "factorio_category": "crafting"
   }

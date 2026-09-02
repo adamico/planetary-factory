@@ -1,0 +1,63 @@
+{
+  "type": "gtceu:assembling",
+  "inputs": {
+    "item": [
+      {
+        "content": {
+          "ingredient": {
+            "item": "gtceu:steel_plate"
+          },
+          "count": 15
+        }
+      },
+      {
+        "content": {
+          "ingredient": {
+            "item": "gtceu:iron_gear"
+          },
+          "count": 10
+        }
+      },
+      {
+        "content": {
+          "ingredient": {
+            "item": "minecraft:stone"
+          },
+          "count": 10
+        }
+      },
+      {
+        "content": {
+          "ingredient": {
+            "item": "planetaryfactory:electronic_circuit"
+          },
+          "count": 10
+        }
+      },
+      {
+        "content": {
+          "ingredient": {
+            "item": "create:fluid_pipe"
+          },
+          "count": 10
+        }
+      }
+    ]
+  },
+  "outputs": {
+    "item": [
+      {
+        "content": {
+          "ingredient": {
+            "item": "kubejs:oil_refinery"
+          },
+          "count": 1
+        }
+      }
+    ]
+  },
+  "duration": 160,
+  "data": {
+    "factorio_category": "crafting"
+  }
+}

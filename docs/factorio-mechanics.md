@@ -68,7 +68,7 @@ text and commits to no jar; **`pack` is admissible as a candidate only with a na
 | [The technology tree](#the-technology-tree) | `shipped` | pack-wide |
 | [Rocket silo and rocket launch](#rocket-silo-and-rocket-launch) | `planned` | all bodies |
 | [Personal transport](#personal-transport) | `blocked` | — |
-| [Terrain modification](#terrain-modification) | `excluded` | — |
+| [Terrain modification](#terrain-modification) | `adapted` | all bodies |
 | [Repair and entity damage](#repair-and-entity-damage) | `excluded` | — |
 | [Radar and map exploration](#radar-and-map-exploration) | `planned` | Terra |
 | [The logistic request and trash system](#the-logistic-request-and-trash-system) | `excluded` | — |
@@ -184,14 +184,19 @@ Sub-rules:
 
 - **verdict**: `planned`
 - **where**: all bodies
-- **via**: `undecided` — #91 decides which pack block each of Factorio's three furnace tiers is
+- **via**: `planetaryfactory_core` — the three tiers are pack blocks (#91, #149, #155)
 - **owner**: #91
-- **ticket**: #91
+- **ticket**: #155
 
 Sub-rules:
 
 - **Ore smelts one-to-one straight to plate, with no intermediate step** — `planned`. Recorded in
   `subgroup-owner.json`; the pack does not get to add a hop.
+- **A furnace recipe may consume more than one item** — `adapted`, #155. Vanilla's `SmeltingRecipe`
+  holds an `Ingredient` with no count, so Factorio's `steel-plate` (5 plates to 1) has no vanilla
+  shape at all; the pack's three furnaces read a count-bearing `planetaryfactory:smelting` type
+  alongside the vanilla one. `stone-brick` deliberately does NOT use it — it takes Minecraft's
+  1 cobblestone to 1 stone shape, a recorded departure in `recipe-overrides.json`.
 - **No ore multiplication** — `planned`, settled by ADR-0032: cut pack-wide, Mekanism's ladder and
   Create's rung-0 Crushing Wheels alike. Yield gain by research or module is `blocked`, not
   `excluded` — the lab cannot express levelled research (ADR-0022 prunes 106 such technologies) and
@@ -678,9 +683,10 @@ Follow-on: #121.
 
 ### Terrain modification
 
-- **verdict**: `excluded`
-- **where**: —
-- **owner**: `by-consequence`, and ADR-0019 for landfill specifically
+- **verdict**: `adapted`
+- **where**: all bodies
+- **via**: Block Runner (walking speed), vanilla concrete (the block)
+- **owner**: `by-consequence` for cliffs, ADR-0019 for landfill, #87 for concrete
 
 Sub-rules:
 
@@ -688,8 +694,12 @@ Sub-rules:
   This one *is* argued.
 - **Cliffs and cliff explosives** — `excluded`. `by-consequence`: no body generates cliffs as an
   obstacle, so nothing needs removing.
-- **Concrete and its speed bonus** — `excluded` as a mechanic. The item is on `logistics/terrain`,
-  `undecided`, and `create:mixing` fits it by shape; the walking-speed bonus has no analogue.
+- **Concrete and its speed bonus** — `adapted`. #87 maps the four concretes onto vanilla's own
+  coloured concrete (grey, yellow for hazard, light grey and orange for the refined pair) and routes
+  their recipes to the Assembling Machine like every other `crafting-with-fluid` craft. **The
+  walking-speed bonus does have an analogue**: Block Runner gives a block a configurable
+  walk/run speed, which is exactly what Factorio's concrete is for. The earlier `excluded` verdict
+  was written before that mod was in the pack and is superseded rather than reversed on argument.
 
 ### Repair and entity damage
 

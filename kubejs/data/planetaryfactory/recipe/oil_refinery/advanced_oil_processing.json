@@ -1,0 +1,55 @@
+{
+  "type": "gtceu:oil_refinery",
+  "inputs": {
+    "fluid": [
+      {
+        "content": {
+          "ingredient": {
+            "fluid": "minecraft:water"
+          },
+          "amount": 50
+        }
+      },
+      {
+        "content": {
+          "ingredient": {
+            "fluid": "gtceu:raw_oil"
+          },
+          "amount": 100
+        }
+      }
+    ]
+  },
+  "outputs": {
+    "fluid": [
+      {
+        "content": {
+          "ingredient": {
+            "fluid": "gtceu:heavy_oil"
+          },
+          "amount": 25
+        }
+      },
+      {
+        "content": {
+          "ingredient": {
+            "fluid": "gtceu:light_oil"
+          },
+          "amount": 45
+        }
+      },
+      {
+        "content": {
+          "ingredient": {
+            "fluid": "gtceu:oil"
+          },
+          "amount": 55
+        }
+      }
+    ]
+  },
+  "duration": 100,
+  "data": {
+    "factorio_category": "oil-processing"
+  }
+}

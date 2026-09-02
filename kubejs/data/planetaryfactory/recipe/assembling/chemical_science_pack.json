@@ -5,23 +5,23 @@
       {
         "content": {
           "ingredient": {
-            "item": "minecraft:cobblestone"
+            "item": "planetaryfactory:engine_unit"
           },
-          "count": 1
+          "count": 2
         }
       },
       {
         "content": {
           "ingredient": {
-            "item": "gtceu:iron_rod"
+            "item": "planetaryfactory:advanced_circuit"
           },
-          "count": 1
+          "count": 3
         }
       },
       {
         "content": {
           "ingredient": {
-            "item": "gtceu:steel_plate"
+            "item": "gtceu:sulfur_dust"
           },
           "count": 1
         }
@@ -33,14 +33,18 @@
       {
         "content": {
           "ingredient": {
-            "item": "create:track"
+            "type": "neoforge:components",
+            "items": "researchd:research_pack",
+            "components": {
+              "researchd:research_pack": "planetary_factory:chemical_science_pack"
+            }
           },
           "count": 2
         }
       }
     ]
   },
-  "duration": 10,
+  "duration": 480,
   "data": {
     "factorio_category": "crafting"
   }

@@ -5,25 +5,33 @@
       {
         "content": {
           "ingredient": {
-            "item": "minecraft:cobblestone"
-          },
-          "count": 1
-        }
-      },
-      {
-        "content": {
-          "ingredient": {
-            "item": "gtceu:iron_rod"
-          },
-          "count": 1
-        }
-      },
-      {
-        "content": {
-          "ingredient": {
             "item": "gtceu:steel_plate"
           },
-          "count": 1
+          "count": 5
+        }
+      },
+      {
+        "content": {
+          "ingredient": {
+            "item": "gtceu:iron_gear"
+          },
+          "count": 5
+        }
+      },
+      {
+        "content": {
+          "ingredient": {
+            "item": "planetaryfactory:electronic_circuit"
+          },
+          "count": 5
+        }
+      },
+      {
+        "content": {
+          "ingredient": {
+            "item": "create:fluid_pipe"
+          },
+          "count": 5
         }
       }
     ]
@@ -33,14 +41,14 @@
       {
         "content": {
           "ingredient": {
-            "item": "create:track"
+            "item": "gtceu:lv_chemical_plant"
           },
-          "count": 2
+          "count": 1
         }
       }
     ]
   },
-  "duration": 10,
+  "duration": 100,
   "data": {
     "factorio_category": "crafting"
   }
