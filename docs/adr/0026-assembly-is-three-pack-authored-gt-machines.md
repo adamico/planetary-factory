@@ -169,7 +169,8 @@ built inside that class's own `EDITABLE_UI_CREATOR`, which wraps the recipe type
 outer group padded to 78px to make room for it — the slot is not read off the recipe type, so
 nothing at recipe-type level can decline it.
 
-So the row does get a `MetaMachine` subclass: `AssemblingMachine` in `planetaryfactory_core`,
+So the row does get a `MetaMachine` subclass: `SimpleMachine` in `planetaryfactory_core` (written here as
+`AssemblingMachine` and renamed when ADR-0025's Chemical Plant took the same chassis),
 selected through `KJSTieredMachineBuilder.machine(...)`. **This is not the unbounded work this ADR
 declined.** What was rejected was chasing GT's internals for cover buttons; what is written is one
 overridden predicate and one `EditableMachineUI` that is GregTech's own minus the battery slot. It

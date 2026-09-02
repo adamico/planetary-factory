@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "top": "gtceu:block/casings/solid/machine_casing_solid_steel",
+    "front": "gtceu:block/multiblock/distillation_tower/overlay_front",
+    "side": "gtceu:block/casings/solid/machine_casing_solid_steel"
+  }
+}

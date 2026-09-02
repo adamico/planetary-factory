@@ -40,6 +40,17 @@ fixture entry, not code. See `docs/testing/worldgen-registry-check.md`.
 which marshland carries which tree and that no stromatolite drops ore — with no game launch. Run it
 after any edit to the trees, the stromatolites or the five biomes.
 
+### Machine registration check
+
+`tests/pack/test_machine_assets.py` asserts the machines `kubejs/startup_scripts/machines.js`
+registers still agree with everything that names them: the registered `setMaxIOSize` against the
+corpus envelope, `data/pack/category-map.json`'s `recipe_type` against what the script actually
+creates, each machine's lang key against the id its builder produces, and — for the multiblock,
+whose `kubejs:` namespace GregTech's model provider does not serve — every hop from blockstate to
+model to texture. The two builders land in different namespaces, so the lang assertion is not
+cosmetic. Run it after editing that script, the category map or the machine lang files. Whether a
+machine's GUI and pattern behave is a world load, not a static check.
+
 ### Starting-area geometry check
 
 `tests/worldgen/test_start_geometry.py` asserts Terra's starting area can actually deal all three

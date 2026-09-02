@@ -22,7 +22,11 @@ import java.util.EnumMap;
 import java.util.HashMap;
 
 /**
- * The chassis under Terra's three Assembling Machines (ADR-0026).
+ * The chassis under every single-block machine this pack registers: Terra's three Assembling
+ * Machines (ADR-0026) and its Chemical Plant (ADR-0025).
+ *
+ * <p>Named for what it is rather than for its first caller. It is {@link SimpleTieredMachine}
+ * with two GUI members removed, and nothing about either removal is specific to assembly.
  *
  * <p>ADR-0026 authored the GUI at recipe-type level only and said in as many words that a
  * {@code MetaMachine} subclass was not worth writing — with the escape hatch that if the layout
@@ -37,16 +41,17 @@ import java.util.HashMap;
  *       taken from the recipe type.</li>
  * </ul>
  *
- * <p>Neither belongs on a Factorio assembling machine. There is no circuit anywhere in this pack's
- * assembling corpus — the recipes are generated from Factorio's own prototypes — so the
- * configurator opens onto a setting no recipe reads, and machines here are wired, never
- * battery-fed. This class is the whole answer: one overridden predicate and one UI that is
- * GregTech's own minus the battery slot. It overrides no recipe logic, so nothing here has to
- * track GregTech's internals beyond the two members it names.
+ * <p>Neither belongs on any Factorio machine. There is no circuit anywhere in this pack's corpus —
+ * the recipes are generated from Factorio's own prototypes, and a programmed circuit is a GregTech
+ * idiom for selecting between recipes that share an input set, which Factorio resolves in the
+ * recipe picker instead — so the configurator opens onto a setting no recipe reads, and machines
+ * here are wired, never battery-fed. This class is the whole answer: one overridden predicate
+ * and one UI that is GregTech's own minus the battery slot. It overrides no recipe logic, so
+ * nothing here has to track GregTech's internals beyond the two members it names.
  */
-public class AssemblingMachine extends SimpleTieredMachine {
+public class SimpleMachine extends SimpleTieredMachine {
 
-    public AssemblingMachine(IMachineBlockEntity holder, int tier, Int2IntFunction tankScalingFunction) {
+    public SimpleMachine(IMachineBlockEntity holder, int tier, Int2IntFunction tankScalingFunction) {
         super(holder, tier, tankScalingFunction);
     }
 
@@ -79,21 +84,21 @@ public class AssemblingMachine extends SimpleTieredMachine {
                 () -> (WidgetGroup) recipeType.getRecipeUI()
                         .createEditableUITemplate(false, false).createDefault(),
                 (group, machine) -> {
-                    if (!(machine instanceof AssemblingMachine assembling)) {
+                    if (!(machine instanceof SimpleMachine simple)) {
                         return;
                     }
                     Table<IO, RecipeCapability<?>, Object> storages = Tables.newCustomTable(
                             new EnumMap<>(IO.class), HashMap::new);
-                    storages.put(IO.IN, ItemRecipeCapability.CAP, assembling.importItems.storage);
-                    storages.put(IO.OUT, ItemRecipeCapability.CAP, assembling.exportItems.storage);
-                    storages.put(IO.IN, FluidRecipeCapability.CAP, assembling.importFluids);
-                    storages.put(IO.OUT, FluidRecipeCapability.CAP, assembling.exportFluids);
-                    storages.put(IO.IN, CWURecipeCapability.CAP, assembling.importComputation);
-                    storages.put(IO.OUT, CWURecipeCapability.CAP, assembling.exportComputation);
-                    assembling.getRecipeType().getRecipeUI()
+                    storages.put(IO.IN, ItemRecipeCapability.CAP, simple.importItems.storage);
+                    storages.put(IO.OUT, ItemRecipeCapability.CAP, simple.exportItems.storage);
+                    storages.put(IO.IN, FluidRecipeCapability.CAP, simple.importFluids);
+                    storages.put(IO.OUT, FluidRecipeCapability.CAP, simple.exportFluids);
+                    storages.put(IO.IN, CWURecipeCapability.CAP, simple.importComputation);
+                    storages.put(IO.OUT, CWURecipeCapability.CAP, simple.exportComputation);
+                    simple.getRecipeType().getRecipeUI()
                             .createEditableUITemplate(false, false)
                             .setupUI(group, new GTRecipeTypeUI.RecipeHolder(
-                                    assembling.recipeLogic::getProgressPercent,
+                                    simple.recipeLogic::getProgressPercent,
                                     storages,
                                     new CompoundTag(),
                                     Collections.emptyList(),

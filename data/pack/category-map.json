@@ -36,14 +36,12 @@
       "note": "ADR-0026's Assembling Machine 1/2/3, one recipe type across the three tiers. The id is GregTech's namespace, not the pack's: `GTRecipeTypes.register` runs through GregTech's registrate, which owns it (#73, machines.js)."
     },
     "chemical_plant": {
-      "recipe_type": null,
-      "note": "ADR-0025. #107 registers it; the id will be `gtceu:` for the same reason `assembling` is.",
-      "blocked_by": 107
+      "recipe_type": "gtceu:chemical_plant",
+      "note": "ADR-0025's Chemical Plant, one tier, single block (#107, machines.js). The id is GregTech's namespace, not the pack's, for the same reason `assembling` is. Registered at (2, 1, 2, 1) -- the corpus's envelope, not ADR-0025's original (2, 1, 2, 2), which was the Factorio entity's second output fluid box and no recipe's."
     },
     "oil_refinery": {
-      "recipe_type": null,
-      "note": "ADR-0025. #107 registers it; the id will be `gtceu:` for the same reason `assembling` is.",
-      "blocked_by": 107
+      "recipe_type": "gtceu:oil_refinery",
+      "note": "ADR-0025's Oil Refinery, one tier, multiblock (#107, machines.js). Registered at (0, 0, 2, 3): the corpus holds basic and advanced oil processing and no liquefaction recipe, so the item slots ADR-0025 gave it would be unfillable. Adding coal liquefaction is #12's, and widens this to (2, 0, 2, 3)."
     },
     "smelting": {
       "recipe_type": "minecraft:smelting",

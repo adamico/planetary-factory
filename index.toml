@@ -642,7 +642,7 @@ hash = "fa9ac3b4ef105fc49ea6301ad8f05f35cd076c5ce634eaec58ea414bd782fa6f"
 
 [[files]]
 file = "data/pack/category-map.json"
-hash = "7464efc73e2c55d6484da058c68d23644ff055c12fa412a7c69f82ee1e6ceabb"
+hash = "d4ac5de0f86786ec4180deca098b8dbe7dbd0c2ca0c2a29f0580d36b51f598ce"
 
 [[files]]
 file = "data/pack/item-map.json"
@@ -670,7 +670,23 @@ hash = "976f4b723d45f908789511cbc67058120993f99f30e3b3ee047edf5053fdea32"
 
 [[files]]
 file = "kubejs/assets/gtceu/lang/en_us.json"
-hash = "a8aa4789a9a6d553c0a46ae735889f5bd83c14b8c8b12debb7323d7cb79ada34"
+hash = "4c95b9bf9dd71e110420e3df1f57645ec8bb04c4f526c1d4416d75c0bef6cec4"
+
+[[files]]
+file = "kubejs/assets/kubejs/blockstates/oil_refinery.json"
+hash = "6463ce6d83c1d0a28b0290b99ae9d513706c62af1d17a728abcf62f702a7c4fb"
+
+[[files]]
+file = "kubejs/assets/kubejs/lang/en_us.json"
+hash = "2e5fc0a6af45d289f84dddd6c7d04b0f569ca590a78da9a5ff0fa725dbd6f546"
+
+[[files]]
+file = "kubejs/assets/kubejs/models/block/machine/oil_refinery.json"
+hash = "20eed604bd09d3053e8c8177ed300de39264fa4cc15f38f44e9d7e6988b61628"
+
+[[files]]
+file = "kubejs/assets/kubejs/models/item/oil_refinery.json"
+hash = "6547dbec84dd0b3eb138c41c8c21f006261e46156b97092908b2f011caccb205"
 
 [[files]]
 file = "kubejs/assets/planetaryfactory/blockstates/jellystem_sapling.json"
@@ -1390,7 +1406,7 @@ hash = "dae099ae3be7f033c0c190ee8c3b023b42f6b235d9d0591be5926e8435dbd67f"
 
 [[files]]
 file = "kubejs/server_scripts/recipe_survivors.js"
-hash = "7052a0ae7f0d14aa7a87cf03b9b06b48541ed698bba41ab9014283b013bbf3c6"
+hash = "8bc14ecff7cf689d5506ac13d21badd616b6bf9a96f07feb9193ec536794f739"
 
 [[files]]
 file = "kubejs/server_scripts/recipes.js"
@@ -1426,7 +1442,7 @@ hash = "f6b498b9b5e4999f7113aecbf35a6afa62a1f657816d9504bdc4869a39ba0a4f"
 
 [[files]]
 file = "kubejs/startup_scripts/machines.js"
-hash = "e00bb45b822433facea260b0cdffc9509cfc2b9860d33cefdd1ac3f74d881f44"
+hash = "f39b20948d897253401faa1d0601e3150e15e634d8550a38a9ceab5436688d47"
 
 [[files]]
 file = "kubejs/startup_scripts/main.js"

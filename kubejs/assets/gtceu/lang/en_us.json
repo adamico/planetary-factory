@@ -2,5 +2,8 @@
   "block.gtceu.lv_assembling_machine": "Assembling Machine 1",
   "block.gtceu.mv_assembling_machine": "Assembling Machine 2",
   "block.gtceu.hv_assembling_machine": "Assembling Machine 3",
-  "gtceu.assembling": "Assembling"
+  "gtceu.assembling": "Assembling",
+  "block.gtceu.lv_chemical_plant": "Chemical Plant",
+  "gtceu.chemical_plant": "Chemistry",
+  "gtceu.oil_refinery": "Oil Processing"
 }

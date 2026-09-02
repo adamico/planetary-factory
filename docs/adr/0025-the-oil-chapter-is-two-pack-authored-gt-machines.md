@@ -69,13 +69,34 @@ whatever pattern they establish rather than the other way round.
 
 | Machine | Form | `setMaxIOSize` | Recipes |
 | --- | --- | --- | --- |
-| **Oil Refinery** | Multiblock, one tier | `(2, 0, 2, 3)` | basic oil processing, advanced oil processing, coal liquefaction, simple coal liquefaction |
-| **Chemical Plant** | Single block, one tier | `(2, 1, 2, 2)` | both crackings, lubricant, plastic, sulfur, three solid fuels, sulfuric acid, battery, explosives |
+| **Oil Refinery** | Multiblock, one tier | `(0, 0, 2, 3)` | basic oil processing, advanced oil processing |
+| **Chemical Plant** | Single block, one tier | `(2, 1, 2, 1)` | both crackings, lubricant, plastic, sulfur, three solid fuels, sulfuric acid, battery, explosives |
 
-Both sizes are Factorio's, read off the wiki rather than chosen. The Chemical Plant's `(2, 1, 2, 2)`
-is the exact envelope of its twelve base recipes: two fluid boxes each way, at most two item inputs
-(sulfuric acid, battery, explosives) and at most one item output. The Refinery needs **two** item
-inputs, not one, because simple coal liquefaction is `10 coal + 2 calcite + 25 sulfuric acid`.
+Both sizes are Factorio's, and both are read off **the extracted corpus** rather than chosen.
+
+**Amended by #107, which registered them.** This table first read `(2, 0, 2, 3)` and `(2, 1, 2, 2)`,
+taken from the wiki, and both numbers were wider than anything the pack can craft:
+
+- **The Refinery's two item inputs were justified by simple coal liquefaction**, and *there is no
+  liquefaction recipe in the corpus at all*. `coal-liquefaction` survives only in
+  `data/factorio/technology.json`, where its unit includes `space-science-pack` and its
+  prerequisite is `metallurgic-science-pack` — it is Space Age in 2.x, whatever the 1.1 wiki says,
+  so ADR-0022's four-rung Nauvis-pre-launch filter drops its recipes. The Refinery crafts **two**
+  recipes here, and item slots on it would be slots nothing can ever fill. Ignus is where
+  liquefaction becomes reachable (`#12`), and adding it widens this back to `(2, 0, 2, 3)` — a
+  one-line change, and the smaller half of that ticket's decision, which is whether a post-launch
+  recipe extends the corpus filter or bypasses it through the override file.
+- **The Chemical Plant's second output fluid is the Factorio *entity*, not any recipe.** The
+  entity has two output fluid boxes; the widest of its twelve recipes emits one
+  (`sulfuric-acid`, both crackings, lubricant). The item half of the envelope is unchanged and is
+  the corpus's too: at most two item inputs (sulfuric acid, battery, explosives) and at most one
+  item output.
+
+`tests/factorio/test_recipe_extract.py` pins all four numbers against the corpus, and
+`tests/pack/test_machine_assets.py` asserts the registered `setMaxIOSize` still equals them, so
+neither a regeneration nor an edit to the registration can widen a GUI in silence. Factorio's
+assembling-machine entities carry no item-slot count — item slots come from the recipe — which is
+why the corpus is the only possible source for the first two figures of each pair.
 
 **The Refinery is a multiblock and the Chemical Plant is not**, because Factorio's refinery is a
 landmark the player builds a few of and plans around, and its chemical plant is a small thing the
@@ -134,8 +155,7 @@ exactly.
 Oil Refinery
   basic oil processing        1000 crude                    -> 450 petroleum gas
   advanced oil processing     1000 crude + 500 water        -> 250 heavy + 450 light + 550 gas
-  coal liquefaction           10 coal + 250 heavy + 500 steam -> 900 heavy + 200 light + 100 gas
-  simple coal liquefaction    10 coal + 2 calcite + 250 sulfuric acid -> 500 heavy
+  (coal liquefaction and simple coal liquefaction are Space Age and out of the corpus; #12)
 
 Chemical Plant
   heavy oil cracking          400 heavy + 300 water         -> 300 light

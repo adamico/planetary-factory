@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "kubejs:block/machine/oil_refinery"
+    },
+    "facing=east": {
+      "model": "kubejs:block/machine/oil_refinery",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "kubejs:block/machine/oil_refinery",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "kubejs:block/machine/oil_refinery",
+      "y": 270
+    }
+  }
+}

@@ -35,6 +35,16 @@ var RECIPE_SURVIVORS = [
     why: "ADR-0026's Assembling Machine 1/2/3, one recipe type across the three tiers. ADR-0031: the corpus authors every recipe it contains, and #87 emits them."
   },
   {
+    surface: 'oil_refinery',
+    type: 'gtceu:oil_refinery',
+    why: "ADR-0025's Oil Refinery, the only machine in the pack that emits three fluids at once. Basic and advanced oil processing; #87 emits them, ADR-0031 says the corpus authors them."
+  },
+  {
+    surface: 'chemical_plant',
+    type: 'gtceu:chemical_plant',
+    why: "ADR-0025's Chemical Plant -- cracking, lubricant, plastic, sulfur, sulfuric acid, solid fuel, battery and explosives. ADR-0025 moved sulfur onto petroleum gas and nothing else, so this surface is the pack's only route to it."
+  },
+  {
     surface: 'smelting',
     type: 'minecraft:smelting',
     why: "#91 puts the smelting categories on vanilla `minecraft:smelting`. ADR-0034 §2: the TYPE survives and carries pack content -- vanilla smelting is curated, not deleted. What is curated is the pack's own rows; #91's two named cuts (log to charcoal, ore to ingot) plus every stock smelt nobody has decided go by default-deny, not by a per-recipe decision, and re-admitting any of them is the follow-on ticket's call."
