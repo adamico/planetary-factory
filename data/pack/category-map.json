@@ -8,7 +8,8 @@
     "machines this map does not build.",
     "A `!` prefix means the category is deliberately not routed: the converter emits nothing",
     "and says why. It is not the same as a category missing from this file, which is a hard",
-    "failure -- a new Factorio version adding a category must not silently drop its recipes."
+    "failure -- a new Factorio version adding a category must not silently drop its recipes.",
+    "A `recipe_type` of null is a machine that is not registered yet, and `blocked_by` names the ticket that registers it. `scripts/factorio-recipe-convert.py` reads both, so the converter holds no table of its own. A null with no `blocked_by` is a machine nobody has ticketed."
   ],
   "routes": {
     "crafting": "assembling",
@@ -31,28 +32,32 @@
   },
   "machines": {
     "assembling": {
-      "recipe_type": "planetaryfactory:assembling",
-      "note": "ADR-0026's Assembling Machine 1/2/3, one recipe type across the three tiers"
+      "recipe_type": "gtceu:assembling",
+      "note": "ADR-0026's Assembling Machine 1/2/3, one recipe type across the three tiers. The id is GregTech's namespace, not the pack's: `GTRecipeTypes.register` runs through GregTech's registrate, which owns it (#73, machines.js)."
     },
     "chemical_plant": {
-      "recipe_type": "planetaryfactory:chemical_plant",
-      "note": "ADR-0025"
+      "recipe_type": null,
+      "note": "ADR-0025. #107 registers it; the id will be `gtceu:` for the same reason `assembling` is.",
+      "blocked_by": 107
     },
     "oil_refinery": {
-      "recipe_type": "planetaryfactory:oil_refinery",
-      "note": "ADR-0025"
+      "recipe_type": null,
+      "note": "ADR-0025. #107 registers it; the id will be `gtceu:` for the same reason `assembling` is.",
+      "blocked_by": 107
     },
     "smelting": {
-      "recipe_type": null,
-      "note": "Plates and stone brick, vanilla `minecraft:smelting` on #91's three furnace tiers. ADR-0032 deleted ADR-0017's Ore processing row -- ore is 1:1, so smelting rides nothing and is the whole of ore-to-plate."
+      "recipe_type": "minecraft:smelting",
+      "note": "Plates and stone brick, vanilla `minecraft:smelting` on #91's three furnace tiers. ADR-0032 deleted ADR-0017's Ore processing row -- ore is 1:1, so smelting rides nothing and is the whole of ore-to-plate. The TYPE is vanilla and needs no registration; what waits on #91 is which furnaces exist, which is why `subgroup-owner.json` still reads `undecided:smelting`."
     },
     "centrifuge": {
-      "recipe_type": "planetaryfactory:centrifuge",
-      "note": "ADR-0033. Uranium processing and nuclear fuel reprocessing; Kovarex when the post-launch map reaches it."
+      "recipe_type": null,
+      "note": "ADR-0033. Uranium processing and nuclear fuel reprocessing; Kovarex when the post-launch map reaches it. #135 registers it, and the id will be `gtceu:`.",
+      "blocked_by": 135
     },
     "rocket_silo": {
       "recipe_type": null,
-      "note": "The Rocket Part. #29 and #41 settle what a launch consumes; the silo is GCyR's."
+      "note": "The Rocket Part. #29 and #41 settle what a launch consumes; the silo is GCyR's.",
+      "blocked_by": 41
     },
     "personal_assembler": {
       "recipe_type": null,

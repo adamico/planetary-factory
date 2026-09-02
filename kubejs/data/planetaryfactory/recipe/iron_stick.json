@@ -1,0 +1,31 @@
+{
+  "type": "gtceu:assembling",
+  "inputs": {
+    "item": [
+      {
+        "content": {
+          "ingredient": {
+            "item": "gtceu:iron_plate"
+          },
+          "count": 1
+        }
+      }
+    ]
+  },
+  "outputs": {
+    "item": [
+      {
+        "content": {
+          "ingredient": {
+            "item": "gtceu:iron_rod"
+          },
+          "count": 2
+        }
+      }
+    ]
+  },
+  "duration": 10,
+  "data": {
+    "factorio_category": "crafting"
+  }
+}

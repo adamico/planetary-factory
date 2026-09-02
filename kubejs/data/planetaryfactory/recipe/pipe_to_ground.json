@@ -1,0 +1,39 @@
+{
+  "type": "gtceu:assembling",
+  "inputs": {
+    "item": [
+      {
+        "content": {
+          "ingredient": {
+            "item": "create:fluid_pipe"
+          },
+          "count": 10
+        }
+      },
+      {
+        "content": {
+          "ingredient": {
+            "item": "gtceu:iron_plate"
+          },
+          "count": 5
+        }
+      }
+    ]
+  },
+  "outputs": {
+    "item": [
+      {
+        "content": {
+          "ingredient": {
+            "item": "create:encased_fluid_pipe"
+          },
+          "count": 2
+        }
+      }
+    ]
+  },
+  "duration": 10,
+  "data": {
+    "factorio_category": "crafting"
+  }
+}

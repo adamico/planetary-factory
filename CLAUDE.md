@@ -68,6 +68,17 @@ It is not derived from `data/pack/subgroup-owner.json` and does not derive it �
 is never evidence for `excluded` here — and it places nothing on a progression ladder, which is
 #25's call. Row keys are Factorio's names by declared exception (ADR-0028).
 
+### Recipe conversion
+
+`scripts/factorio-recipe-convert.py` turns the extracted corpus into GregTech recipe JSON under
+`kubejs/data/planetaryfactory/recipe/`, reading five committed data files: the corpus, the category
+map, the subgroup owners, `data/pack/item-map.json` and `data/pack/recipe-overrides.json`. Nothing is
+decided in the script — a decision is a diff to a design document. Generated output is never
+hand-edited; re-run the converter. A Factorio name with no item-map row is a hard failure, while an
+`undecided` row is a recorded skip. `tests/factorio/test_recipe_convert.py` is the static check and
+runs the converter's `--check`; the recipe *shape* needs one world load. See
+`docs/testing/recipe-conversion-check.md`.
+
 ### Factorio tech tree
 
 The pack's research tree takes its shape from Factorio's, extracted rather than transcribed

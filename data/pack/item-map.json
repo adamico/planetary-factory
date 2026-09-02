@@ -1,0 +1,847 @@
+{
+  "_comment": [
+    "Factorio name -> the pack item, tag or fluid it is on Terra (ADR-0026's conversion input).",
+    "",
+    "This is a design document, not a lookup table the converter could have inlined: it is where",
+    "ADR-0021's \"Terra's resources are Nauvis's resources\" stops being a slogan and names items.",
+    "",
+    "THE BORROW/AUTHOR RULE (ADR-0031). Borrow an existing item unless the row sits on a rung",
+    "boundary or a mod's competing line would give a parallel escape -- then author it first-party",
+    "and recipe-remove the competitor. The circuits author because they carry progression;",
+    "`copper-cable` borrows because it carries none. That rule makes most rows transcription.",
+    "",
+    "THE INPUT ALPHABET IS CLOSED (#124, amending ADR-0021). Terra's four ores -- iron, copper,",
+    "coal, uranium -- plus its stone and what its surface grows are the whole input alphabet for",
+    "every pack-authored Terra recipe. The Nether is removed, so no row may reach for redstone,",
+    "quartz, gold, lapis or diamond, and the rule binds hand-authored recipes too.",
+    "",
+    "TWO KINDS OF ROW. A row either names a target or says `status: undecided` and why -- with a",
+    "`ticket` where a ticket owns the question. A missing row is a HARD FAILURE in the converter",
+    "(#72's decision): a Factorio name nobody has looked at must never be quietly skipped. An",
+    "`undecided` row is a recorded skip: the converter emits nothing for any recipe touching it",
+    "and reports the row, so the blocked set is a list rather than a silence.",
+    "",
+    "`kind` is `item`, `tag` or `fluid`. A tag is an ingredient-side answer only; a recipe RESULT",
+    "on a tag row cannot be emitted, because a result has to be one item.",
+    "",
+    "Quantities are NOT here. Nothing is scaled: item counts transfer 1:1 and 1 mB is one Factorio",
+    "fluid unit (#126, rewriting ADR-0025's table)."
+  ],
+  "items": {
+    "accumulator": {
+      "kind": "item",
+      "target": "electroenergetics:accumulator",
+      "source": "borrowed",
+      "note": "Electro's own accumulator, named identically. #148 may move this row with the mod."
+    },
+    "advanced-circuit": {
+      "kind": "item",
+      "target": "planetaryfactory:advanced_circuit",
+      "source": "authored",
+      "note": "As `electronic-circuit`. ADR-0031's three tiers, one item each."
+    },
+    "arithmetic-combinator": {
+      "status": "undecided",
+      "note": "As `small-lamp`: the `logistics/circuit-network` shelf, ADR-0030."
+    },
+    "assembling-machine-1": {
+      "kind": "item",
+      "target": "gtceu:lv_assembling_machine",
+      "source": "borrowed",
+      "note": "ADR-0026's machine, registered through GregTech's registrate -- so the id is `gtceu:` and the tier is a prefix, not a numeral (machines.js)."
+    },
+    "assembling-machine-2": {
+      "kind": "item",
+      "target": "gtceu:mv_assembling_machine",
+      "source": "borrowed",
+      "note": "As `assembling-machine-1`."
+    },
+    "assembling-machine-3": {
+      "kind": "item",
+      "target": "gtceu:hv_assembling_machine",
+      "source": "borrowed",
+      "note": "As `assembling-machine-1`."
+    },
+    "asteroid-collector": {
+      "status": "undecided",
+      "note": "Post-launch, and `not_emitted` on its shelf; #113 and #114 own the space chapter."
+    },
+    "automation-science-pack": {
+      "kind": "item",
+      "target": "planetaryfactory:automation_science_pack",
+      "source": "authored",
+      "note": "ADR-0018's rung 1. The spine is the pack's own; nothing in the manifest is Factorio science."
+    },
+    "barrel": {
+      "status": "undecided",
+      "note": "#93 left the container this maps onto to this ticket, and ADR-0035 took Mekanism's portable tank out of the running. Terra's fluid handling is #106's.",
+      "ticket": 106
+    },
+    "battery": {
+      "status": "undecided",
+      "note": "GregTech's battery items are tiered hulls rather than Factorio's intermediate, and Electro's `capacitor` is a different thing. Needs the borrow/author test."
+    },
+    "battery-equipment": {
+      "status": "undecided",
+      "note": "The `combat` group is `not_emitted` on every shelf; #118 asks whether the pack has combat at all.",
+      "ticket": 118
+    },
+    "beacon": {
+      "status": "undecided",
+      "note": "Do modules and beacons exist here?",
+      "ticket": 120
+    },
+    "belt-immunity-equipment": {
+      "status": "undecided",
+      "note": "The `combat` group is `not_emitted` on every shelf; #118 asks whether the pack has combat at all.",
+      "ticket": 118
+    },
+    "big-electric-pole": {
+      "status": "undecided",
+      "note": "As `small-electric-pole`.",
+      "ticket": 148
+    },
+    "boiler": {
+      "status": "undecided",
+      "note": "#37 puts steam at rung 0 on GregTech's LP boiler; which GT block that is has no row anywhere yet.",
+      "ticket": 37
+    },
+    "bulk-inserter": {
+      "status": "undecided",
+      "note": "As `inserter`.",
+      "ticket": 102
+    },
+    "burner-inserter": {
+      "status": "undecided",
+      "note": "As `inserter`.",
+      "ticket": 102
+    },
+    "burner-mining-drill": {
+      "status": "undecided",
+      "note": "Terra's drill ladder, one rig per rung.",
+      "ticket": 105
+    },
+    "car": {
+      "status": "undecided",
+      "note": "Is personal transport a mechanic here?",
+      "ticket": 121
+    },
+    "carbon": {
+      "status": "undecided",
+      "note": "The asteroid economy, `not_emitted` on its shelf.",
+      "ticket": 114
+    },
+    "carbonic-asteroid-chunk": {
+      "status": "undecided",
+      "note": "The asteroid economy, `not_emitted` on its shelf.",
+      "ticket": 114
+    },
+    "cargo-bay": {
+      "status": "undecided",
+      "note": "Post-launch, and `not_emitted` on its shelf; #113 and #114 own the space chapter."
+    },
+    "cargo-landing-pad": {
+      "status": "undecided",
+      "note": "`not_emitted` shelf."
+    },
+    "cargo-wagon": {
+      "status": "undecided",
+      "note": "As `locomotive`.",
+      "ticket": 108
+    },
+    "centrifuge": {
+      "status": "undecided",
+      "note": "ADR-0033's Centrifuge; #135 registers it.",
+      "ticket": 135
+    },
+    "chemical-plant": {
+      "status": "undecided",
+      "note": "ADR-0025's Chemical Plant; #107 registers it, and the item is that machine.",
+      "ticket": 107
+    },
+    "chemical-science-pack": {
+      "kind": "item",
+      "target": "planetaryfactory:chemical_science_pack",
+      "source": "authored",
+      "note": "ADR-0018's rung 3."
+    },
+    "coal": {
+      "kind": "item",
+      "target": "minecraft:coal",
+      "source": "borrowed",
+      "note": "One of Terra's four ores (ADR-0021)."
+    },
+    "concrete": {
+      "status": "undecided",
+      "note": "`logistics/terrain` is `undecided` in subgroup-owner.json."
+    },
+    "constant-combinator": {
+      "status": "undecided",
+      "note": "As `small-lamp`: the `logistics/circuit-network` shelf, ADR-0030."
+    },
+    "construction-robot": {
+      "status": "undecided",
+      "note": "Does the pack have robots at all?",
+      "ticket": 145
+    },
+    "copper-cable": {
+      "kind": "item",
+      "target": "electroenergetics:copper_wire",
+      "source": "borrowed",
+      "note": "ADR-0031 names this row: cable carries no progression, so it borrows."
+    },
+    "copper-ore": {
+      "kind": "tag",
+      "target": "c:raw_materials/copper",
+      "source": "borrowed",
+      "note": "As `iron-ore`."
+    },
+    "copper-plate": {
+      "kind": "item",
+      "target": "gtceu:copper_plate",
+      "source": "borrowed",
+      "note": "As `iron-plate`."
+    },
+    "crude-oil": {
+      "status": "undecided",
+      "note": "The oil chapter's fluids arrive with #107's two machines; which GregTech fluid each is has no row yet.",
+      "ticket": 107
+    },
+    "crude-oil-barrel": {
+      "status": "native_mechanic",
+      "note": "One container, filled by Create's Spout and drained by its Item Drain (#93). Which container is the same question as `barrel`, and is #106's."
+    },
+    "crusher": {
+      "status": "undecided",
+      "note": "Post-launch, and `not_emitted` on its shelf; #113 and #114 own the space chapter."
+    },
+    "decider-combinator": {
+      "status": "undecided",
+      "note": "As `small-lamp`: the `logistics/circuit-network` shelf, ADR-0030."
+    },
+    "depleted-uranium-fuel-cell": {
+      "status": "undecided",
+      "note": "As `uranium-fuel-cell`.",
+      "ticket": 135
+    },
+    "display-panel": {
+      "status": "undecided",
+      "note": "As `small-lamp`: the `logistics/circuit-network` shelf, ADR-0030."
+    },
+    "electric-engine-unit": {
+      "status": "undecided",
+      "note": "As `engine-unit`."
+    },
+    "electric-furnace": {
+      "status": "undecided",
+      "note": "#149 registers the Electric Furnace as a pack machine.",
+      "ticket": 149
+    },
+    "electric-mining-drill": {
+      "status": "undecided",
+      "note": "As `burner-mining-drill`.",
+      "ticket": 105
+    },
+    "electronic-circuit": {
+      "kind": "item",
+      "target": "planetaryfactory:electronic_circuit",
+      "source": "authored",
+      "note": "Registered in `kubejs/startup_scripts/items.js`. #62 removed GregTech's and Mekanism's competing lines; the tier carries progression, so it authors rather than borrows."
+    },
+    "engine-unit": {
+      "status": "undecided",
+      "note": "Factorio's engine is an intermediate no mod ships as one item."
+    },
+    "exoskeleton-equipment": {
+      "status": "undecided",
+      "note": "The `combat` group is `not_emitted` on every shelf; #118 asks whether the pack has combat at all.",
+      "ticket": 118
+    },
+    "explosives": {
+      "status": "undecided",
+      "note": "No consumer in the emittable set; the recipe is `pack:chemical_plant` and waits on #107."
+    },
+    "express-splitter": {
+      "status": "undecided",
+      "note": "As `splitter` and `fast-transport-belt`."
+    },
+    "express-transport-belt": {
+      "status": "undecided",
+      "note": "As `fast-transport-belt`."
+    },
+    "express-underground-belt": {
+      "status": "undecided",
+      "note": "As `underground-belt` and `fast-transport-belt`."
+    },
+    "fast-inserter": {
+      "status": "undecided",
+      "note": "As `inserter`.",
+      "ticket": 102
+    },
+    "fast-splitter": {
+      "status": "undecided",
+      "note": "As `splitter` and `fast-transport-belt`."
+    },
+    "fast-transport-belt": {
+      "status": "undecided",
+      "note": "Create ships one belt. Whether Terra has a three-tier belt ladder at all is undecided."
+    },
+    "fast-underground-belt": {
+      "status": "undecided",
+      "note": "As `underground-belt` and `fast-transport-belt`."
+    },
+    "firearm-magazine": {
+      "status": "undecided",
+      "note": "The `combat` group is `not_emitted` on every shelf; #118 asks whether the pack has combat at all.",
+      "ticket": 118
+    },
+    "fluid-wagon": {
+      "status": "undecided",
+      "note": "As `locomotive`.",
+      "ticket": 108
+    },
+    "fluoroketone-cold": {
+      "status": "undecided",
+      "note": "Aquilo's fluid; it reaches the corpus only through a barrel recipe, and barrelling is `native_mechanic` (#93)."
+    },
+    "fluoroketone-cold-barrel": {
+      "status": "native_mechanic",
+      "note": "One container, filled by Create's Spout and drained by its Item Drain (#93). Which container is the same question as `barrel`, and is #106's."
+    },
+    "fluoroketone-hot": {
+      "status": "undecided",
+      "note": "As `fluoroketone-cold`."
+    },
+    "fluoroketone-hot-barrel": {
+      "status": "native_mechanic",
+      "note": "One container, filled by Create's Spout and drained by its Item Drain (#93). Which container is the same question as `barrel`, and is #106's."
+    },
+    "flying-robot-frame": {
+      "status": "undecided",
+      "note": "As `construction-robot`.",
+      "ticket": 145
+    },
+    "gate": {
+      "status": "undecided",
+      "note": "The `combat` group is `not_emitted` on every shelf; #118 asks whether the pack has combat at all.",
+      "ticket": 118
+    },
+    "grenade": {
+      "status": "undecided",
+      "note": "The `combat` group is `not_emitted` on every shelf; #118 asks whether the pack has combat at all.",
+      "ticket": 118
+    },
+    "gun-turret": {
+      "status": "undecided",
+      "note": "The `combat` group is `not_emitted` on every shelf; #118 asks whether the pack has combat at all.",
+      "ticket": 118
+    },
+    "hazard-concrete": {
+      "status": "undecided",
+      "note": "As `concrete`."
+    },
+    "heat-exchanger": {
+      "status": "undecided",
+      "note": "`not_emitted` on its shelf; the nuclear chapter ships without a heat layer (ADR-0033).",
+      "ticket": 135
+    },
+    "heat-pipe": {
+      "status": "undecided",
+      "note": "As `heat-exchanger`.",
+      "ticket": 135
+    },
+    "heavy-armor": {
+      "status": "undecided",
+      "note": "The `combat` group is `not_emitted` on every shelf; #118 asks whether the pack has combat at all.",
+      "ticket": 118
+    },
+    "heavy-oil": {
+      "status": "undecided",
+      "note": "As `crude-oil`.",
+      "ticket": 107
+    },
+    "heavy-oil-barrel": {
+      "status": "native_mechanic",
+      "note": "One container, filled by Create's Spout and drained by its Item Drain (#93). Which container is the same question as `barrel`, and is #106's."
+    },
+    "ice": {
+      "status": "undecided",
+      "note": "The asteroid economy, `not_emitted` on its shelf.",
+      "ticket": 114
+    },
+    "inserter": {
+      "status": "undecided",
+      "note": "Can Create's Mechanical Arm be Factorio's inserter?",
+      "ticket": 102
+    },
+    "iron-chest": {
+      "status": "undecided",
+      "note": "Vanilla has one chest and the pack ships no chest ladder; the three-tier shelf is a decision nobody has taken."
+    },
+    "iron-gear-wheel": {
+      "kind": "item",
+      "target": "gtceu:iron_gear",
+      "source": "borrowed",
+      "note": "GregTech's gear prefix on Iron. A gear carries no progression and GT's line is not a parallel escape, so it borrows (ADR-0031). That the prefix is generated for Iron in GTCEu 7.0.2 is a registry fact, so the world-load check is what confirms it."
+    },
+    "iron-ore": {
+      "kind": "tag",
+      "target": "c:raw_materials/iron",
+      "source": "borrowed",
+      "note": "A tag, not an item: Terra's ore is GregTech's vein and Almost Unified may unify what it drops, so the row names the common tag rather than betting on one mod's raw ore. Ingredient side only, which is all `smelting` needs."
+    },
+    "iron-plate": {
+      "kind": "item",
+      "target": "gtceu:iron_plate",
+      "source": "borrowed",
+      "note": "GregTech's material item. ADR-0032: ore smelts 1:1 to plate, no ingot step."
+    },
+    "iron-stick": {
+      "kind": "item",
+      "target": "gtceu:iron_rod",
+      "source": "borrowed",
+      "note": "GregTech's rod prefix on Iron -- Factorio's iron stick. As `iron-gear-wheel`."
+    },
+    "lab": {
+      "status": "undecided",
+      "note": "Researchd's Lab, and #103 has it running on nothing. Which block the item is is not settled.",
+      "ticket": 103
+    },
+    "landfill": {
+      "status": "undecided",
+      "note": "As `concrete`. Terra is flat (ADR-0019), so it may have no job here at all."
+    },
+    "light-armor": {
+      "status": "undecided",
+      "note": "The `combat` group is `not_emitted` on every shelf; #118 asks whether the pack has combat at all.",
+      "ticket": 118
+    },
+    "light-oil": {
+      "status": "undecided",
+      "note": "As `crude-oil`.",
+      "ticket": 107
+    },
+    "light-oil-barrel": {
+      "status": "native_mechanic",
+      "note": "One container, filled by Create's Spout and drained by its Item Drain (#93). Which container is the same question as `barrel`, and is #106's."
+    },
+    "locomotive": {
+      "status": "undecided",
+      "note": "Create's rail network as Factorio's.",
+      "ticket": 108
+    },
+    "logistic-robot": {
+      "status": "undecided",
+      "note": "As `construction-robot`.",
+      "ticket": 145
+    },
+    "logistic-science-pack": {
+      "kind": "item",
+      "target": "planetaryfactory:logistic_science_pack",
+      "source": "authored",
+      "note": "ADR-0018's rung 2."
+    },
+    "long-handed-inserter": {
+      "status": "undecided",
+      "note": "As `inserter`.",
+      "ticket": 102
+    },
+    "low-density-structure": {
+      "status": "undecided",
+      "note": "A rocket intermediate; #29 and #41 own what a launch consumes."
+    },
+    "lubricant": {
+      "status": "undecided",
+      "note": "As `crude-oil`.",
+      "ticket": 107
+    },
+    "lubricant-barrel": {
+      "status": "native_mechanic",
+      "note": "One container, filled by Create's Spout and drained by its Item Drain (#93). Which container is the same question as `barrel`, and is #106's."
+    },
+    "medium-electric-pole": {
+      "status": "undecided",
+      "note": "As `small-electric-pole`.",
+      "ticket": 148
+    },
+    "metallic-asteroid-chunk": {
+      "status": "undecided",
+      "note": "The asteroid economy, `not_emitted` on its shelf.",
+      "ticket": 114
+    },
+    "military-science-pack": {
+      "status": "undecided",
+      "note": "The `combat` group is `not_emitted` on every shelf; #118 asks whether the pack has combat at all.",
+      "ticket": 118
+    },
+    "modular-armor": {
+      "status": "undecided",
+      "note": "The `combat` group is `not_emitted` on every shelf; #118 asks whether the pack has combat at all.",
+      "ticket": 118
+    },
+    "night-vision-equipment": {
+      "status": "undecided",
+      "note": "The `combat` group is `not_emitted` on every shelf; #118 asks whether the pack has combat at all.",
+      "ticket": 118
+    },
+    "nuclear-reactor": {
+      "status": "undecided",
+      "note": "#135's nuclear chapter.",
+      "ticket": 135
+    },
+    "offshore-pump": {
+      "status": "undecided",
+      "note": "The fluid rig half of the same shelf.",
+      "ticket": 105
+    },
+    "oil-refinery": {
+      "status": "undecided",
+      "note": "ADR-0025's Oil Refinery; #107 registers it.",
+      "ticket": 107
+    },
+    "oxide-asteroid-chunk": {
+      "status": "undecided",
+      "note": "The asteroid economy, `not_emitted` on its shelf.",
+      "ticket": 114
+    },
+    "passive-provider-chest": {
+      "status": "undecided",
+      "note": "Create 6's package logistics is the shelf's answer, gated to the `logistic` rung; which block is a provider chest is not chosen.",
+      "ticket": 28
+    },
+    "personal-roboport-equipment": {
+      "status": "undecided",
+      "note": "The `combat` group is `not_emitted` on every shelf; #118 asks whether the pack has combat at all.",
+      "ticket": 118
+    },
+    "petroleum-gas": {
+      "status": "undecided",
+      "note": "As `crude-oil`.",
+      "ticket": 107
+    },
+    "petroleum-gas-barrel": {
+      "status": "native_mechanic",
+      "note": "One container, filled by Create's Spout and drained by its Item Drain (#93). Which container is the same question as `barrel`, and is #106's."
+    },
+    "piercing-rounds-magazine": {
+      "status": "undecided",
+      "note": "The `combat` group is `not_emitted` on every shelf; #118 asks whether the pack has combat at all.",
+      "ticket": 118
+    },
+    "pipe": {
+      "kind": "item",
+      "target": "create:fluid_pipe",
+      "source": "borrowed",
+      "note": "As `storage-tank`."
+    },
+    "pipe-to-ground": {
+      "kind": "item",
+      "target": "create:encased_fluid_pipe",
+      "source": "borrowed",
+      "note": "Create's encased pipe is the buried run; Factorio's pipe-to-ground is the same affordance."
+    },
+    "plastic-bar": {
+      "kind": "item",
+      "target": "planetaryfactory:plastic_bar",
+      "source": "authored",
+      "note": "Plastic gates rung 2 (ADR-0025) and a rung-boundary row authors rather than borrows (ADR-0031). Its recipe is `pack:chemical_plant` and waits on #107; the ITEM exists now, so the recipes that consume it are not blocked on a machine they do not use."
+    },
+    "power-armor": {
+      "status": "undecided",
+      "note": "The `combat` group is `not_emitted` on every shelf; #118 asks whether the pack has combat at all.",
+      "ticket": 118
+    },
+    "power-switch": {
+      "status": "undecided",
+      "note": "As `small-lamp`: the `logistics/circuit-network` shelf, ADR-0030."
+    },
+    "processing-unit": {
+      "kind": "item",
+      "target": "planetaryfactory:processing_unit",
+      "source": "authored",
+      "note": "As `electronic-circuit`."
+    },
+    "production-science-pack": {
+      "kind": "item",
+      "target": "planetaryfactory:production_science_pack",
+      "source": "authored",
+      "note": "ADR-0018's rung 4."
+    },
+    "productivity-module": {
+      "status": "undecided",
+      "note": "As `beacon`.",
+      "ticket": 120
+    },
+    "programmable-speaker": {
+      "status": "undecided",
+      "note": "As `small-lamp`: the `logistics/circuit-network` shelf, ADR-0030."
+    },
+    "pump": {
+      "kind": "item",
+      "target": "create:mechanical_pump",
+      "source": "borrowed",
+      "note": "As `storage-tank`."
+    },
+    "pumpjack": {
+      "status": "undecided",
+      "note": "As `offshore-pump`.",
+      "ticket": 105
+    },
+    "radar": {
+      "status": "undecided",
+      "note": "#57 authors a pack Radar machine rather than converting Factorio's item; the shelf is `not_emitted`.",
+      "ticket": 57
+    },
+    "rail": {
+      "kind": "item",
+      "target": "create:track",
+      "source": "borrowed",
+      "note": "Create's train track, not `minecraft:rail`: ADR-0017's train row is Create's network (#108)."
+    },
+    "rail-chain-signal": {
+      "status": "undecided",
+      "note": "Create ships one signal block; whether the chain signal is a second item or nothing is undecided."
+    },
+    "rail-signal": {
+      "kind": "item",
+      "target": "create:track_signal",
+      "source": "borrowed",
+      "note": "As `rail`. It follows its shelf rather than its ingredients (subgroup-owner.json)."
+    },
+    "refined-concrete": {
+      "status": "undecided",
+      "note": "As `concrete`."
+    },
+    "refined-hazard-concrete": {
+      "status": "undecided",
+      "note": "As `concrete`."
+    },
+    "repair-pack": {
+      "status": "undecided",
+      "note": "`production/tool` is `undecided` in subgroup-owner.json -- ADR-0017 has no repair row."
+    },
+    "roboport": {
+      "status": "undecided",
+      "note": "As `construction-robot`.",
+      "ticket": 145
+    },
+    "rocket-fuel": {
+      "status": "undecided",
+      "note": "As `low-density-structure`."
+    },
+    "rocket-part": {
+      "status": "undecided",
+      "note": "#41 makes the Rocket Part a multiblock cycle rather than an item.",
+      "ticket": 41
+    },
+    "rocket-silo": {
+      "status": "undecided",
+      "note": "GCyR's silo; #41 owns it.",
+      "ticket": 41
+    },
+    "selector-combinator": {
+      "status": "undecided",
+      "note": "As `small-lamp`: the `logistics/circuit-network` shelf, ADR-0030."
+    },
+    "shotgun": {
+      "status": "undecided",
+      "note": "The `combat` group is `not_emitted` on every shelf; #118 asks whether the pack has combat at all.",
+      "ticket": 118
+    },
+    "shotgun-shell": {
+      "status": "undecided",
+      "note": "The `combat` group is `not_emitted` on every shelf; #118 asks whether the pack has combat at all.",
+      "ticket": 118
+    },
+    "small-electric-pole": {
+      "status": "undecided",
+      "note": "Electro's poles are the rows #148's mod swap moves.",
+      "ticket": 148
+    },
+    "small-lamp": {
+      "status": "undecided",
+      "note": "`logistics/circuit-network` is `undecided`; ADR-0030 makes Factorio's circuit network Minecraft's redstone, which may leave the whole shelf `not_emitted`."
+    },
+    "solar-panel": {
+      "status": "undecided",
+      "note": "As `steam-engine`.",
+      "ticket": 148
+    },
+    "solar-panel-equipment": {
+      "status": "undecided",
+      "note": "The `combat` group is `not_emitted` on every shelf; #118 asks whether the pack has combat at all.",
+      "ticket": 118
+    },
+    "solid-fuel": {
+      "status": "undecided",
+      "note": "The oil chapter's solid fuel; its three recipes are `pack:chemical_plant` and wait on #107.",
+      "ticket": 107
+    },
+    "space-platform-foundation": {
+      "status": "undecided",
+      "note": "Post-launch, and `not_emitted` on its shelf; #113 and #114 own the space chapter."
+    },
+    "space-platform-starter-pack": {
+      "status": "undecided",
+      "note": "Post-launch, and `not_emitted` on its shelf; #113 and #114 own the space chapter."
+    },
+    "space-science-pack": {
+      "status": "undecided",
+      "note": "Post-launch, and `not_emitted` on its shelf; #113 and #114 own the space chapter."
+    },
+    "speed-module": {
+      "status": "undecided",
+      "note": "As `beacon`.",
+      "ticket": 120
+    },
+    "splitter": {
+      "status": "undecided",
+      "note": "Create's belt has no splitter item; the shape is a funnel-and-belt arrangement, not one block."
+    },
+    "steam-engine": {
+      "status": "undecided",
+      "note": "Electro's generator row (#92, #104), and #148 may move it.",
+      "ticket": 148
+    },
+    "steam-turbine": {
+      "status": "undecided",
+      "note": "#135's nuclear chapter.",
+      "ticket": 135
+    },
+    "steel-chest": {
+      "status": "undecided",
+      "note": "As `iron-chest`."
+    },
+    "steel-furnace": {
+      "status": "undecided",
+      "note": "#91 defines what a Steel Furnace is here; the shelf is `undecided` in subgroup-owner.json.",
+      "ticket": 91
+    },
+    "steel-plate": {
+      "kind": "item",
+      "target": "gtceu:steel_plate",
+      "source": "borrowed",
+      "note": "The only surviving alloy on Terra -- iron plus coal, #72."
+    },
+    "stone": {
+      "kind": "item",
+      "target": "minecraft:stone",
+      "source": "borrowed",
+      "note": "Terra is `minecraft:overworld` (ADR-0019); its stone is vanilla stone."
+    },
+    "stone-brick": {
+      "kind": "item",
+      "target": "minecraft:stone_bricks",
+      "source": "borrowed",
+      "note": "Factorio's building block, and vanilla's is the same shape. The RECIPE is `smelting` and waits on #91."
+    },
+    "stone-furnace": {
+      "status": "undecided",
+      "note": "As `steel-furnace`.",
+      "ticket": 91
+    },
+    "stone-wall": {
+      "status": "undecided",
+      "note": "The `combat` group is `not_emitted` on every shelf; #118 asks whether the pack has combat at all.",
+      "ticket": 118
+    },
+    "storage-chest": {
+      "status": "undecided",
+      "note": "As `passive-provider-chest`.",
+      "ticket": 28
+    },
+    "storage-tank": {
+      "kind": "item",
+      "target": "create:fluid_tank",
+      "source": "borrowed",
+      "note": "Create owns bulk fluid storage on Terra (ADR-0017, #106)."
+    },
+    "submachine-gun": {
+      "status": "undecided",
+      "note": "The `combat` group is `not_emitted` on every shelf; #118 asks whether the pack has combat at all.",
+      "ticket": 118
+    },
+    "substation": {
+      "status": "undecided",
+      "note": "As `small-electric-pole`.",
+      "ticket": 148
+    },
+    "sulfur": {
+      "kind": "item",
+      "target": "gtceu:sulfur_dust",
+      "source": "borrowed",
+      "note": "GregTech's dust. Its RECIPE is `pack:chemical_plant` and waits on #107."
+    },
+    "sulfuric-acid": {
+      "status": "undecided",
+      "note": "As `crude-oil`.",
+      "ticket": 107
+    },
+    "sulfuric-acid-barrel": {
+      "status": "native_mechanic",
+      "note": "One container, filled by Create's Spout and drained by its Item Drain (#93). Which container is the same question as `barrel`, and is #106's."
+    },
+    "train-stop": {
+      "kind": "item",
+      "target": "create:track_station",
+      "source": "borrowed",
+      "note": "As `rail`."
+    },
+    "transport-belt": {
+      "kind": "item",
+      "target": "create:belt_connector",
+      "source": "borrowed",
+      "note": "Create's belt item. ADR-0017 gives Create item logistics; #93 keeps the recipe on `pack:assembling`."
+    },
+    "underground-belt": {
+      "status": "undecided",
+      "note": "As `splitter`."
+    },
+    "uranium-235": {
+      "status": "undecided",
+      "note": "As `uranium-fuel-cell`.",
+      "ticket": 135
+    },
+    "uranium-238": {
+      "status": "undecided",
+      "note": "As `uranium-fuel-cell`.",
+      "ticket": 135
+    },
+    "uranium-fuel-cell": {
+      "status": "undecided",
+      "note": "The nuclear chapter's fuel; #135.",
+      "ticket": 135
+    },
+    "uranium-ore": {
+      "status": "undecided",
+      "note": "GregTech's uranium ore is on Terra (ADR-0021) but which item the corpus's `uranium-ore` is has no row.",
+      "ticket": 135
+    },
+    "utility-science-pack": {
+      "status": "undecided",
+      "note": "Post-launch, and `not_emitted` on its shelf; #113 and #114 own the space chapter."
+    },
+    "water": {
+      "kind": "fluid",
+      "target": "minecraft:water",
+      "source": "borrowed",
+      "note": "Vanilla water. 1 mB is 1 Factorio fluid unit (#126)."
+    },
+    "water-barrel": {
+      "status": "native_mechanic",
+      "note": "One container, filled by Create's Spout and drained by its Item Drain (#93). Which container is the same question as `barrel`, and is #106's."
+    },
+    "wood": {
+      "kind": "tag",
+      "target": "minecraft:planks",
+      "source": "borrowed",
+      "note": "Factorio's wood is a raw building material. A tag, because Terra's trees are Sapros's business and no single plank is the pack's."
+    },
+    "wooden-chest": {
+      "kind": "item",
+      "target": "minecraft:chest",
+      "source": "borrowed",
+      "note": "Vanilla's chest is Factorio's wooden chest with no argument to have about it."
+    }
+  }
+}

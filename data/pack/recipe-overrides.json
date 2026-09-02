@@ -1,0 +1,33 @@
+{
+  "_comment": [
+    "Every place the pack knowingly differs from Factorio's own recipe, and why (ADR-0031).",
+    "",
+    "ADR-0031 inverted the default: THE CORPUS AUTHORS EVERY RECIPE IT CONTAINS. An override is a",
+    "departure from Nauvis, so this file is the register of the departures rather than a place for",
+    "awkward cases. Taste is not exempt -- it is an argument to write down here, where the next",
+    "reader can weigh it, not a silent win over the extracted data.",
+    "",
+    "EVERY ENTRY NEEDS A `reason`, and `tests/factorio/test_recipe_convert.py` asserts it. Without",
+    "one the register is a list of names and the rule is decorative.",
+    "",
+    "An entry's key is a recipe name in `data/factorio/recipe.json`; naming a recipe that is not in",
+    "the corpus is a failure, because it is either a typo or a rule left behind by a regeneration.",
+    "",
+    "FIELDS. `reason` (required, prose). `skip` (bool) emits nothing for the recipe. `duration`",
+    "(ticks) replaces `energy_required` x 20. `ingredients` / `results` replace the corpus's lists",
+    "entirely, each entry `{name, amount}` naming a row in `item-map.json`.",
+    "",
+    "WHAT IS NOT AN OVERRIDE, and must not be moved here:",
+    "  - a `!`-routed category (`data/pack/category-map.json`) -- not routed, so nothing to override;",
+    "  - a `native_mechanic` shelf (`data/pack/subgroup-owner.json`) -- the eighteen barrel recipes",
+    "    are IN scope and fully supported by Create's Spout and Item Drain, which is why they emit",
+    "    nothing (#93). Recording them here would read as a cut feature;",
+    "  - a `not_emitted` shelf, or an `undecided` item-map row -- both are recorded where the",
+    "    decision lives, and both already report themselves in the converter's summary.",
+    "",
+    "The file is deliberately empty of entries. Every departure known today is one of the three",
+    "kinds above, and an entry here would be the pack overruling Factorio on a recipe's contents --",
+    "which nothing has yet had a reason to do."
+  ],
+  "recipes": {}
+}

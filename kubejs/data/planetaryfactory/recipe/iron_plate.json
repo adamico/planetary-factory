@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "tag": "c:raw_materials/iron"
+  },
+  "result": {
+    "id": "gtceu:iron_plate",
+    "count": 1
+  },
+  "experience": 0.0,
+  "cookingtime": 64
+}
