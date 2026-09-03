@@ -162,8 +162,8 @@ _Avoid_: abstraction, going virtual
 ### Making things
 
 **Personal Assembler**:
-The portable device that turns a bootstrap-tier craft into a queued request completing after a duration. It is a surface, not a machine — it has no recipe type of its own, and runs the **Assembling Machine**'s recipes that Factorio marks hand-craftable, one at a time (ADR-0029). It **replaces** the crafting grid, which the pack removes (`#90`), and covers only the components of the first machines. The panel is always present and always full: it is taught by the opening, never granted by it (`#100`).
-_Avoid_: crafting table, hand crafter, personal crafter
+A permanent panel on the vanilla inventory screen that turns a hand-craft into a queued request completing after a duration. It is a surface, not a machine, but it carries its own recipe type: KubeJS cannot register one on 1.21.1, so the type, menu, screen and queue are Java in `planetaryfactory_core` (`#96`). It runs Factorio's `hand-crafting` category at speed 1, serially (ADR-0029). It **replaces** the crafting grid, which the pack removes (`#90`), and is the player's hand-crafting surface for the whole run rather than a bootstrap crutch — every fluid-free `crafting` recipe reaches it (`#88`, `#95`). The panel is always present and always full: it is taught by the opening, never granted by it (`#100`).
+_Avoid_: hand crafter, personal crafter, portable crafter
 
 **Assembling Machine**:
 One of the three machines the pack registers on a GregTech chassis to run Factorio's crafting recipes — `assembling_machine_1`, `_2` and `_3`, differing by speed and tint only, each granted by a science rung and gating nothing (ADR-0026). Not GregTech's Assembler, whose craft the pack removes.

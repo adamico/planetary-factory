@@ -165,8 +165,8 @@ player-declared per Platform, not automatic on chunk unload.
 
 ## 5. Crafting and Recipe Routing
 
-**The crafting grid is removed** (`#90`), and the Personal Assembler replaces it for the bootstrap
-tier. Automation pressure comes from which recipe type each product uses — a recipe is craftable
+**The crafting grid is removed** (`#90`), and the Personal Assembler replaces it permanently
+(`#95`). Automation pressure comes from which recipe type each product uses — a recipe is craftable
 wherever its type is, and that routing is inherent to the recipe system rather than something to
 script.
 
@@ -194,19 +194,38 @@ puzzle belongs to that body and is specified with it, not here.
 
 ### The Personal Assembler
 
-A panel on the inventory screen, covering the bootstrap tier only: the components of the first
-machines, which have nowhere to go once the crafting grid is removed and before any machine exists
-to make them. It is not an item — there is nothing to craft, nothing to lose and nothing to grant.
+A permanent panel on the vanilla inventory screen. It is the player's hand-crafting surface for the
+whole run, not a bootstrap crutch: the crafting grid is gone, and every fluid-free `crafting` recipe
+reaches it (`#88`, `#95`). It is not an item — there is nothing to craft, nothing to lose and nothing
+to grant. Hand-crafting stops being how you *produce* long before it stops being available, which is
+a pacing outcome rather than a removed feature.
 
 - **Trigger** — A tab on the inventory screen, present from the first tick (`#95`).
-- **Recipes** — The Assembling Machine's own, filtered to those Factorio marks hand-craftable; it
-  has no recipe type of its own (ADR-0029).
-- **Rate** — One at a time, at speed 1, so a craft is a request that completes rather than an
-  instant.
+- **Recipes** — Factorio's `hand-crafting` category, routed by `data/pack/category-map.json`, against
+  the Assembler's **own recipe type**. KubeJS cannot register a `RecipeType` on 1.21.1 and ScreenJS is
+  dead, so the type, `MenuType`, screen, queue and its persistence are Java in `planetaryfactory_core`,
+  with KubeJS authoring recipes against the registered type (`#96`, ADR-0015). The screen is a vanilla
+  `AbstractContainerScreen`, not FTB Library, which is All Rights Reserved with a CLA and no KubeJS
+  screen binding.
+- **Rate** — Speed 1, one entry at a time, durations `energy_required × 20` unmodified (ADR-0029). The
+  slowness is the serial queue, not a penalty multiplier.
+- **Queue** — A real multi-entry queue on a player data attachment, ticked server-side whether or not
+  the screen is open, and surviving logout. Ingredients are consumed at queue time and refunded in
+  full on cancel, Factorio's rule: the cost is legible at the moment of commitment, and each entry is
+  self-contained, so logout persistence has nothing to re-validate on login.
+- **Browsing** — There is none of ours. The panel is queue-and-slots only; recipes enter the queue
+  through an **EMI recipe transfer handler**, which is what keeps it small enough to live on the
+  inventory screen. **EMI is therefore a hard requirement of the pack** — a client-side mod is
+  load-bearing for a core verb, acceptable in a curated pack with a fixed manifest, and recorded here
+  so it does not read as an accident later. JEI stays; EMI being the transfer target does not
+  displace it.
+- **The 2x2 grid is removed**, server-guarded, and the vanilla recipe book goes with it. A 2x2 that
+  still works teaches that queued crafting is optional.
 
-It is unpowered, works anywhere, and is deliberately slow. Once real machines exist it has nothing
-left to make. Because it can never be missing, the opening's job is to **teach** it — Terra's
-wreckage and the quest book's tooltip hint, not a grant (`#100`).
+It is unpowered, works anywhere, and is deliberately slow. Because it can never be missing, the
+opening's job is to **teach** it — Terra's wreckage and the quest book's tooltip hint, not a grant
+(`#100`). Whether it gains upgrade modules is open at `#99`, reframed as whether Assembler speed
+scales by science rung so that one ladder remains.
 
 ## 6. Hazards and the Overseer System
 
@@ -325,7 +344,9 @@ chains, machine restrictions and craft gating from `docs/planets.md`.
 9. **`Puzzle:` tickets** — one per body, each sequenced after its own body ships.
 10. **Resource unification** — using AlmostUnified.
 11. **Tech and recipe gating** — using KubeJS.
-12. **Personal Assembler** — plus the cross-mod recipe audit. Largely independent.
+12. **Personal Assembler** — plus the cross-mod recipe audit. Not independent: it is entangled
+    with the crafting-surface removal (`#90`), the recipe emit rules (`#88`, `#97`) and EMI, so it
+    cannot land before those settle.
 13. **Emission** — per-chunk scoring, decay, diffusion.
 14. **Overseer loop** — Command Center, Cryo-Pod, Dormant Siege. Depends on Emission and Sapros.
 15. **Cargo terminals** — Launch/Receiving/Drop Hatch as pack-registered machines, plus the Flight
