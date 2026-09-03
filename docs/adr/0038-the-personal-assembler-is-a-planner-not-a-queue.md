@@ -105,9 +105,27 @@ Recorded because ADR-0021's fidelity axis makes an unmarked departure a defect:
 - **This thing is registered** — one world load: the panel is present from the first tick, EMI's Fill
   Recipe reaches it, and a plan completes.
 
-The EMI contract is the one assumption the entry point rests on, so it is probed **before** either
-half is built: a stub handler on the menu, checking that `+ Fill Recipe` renders and stays enabled
-with the ingredients missing. A normal handler moves ingredients into a grid and EMI greys the button
-when they are absent; ours moves nothing and must stay enabled, because naming what is missing is the
-plan's whole job. If EMI does not permit that, this ADR's step 2 is wrong and the flow needs
-redesigning — which is worth knowing before the resolver exists, not after.
+## The EMI contract, verified
+
+The entry point rested on one assumption, so it was checked against the installed
+`emi-1.1.24+1.21.1+neoforge.jar` before either half was built. EMI is MIT, so its source is legitimate
+reference material.
+
+`RecipeFillButtonWidget` computes `canFill = supportsRecipe(recipe) && canCraft(recipe, ctx)`, and
+that single field drives both the greyed texture and the click gate. `canCraft` is the implementer's,
+so **step 2 holds**: implement `EmiRecipeHandler` directly — *not* `StandardRecipeHandler`, whose
+default `canCraft` checks the inventory against the recipe, which is precisely the behaviour we must
+not have — and return true unconditionally. The button stays lit with the ingredients missing, which
+is what lets the plan do its job of naming them.
+
+One constraint follows from the same read, and it shapes the screen: `EmiRecipeFiller.performFill`
+calls `craft(recipe, ctx)` and then, on true, `Minecraft.setScreen(handledScreen)`. **A `Screen`
+opened by `craft()` is replaced immediately.** So Select Amount and the Crafting Plan are drawn
+*inside* the Assembler panel, as an overlay on our own `AbstractContainerScreen`, never as separate
+screens; `craft()` sets panel state and returns true, and EMI's forced `setScreen` then lands the
+player where the dialog already is.
+
+Two smaller facts worth keeping: the button passes `Integer.MAX_VALUE` on shift-click and `1`
+otherwise, arriving as `EmiCraftContext.getAmount()` — Factorio's click-for-one and shift-for-all,
+free, and the right initial value for Select Amount. And `EmiRecipeFiller.handlers` is keyed by
+`MenuType`, which is what makes the panel being open a precondition of the only route in.
