@@ -118,12 +118,27 @@ default `canCraft` checks the inventory against the recipe, which is precisely t
 not have — and return true unconditionally. The button stays lit with the ingredients missing, which
 is what lets the plan do its job of naming them.
 
-One constraint follows from the same read, and it shapes the screen: `EmiRecipeFiller.performFill`
-calls `craft(recipe, ctx)` and then, on true, `Minecraft.setScreen(handledScreen)`. **A `Screen`
-opened by `craft()` is replaced immediately.** So Select Amount and the Crafting Plan are drawn
-*inside* the Assembler panel, as an overlay on our own `AbstractContainerScreen`, never as separate
-screens; `craft()` sets panel state and returns true, and EMI's forced `setScreen` then lands the
-player where the dialog already is.
+One ordering fact follows from the same read: `EmiRecipeFiller.performFill` calls
+`craft(recipe, ctx)` and then, on true, `Minecraft.setScreen(handledScreen)`. **A client-side `Screen`
+opened synchronously inside `craft()` therefore loses the race** — EMI replaces it a moment later. It
+is a last-writer-wins ordering problem at one instant, not a rule confining the Assembler to the
+inventory screen, and it does not limit how large a dialog may be.
+
+## The dialogs are server-opened menus
+
+Select Amount and the Crafting Plan are **their own `MenuType`s, opened by the server**, not client
+screens and not overlays on the panel.
+
+The reason is not EMI's ordering, which several tricks would sidestep. It is that a plan is server
+truth: resolving one reads the player's inventory *and* the team's Researchd state, and Start takes
+the reservation. There is a round-trip either way, so the plan may as well live where it is computed.
+A client-side dialog would hold a plan the server must re-validate at Start — reintroducing exactly
+the re-validation this ADR removed by paying for the plan up front.
+
+So `craft()` sends "plan this recipe, amount N", returns true, and lets EMI restore the inventory
+screen; the server resolves and opens the dialog menu. Nothing races EMI, because the server is doing
+the opening. `N` comes from `EmiCraftContext.getAmount()`, which is `1` on a click and
+`Integer.MAX_VALUE` on shift-click — Factorio's one-and-all, arriving for free.
 
 Two smaller facts worth keeping: the button passes `Integer.MAX_VALUE` on shift-click and `1`
 otherwise, arriving as `EmiCraftContext.getAmount()` — Factorio's click-for-one and shift-for-all,
