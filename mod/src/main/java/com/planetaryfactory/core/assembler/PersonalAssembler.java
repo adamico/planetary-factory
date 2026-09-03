@@ -54,7 +54,11 @@ public final class PersonalAssembler {
     public static void openSelectAmount(ServerPlayer player, ResourceLocation recipe, int amount) {
         PENDING.remove(player.getUUID());
         int all = PlanSource.ACTIVE.largestAffordable(player, recipe);
-        int initial = Math.max(1, Math.min(amount, Math.max(1, all)));
+        // Clamped to `all` only when the resolver has an `all` to give. A resolver that cannot
+        // answer must not quietly rewrite the count the button asked for: clamping against a zero
+        // would land every request on 1, and a shift-click and a plain click -- Factorio's
+        // one-and-all, and the one thing this packet carries -- would arrive indistinguishable.
+        int initial = all > 0 ? Math.max(1, Math.min(amount, all)) : Math.max(1, amount);
         player.openMenu(
                 new SimpleMenuProvider(
                         (id, inventory, who) -> new SelectAmountMenu(id, inventory, recipe, initial, all),
