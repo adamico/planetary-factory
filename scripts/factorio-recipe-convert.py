@@ -241,6 +241,20 @@ def main():
                 break
         if blocked:
             continue
+        # A `blocked_by` row is DECIDED -- it has a target and a source -- but its item is not
+        # registered yet, because it arrives with a `planetaryfactory_core` ticket. Emitting a
+        # recipe against it produces JSON that names an item nothing registers, and KubeJS fails
+        # to read the recipe at WORLD LOAD rather than at conversion time: an error in a log,
+        # nothing craftable, and no clue pointing back here. The static check already tolerates
+        # these rows; the converter has to skip them, or the tolerance ships a broken world.
+        awaited = sorted({e["name"] for e in recipe["ingredients"] + recipe["results"]
+                          if "blocked_by" in items[e["name"]]})
+        if awaited:
+            tickets = sorted({items[n]["blocked_by"] for n in awaited})
+            skipped.append((name, "item not registered yet",
+                            ", ".join(awaited) + " — "
+                            + ", ".join(f"#{t}" for t in tickets)))
+            continue
         on_tag = [e["name"] for e in recipe["results"] if items[e["name"]]["kind"] == "tag"]
         if on_tag:
             failures.append(f"{name}: result {on_tag[0]} maps onto a tag, which cannot be a result")

@@ -150,14 +150,27 @@ def check_emitted(items, recipe_types, failures):
     Two shapes reach this directory: GregTech's, and vanilla's furnace for the 1:1 smelts (#91).
     """
     targets = {row["target"] for row in items.values() if "target" in row}
+    # A `blocked_by` row is decided but its item is not registered yet -- it arrives with a
+    # `planetaryfactory_core` ticket. A recipe naming one passes every assertion above and then
+    # fails at WORLD LOAD, where KubeJS cannot resolve the item: an error in a log, a recipe
+    # nothing can craft, and nothing pointing back at the item map. The converter skips these
+    # rows; this is the assertion that it is still doing so.
+    awaited = {row["target"]: row["blocked_by"] for row in items.values() if "blocked_by" in row}
+
+    def resolves(path, field, target):
+        if target not in targets:
+            failures.append(f"{path.name}: {field} names {target}, which no item-map row gives")
+        elif target in awaited:
+            failures.append(f"{path.name}: {field} names {target}, which is blocked_by "
+                            f"#{awaited[target]} and is not registered yet -- re-run the converter")
+
     for path in sorted((ROOT / "kubejs/data/planetaryfactory/recipe").rglob("*.json")):
         recipe = json.loads(path.read_text())
         if recipe.get("type") == "minecraft:smelting":
             named = [recipe["ingredient"].get("item") or recipe["ingredient"].get("tag"),
                      recipe["result"]["id"]]
             for target in named:
-                if target not in targets:
-                    failures.append(f"{path.name} names {target}, which no item-map row gives")
+                resolves(path, "the recipe", target)
             if not isinstance(recipe.get("cookingtime"), int) or recipe["cookingtime"] <= 0:
                 failures.append(f"{path.name} has cookingtime {recipe.get('cookingtime')!r}")
             if "tag" in recipe["ingredient"] and recipe["result"]["id"].startswith("#"):
@@ -173,9 +186,7 @@ def check_emitted(items, recipe_types, failures):
                     ingredient = entry["content"]["ingredient"]
                     target = ingredient.get("item") or ingredient.get("tag") \
                         or ingredient.get("fluid") or ingredient.get("items")
-                    if target not in targets:
-                        failures.append(
-                            f"{path.name}: {field} names {target}, which no item-map row gives")
+                    resolves(path, field, target)
                     if capability == "fluid" and "fluid" not in ingredient:
                         failures.append(f"{path.name}: a fluid content holds {ingredient}")
 

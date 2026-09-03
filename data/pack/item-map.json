@@ -257,8 +257,8 @@
     },
     "electric-furnace": {
       "status": "undecided",
-      "note": "#149 registers the Electric Furnace as a pack machine.",
-      "ticket": 149
+      "note": "#155 registers the Electric Furnace as the third block of the mod-authored furnace ladder, taking EU. #149 specified it on a GT chassis and is closed as superseded: a GT machine reads `SmeltingRecipe` through `GTRecipeType.proxyRecipes` and would be blind to the count-bearing `planetaryfactory:smelting` type.",
+      "ticket": 155
     },
     "electric-mining-drill": {
       "status": "undecided",
