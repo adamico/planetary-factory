@@ -35,6 +35,9 @@ tiers differ in the ground they cover and in nothing else, and none of them chan
 receives. That distinction is what keeps the pole off the science spine, where a power
 ladder would compete with it.
 
+*Amended by #147: **three** tiers ship, not four — the big pole is dropped. The footprint-ladder
+sentence above is not weakened by that; it is the reason the tier went. See the amendment below.*
+
 ## Three facts from the jars that decide this, and must not be re-derived
 
 Verified with `javap` against the installed jars. They are the reason the two obvious alternatives
@@ -146,8 +149,19 @@ a material property of the wire, so a pole here has no span to differ in. Fideli
 tidier ladder, and the four values are pinned by `PoleTierTest` so the inversion is not "fixed" by
 someone reading it as a typo.
 
-**Even-sided areas are offset, not rounded.** Factorio's big pole and substation are 2x2 entities,
-so their even-sided areas centre on a seam between tiles. The pole here is one block. The tile
+**That paragraph's conclusion is overturned: the big pole is dropped, and three tiers ship.** It
+is left standing rather than rewritten, because the position it takes was really held and then
+lost to a fact sitting inside it. A tier here is a supply footprint and *nothing else* — that is
+this ADR's own rule, three paragraphs up — so a pole that justifies a smaller area by buying wire
+reach is buying something the pack does not sell. Power Grid prices span on the catenary wire, as
+a material property of the wire, and the pole it hangs from does not enter the calculation.
+Shipping the 4x4 on fidelity grounds would have shipped a strictly worse medium pole at a higher
+cost: a trap wearing a tier's clothes. `PoleTierTest` now pins the tier's *absence* instead of its
+value, so re-admitting it has to argue with a failing test first, and
+`data/pack/item-map.json` carries the row as `not_emitted` with the same reasoning.
+
+**Even-sided areas are offset, not rounded.** The substation is a 2x2 entity in Factorio, so its
+even-sided area centres on a seam between tiles. The pole here is one block. The tile
 count is kept exact and the area sits half a block off, taking its extra block on the negative
 side -- the same relationship Factorio's 2x2 pole has to any single tile beneath it.
 
@@ -182,7 +196,8 @@ arrive through, so the pole calls `addEnergy` and the question does not arise.
 - **Author a real cable network in `planetaryfactory_core`.** Rejected: it is the expensive half of
   a power mod, and it buys an idiom Factorio does not have.
 - **Two pole tiers now, the other two later.** Rejected for fidelity. The tiers are cheap once the
-  supply-area scan exists — they differ by one number.
+  supply-area scan exists — they differ by one number. *#147 settled at three, which is not this
+  option: the fourth is not deferred, it is refused.*
 - **Keep the per-area cap by other means.** Rejected: the emergent limit is better teaching, and a
   synthetic ceiling on top of a solver that already models current is two answers to one question.
 

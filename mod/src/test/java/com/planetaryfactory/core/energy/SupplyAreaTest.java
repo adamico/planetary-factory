@@ -66,7 +66,7 @@ class SupplyAreaTest {
     @Test
     void theVolumeIsTheSupplySquareTimesTheBand() {
         assertEquals(5 * 5 * 5, SupplyArea.volume(PoleTier.SMALL));
-        assertEquals(4 * 4 * 5, SupplyArea.volume(PoleTier.BIG));
+        assertEquals(7 * 7 * 5, SupplyArea.volume(PoleTier.MEDIUM));
         assertEquals(18 * 18 * 5, SupplyArea.volume(PoleTier.SUBSTATION));
     }
 
@@ -85,9 +85,11 @@ class SupplyAreaTest {
     }
 
     @Test
-    void theBigPoleDoesNotCoverEverythingAMediumOneDoes() {
-        // The inversion, stated as behaviour rather than as a number.
+    void theLadderOnlyGrows() {
+        // With the big pole gone (see PoleTier) every tier covers everything the one below does.
+        SupplyArea.forEachOffset(PoleTier.SMALL, (dx, dy, dz) ->
+                assertTrue(SupplyArea.covers(PoleTier.MEDIUM, dx, dy, dz)));
         assertTrue(SupplyArea.covers(PoleTier.MEDIUM, 3, 0, 0));
-        assertFalse(SupplyArea.covers(PoleTier.BIG, 3, 0, 0));
+        assertFalse(SupplyArea.covers(PoleTier.SMALL, 3, 0, 0));
     }
 }

@@ -443,7 +443,14 @@ Sub-rules:
 - **Voltage tiers** — `adapted`. Factorio steps low to medium to high voltage at the transformer;
   Electro's ladder is wire gauge and material, so upgrading a run means rewiring it rather than
   swapping a pole tier.
-- **Power poles have a supply area and a wire reach** — `planned`.
+- **Power poles have a supply area** — `shipped`. A pack-authored block in
+  `planetaryfactory_core` (ADR-0036, #147) that scans its area on a tick and pushes into every
+  machine inside it. Three tiers, 5x5, 7x7 and 18x18, Factorio's own numbers.
+- **Power poles have a wire reach** — `excluded`. The two halves used to be one row, which is what
+  let Factorio's big pole survive as a candidate: it justifies a *smaller* supply area, 4x4, by
+  buying 30 tiles of reach. Here the wire has the span — Power Grid's catenary, as a material
+  property — and the pole it hangs from does not enter it, so there is no reach for a pole tier to
+  differ in and the big pole is dropped (`not_emitted` in `data/pack/item-map.json`).
 - **Transformers between voltage levels** — `planned`. Kept craftable early because Transformer Oil
   is seed oil and renewable, on the one-way rule that it must never become an input to the oil
   chapter (ADR-0017).

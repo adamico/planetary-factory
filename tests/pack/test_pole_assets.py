@@ -16,8 +16,10 @@ halves against each other at build time, and each way of breaking them apart fai
   - a missing loot table makes the block break into nothing, which reads as a game bug rather
     than a packaging one
 
-The tier list is read out of `PoleTier.java` rather than typed here, so adding a fifth tier fails
-this check instead of silently shipping without assets.
+The tier list is read out of `PoleTier.java` rather than typed here, so adding a fourth tier fails
+this check instead of silently shipping without assets. The reverse -- a tier *removed* from the
+enum -- is checked too: the files it left behind stop being reachable from the tier list, so they
+have to be asserted absent by name.
 """
 
 import json
@@ -46,18 +48,34 @@ class PoleAssets(unittest.TestCase):
     def setUp(self):
         self.tiers = registered_tiers()
 
-    def test_all_four_factorio_tiers_are_registered(self):
+    def test_the_three_shipped_tiers_are_registered(self):
         self.assertEqual(
             {
                 "small_electric_pole": 5,
                 "medium_electric_pole": 7,
-                "big_electric_pole": 4,
                 "substation_electric_pole": 18,
             },
             self.tiers,
-            "the supply areas are Factorio's own; the big pole's 4x4 really is smaller than the "
-            "medium pole's 7x7, because in Factorio it buys wire reach instead (see PoleTier)",
+            "the supply areas are Factorio's own; Factorio's fourth tier, the big pole, is "
+            "deliberately absent (see PoleTier)",
         )
+
+    def test_the_dropped_big_pole_leaves_no_files_behind(self):
+        # A tier is a name spread over seven files in three trees, and dropping one is seven
+        # deletions with nothing checking that they all happened. A blockstate, model, texture or
+        # lang key for a block nothing registers is inert -- it ships, and nothing reports it. The
+        # recipe JSON is worse: it is generated, so a stale one comes back as a converter diff on
+        # whoever next runs it rather than as a failure here. Named rather than generalised over
+        # every unregistered pole, because this asserts one decision, not a rule about files.
+        stale = sorted(
+            path.relative_to(ROOT).as_posix()
+            for tree in (ASSETS, DATA)
+            for path in tree.rglob("*big_electric_pole.*")
+        )
+        self.assertEqual([], stale, "the big pole is dropped, so nothing may still name it")
+
+        lang = json.loads((ASSETS / "lang" / "en_us.json").read_text(encoding="utf-8"))
+        self.assertNotIn("block.planetaryfactory.big_electric_pole", lang)
 
     def test_every_pole_has_a_blockstate_naming_a_model_that_exists(self):
         for name in self.tiers:

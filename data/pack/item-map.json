@@ -106,7 +106,7 @@
     },
     "big-electric-pole": {
       "status": "not_emitted",
-      "note": "Dropped by #147 on building the pole. A tier here is a supply footprint and nothing else: Factorio's big pole justifies its 4x4 area -- smaller than the medium pole's 7x7 -- by buying 30 tiles of wire reach, and the pack has no reach to sell. Power Grid owns transmission with catenary whose span is a property of the wire, not of the pole it hangs on, so the big pole would ship as a strictly worse medium pole. The remaining three are 5x5, 7x7 and 18x18, Factorio's own numbers. Recorded as `adapted` in docs/factorio-mechanics.md."
+      "note": "Dropped by #147 on building the pole. A tier here is a supply footprint and nothing else: Factorio's big pole justifies its 4x4 area -- smaller than the medium pole's 7x7 -- by buying 30 tiles of wire reach, and the pack has no reach to sell. Power Grid owns transmission with catenary whose span is a property of the wire, not of the pole it hangs on, so the big pole would ship as a strictly worse medium pole. The remaining three are 5x5, 7x7 and 18x18, Factorio's own numbers. docs/factorio-mechanics.md splits the row this turns on: the supply area is `shipped`, the wire reach is `excluded`."
     },
     "boiler": {
       "status": "undecided",
