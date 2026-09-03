@@ -17,6 +17,8 @@ abstract class AssemblerScreen<T extends AbstractContainerMenu> extends Abstract
 
     protected static final int PANEL = 0xFF2B2B2B;
     protected static final int ROW = 0xFF3C3C3C;
+    private static final int SLOT = 0xFF1A1A1A;
+    private static final int SLOT_EDGE = 0xFF4A4A4A;
 
     protected AssemblerScreen(T menu, Inventory inventory, Component title, int width, int height) {
         super(menu, inventory, title);
@@ -32,6 +34,23 @@ abstract class AssemblerScreen<T extends AbstractContainerMenu> extends Abstract
 
     /** What this particular screen puts on the panel. */
     protected abstract void renderPanel(GuiGraphics graphics, int mouseX, int mouseY);
+
+    /**
+     * A well for every slot the menu carries.
+     *
+     * <p>{@code AbstractContainerScreen} draws what is <em>in</em> a slot and nothing else -- the
+     * empty grid is part of the background texture in vanilla. With no texture, an empty inventory
+     * renders as blank panel, so the wells are drawn here from the menu's own slot positions rather
+     * than from a second copy of the layout.
+     */
+    protected void renderSlots(GuiGraphics graphics) {
+        for (net.minecraft.world.inventory.Slot slot : menu.slots) {
+            int x = leftPos + slot.x;
+            int y = topPos + slot.y;
+            graphics.fill(x - 1, y - 1, x + 17, y + 17, SLOT_EDGE);
+            graphics.fill(x, y, x + 16, y + 16, SLOT);
+        }
+    }
 
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {

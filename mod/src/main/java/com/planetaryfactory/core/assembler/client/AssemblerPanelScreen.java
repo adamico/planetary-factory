@@ -34,6 +34,7 @@ public final class AssemblerPanelScreen extends AssemblerScreen<AssemblerPanelMe
 
     @Override
     protected void renderPanel(GuiGraphics graphics, int mouseX, int mouseY) {
+        renderSlots(graphics);
         int y = topPos + ROWS_TOP;
         int index = 0;
         for (QueueSyncPacket.Entry entry : AssemblerQueueView.entries()) {
