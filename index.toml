@@ -2150,11 +2150,6 @@ hash = "d50dfa866f719fe606d34bb81b0e466c1e6017878fa6b58b405e419ceaf9ee0d"
 metafile = true
 
 [[files]]
-file = "mods/tips.pw.toml"
-hash = "80c337f39bf8842d0e927f8a2fbe50566549e094ac84ee134a3cfd6977afcfea"
-metafile = true
-
-[[files]]
 file = "mods/titanium.pw.toml"
 hash = "b4839b51f328fbd3af8addab6905f444a425ffd8d540966766bbe2947528cba8"
 metafile = true
