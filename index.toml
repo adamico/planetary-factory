@@ -5,44 +5,16 @@ file = ".pytest_cache/CACHEDIR.TAG"
 hash = "37dc88ef9a0abeddbe81053a6dd8fdfb13afb613045ea1eb4a5c815a74a3bde4"
 
 [[files]]
+file = ".pytest_cache/v/cache/lastfailed"
+hash = "1f6e097a73cbc7ded6ac2f921de378d40cb3c5d31c39fb92070c1b7da24277a8"
+
+[[files]]
 file = ".pytest_cache/v/cache/nodeids"
-hash = "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+hash = "62985fc22ea4d01102ba4c54221fab951dddd5d31a5fc13c4c39b96f6296eb28"
 
 [[files]]
 file = "config/CoroUtil/General.toml"
 hash = "6003299fd97cb6b383ca3df88a2a676c565585799b1e14bb2987617ee189c7c2"
-
-[[files]]
-file = "config/Mekanism/common.toml"
-hash = "135c4f3482c6581b8d48843a004a88e15389c4932540d19560fb2ed11f5c5803"
-
-[[files]]
-file = "config/Mekanism/gear.toml"
-hash = "7deb0ab9ebc8b5237f06cbc478ef78bf78b57b8894469fd9d30acde6d9a21fda"
-
-[[files]]
-file = "config/Mekanism/general.toml"
-hash = "1771b4e337597f1a433831a213ae518f463623f99540b372470bebef141dff7b"
-
-[[files]]
-file = "config/Mekanism/machine-storage.toml"
-hash = "1175048ed4c343bf3b4923f9ec936e21b62036f63f27fb668daa4522613b1178"
-
-[[files]]
-file = "config/Mekanism/machine-usage.toml"
-hash = "b8d372d1600d659c148f5e238b7054c321537f7de2dfad24801de286abce1f77"
-
-[[files]]
-file = "config/Mekanism/startup.toml"
-hash = "97f1eccffa97ae4b0638fa14314b214f7884f12b45ce1188b05b4f9c02bdeca2"
-
-[[files]]
-file = "config/Mekanism/tiers.toml"
-hash = "a62413e8c2db427d7e2db72fc6d16d1ce3285a5a84a4913a9877378319552277"
-
-[[files]]
-file = "config/Mekanism/world.toml"
-hash = "d56fd55d230bc5b7a96854e4059ede7812e096fd13afd9ef932b1efbd3fdda0a"
 
 [[files]]
 file = "config/MouseTweaks.cfg"
@@ -442,11 +414,11 @@ hash = "5754114a0a663b321793a61f741bafa70c2a6dd649657260cdc096600763ad94"
 
 [[files]]
 file = "config/jade/plugins.json"
-hash = "af8e144d0a065a8865b3e45b2994558606312af723a2a83e46b2c766cf32de81"
+hash = "0bfbd429ad611a0a4fa414c13f8933bc746460debfea3b87a0cf7ed916730ba8"
 
 [[files]]
 file = "config/jade/sort-order.json"
-hash = "6d5fd467e6e2f88ffef50c7a01de5b591f4d8b4f276cb2acc40ee2076b626a6d"
+hash = "21754858a9ed3a1b50047842eda21eaff10bf51d1bc4c74a1113e18d5a67f6bc"
 
 [[files]]
 file = "config/jamlib/known_suspicious_jars.txt"
@@ -529,6 +501,14 @@ file = "config/placebo.cfg"
 hash = "6bbc71c6dc18b1ba4952e1bc54ed2b98c3a90f04cec4257ec3f7566cdf0c0e2a"
 
 [[files]]
+file = "config/powergrid-common.toml"
+hash = "353ff57e22aba1ad258de34ff0ffce3a229bebeaec909e1b2501326cc55d73f1"
+
+[[files]]
+file = "config/powergrid-server.toml"
+hash = "d160ed917be84dcad1d6c01f2b2f2e0b7336bf4bf0806c7daf258280fd4919eb"
+
+[[files]]
 file = "config/researchd-common.toml"
 hash = "ff6d7ae15491acb223054ff3eb9d0ff2f0235923f98cb4686f7aab9e7a00eef7"
 
@@ -578,7 +558,7 @@ hash = "bc029afc200ba2fba522a27245d65c8e5db0f20cd0eddd5873a316054d962923"
 
 [[files]]
 file = "config/sound_physics_remastered/sound_rates.properties"
-hash = "25822762b6ae6da70f8269aad6da8011e8f3047a11461983fd1f4c168c22bd22"
+hash = "6a8fd075c38c19f2f70aed674ca8b9c2f91707469c5784365573c449f28fadc1"
 
 [[files]]
 file = "config/sound_physics_remastered/soundphysics.properties"
@@ -642,19 +622,19 @@ hash = "fa9ac3b4ef105fc49ea6301ad8f05f35cd076c5ce634eaec58ea414bd782fa6f"
 
 [[files]]
 file = "data/pack/category-map.json"
-hash = "d4ac5de0f86786ec4180deca098b8dbe7dbd0c2ca0c2a29f0580d36b51f598ce"
+hash = "8229a39ece8aea71d6b58234972998de331a6a9bdcce26cc5a5c493669c1c9b3"
 
 [[files]]
 file = "data/pack/item-map.json"
-hash = "42981a411dfc1c55fab66706f5399cbeeb116f39a7161d505c2c0c609588bf9a"
+hash = "ce05b0b003c505d1fd5ccd408b200dd4a924646e60ae4b4b77232e50a8217673"
 
 [[files]]
 file = "data/pack/recipe-overrides.json"
-hash = "8e5a00c0575787cca8d664ec45326ae76531c5df5caa0dbfa07ff288392b8a46"
+hash = "1f7c305c8895ca64fb3cdccdebbc9241707a2f08d080641fc6b2ef11f3962949"
 
 [[files]]
 file = "data/pack/subgroup-owner.json"
-hash = "ff3689d49b9c2b49c4ecd75efeb29300af6215a5aff37a28ed1a4d5b0e759090"
+hash = "17ea1cbd80a3c1b46d2568329463d5500f0f84d4001f47b2f37450866ac13392"
 
 [[files]]
 file = "defaultconfigs/ftbessentials-server.snbt"
@@ -693,6 +673,18 @@ file = "kubejs/assets/planetaryfactory/blockstates/jellystem_sapling.json"
 hash = "0fe22868eef0264c0cef28f7b69621e532e719127e58f7a6258bc10036fadf07"
 
 [[files]]
+file = "kubejs/assets/planetaryfactory/blockstates/medium_electric_pole.json"
+hash = "bd683ac99484d47a4ff2289868df09a8ae4152ee0b6f180e7c69beacc88d49bb"
+
+[[files]]
+file = "kubejs/assets/planetaryfactory/blockstates/small_electric_pole.json"
+hash = "aafb2459a1854047f8e1b3ed657adb65c154b9a2548b9d86c06ce0a3d12b0740"
+
+[[files]]
+file = "kubejs/assets/planetaryfactory/blockstates/substation_electric_pole.json"
+hash = "e5042ec66566bef5409f936f84f8aa4eca9be38d4d91088d6e52753df99e5c2d"
+
+[[files]]
 file = "kubejs/assets/planetaryfactory/blockstates/yumako_sapling.json"
 hash = "f9c8e7527d3def59fa590634e75c1361b209954252886d643d0163c504220c3c"
 
@@ -722,19 +714,47 @@ hash = "29164eb82d87037838018b501fec02ff573ee0aad9ebade8bc0f31035c433086"
 
 [[files]]
 file = "kubejs/assets/planetaryfactory/lang/en_us.json"
-hash = "1fe90205870cb1a74713f93e95cad7767c5c0539e96b1f8c69bba6c5cef7adb5"
+hash = "1808806fb396cf75a0660c33ab54224f4888bca15356ecdde1216ac7d232fb04"
 
 [[files]]
 file = "kubejs/assets/planetaryfactory/models/block/jellystem_sapling.json"
 hash = "fcb98b855a3c81478dc1fa42ff51a2fa77e5edb7a8a21c692c1e5e6fadca6e48"
 
 [[files]]
+file = "kubejs/assets/planetaryfactory/models/block/medium_electric_pole.json"
+hash = "2aa7658d29793bdba9893db10b68089add5a894bd3b7dd8abbc3259347ffbfbb"
+
+[[files]]
+file = "kubejs/assets/planetaryfactory/models/block/small_electric_pole.json"
+hash = "9fa9eb73e76daaa3db8d27afbe48c1dcd3915d6486e384e87843681da2d8b8ee"
+
+[[files]]
+file = "kubejs/assets/planetaryfactory/models/block/substation_electric_pole.json"
+hash = "086a81849477b71d19e32a92ee3a10b77ada3a59ae9bd4f7f79df00462afed0e"
+
+[[files]]
 file = "kubejs/assets/planetaryfactory/models/block/yumako_sapling.json"
 hash = "531df9cddc4c825bc14defdbaa1f753a51e2180b491ea061ee5cdd40f894f977"
 
 [[files]]
+file = "kubejs/assets/planetaryfactory/models/item/barrel.json"
+hash = "c4677df0ae04d4028fd9c3a07ab659c2a64dae63f9d0568b14970431837fc5b0"
+
+[[files]]
 file = "kubejs/assets/planetaryfactory/models/item/jellystem_sapling.json"
 hash = "39beddcb07b29a9d1b8cf9ebd9e25042cdee91411b2af7604cc09b2f8ba39198"
+
+[[files]]
+file = "kubejs/assets/planetaryfactory/models/item/medium_electric_pole.json"
+hash = "69e3fbddf721e92479fe9db6dc77616ef0cab6567e7e27d80f5c4f81fd7c0a59"
+
+[[files]]
+file = "kubejs/assets/planetaryfactory/models/item/small_electric_pole.json"
+hash = "78c96bc3d6ac0dd82929214f3b2e741826fd2a461b6acb7833e69201bdfd9f3b"
+
+[[files]]
+file = "kubejs/assets/planetaryfactory/models/item/substation_electric_pole.json"
+hash = "0287b5f06d45f8d5bb009d2472affadddbc231108143f460187fdfd39aea8010"
 
 [[files]]
 file = "kubejs/assets/planetaryfactory/models/item/yumako_sapling.json"
@@ -761,6 +781,18 @@ file = "kubejs/assets/planetaryfactory/textures/block/jellystem_stem.png"
 hash = "c4c8f5b363881e5fa2255e3983ca5e5a808eae512fe94bda4f02e25899c5474f"
 
 [[files]]
+file = "kubejs/assets/planetaryfactory/textures/block/medium_electric_pole.png"
+hash = "0bfb7be4dd39c33a6a3c7f2f931eb80f96475258cfb30f03adcf7a237d2e649e"
+
+[[files]]
+file = "kubejs/assets/planetaryfactory/textures/block/small_electric_pole.png"
+hash = "b5026734bad8f46b2bcc617e34624c94bfdb69032acd5475bd537ef32df39a9c"
+
+[[files]]
+file = "kubejs/assets/planetaryfactory/textures/block/substation_electric_pole.png"
+hash = "e69c85711c8e1cca112d6d723561399a2c6a323470cf4f4f83ef7c4b65e9669c"
+
+[[files]]
 file = "kubejs/assets/planetaryfactory/textures/block/yumako_leaves.png"
 hash = "c05ff631707618721e45f3a25e67004be785d16407d86aa68d29d6e511b35060"
 
@@ -771,6 +803,10 @@ hash = "e6076ea16f27bbd6a57a9c2c1709b8a06addf13d6f363a3f060dd478a9b7b36a"
 [[files]]
 file = "kubejs/assets/planetaryfactory/textures/block/yumako_sapling.png"
 hash = "d9a7b500fdf01f334d81164f1327f72bd8403a7ecfdf4d371032fda516e8b98b"
+
+[[files]]
+file = "kubejs/assets/planetaryfactory/textures/item/barrel.png"
+hash = "d7631b76f66fadd80329914d7cb73f386c3815e8c37268ceea25c2c6e597ff26"
 
 [[files]]
 file = "kubejs/assets/planetaryfactory/textures/item/copper_bacteria.png"
@@ -802,7 +838,7 @@ hash = "e00a67922942660d77c213379b5128a46c5abc894178b0be04006d325ff5f6b3"
 
 [[files]]
 file = "kubejs/config/probe-settings.json"
-hash = "bed0a6bc193817d3fa3868d76144b14f2327c26d7714194c79953878aa464311"
+hash = "4ab12b6f56f06dad20def95f873db9b14e5f5f386e12481b76da16d4498e816e"
 
 [[files]]
 file = "kubejs/config/web_server.json"
@@ -1041,8 +1077,20 @@ file = "kubejs/data/planetaryfactory/loot_table/blocks/jellystem_stem.json"
 hash = "0f206cb80ff1158d375d286518f0b73535b37fc54deea1e2ba65adb07927f03e"
 
 [[files]]
+file = "kubejs/data/planetaryfactory/loot_table/blocks/medium_electric_pole.json"
+hash = "d9e46da30e0961d39be4aee350a412ddbd18382da4b05ba01a9193f821c7f898"
+
+[[files]]
 file = "kubejs/data/planetaryfactory/loot_table/blocks/scrap_pile.json"
 hash = "9883d710e25702d7b0605d433b1095cb983afe08e12636d51c44527fba2c0fbb"
+
+[[files]]
+file = "kubejs/data/planetaryfactory/loot_table/blocks/small_electric_pole.json"
+hash = "e32c812631aef844ab9d1eaa1ce2336530d874486594c4e370dd7d06acd5381f"
+
+[[files]]
+file = "kubejs/data/planetaryfactory/loot_table/blocks/substation_electric_pole.json"
+hash = "9b1efe50c957a69a49137c446b24e912369554832e4ec9437a0a3bac0e98fdeb"
 
 [[files]]
 file = "kubejs/data/planetaryfactory/loot_table/blocks/yumako_leaves.json"
@@ -1057,72 +1105,204 @@ file = "kubejs/data/planetaryfactory/loot_table/blocks/yumako_sapling.json"
 hash = "ec30199aaa8701f5453dfe974e46119aa845a6188bd265e9dc3fa11ced2c154c"
 
 [[files]]
-file = "kubejs/data/planetaryfactory/recipe/advanced_circuit.json"
+file = "kubejs/data/planetaryfactory/recipe/assembling/accumulator.json"
+hash = "ffe91fc883a7cb8ddb084eb7593bc8bbb4203a9ea6d00d7ef6f36f64f7e16751"
+
+[[files]]
+file = "kubejs/data/planetaryfactory/recipe/assembling/advanced_circuit.json"
 hash = "416a013bf9e0274bd8fad7a691e201423f4327e221fabb33406dc25d63c4f37e"
 
 [[files]]
-file = "kubejs/data/planetaryfactory/recipe/assembling_machine_1.json"
+file = "kubejs/data/planetaryfactory/recipe/assembling/assembling_machine_1.json"
 hash = "e1e2cc7092b1162e86ced084d1b624daeb1dee5f8fb1cd5c30e8cbbd4f86ac90"
 
 [[files]]
-file = "kubejs/data/planetaryfactory/recipe/assembling_machine_2.json"
+file = "kubejs/data/planetaryfactory/recipe/assembling/assembling_machine_2.json"
 hash = "2144e98ecf40d0ac6491c747ca8afacf93e659228cb55a9d1e76af15a0ca2044"
 
 [[files]]
-file = "kubejs/data/planetaryfactory/recipe/automation_science_pack.json"
+file = "kubejs/data/planetaryfactory/recipe/assembling/automation_science_pack.json"
 hash = "371b855d9cc851170c5688bee9a7a8973177f159c9ef836d6722c25afc2a2c69"
 
 [[files]]
-file = "kubejs/data/planetaryfactory/recipe/copper_cable.json"
+file = "kubejs/data/planetaryfactory/recipe/assembling/barrel.json"
+hash = "30d821bfb0de5816982eaacd2f66af53c41225c435c6805d4884eddd4fb2ad30"
+
+[[files]]
+file = "kubejs/data/planetaryfactory/recipe/assembling/chemical_plant.json"
+hash = "d65eac43c102691227b6482ae5da3d6544d72272cf20e85dffa199b72c968551"
+
+[[files]]
+file = "kubejs/data/planetaryfactory/recipe/assembling/chemical_science_pack.json"
+hash = "a8ab3f604da74c3bb519f388e3f5d05eb2aa1a7637d3aef59a5f1347565b8987"
+
+[[files]]
+file = "kubejs/data/planetaryfactory/recipe/assembling/concrete.json"
+hash = "b909666ff197c990fb5a5b9d3aa121ca7e74ffa713d6e856d9de545ecf72bf50"
+
+[[files]]
+file = "kubejs/data/planetaryfactory/recipe/assembling/copper_cable.json"
 hash = "080642ab5362823037ce5f540b2cdc4f5573addea5aa1b85e05b4196c5a7cece"
+
+[[files]]
+file = "kubejs/data/planetaryfactory/recipe/assembling/electric_engine_unit.json"
+hash = "c5ad32a3280ecffdf54a2d922aee97d5d7db9c2ac9c4381bb5eeabf510ec1cec"
+
+[[files]]
+file = "kubejs/data/planetaryfactory/recipe/assembling/electronic_circuit.json"
+hash = "d1cebfc0af2e9f34dab75086ea6ff881d904c5822c1cbdcadee4226151f006ad"
+
+[[files]]
+file = "kubejs/data/planetaryfactory/recipe/assembling/engine_unit.json"
+hash = "74e7d7dbe4f0b6b463c88d42a19e140a7862ac325af821352400d71984eb15b5"
+
+[[files]]
+file = "kubejs/data/planetaryfactory/recipe/assembling/hazard_concrete.json"
+hash = "71327eeb2144185c5dc6864fa020e26a44984b66379f8a28f82f44aa8c9a352f"
+
+[[files]]
+file = "kubejs/data/planetaryfactory/recipe/assembling/iron_chest.json"
+hash = "8169aba9e044342c5ce39c6d4bb73462643417c0660ba9f6f77b66cd4c767353"
+
+[[files]]
+file = "kubejs/data/planetaryfactory/recipe/assembling/iron_gear_wheel.json"
+hash = "7937d303ddb655f4bf6ed8cf61b077db73485f4a3dacad92c1c9516c3c2af6f4"
+
+[[files]]
+file = "kubejs/data/planetaryfactory/recipe/assembling/iron_stick.json"
+hash = "13f5f27b139518a4f436167538933563f4a9fce08e43d38a51a894381c57dc39"
+
+[[files]]
+file = "kubejs/data/planetaryfactory/recipe/assembling/low_density_structure.json"
+hash = "3039c8b4a2f0869678c29e2557d30376a881eee71c1d33cc8422e6fc4677c208"
+
+[[files]]
+file = "kubejs/data/planetaryfactory/recipe/assembling/medium_electric_pole.json"
+hash = "cc24face75c79d338ee5fe44097b0b976c3ed221f9aa8e76444bd5aa168820ff"
+
+[[files]]
+file = "kubejs/data/planetaryfactory/recipe/assembling/oil_refinery.json"
+hash = "d5e7e03a4ccba3ad6457b2504fe226dda50a40df2869ebbbae9d7073d079183f"
+
+[[files]]
+file = "kubejs/data/planetaryfactory/recipe/assembling/pipe.json"
+hash = "0efcf74366c8dcd284308ade61c9a06fa6bfaa7fde67a44ed7ae3e8f6028dc3a"
+
+[[files]]
+file = "kubejs/data/planetaryfactory/recipe/assembling/pump.json"
+hash = "87d83f8c8de737cc5a20ed85884932efc08b4aa0fc25624d86481fe84c5b439e"
+
+[[files]]
+file = "kubejs/data/planetaryfactory/recipe/assembling/rail.json"
+hash = "8b560b0489fc50e29dde4791c554068bce3fa312704f9165bd3e52a036cfb916"
+
+[[files]]
+file = "kubejs/data/planetaryfactory/recipe/assembling/rail_signal.json"
+hash = "5414b0b5562700976e31f313b6f93503ccb8579de8a4781335015a7de53ce5c1"
+
+[[files]]
+file = "kubejs/data/planetaryfactory/recipe/assembling/refined_concrete.json"
+hash = "c07200e2b7e75fa1d4b910ad9e4be0c88f170d5fcb809fcffa32891c98197170"
+
+[[files]]
+file = "kubejs/data/planetaryfactory/recipe/assembling/refined_hazard_concrete.json"
+hash = "ec81ddea37726216571dd48448551c70abd67e4fc5c972b5c925be2443c43096"
+
+[[files]]
+file = "kubejs/data/planetaryfactory/recipe/assembling/small_electric_pole.json"
+hash = "8616e151a5a0985179937e29b32e7f9c8ab0d9580639b9c3951664886c8ad439"
+
+[[files]]
+file = "kubejs/data/planetaryfactory/recipe/assembling/steel_chest.json"
+hash = "496454b2586eb7bb4ff40ba213f6a6934375a32190f95d83f364efd49d085051"
+
+[[files]]
+file = "kubejs/data/planetaryfactory/recipe/assembling/storage_tank.json"
+hash = "41a306bcea2bf10e581c279d5b09ee6e7dd4a9267b1cd5d978791b2a11989649"
+
+[[files]]
+file = "kubejs/data/planetaryfactory/recipe/assembling/substation.json"
+hash = "26ced5b3a1f3850e6d92c161cc882ecdb63b034e15ad92b9d2bd2e7e90a44600"
+
+[[files]]
+file = "kubejs/data/planetaryfactory/recipe/assembling/train_stop.json"
+hash = "6a3f59dcf65d4413f3d273e26bd2e40d2487e70a2484748f4f1e420941e7b35f"
+
+[[files]]
+file = "kubejs/data/planetaryfactory/recipe/assembling/transport_belt.json"
+hash = "143bcdb043d179e0acbd6c9d6b22f7c8ca1f9231849c291def194f472978a486"
+
+[[files]]
+file = "kubejs/data/planetaryfactory/recipe/assembling/wooden_chest.json"
+hash = "58d918acd87b85d49c26b7ed8c39139d4b985ac157b650469aecf25353232053"
+
+[[files]]
+file = "kubejs/data/planetaryfactory/recipe/chemical_plant/battery.json"
+hash = "e991b96d8ac63ec6b2c53cb5b88d63cf5b041cce56fce95f8ac6f20393ea5ea7"
+
+[[files]]
+file = "kubejs/data/planetaryfactory/recipe/chemical_plant/heavy_oil_cracking.json"
+hash = "9ef07e6fc83f17eeda9b46f4e06e334e8ee20985d13aecb7fc67bda08336cdb6"
+
+[[files]]
+file = "kubejs/data/planetaryfactory/recipe/chemical_plant/light_oil_cracking.json"
+hash = "3e326e327a0ea6a1f9c7cb2103a3d4c4760fc036a26c8872f45f404a9669862e"
+
+[[files]]
+file = "kubejs/data/planetaryfactory/recipe/chemical_plant/lubricant.json"
+hash = "ae47f6281c05ab58dbcbd272654715eac3673bf6ee3276e32cdd99146d91b85e"
+
+[[files]]
+file = "kubejs/data/planetaryfactory/recipe/chemical_plant/plastic_bar.json"
+hash = "ca060fd787804219bf1721f02d0a13956e54d26092c82c2040ece5757c144129"
+
+[[files]]
+file = "kubejs/data/planetaryfactory/recipe/chemical_plant/processing_unit.json"
+hash = "2d2577bccf0fd43a999f0393ddcbd2dc33d298be4b5fb6f61b0ea04a7816fedb"
+
+[[files]]
+file = "kubejs/data/planetaryfactory/recipe/chemical_plant/rocket_fuel.json"
+hash = "604710caf36afa422d97a712536fbebb1681d23050b037c17e246618ee92efd8"
+
+[[files]]
+file = "kubejs/data/planetaryfactory/recipe/chemical_plant/solid_fuel_from_heavy_oil.json"
+hash = "a5e4690d7ec23544e7986f07a92312b91f47383c63921f5c5bcab40eb6931675"
+
+[[files]]
+file = "kubejs/data/planetaryfactory/recipe/chemical_plant/solid_fuel_from_light_oil.json"
+hash = "a9bfd912ce3394f6e38f70344bd31d6964f432e48db5aa48d9d6a54cf6bbbba2"
+
+[[files]]
+file = "kubejs/data/planetaryfactory/recipe/chemical_plant/solid_fuel_from_petroleum_gas.json"
+hash = "da0b215eec8b0ddf2be7b19a697d95cd7e1c963d809529c7a6cac307f2d08f08"
+
+[[files]]
+file = "kubejs/data/planetaryfactory/recipe/chemical_plant/sulfur.json"
+hash = "96f9fb3db2b1d05cc81ab6223e53aaeda7bbe72599ecb132bcfc32348a6af411"
+
+[[files]]
+file = "kubejs/data/planetaryfactory/recipe/chemical_plant/sulfuric_acid.json"
+hash = "030c7e42a6fd024136d66619836d0c9e81978c288ce45f04279dc361d0e1bde5"
 
 [[files]]
 file = "kubejs/data/planetaryfactory/recipe/copper_plate.json"
 hash = "b1c9fd77af25ea4041276a6699ce4cfb759370a4bf9470d8ba980d59da232269"
 
 [[files]]
-file = "kubejs/data/planetaryfactory/recipe/electronic_circuit.json"
-hash = "d1cebfc0af2e9f34dab75086ea6ff881d904c5822c1cbdcadee4226151f006ad"
-
-[[files]]
-file = "kubejs/data/planetaryfactory/recipe/iron_gear_wheel.json"
-hash = "7937d303ddb655f4bf6ed8cf61b077db73485f4a3dacad92c1c9516c3c2af6f4"
-
-[[files]]
 file = "kubejs/data/planetaryfactory/recipe/iron_plate.json"
 hash = "84ede15fddcc88a34fc9591348529844f1519c13dab4e5ead2b7e0ef14404dce"
 
 [[files]]
-file = "kubejs/data/planetaryfactory/recipe/iron_stick.json"
-hash = "13f5f27b139518a4f436167538933563f4a9fce08e43d38a51a894381c57dc39"
+file = "kubejs/data/planetaryfactory/recipe/oil_refinery/advanced_oil_processing.json"
+hash = "92b0e4fb2a0d6cc712169479648328bec685ad5ac9cf5be6d41adb07adec2690"
 
 [[files]]
-file = "kubejs/data/planetaryfactory/recipe/pipe.json"
-hash = "0efcf74366c8dcd284308ade61c9a06fa6bfaa7fde67a44ed7ae3e8f6028dc3a"
+file = "kubejs/data/planetaryfactory/recipe/oil_refinery/basic_oil_processing.json"
+hash = "5a7fa31f58e98df5d0fd2a13d73010448d676b747b6391cb6ab2e7cd43b070d1"
 
 [[files]]
-file = "kubejs/data/planetaryfactory/recipe/rail.json"
-hash = "b5d7a6cc32e9dc32f0f310979049c4fef8e85feed171950e19b7201064c1bc95"
-
-[[files]]
-file = "kubejs/data/planetaryfactory/recipe/rail_signal.json"
-hash = "5414b0b5562700976e31f313b6f93503ccb8579de8a4781335015a7de53ce5c1"
-
-[[files]]
-file = "kubejs/data/planetaryfactory/recipe/storage_tank.json"
-hash = "41a306bcea2bf10e581c279d5b09ee6e7dd4a9267b1cd5d978791b2a11989649"
-
-[[files]]
-file = "kubejs/data/planetaryfactory/recipe/train_stop.json"
-hash = "6a3f59dcf65d4413f3d273e26bd2e40d2487e70a2484748f4f1e420941e7b35f"
-
-[[files]]
-file = "kubejs/data/planetaryfactory/recipe/transport_belt.json"
-hash = "143bcdb043d179e0acbd6c9d6b22f7c8ca1f9231849c291def194f472978a486"
-
-[[files]]
-file = "kubejs/data/planetaryfactory/recipe/wooden_chest.json"
-hash = "58d918acd87b85d49c26b7ed8c39139d4b985ac157b650469aecf25353232053"
+file = "kubejs/data/planetaryfactory/recipe/stone_brick.json"
+hash = "411040aad288a7f0374da680484feb6cf9a2e03318be9b3323c0eeb0c7dc3d17"
 
 [[files]]
 file = "kubejs/data/planetaryfactory/structure/electro_ruin_1.nbt"
@@ -1430,11 +1610,11 @@ hash = "20580ceeb23855b9d54a9b11219143100dee749d16b356f7f60d667380958ead"
 
 [[files]]
 file = "kubejs/startup_scripts/blocks.js"
-hash = "804b30acf1f20682491e33c37c475461d474c20dec9b58772ac19e91850115ad"
+hash = "46015fa25f232206fbbb92e1ac4600ab699b39d2a5bfaf866987f563dc478779"
 
 [[files]]
 file = "kubejs/startup_scripts/items.js"
-hash = "a24551c39255d82d06b43491c410a2f29697dec9c9782a762efc304c3b3009db"
+hash = "5c3b0cf66b1e08b9197ab2a352b3c673fb3fef10842399e3924f334bd2d113e3"
 
 [[files]]
 file = "kubejs/startup_scripts/jsconfig.json"
@@ -1511,6 +1691,11 @@ hash = "c495c19a48e96ad7d32d8738a9209539968f7f41db7a5f8d20eed1b0f477fcad"
 metafile = true
 
 [[files]]
+file = "mods/block-runner.pw.toml"
+hash = "811b76b8d4e9e65bde15493b0e3dd72e1d19a0686d92fa02c592e4ed4c6b7c76"
+metafile = true
+
+[[files]]
 file = "mods/bookshelf.pw.toml"
 hash = "cf914684c4151076b726116a66f7bc81a6116655551bcce70a9e64e34e5aa308"
 metafile = true
@@ -1538,11 +1723,6 @@ metafile = true
 [[files]]
 file = "mods/certain-questing-additions.pw.toml"
 hash = "9b638a69442bee4961aee921b086ca32df54f4b35e9b10c7ca74bc251bff912e"
-metafile = true
-
-[[files]]
-file = "mods/charging-gadgets.pw.toml"
-hash = "a471ec05d756850dfea0763087dbd1852727e0c00ab06dcd2a3ae8e38e76f8e0"
 metafile = true
 
 [[files]]
@@ -1621,11 +1801,6 @@ hash = "13481b387ddbf461b1da0ff317df17beafeda05291a586ee717bac23c86a0e74"
 metafile = true
 
 [[files]]
-file = "mods/create-electro-energetics.pw.toml"
-hash = "b4ab61193a8a453d3d49f9c221a3d519691e0f06b7f044ea884e66935465654d"
-metafile = true
-
-[[files]]
 file = "mods/create.pw.toml"
 hash = "4b0ca63279620ec9ba4c63820a9d4f9ceea9b717227137ea19e5c420c820f858"
 metafile = true
@@ -1653,11 +1828,6 @@ metafile = true
 [[files]]
 file = "mods/default-options.pw.toml"
 hash = "12602d5c4952c42a2390b1d78869777d81e37f0393188a3bb409ded91e18f373"
-metafile = true
-
-[[files]]
-file = "mods/durability-tooltip.pw.toml"
-hash = "13af7707844b2af1b04c8e95ad86016cd45e89a8d10b9a6aba1caee55e6991fe"
 metafile = true
 
 [[files]]
@@ -1785,11 +1955,6 @@ hash = "47a1c8fb4a4289dff80b4568dabf2cb7996ef9afab1b020112bfdd890550c188"
 metafile = true
 
 [[files]]
-file = "mods/just-enough-mekanism-multiblocks.pw.toml"
-hash = "2ff193eefa4aade64935eb580db3d35cd9956370f92d2454a6fb3e33938591f2"
-metafile = true
-
-[[files]]
 file = "mods/just-zoom.pw.toml"
 hash = "5345bb641d6b9307c6a05f12885315537386519476bd2aee79d9fd1181268a7a"
 metafile = true
@@ -1827,11 +1992,6 @@ metafile = true
 [[files]]
 file = "mods/mcjtylib.pw.toml"
 hash = "b72d3f3171eb5b38308c3960dfca5716c708f29b0ea8055a589f32528bed6db4"
-metafile = true
-
-[[files]]
-file = "mods/mekanism.pw.toml"
-hash = "290b13afab94146d1159d821b73c8c98f5299b4df75fd28e826f9fd409e9bb40"
 metafile = true
 
 [[files]]
@@ -1900,6 +2060,11 @@ hash = "b484f15d3353a7d4b3baf14b9da340c922299aead74f7f052dd886f49489d7fd"
 metafile = true
 
 [[files]]
+file = "mods/power-grid.pw.toml"
+hash = "d8a997c508417eff07068e7ee5e5e501a6ae6e44fb4592829d077fe4a3b73ec3"
+metafile = true
+
+[[files]]
 file = "mods/prickle.pw.toml"
 hash = "eab2f56ff9135b3b7253ea5a73deae2f887e2876f5f0432936044a6e926937b4"
 metafile = true
@@ -1907,6 +2072,11 @@ metafile = true
 [[files]]
 file = "mods/probejs.pw.toml"
 hash = "2a8dd9366ed60e7040e90c1b87722b14729ffe080e693ef43151dea10d25ed38"
+metafile = true
+
+[[files]]
+file = "mods/puzzles-lib.pw.toml"
+hash = "775097fcba4e4fecf8c6b5ac1984e361d0d069171e6c764929320b7fd1d86031"
 metafile = true
 
 [[files]]
