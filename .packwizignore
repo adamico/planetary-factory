@@ -110,10 +110,11 @@ usernamecache.json
 minecraftinstance.json
 *.log
 __pycache__/
+/.pytest_cache/
+/.rtk/
 .DS_Store
 
 # --- Disabled and replaced jars -----------------------------------------------
 *.jar.disabled
 *.jar.meta
 mods/.replaced/
-.rtk/

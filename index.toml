@@ -1,18 +1,6 @@
 hash-format = "sha256"
 
 [[files]]
-file = ".pytest_cache/CACHEDIR.TAG"
-hash = "37dc88ef9a0abeddbe81053a6dd8fdfb13afb613045ea1eb4a5c815a74a3bde4"
-
-[[files]]
-file = ".pytest_cache/v/cache/lastfailed"
-hash = "1f6e097a73cbc7ded6ac2f921de378d40cb3c5d31c39fb92070c1b7da24277a8"
-
-[[files]]
-file = ".pytest_cache/v/cache/nodeids"
-hash = "62985fc22ea4d01102ba4c54221fab951dddd5d31a5fc13c4c39b96f6296eb28"
-
-[[files]]
 file = "config/CoroUtil/General.toml"
 hash = "6003299fd97cb6b383ca3df88a2a676c565585799b1e14bb2987617ee189c7c2"
 
