@@ -122,5 +122,6 @@
   "minecraft:waxed": null,
   "minecraft:zombie_villager": null,
   "modularrouters:router": null,
-  "pipez:pipe": null
+  "pipez:pipe": null,
+  "planetaryfactory:supply_area_pole": null
 }

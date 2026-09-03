@@ -437,9 +437,17 @@ that replaced it models brownouts natively.
 
 Sub-rules:
 
-- **Brownout: insufficient supply degrades what is running** — `shipped`. On by default, and it is
-  the read-the-graph-and-add-generation loop Factorio teaches, arriving with more electrical detail
-  rather than less.
+- **Brownout: insufficient supply degrades what is running** — `blocked`, and the row has now been
+  wrong in both directions. Power Grid models sag on the *grid* natively, which is what the previous
+  `shipped` verdict rested on. But the machine side does not derate: `RecipeLogic.regressRecipe`
+  takes progress *down* by two per waiting tick (`recipeProgressLowEnergy: false` in
+  `config/gtceu.yaml`), so a machine that can afford its full EU/t on a fraction `f` of ticks nets
+  `3f - 2` progress per tick and **never completes anything below f = 2/3**. Factorio has a slope
+  there; the pack has a cliff, with no signal separating "slow" from "permanently stuck". The
+  pole's water-fill makes it worse rather than better: sharing a shortfall evenly puts every machine
+  in an area under the cliff at once instead of stalling the hungriest. Verified by disassembly
+  against GTCEu 7.0.2 while building #147; the fix is #157, and it is an ADR's worth of argument
+  because GT will not derate without touching recipe logic that ADR-0036 forbids reaching into.
 - **Voltage tiers** — `adapted`. Factorio steps low to medium to high voltage at the transformer;
   Electro's ladder is wire gauge and material, so upgrading a run means rewiring it rather than
   swapping a pole tier.

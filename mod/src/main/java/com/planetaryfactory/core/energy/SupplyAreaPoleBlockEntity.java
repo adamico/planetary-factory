@@ -65,6 +65,19 @@ public class SupplyAreaPoleBlockEntity extends BlockEntity {
     private List<BlockPos> receivers = List.of();
     private int sinceRescan = RESCAN_INTERVAL;
 
+    /**
+     * What the last tick actually did, for the Jade line and for nothing else.
+     *
+     * <p>These are not persisted and not synced by the block entity: Jade asks the server for them
+     * when a player looks at the pole, and a pole nobody is looking at has no reason to send them.
+     * They exist because the two failure modes a player cannot otherwise tell apart -- a machine
+     * outside the area, and a machine inside it that is not being fed -- are distinguished exactly
+     * by the machine count and the delivered-against-demanded pair.
+     */
+    private int lastMachineCount;
+    private long lastDeliveredEu;
+    private long lastDemandedEu;
+
     public SupplyAreaPoleBlockEntity(BlockPos pos, BlockState state) {
         super(PFBlockEntities.SUPPLY_AREA_POLE.get(), pos, state);
     }
@@ -99,10 +112,32 @@ public class SupplyAreaPoleBlockEntity extends BlockEntity {
             sinceRescan = 0;
             receivers = scan(level);
         }
-        if (receivers.isEmpty() || ledger.availableEu() <= 0L) {
+        if (receivers.isEmpty()) {
+            lastMachineCount = 0;
+            lastDeliveredEu = 0L;
+            lastDemandedEu = 0L;
             return;
         }
+        // Deliberately not short-circuited on an empty ledger. A pole with no energy still has to
+        // measure what its area is asking for, because "0 of 120 EU/t" is the reading that tells a
+        // player the machines are in range and the grid is not feeding them -- which is the whole
+        // point of the Jade line. The cost is the capability lookups distribute() already does.
         distribute(level);
+    }
+
+    /** How many machines answered the last scan. Jade reads this; nothing else does. */
+    public int machineCount() {
+        return lastMachineCount;
+    }
+
+    /** EU actually handed out on the last tick. */
+    public long deliveredEuPerTick() {
+        return lastDeliveredEu;
+    }
+
+    /** EU the area asked for on the last tick, whether or not it was there to give. */
+    public long demandedEuPerTick() {
+        return lastDemandedEu;
     }
 
     /** Every position in the area that currently answers with a GregTech energy container. */
@@ -137,19 +172,32 @@ public class SupplyAreaPoleBlockEntity extends BlockEntity {
                 hungry.add(new Receiver(container, demand));
             }
         }
+        // The count is every machine the scan found, not just the hungry ones. A machine sitting
+        // full has no demand this tick, and dropping it from the count would report "0 machines"
+        // to a player standing in front of a working factory -- the precise misreading this line
+        // exists to prevent.
+        lastMachineCount = receivers.size();
         if (hungry.isEmpty()) {
+            lastDeliveredEu = 0L;
+            lastDemandedEu = 0L;
             return;
         }
 
         long[] demands = hungry.stream().mapToLong(Receiver::demand).toArray();
         long[] grants = EnergyShare.waterFill(ledger.availableEu(), demands);
 
+        long wanted = 0L;
+        for (long demand : demands) {
+            wanted += demand;
+        }
         long spent = 0L;
         for (int i = 0; i < grants.length; i++) {
             if (grants[i] > 0L) {
                 spent += hungry.get(i).container().addEnergy(grants[i]);
             }
         }
+        lastDemandedEu = wanted;
+        lastDeliveredEu = spent;
         if (spent > 0L) {
             ledger.drainEu(spent);
             setChanged();

@@ -52,6 +52,9 @@
     "painting": true,
     "chiseled_bookshelf": true
   },
+  "jadeaddons": {
+    "equipment_requirement": ""
+  },
   "jadeaddons.create": {
     "filter": true,
     "backtank_capacity": true,
@@ -105,20 +108,14 @@
     "block_properties": false,
     "mod_name": true
   },
+  "gravestone": {
+    "grave": true
+  },
+  "planetaryfactory": {
+    "supply_area_pole": true
+  },
   "balm": {
     "jade": true
-  },
-  "functionalstorage": {
-    "armory": true,
-    "drawer": true
-  },
-  "integrateddynamicscompat": {
-    "proxy": true,
-    "mechanical_squeezer": true,
-    "mechanical_drying_basin": true,
-    "drying_basin": true,
-    "part": true,
-    "squeezer": true
   },
   "ae2": {
     "part_icon": true,
@@ -131,24 +128,5 @@
     "power_storage": true,
     "crafting_monitor": true,
     "part_name": true
-  },
-  "modularrouters": {
-    "router": true
-  },
-  "jadeaddons": {
-    "equipment_requirement": ""
-  },
-  "mekanism": {
-    "chemical": true,
-    "remove_builtin": true,
-    "fluid": true,
-    "energy": true,
-    "tooltip_renderer": true
-  },
-  "pipez": {
-    "pipe": true
-  },
-  "gravestone": {
-    "grave": true
   }
 }

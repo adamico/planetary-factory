@@ -23,5 +23,11 @@
   "block.planetaryfactory.jellystem_sapling": "Jellystem Sapling",
   "block.planetaryfactory.small_electric_pole": "Small Electric Pole",
   "block.planetaryfactory.medium_electric_pole": "Medium Electric Pole",
-  "block.planetaryfactory.substation_electric_pole": "Substation"
+  "block.planetaryfactory.substation_electric_pole": "Substation",
+  "tooltip.planetaryfactory.pole.area": "Supplies a %sx%s area, %s blocks up and down",
+  "tooltip.planetaryfactory.pole.wireless": "Powers machines directly — no wires needed",
+  "tooltip.planetaryfactory.pole.column": "Measured at the base; extend with another %s (up to %s tall)",
+  "tooltip.planetaryfactory.pole.jade.machines": "Machines in area: %s",
+  "tooltip.planetaryfactory.pole.jade.supply": "This pole: %s / %s EU/t",
+  "tooltip.planetaryfactory.pole.jade.idle": "Nothing drawing power"
 }

@@ -1,6 +1,9 @@
 package com.planetaryfactory.core;
 
+import com.planetaryfactory.core.energy.PoleColumn;
+import com.planetaryfactory.core.energy.PoleTier;
 import com.planetaryfactory.core.energy.SupplyAreaPoleBlockEntity;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.bus.api.IEventBus;
@@ -36,16 +39,38 @@ public final class PFBlockEntities {
     }
 
     /**
-     * The pole's FE face, exposed on every tier.
+     * The pole's FE face, exposed on every segment of every tier.
      *
      * <p>This is the entire V-to-machine boundary. Power Grid's own bridge block feeds it, no mod
      * internals are touched on either side, and there is no separate placeable converter -- which
      * is ADR-0036's arrangement, and the only interop path either grid mod's author supports.
+     *
+     * <p>Registered against the <em>block</em> rather than the block entity type, because a pole is
+     * a column and a connector may be attached to any segment of it. Power Grid's
+     * {@code BridgeElectricBehaviourImpl.makeFEHandler} does a plain
+     * {@code level.getCapability(Capabilities.EnergyStorage.BLOCK, pos.relative(facing), ...)} and
+     * never asks whether the target has a block entity, so an extension answering the lookup is
+     * ordinary rather than a trick.
+     *
+     * <p>What comes back is the <em>base's own</em> {@link
+     * com.planetaryfactory.core.energy.PoleEnergyStorage}. Nothing is transported up or down the
+     * column: a segment is an address, not a conduit, and once the lookup has resolved the segments
+     * are not in the path at all. A segment with no base below it -- an orphan mid-collapse -- has
+     * no storage to name, so it answers null and the connector treats it as not connected.
      */
     static void registerCapabilities(RegisterCapabilitiesEvent event) {
-        event.registerBlockEntity(
-                Capabilities.EnergyStorage.BLOCK,
-                SUPPLY_AREA_POLE.get(),
-                (pole, side) -> pole.feSide());
+        for (PoleTier tier : PoleTier.values()) {
+            event.registerBlock(
+                    Capabilities.EnergyStorage.BLOCK,
+                    (level, pos, state, blockEntity, side) -> {
+                        BlockPos base = PoleColumn.baseOf(level, pos);
+                        if (base == null) {
+                            return null;
+                        }
+                        return level.getBlockEntity(base)
+                                instanceof SupplyAreaPoleBlockEntity pole ? pole.feSide() : null;
+                    },
+                    PFBlocks.pole(tier).get());
+        }
     }
 }

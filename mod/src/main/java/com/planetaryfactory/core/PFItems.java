@@ -1,6 +1,7 @@
 package com.planetaryfactory.core;
 
 import com.planetaryfactory.core.energy.PoleTier;
+import com.planetaryfactory.core.energy.SupplyAreaPoleItem;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.neoforged.bus.api.IEventBus;
@@ -28,7 +29,10 @@ public final class PFItems {
         NATURAL.add(ITEMS.registerSimpleBlockItem(PFBlocks.YUMAKO_SAPLING));
         NATURAL.add(ITEMS.registerSimpleBlockItem(PFBlocks.JELLYSTEM_SAPLING));
         for (PoleTier tier : PoleTier.values()) {
-            FUNCTIONAL.add(ITEMS.registerSimpleBlockItem(PFBlocks.pole(tier)));
+            // Not registerSimpleBlockItem: the pole carries the only description of itself the
+            // pack has, so its item is a SupplyAreaPoleItem for the tooltip alone.
+            FUNCTIONAL.add(ITEMS.register(PFBlocks.pole(tier).getId().getPath(),
+                    () -> new SupplyAreaPoleItem(PFBlocks.pole(tier).get(), new Item.Properties())));
         }
     }
 

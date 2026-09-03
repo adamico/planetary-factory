@@ -29,6 +29,10 @@ import unittest
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 POLE_TIER = ROOT / "mod/src/main/java/com/planetaryfactory/core/energy/PoleTier.java"
+TRANSLATING_SOURCES = (
+    ROOT / "mod/src/main/java/com/planetaryfactory/core/energy/SupplyAreaPoleItem.java",
+    ROOT / "mod/src/main/java/com/planetaryfactory/core/compat/PoleJadePlugin.java",
+)
 ASSETS = ROOT / "kubejs/assets/planetaryfactory"
 DATA = ROOT / "kubejs/data/planetaryfactory"
 
@@ -42,6 +46,41 @@ def registered_tiers():
     if not tiers:
         raise AssertionError(f"no pole tiers parsed out of {POLE_TIER} -- has the enum moved?")
     return {name.lower() + "_electric_pole": int(size) for name, size in tiers}
+
+
+def translatable_calls(source):
+    """Every `Component.translatable("key", arg, ...)` in a Java source, as (key, argument count).
+
+    Parsed rather than regexed because the pole's own tooltip nests one `Component.translatable`
+    inside another's arguments, and a regex that stops at the first `)` would read the inner call's
+    arguments as the outer call's.
+    """
+    calls = []
+    marker = "Component.translatable("
+    start = source.find(marker)
+    while start != -1:
+        i = start + len(marker)
+        depth, args, current = 1, [], []
+        while depth > 0:
+            char = source[i]
+            if char in "([":
+                depth += 1
+            elif char in ")]":
+                depth -= 1
+                if depth == 0:
+                    break
+            if char == "," and depth == 1:
+                args.append("".join(current).strip())
+                current = []
+            else:
+                current.append(char)
+            i += 1
+        args.append("".join(current).strip())
+        key = args[0].strip()
+        if key.startswith('"') and key.endswith('"'):
+            calls.append((key[1:-1], len(args) - 1))
+        start = source.find(marker, i)
+    return calls
 
 
 class PoleAssets(unittest.TestCase):
@@ -132,6 +171,35 @@ class PoleAssets(unittest.TestCase):
                     if entry.get("type") == "minecraft:item"
                 }
                 self.assertEqual({f"planetaryfactory:{name}"}, dropped)
+
+
+    def test_every_translation_key_the_pole_uses_exists(self):
+        # The pole is the only block in the pack that explains itself -- no cable to trace, no GUI,
+        # no recipe that hints at reach -- so a missing key here is not a cosmetic blemish. It ships
+        # the raw key where the explanation should be, and nothing logs it.
+        lang = json.loads((ASSETS / "lang" / "en_us.json").read_text(encoding="utf-8"))
+        for source in TRANSLATING_SOURCES:
+            for key, _ in translatable_calls(source.read_text(encoding="utf-8")):
+                if not key.startswith("tooltip.planetaryfactory."):
+                    continue
+                with self.subTest(source=source.name, key=key):
+                    self.assertIn(key, lang, f"{source.name} translates {key}, which has no entry")
+                    self.assertTrue(lang[key].strip(), f"{key} is blank")
+
+    def test_every_translation_key_takes_the_arguments_it_is_given(self):
+        # A key whose `%s` count disagrees with the Java crashes the client formatting it, at the
+        # moment a player hovers the item. Nothing at build time compares the two sides.
+        lang = json.loads((ASSETS / "lang" / "en_us.json").read_text(encoding="utf-8"))
+        for source in TRANSLATING_SOURCES:
+            for key, count in translatable_calls(source.read_text(encoding="utf-8")):
+                if key not in lang:
+                    continue  # the test above owns that failure
+                with self.subTest(source=source.name, key=key):
+                    self.assertEqual(
+                        lang[key].count("%s"), count,
+                        f"{key} takes {lang[key].count('%s')} arguments, "
+                        f"{source.name} passes {count}",
+                    )
 
 
 if __name__ == "__main__":

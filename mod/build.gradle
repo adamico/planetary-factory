@@ -58,12 +58,17 @@ def extractLdLib = tasks.register('extractLdLib', Copy) {
 }
 
 dependencies {
-    // EMI and JEI are here for the recipe-viewer lock annotation (issue #75). Both plugin
-    // classes are found by their own viewer's annotation scan and referenced from nowhere
-    // else in the mod, so neither jar is needed at runtime for the rest of it to load.
+    // EMI and JEI are here for the recipe-viewer lock annotation (issue #75), and Jade for the
+    // pole's live HUD line (#147). All three plugin classes are found by their own host's
+    // annotation scan and referenced from nowhere else in the mod, so none of the jars is needed
+    // at runtime for the rest of it to load.
+    //
+    // Jade's jar ships with a capital J, so the pattern carries both spellings rather than relying
+    // on a case-insensitive filesystem to paper over it.
     compileOnly fileTree(
             dir: rootProject.file('mods'),
-            include: ['gtceu-*.jar', 'researchd-*.jar', 'emi-*.jar', 'jei-*.jar'])
+            include: ['gtceu-*.jar', 'researchd-*.jar', 'emi-*.jar', 'jei-*.jar',
+                      'Jade-*.jar', 'jade-*.jar'])
     compileOnly fileTree(dir: layout.buildDirectory.dir('ldlib'), include: ['*.jar'])
             .builtBy(extractLdLib)
 

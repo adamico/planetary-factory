@@ -171,6 +171,72 @@ one on a platform above, without a pole quietly powering the floor below through
 deliberately much shallower than the horizontal reach, so the area still reads as a footprint on
 the ground.
 
+**Every clause of that paragraph assumes the pole stands on the floor it supplies, and #147 found
+that it need not.** A player mounting the pole on a stack of fences -- the obvious way to get a wire
+attachment point up into the air, and the thing Power Grid's catenary invites, since span is
+horizontal and height buys clearance -- lifts the supply area off the ground with it. Two blocks
+down from a pole on a five-block post reaches nothing.
+
+The defect is not that two is too small. It is that **the area was anchored to the pole block, and
+the pole block's height is a wiring decision while the supply area is a ground concept**. Two
+unrelated concerns were sharing one coordinate, and enlarging the number papers over it -- a pole
+on a twelve-block tower still fails, and a pole on the ground starts powering the basement.
+
+**So the pole becomes its own post.** A pole is a column: a base standing where the footprint
+belongs, and up to four extensions above it, added by right-clicking any segment with the same
+tier's pole item. **Only the base's block entity is ticked or consulted** -- the buffer, the
+receiver cache and the ledger are read from it and from nowhere else -- so a five-tall pole costs
+per tick exactly what a one-tall pole costs. The supply area is measured at the base, at any
+height, and `VERTICAL_RADIUS` stays two.
+
+Minecraft builds a block entity from the blockstate alone, with no view of the block below it, so
+an extension is given one whether or not it has any use for it. That is why the rule reads *only
+the base's is ticked or consulted* rather than *only the base has one*: the second is not available
+without storing the base/extension distinction in the blockstate, which is exactly what deriving it
+avoids. An extension's block entity holds an empty ledger that nothing reads.
+
+- **Whether a segment is a base is derived, never stored**: you are an extension if and only if the
+  block below you is a pole of the same tier. No blockstate property means no saved state that can
+  disagree with the world. The consequence -- two separate same-tier poles cannot be stacked
+  directly, because stacking *is* extension -- is the right reading rather than a limitation.
+- **Height buys nothing but wire height**, and it is available equally to every tier. That is what
+  keeps the footprint ladder one-dimensional: a height that scaled with tier would hand the
+  substation clearance the small pole cannot have, reopening the reach argument that dropped the
+  big pole four paragraphs up.
+- **The cap is five, and it is an ergonomics number, not a performance one.** Extensions do not
+  tick, so height is free. Five is what the rule *the whole pole is workable from the ground it
+  stands on* evaluates to: the top segment's face sits at y+4, within a player's reach, so the
+  Device Connector can be placed and wired without building scaffolding beside every pole and
+  tearing it down after.
+- **A base may be placed in mid-air**, with no support requirement. Floating one is a player
+  choosing where the footprint sits, and a support check would break placing a pole on a legitimate
+  platform.
+- **Breaking any segment drops the column above it, base included** -- chains, scaffolding and
+  Create's belts all behave this way, so the muscle memory exists.
+
+**The FE capability registers on the block, not on the block entity.** Power Grid's
+`BridgeElectricBehaviourImpl.makeFEHandler` -- read by disassembly, not assumed -- does
+`level.getCapability(Capabilities.EnergyStorage.BLOCK, pos.relative(facing), facing.getOpposite())`
+and requires `canReceive()`. It is a plain level lookup that never asks whether the target has a
+block entity. So an extension's provider walks down to the base and returns **the base's own
+`PoleEnergyStorage` object**: nothing flows through the shaft, and a segment is an address rather
+than a conduit. A Device Connector may attach at any height; the top is where it makes sense and
+nothing enforces that.
+
+The cost of this is one thing that must not be forgotten: NeoForge caches block capabilities per
+position and does not invalidate a block without a block entity on its own. Every segment needs
+`level.invalidateCapabilities(pos)` when the column changes -- on extend, on break, and on the base
+appearing or going -- or a connector keeps a handler pointing into a dead block entity, silently.
+
+**Nothing else in the pack says what a pole does.** There is no cable to trace, no GUI, and no
+recipe that hints at reach, so the mechanism is invisible by construction and the block is unusable
+without being told. The pole therefore ships its own legibility: three tooltip lines stating the
+footprint, that it powers machines with no wires, and that the area is measured at the base whatever
+the height -- plus a Jade line carrying the two live numbers a static tooltip cannot, the machine
+count in the area and this pole's delivered-against-demanded. Those two separate the only two
+failure modes a player cannot otherwise tell apart: *out of range* and *underfed*. An in-world
+overlay of the area remains worth building and is its own ticket.
+
 **A shortfall is shared out, not raced for.** When the area asks for more than the grid is giving,
 the pole water-fills: every machine gets an equal cut, and a machine whose demand is below that cut
 takes only what it asked for while its spare goes back to the machines that can still use it. The
