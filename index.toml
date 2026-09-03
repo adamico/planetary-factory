@@ -622,7 +622,7 @@ hash = "fa9ac3b4ef105fc49ea6301ad8f05f35cd076c5ce634eaec58ea414bd782fa6f"
 
 [[files]]
 file = "data/pack/category-map.json"
-hash = "8229a39ece8aea71d6b58234972998de331a6a9bdcce26cc5a5c493669c1c9b3"
+hash = "5970899b24a3a9e717111c32e012165bcb2102eb4bc9a4fd11377e3447abc3c9"
 
 [[files]]
 file = "data/pack/item-map.json"
@@ -714,7 +714,7 @@ hash = "29164eb82d87037838018b501fec02ff573ee0aad9ebade8bc0f31035c433086"
 
 [[files]]
 file = "kubejs/assets/planetaryfactory/lang/en_us.json"
-hash = "1808806fb396cf75a0660c33ab54224f4888bca15356ecdde1216ac7d232fb04"
+hash = "23872a13042699deabcb624b14a5cda656f8b3c4389562420f79a461b49b10de"
 
 [[files]]
 file = "kubejs/assets/planetaryfactory/models/block/jellystem_sapling.json"
@@ -838,7 +838,7 @@ hash = "e00a67922942660d77c213379b5128a46c5abc894178b0be04006d325ff5f6b3"
 
 [[files]]
 file = "kubejs/config/probe-settings.json"
-hash = "4ab12b6f56f06dad20def95f873db9b14e5f5f386e12481b76da16d4498e816e"
+hash = "9f6a9685ff9bbd714b2fc53ba43efd60c878bc886dc51d79856abe965c0bcf5e"
 
 [[files]]
 file = "kubejs/config/web_server.json"

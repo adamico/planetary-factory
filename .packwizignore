@@ -116,3 +116,4 @@ __pycache__/
 *.jar.disabled
 *.jar.meta
 mods/.replaced/
+.rtk/
