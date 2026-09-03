@@ -6,9 +6,11 @@ import dev.emi.emi.api.recipe.EmiPlayerInventory;
 import dev.emi.emi.api.recipe.EmiRecipe;
 import dev.emi.emi.api.recipe.handler.EmiCraftContext;
 import dev.emi.emi.api.recipe.handler.EmiRecipeHandler;
+import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 /**
@@ -33,9 +35,22 @@ import net.neoforged.neoforge.network.PacketDistributor;
  */
 public final class PersonalAssemblerEmiHandler implements EmiRecipeHandler<AssemblerPanelMenu> {
 
+    /**
+     * The player's stacks, built here rather than asked for.
+     *
+     * <p>{@code EmiPlayerInventory.of(player)} would be the obvious call and is a stack overflow:
+     * read out of the jar, {@code of} is EMI's <em>dispatcher</em> -- it looks up the handlers
+     * registered for the currently open screen and returns {@code handlers.get(0).getInventory(...)},
+     * which is this method. It only reaches {@code new EmiPlayerInventory(player)} when no handler is
+     * registered at all, so it works everywhere except inside a handler.
+     *
+     * <p>It crashes the moment the panel opens, not on a button press: EMI builds the inventory to
+     * work out what is craftable as soon as a screen with a handler comes up.
+     */
     @Override
     public EmiPlayerInventory getInventory(AbstractContainerScreen<AssemblerPanelMenu> screen) {
-        return EmiPlayerInventory.of(Minecraft.getInstance().player);
+        Player player = Minecraft.getInstance().player;
+        return player == null ? new EmiPlayerInventory(List.of()) : new EmiPlayerInventory(player);
     }
 
     /**
