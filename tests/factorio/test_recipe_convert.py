@@ -86,7 +86,7 @@ def mod_registered_items():
     that is to weaken the check, which is the one thing it must not do.
     """
     return {f"planetaryfactory:{name}" for name in re.findall(
-        r'ITEMS\.registerSimpleItem\(\s*"([a-z0-9_]+)"', PF_ITEMS.read_text(encoding="utf-8"))}
+        r'ITEMS\.register(?:SimpleItem)?\(\s*"([a-z0-9_]+)"', PF_ITEMS.read_text(encoding="utf-8"))}
 
 
 def first_party_items():

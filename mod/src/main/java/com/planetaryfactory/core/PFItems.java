@@ -3,6 +3,7 @@ package com.planetaryfactory.core;
 import com.planetaryfactory.core.energy.PoleTier;
 import com.planetaryfactory.core.energy.SupplyAreaPoleItem;
 import com.planetaryfactory.core.fluid.BarrelFluidHandler;
+import com.planetaryfactory.core.fluid.BarrelItem;
 import com.planetaryfactory.core.fluid.BarrelSpec;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
@@ -40,9 +41,13 @@ public final class PFItems {
      * <p>Both numbers are Factorio's and neither is tunable here -- see {@link BarrelSpec}. Filling
      * and emptying are Create's Spout and Item Drain, natively and with no recipes at all, because
      * both key on the fluid capability this item carries (#93).
+     *
+     * <p>{@link BarrelItem}, not a plain {@link Item}: a filled and an empty barrel are otherwise
+     * identical in the inventory, and the fluid a barrel carries is not a decoration but the reason
+     * to hold one over another.
      */
-    public static final DeferredHolder<Item, Item> BARREL = ITEMS.registerSimpleItem(
-            "barrel", new Item.Properties().stacksTo(BarrelSpec.STACK_SIZE));
+    public static final DeferredHolder<Item, Item> BARREL = ITEMS.register(
+            "barrel", () -> new BarrelItem(new Item.Properties().stacksTo(BarrelSpec.STACK_SIZE)));
 
     static {
         NATURAL.add(ITEMS.registerSimpleBlockItem(PFBlocks.YUMAKO_SAPLING));
