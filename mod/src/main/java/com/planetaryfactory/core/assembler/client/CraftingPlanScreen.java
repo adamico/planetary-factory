@@ -53,10 +53,13 @@ public final class CraftingPlanScreen extends AssemblerScreen<CraftingPlanMenu> 
         column(graphics, leftPos + 8 + width, "missing", display.missing(), ChatFormatting.RED, width);
         column(graphics, leftPos + 8 + 2 * width, "locked", display.locked(), ChatFormatting.GOLD, width);
         if (!display.complete()) {
+            // Its own line above the buttons, not beside them: the reason a plan cannot start is a
+            // translated sentence of unknown width, and sharing the row with Start and Back means
+            // the longest translation is the one that gets cut in half.
             graphics.drawString(font,
                     Component.translatable("planetaryfactory_core.assembler.incomplete")
                             .withStyle(ChatFormatting.RED),
-                    leftPos + 8, topPos + imageHeight - 22, 0xFF5555, false);
+                    leftPos + 8, topPos + imageHeight - 38, 0xFF5555, false);
         }
     }
 
