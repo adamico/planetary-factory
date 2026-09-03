@@ -159,7 +159,11 @@ Sub-rules:
 Sub-rules:
 
 - **Barrelling and unbarrelling** — `shipped` as `native_mechanic`; `subgroup-owner.json`'s barrel
-  shelves emit nothing because the mechanic already works (#93).
+  shelves emit nothing because the mechanic already works (#93). The container is
+  `planetaryfactory:barrel` (ADR-0037), pack-registered at Factorio's 50 units — 50 mB under the
+  converter's 1:1 rule — stacking to 10. **Factorio's fluid restriction is not ported**: the barrel
+  accepts any fluid, because that list is a content budget for nine items and eighteen recipes, and
+  the pack has one container and none.
 - **Underground pipes** — `excluded`. The same argument as underground belts, one level up: a
   Create pipe routes freely in three dimensions, so the crossing problem Factorio's pipe-to-ground
   exists to solve does not arise, and `create:encased_fluid_pipe` is decoration rather than a

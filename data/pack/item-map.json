@@ -80,7 +80,7 @@
     },
     "barrel": {
       "status": "undecided",
-      "note": "#93 left the container this maps onto to this ticket, and ADR-0035 took Mekanism's portable tank out of the running. Terra's fluid handling is #106's.",
+      "note": "DECIDED BY ADR-0037, NOT YET FLIPPED. The container is `planetaryfactory:barrel`, pack-registered in `planetaryfactory_core` as an `IFluidHandlerItem`: 50 mB -- Factorio's 50 units under the converter's 1:1 fluid rule -- stacking to 10, accepting any fluid. The row stays `undecided` only because flipping it makes the converter emit `assembling/barrel`, whose output item does not exist until the mod work lands; the flip, the item and the converter re-run are one change (#106).",
       "ticket": 106
     },
     "battery": {
@@ -105,10 +105,8 @@
       "ticket": 118
     },
     "big-electric-pole": {
-      "kind": "item",
-      "target": "planetaryfactory:big_electric_pole",
-      "source": "authored",
-      "note": "ADR-0036's supply-area pole, registered in `planetaryfactory_core` by #147. A tier is a footprint and nothing else -- it grants no voltage and changes nothing a machine receives -- so the four sit on one shelf with one process. The supply areas are Factorio's own, big pole included, which covers LESS ground than the medium one because in Factorio it buys wire reach the pack has no use for."
+      "status": "not_emitted",
+      "note": "Dropped by #147 on building the pole. A tier here is a supply footprint and nothing else: Factorio's big pole justifies its 4x4 area -- smaller than the medium pole's 7x7 -- by buying 30 tiles of wire reach, and the pack has no reach to sell. Power Grid owns transmission with catenary whose span is a property of the wire, not of the pole it hangs on, so the big pole would ship as a strictly worse medium pole. The remaining three are 5x5, 7x7 and 18x18, Factorio's own numbers. Recorded as `adapted` in docs/factorio-mechanics.md."
     },
     "boiler": {
       "status": "undecided",
@@ -228,7 +226,7 @@
     },
     "crude-oil-barrel": {
       "status": "native_mechanic",
-      "note": "One container, filled by Create's Spout and drained by its Item Drain (#93). Which container is the same question as `barrel`, and is #106's."
+      "note": "One container, filled by Create's Spout and drained by its Item Drain (#93). The container is `planetaryfactory:barrel` (ADR-0037)."
     },
     "crusher": {
       "status": "undecided",
@@ -333,7 +331,7 @@
     },
     "fluoroketone-cold-barrel": {
       "status": "native_mechanic",
-      "note": "One container, filled by Create's Spout and drained by its Item Drain (#93). Which container is the same question as `barrel`, and is #106's."
+      "note": "One container, filled by Create's Spout and drained by its Item Drain (#93). The container is `planetaryfactory:barrel` (ADR-0037)."
     },
     "fluoroketone-hot": {
       "status": "not_emitted",
@@ -341,7 +339,7 @@
     },
     "fluoroketone-hot-barrel": {
       "status": "native_mechanic",
-      "note": "One container, filled by Create's Spout and drained by its Item Drain (#93). Which container is the same question as `barrel`, and is #106's."
+      "note": "One container, filled by Create's Spout and drained by its Item Drain (#93). The container is `planetaryfactory:barrel` (ADR-0037)."
     },
     "flying-robot-frame": {
       "status": "undecided",
@@ -392,7 +390,7 @@
     },
     "heavy-oil-barrel": {
       "status": "native_mechanic",
-      "note": "One container, filled by Create's Spout and drained by its Item Drain (#93). Which container is the same question as `barrel`, and is #106's."
+      "note": "One container, filled by Create's Spout and drained by its Item Drain (#93). The container is `planetaryfactory:barrel` (ADR-0037)."
     },
     "ice": {
       "status": "undecided",
@@ -456,7 +454,7 @@
     },
     "light-oil-barrel": {
       "status": "native_mechanic",
-      "note": "One container, filled by Create's Spout and drained by its Item Drain (#93). Which container is the same question as `barrel`, and is #106's."
+      "note": "One container, filled by Create's Spout and drained by its Item Drain (#93). The container is `planetaryfactory:barrel` (ADR-0037)."
     },
     "locomotive": {
       "status": "undecided",
@@ -496,7 +494,7 @@
     },
     "lubricant-barrel": {
       "status": "native_mechanic",
-      "note": "One container, filled by Create's Spout and drained by its Item Drain (#93). Which container is the same question as `barrel`, and is #106's."
+      "note": "One container, filled by Create's Spout and drained by its Item Drain (#93). The container is `planetaryfactory:barrel` (ADR-0037)."
     },
     "medium-electric-pole": {
       "kind": "item",
@@ -563,7 +561,7 @@
     },
     "petroleum-gas-barrel": {
       "status": "native_mechanic",
-      "note": "One container, filled by Create's Spout and drained by its Item Drain (#93). Which container is the same question as `barrel`, and is #106's."
+      "note": "One container, filled by Create's Spout and drained by its Item Drain (#93). The container is `planetaryfactory:barrel` (ADR-0037)."
     },
     "piercing-rounds-magazine": {
       "status": "undecided",
@@ -848,7 +846,7 @@
     },
     "sulfuric-acid-barrel": {
       "status": "native_mechanic",
-      "note": "One container, filled by Create's Spout and drained by its Item Drain (#93). Which container is the same question as `barrel`, and is #106's."
+      "note": "One container, filled by Create's Spout and drained by its Item Drain (#93). The container is `planetaryfactory:barrel` (ADR-0037)."
     },
     "train-stop": {
       "kind": "item",
@@ -899,7 +897,7 @@
     },
     "water-barrel": {
       "status": "native_mechanic",
-      "note": "One container, filled by Create's Spout and drained by its Item Drain (#93). Which container is the same question as `barrel`, and is #106's."
+      "note": "One container, filled by Create's Spout and drained by its Item Drain (#93). The container is `planetaryfactory:barrel` (ADR-0037)."
     },
     "wood": {
       "kind": "tag",

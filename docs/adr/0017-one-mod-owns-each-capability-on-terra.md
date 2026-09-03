@@ -58,7 +58,7 @@ crafting surface named too. Late is not an argument for shipping something nobod
 | Item logistics | **Create** (belts, chutes, trains) | Mekanism Logistical Transporters recipe-removed *(removed with the mod instead, ADR-0035)*; GT item pipes and covers removed with the power layer |
 | Fluid logistics | **Create** (fluid pipes, pumps) — *amended by #101; this row read "Mekanism (Mechanical Pipes)" and kept Create's pipes as a hand-placed exception* | Mekanism Mechanical Pipes **recipe-removed** *(removed with the mod instead, ADR-0035)* |
 | Bulk storage (item) | **Create** (Item Vault) | Mekanism Bins and QIO **cut** *(removed with the mod instead, ADR-0035)*; GT quantum chests removed |
-| Bulk storage (fluid) | **Create** (Fluid Tanks) — *amended by #101; this row read "Mekanism (Dynamic Tank)"* | Mekanism Dynamic Tank **recipe-removed** *(removed with the mod instead, ADR-0035)*; GT quantum tanks removed |
+| Bulk storage (fluid) | **Create** (Fluid Tank) — *amended by #101; this row read "Mekanism (Dynamic Tank)". #106 objected that #101 named "Fluid Tanks" without a block being named by anyone, and ADR-0037 argues the row: Create's tank is 8 000 mB per block against Factorio's 25 000-unit storage tank, so **three blocks are one Factorio tank** — a multiblock, so the gap is paid in build effort rather than lost capacity* | Mekanism Dynamic Tank **recipe-removed** *(removed with the mod instead, ADR-0035)*; GT quantum tanks removed |
 | Oil processing | **The pack** — a registered **Oil Refinery** on a GT chassis (ADR-0025) | GT Distillation Tower and Distillery **recipe-removed on Terra**; Create: Petrochem and Create: Diesel Generators declined |
 | Chemistry | **The pack** — a registered **Chemical Plant** on a GT chassis (ADR-0025), carrying Factorio's whole chemical-plant list | ~~Mekanism keeps chemistry only where the oil chapter does not reach it~~ *(ADR-0035: there is no Mekanism chemistry left to reach)*; GT's chem line is not Terra's |
 | Refining | **The pack** (ADR-0025) — *this row was "Mekanism, by pack-authored recipes on machines it owns" and was written without checking that Mekanism can express the recipe. It cannot: advanced oil processing is two fluids in and three out, and no Mekanism machine has that shape.* | as above |
@@ -277,8 +277,11 @@ This is the fourth time the table has been corrected in the same direction — a
 checking the shape of what it actually has to do. The Refining row, the barrel shelf, the Power
 generation row (all recorded under #93 above), and now this one.
 
-**Bulk storage (fluid) moves with it.** Create's Fluid Tanks own it and the Dynamic Tank is
-recipe-removed. Both fluid rows are Create's, so unlike the item rows — where Create owns logistics
+**Bulk storage (fluid) moves with it.** Create's Fluid Tank owns it and the Dynamic Tank is
+recipe-removed. *ADR-0037 supplies the capacity argument this paragraph did not make, and adds the
+container that ADR-0035 left vacant: Factorio's barrel is `planetaryfactory:barrel`, 50 mB, which is
+1:160 against a tank block where Factorio's own ratio is 1:500 — no quantity of barrels is a cheaper
+tank.* Both fluid rows are Create's, so unlike the item rows — where Create owns logistics
 and Create owns bulk storage too — there is no seam here to get wrong: **Mekanism has no fluid role
 on Terra at all.** It keeps power distribution, energy storage, ore processing from rung 1 and the
 chemistry the oil chapter does not reach; none of those is a fluid capability.

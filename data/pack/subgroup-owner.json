@@ -131,10 +131,12 @@
         "container collapses them to one. That is a real divergence from ADR-0021's axis, and it is taken",
         "because the mechanic it buys is native, free and the one Factorio's barrel exists to provide.",
         "",
-        "The container is not the process: the Spout fills whatever container the item map names, which",
-        "carries far more per item than a vanilla bucket. THIS READ `a Mekanism portable tank` UNTIL",
-        "ADR-0035 took the mod out; which container the `barrel` item maps to is #87's item map, not",
-        "this file's routing."
+        "The container is not the process: the Spout fills whatever container the item map names. THIS",
+        "READ `a Mekanism portable tank` UNTIL ADR-0035 took the mod out, and the vacancy is filled by",
+        "ADR-0037: `planetaryfactory:barrel`, pack-registered, 50 mB and stacking to 10. Note that it",
+        "carries LESS per item than a vanilla bucket, not more -- 50 mB is Factorio's 50 units under the",
+        "converter's 1:1 rule, and the barrel is meant to be bad at storage. Which container the `barrel`",
+        "item maps to is still #87's item map, not this file's routing."
       ],
       "count": 9
     },
@@ -234,11 +236,11 @@
     },
     "logistics/energy-pipe-distribution": {
       "owner": "split",
-      "reason": "The shelf straddles ADR-0017's transmission/fluid-handling seam -- Factorio files poles and pipes together because both carry stuff between machines; the pack does not. The pipes moved from `mekanism` to `create` with #101's amendment to ADR-0017. The four poles were `electro`, on the assumption that in-area distribution was a grid mod's to own; ADR-0036 made it the pack's own block and #147 built it, so they are `pack` and the seam now runs between the pack's poles and Create's pipes.",
+      "reason": "The shelf straddles ADR-0017's transmission/fluid-handling seam -- Factorio files poles and pipes together because both carry stuff between machines; the pack does not. The pipes moved from `mekanism` to `create` with #101's amendment to ADR-0017. The poles were `electro`, on the assumption that in-area distribution was a grid mod's to own; ADR-0036 made it the pack's own block and #147 built it, so they are `pack` and the seam now runs between the pack's poles and Create's pipes. `big-electric-pole` is `not_emitted`: #147 dropped the tier, which in Factorio pays for its small area with wire reach the pack's catenary does not price.",
       "per_recipe": {
         "small-electric-pole": "pack:assembling",
         "medium-electric-pole": "pack:assembling",
-        "big-electric-pole": "pack:assembling",
+        "big-electric-pole": "not_emitted",
         "substation": "pack:assembling",
         "pipe": "create / pack:assembling",
         "pipe-to-ground": "not_emitted",
