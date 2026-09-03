@@ -27,7 +27,7 @@
     "electromagnetics": "!fulgora",
     "recycling": "!fulgora",
     "captive-spawner-process": "!gleba",
-    "hand-crafting": "personal_assembler",
+    "hand-crafting": "!the-character-declares-it-and-no-recipe-carries-it",
     "parameters": "!blueprint-ui-scaffolding"
   },
   "machines": {
@@ -56,10 +56,6 @@
       "recipe_type": null,
       "note": "The Rocket Part. #29 and #41 settle what a launch consumes; the silo is GCyR's.",
       "blocked_by": 41
-    },
-    "personal_assembler": {
-      "recipe_type": null,
-      "note": "GDD §5's bootstrap surface, delivery step 11. In scope for the spec, not for this build."
     }
   }
 }

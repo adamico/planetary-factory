@@ -162,8 +162,24 @@ _Avoid_: abstraction, going virtual
 ### Making things
 
 **Personal Assembler**:
-A permanent panel on the vanilla inventory screen that turns a hand-craft into a queued request completing after a duration. It is a surface, not a machine, but it carries its own recipe type: KubeJS cannot register one on 1.21.1, so the type, menu, screen and queue are Java in `planetaryfactory_core` (`#96`). It runs Factorio's `hand-crafting` category at speed 1, serially (ADR-0029). It **replaces** the crafting grid, which the pack removes (`#90`), and is the player's hand-crafting surface for the whole run rather than a bootstrap crutch — every fluid-free `crafting` recipe reaches it (`#88`, `#95`). The panel is always present and always full: it is taught by the opening, never granted by it (`#100`).
+The permanent panel on the inventory screen that is the player's only hand-crafting surface. It is a surface, not a machine, and has no recipe type of its own: it runs the **Assembling Machine**'s recipes that Factorio marks hand-craftable — first category `crafting`, minus the eleven Factorio withholds (`#88`) — at speed 1, serially (ADR-0029). It **replaces** the crafting grid, which the pack removes (`#90`), and crafts nothing by hand directly: every craft is a **Crafting Plan** (ADR-0038). The panel is always present and always full: it is taught by the opening, never granted by it (`#100`).
 _Avoid_: hand crafter, personal crafter, portable crafter
+
+**Crafting Plan**:
+The resolved, flattened tree of crafts the Personal Assembler produces when an amount is chosen, and the unit in which the player commits, cancels and is refunded. It names every intermediate it will make, every ingredient the player lacks and every recipe the team has not researched; it is paid for in full when it starts and is never re-resolved (ADR-0038).
+_Avoid_: crafting job, batch, order
+
+**Assembler queue**:
+The serial list of Crafting Plans awaiting execution. One plan runs at a time, and a plan whose finished craft cannot fit in the player's inventory pauses and stops the whole queue rather than dropping anything.
+_Avoid_: crafting queue, backlog
+
+**Missing ingredient**:
+A leaf of a Crafting Plan the player does not have and the Assembler cannot make — it is mined, smelted or machine-made. Distinct from **Locked**, which the player cannot make *yet*: the two demand different actions, so the plan names them separately.
+_Avoid_: shortfall, unavailable
+
+**Locked**:
+A recipe inside a Crafting Plan that the team has not researched. The resolver plans only through unlocked recipes, so a locked intermediate stops a plan exactly as a missing ingredient does, for a reason the player fixes with research rather than with mining.
+_Avoid_: unavailable recipe, gated
 
 **Assembling Machine**:
 One of the three machines the pack registers on a GregTech chassis to run Factorio's crafting recipes — `assembling_machine_1`, `_2` and `_3`, differing by speed and tint only, each granted by a science rung and gating nothing (ADR-0026). Not GregTech's Assembler, whose craft the pack removes.

@@ -194,33 +194,44 @@ puzzle belongs to that body and is specified with it, not here.
 
 ### The Personal Assembler
 
-A permanent panel on the vanilla inventory screen. It is the player's hand-crafting surface for the
-whole run, not a bootstrap crutch: the crafting grid is gone, and every fluid-free `crafting` recipe
-reaches it (`#88`, `#95`). It is not an item — there is nothing to craft, nothing to lose and nothing
-to grant. Hand-crafting stops being how you *produce* long before it stops being available, which is
-a pacing outcome rather than a removed feature.
+A permanent panel on the vanilla inventory screen, and the player's only hand-crafting surface. The
+crafting grid is gone and every fluid-free `crafting` recipe reaches the Assembler instead (`#88`,
+`#95`). It is not an item — there is nothing to craft, nothing to lose and nothing to grant.
+Hand-crafting stops being how you *produce* long before it stops being available, which is a pacing
+outcome rather than a removed feature.
 
-- **Trigger** — A tab on the inventory screen, present from the first tick (`#95`).
-- **Recipes** — Factorio's `hand-crafting` category, routed by `data/pack/category-map.json`, against
-  the Assembler's **own recipe type**. KubeJS cannot register a `RecipeType` on 1.21.1 and ScreenJS is
-  dead, so the type, `MenuType`, screen, queue and its persistence are Java in `planetaryfactory_core`,
-  with KubeJS authoring recipes against the registered type (`#96`, ADR-0015). The screen is a vanilla
-  `AbstractContainerScreen`, not FTB Library, which is All Rights Reserved with a CLA and no KubeJS
-  screen binding.
-- **Rate** — Speed 1, one entry at a time, durations `energy_required × 20` unmodified (ADR-0029). The
-  slowness is the serial queue, not a penalty multiplier.
-- **Queue** — A real multi-entry queue on a player data attachment, ticked server-side whether or not
-  the screen is open, and surviving logout. Ingredients are consumed at queue time and refunded in
-  full on cancel, Factorio's rule: the cost is legible at the moment of commitment, and each entry is
-  self-contained, so logout persistence has nothing to re-validate on login.
-- **Browsing** — There is none of ours. The panel is queue-and-slots only; recipes enter the queue
-  through an **EMI recipe transfer handler**, which is what keeps it small enough to live on the
-  inventory screen. **EMI is therefore a hard requirement of the pack** — a client-side mod is
-  load-bearing for a core verb, acceptable in a curated pack with a fixed manifest, and recorded here
-  so it does not read as an accident later. JEI stays; EMI being the transfer target does not
-  displace it.
-- **The 2x2 grid is removed**, server-guarded, and the vanilla recipe book goes with it. A 2x2 that
-  still works teaches that queued crafting is optional.
+It is a **planner, not a queue** (ADR-0038). Factorio's hand-crafting chain-crafts — request a recipe
+whose ingredients you lack and the sub-crafts are queued for you — and that, not the timer, is what
+separates the hand from an assembling machine. The interaction is Applied Energistics 2's
+autocrafting shape, simplified:
+
+1. The inventory is open, so the panel is open. EMI offers **Fill Recipe** only for the screen
+   currently open, so there is no craft-from-anywhere path.
+2. In EMI: search the item, `R` for its recipes, choose one, press **`+` Fill Recipe**.
+3. **Select Amount** — `x1`, `x5`, `all`, and a typed field. `all` is the largest count whose complete
+   plan the player's inventory covers.
+4. **Crafting Plan** — the whole tree, flattened: `To Craft` for intermediates it will make, `Missing`
+   for what must be mined or smelted, `Locked` for what the team has not researched.
+5. **Start**, refused unless the plan is complete.
+
+Start takes the plan's entire raw cost at once and flattens it into an ordered list of crafts; the
+plan is never re-resolved. Plans run **serially**, at speed 1 with durations `energy_required × 20`
+unmodified (ADR-0029) — the slowness is the serial queue, not a multiplier. A finished craft that
+cannot fit in the inventory **pauses the head and stops the queue**; nothing is dropped. Cancelling
+takes the plan as its unit and refunds its remaining reservation plus any intermediates already made.
+
+It has **no recipe type of its own** — the hand-craftable set is a predicate over Assembling Machine
+1's recipes, so one emitted recipe serves both surfaces. What is Java in `planetaryfactory_core` is
+the mechanism: the `MenuType`, the screen, the resolver, the queue and its persistence on a player
+data attachment, ticked server-side and surviving logout. KubeJS cannot do this on 1.21.1 and
+ScreenJS is dead (`#96`, ADR-0015). The screen is a vanilla `AbstractContainerScreen`, not FTB
+Library, which is All Rights Reserved with a CLA and no KubeJS screen binding.
+
+**EMI is a hard requirement of the pack.** The panel has no recipe browser of its own — a client-side
+mod is load-bearing for a core verb, which is acceptable in a curated pack with a fixed manifest and
+is recorded here so it does not read as an accident later. JEI stays; EMI being the transfer target
+does not displace it. The **2x2 grid is removed**, server-guarded, and the vanilla recipe book goes
+with it (`#140`): a 2x2 that still works teaches that planned crafting is optional.
 
 It is unpowered, works anywhere, and is deliberately slow. Because it can never be missing, the
 opening's job is to **teach** it — Terra's wreckage and the quest book's tooltip hint, not a grant

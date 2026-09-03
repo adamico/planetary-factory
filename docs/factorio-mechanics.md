@@ -241,26 +241,31 @@ Sub-rules:
 
 - **verdict**: `planned`
 - **where**: all bodies
-- **via**: a mod of its own, not yet written
-- **owner**: `docs/gdd.md` §5
-- **ticket**: #98, #99, #100
+- **via**: `planetaryfactory_core`
+- **owner**: ADR-0038, `docs/gdd.md` §5
+- **ticket**: #160, #161, #99, #100
 
-The crafting grid stays, so early handcrafting is instant rather than queued. Factorio's *queue* —
-select a recipe, wait, collect — survives only as the Personal Assembler's bootstrap tier, covering
-the components of the first machines: the things with nowhere to go once their recipes leave the grid
-and before any machine exists to make them.
+The crafting grid is removed (#90) and the Personal Assembler replaces it permanently (#95) — it is
+the player's only hand-crafting surface, not a bootstrap crutch, and every fluid-free `crafting`
+recipe reaches it (#88).
 
-**The Assembler ships as its own mod**, not as pack scripting. Note that `docs/gdd.md` §5 still
-describes it as a KubeJS implementation — an FTB Library UI, a `persistentData` queue and a
-`PlayerEvents.tick` engine — and ADR-0015's ownership table decides where pack content lives. Moving
-it to a mod is a decision neither document records yet.
+**Chain-crafting is the mechanic, not the timer.** Factorio's wiki names it as what separates the
+hand from an assembling machine: request a recipe whose ingredients you lack and the sub-crafts are
+queued for you. The pack reproduces it as a resolved **Crafting Plan** on Applied Energistics 2's
+autocrafting shape — an amount dialog, then a flattened plan naming every intermediate and every
+shortfall, then one commitment that pays the whole cost (ADR-0038). Two departures from Factorio are
+deliberate and recorded there: cancellation takes the plan as its unit, and a plan with a missing
+ingredient cannot be started.
 
-**The queue's slowness is serial, not a multiplier.** The character prototype sets no
-`crafting_speed` at all -- it is not a crafting machine -- so Factorio hand-crafting runs at exactly
-`energy_required` seconds. What makes it slow is that the queue is serial: one craft at a time, no
-modules, no parallelism. `#95` already gave the Personal Assembler a timed queue, so the pack
-reproduces the mechanism rather than approximating it with a penalty, and ADR-0029 gives the
-Assembler speed 1 with durations of `energy_required x 20` unmodified.
+**The Assembler ships in `planetaryfactory_core`**, not as pack scripting: KubeJS cannot register a
+menu or a screen on 1.21.1 (#96, ADR-0015). It has no recipe type of its own — the hand-craftable set
+is a predicate over Assembling Machine 1's recipes (#88), so one emitted recipe serves both surfaces.
+
+**The queue's slowness is serial, not a multiplier.** The character prototype sets no `crafting_speed`
+at all -- it is not a crafting machine -- so Factorio hand-crafting runs at exactly `energy_required`
+seconds. What makes it slow is that the queue is serial: one plan at a time, no modules, no
+parallelism. The pack reproduces the mechanism rather than approximating it with a penalty, and
+ADR-0029 gives the Assembler speed 1 with durations of `energy_required x 20` unmodified.
 
 ### Transport belts
 
