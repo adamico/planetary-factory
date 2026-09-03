@@ -51,6 +51,19 @@ model to texture. The two builders land in different namespaces, so the lang ass
 cosmetic. Run it after editing that script, the category map or the machine lang files. Whether a
 machine's GUI and pattern behave is a world load, not a static check.
 
+### Assembler queue check
+
+`mod/src/test/java/com/planetaryfactory/core/assembler/` asserts the Personal Assembler's queue:
+Start takes the whole raw cost at once, a chain runs its steps in order and delivers only what no
+remaining step needs, cancelling refunds the unspent reservation plus the intermediates already made,
+a craft that will not fit pauses the head instead of dropping, and a paused head stops the plans
+behind it. `AssemblerCodecsTest` is the data attachment's round trip, which ADR-0038 asks for by
+name — a codec that drops a field does not crash, it returns a queue that silently emptied over a
+logout. Both are `./gradlew :planetaryfactory_core:test` with no game launch: the queue names items by
+string and its codec is DataFixerUpper's rather than Minecraft's, which is what keeps them checkable.
+Run them after editing anything under `core/assembler/`. Whether EMI's Fill Recipe reaches the panel
+and a plan delivers is a world load, not a static check.
+
 ### Starting-area geometry check
 
 `tests/worldgen/test_start_geometry.py` asserts Terra's starting area can actually deal all three

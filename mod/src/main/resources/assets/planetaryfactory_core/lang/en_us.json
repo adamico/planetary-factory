@@ -3,5 +3,21 @@
   "planetaryfactory_core.recipe_viewer.locked_badge": "!",
   "planetaryfactory_core.recipe_viewer.locked": "Locked by research",
   "planetaryfactory_core.recipe_viewer.locked_by": "Complete: %s",
-  "planetaryfactory_core.recipe_viewer.locked_by_unknown": "The research that unlocks it is unknown"
+  "planetaryfactory_core.recipe_viewer.locked_by_unknown": "The research that unlocks it is unknown",
+  "planetaryfactory_core.assembler.panel": "Personal Assembler",
+  "planetaryfactory_core.assembler.tab": "Assembler",
+  "planetaryfactory_core.assembler.tab.tooltip": "Your crafting queue. Open it, then pick a recipe in EMI.",
+  "planetaryfactory_core.assembler.queue_empty": "Nothing queued",
+  "planetaryfactory_core.assembler.paused": "Paused: no room for the finished craft",
+  "planetaryfactory_core.assembler.select_amount": "Select Amount",
+  "planetaryfactory_core.assembler.all": "all",
+  "planetaryfactory_core.assembler.amount": "Amount",
+  "planetaryfactory_core.assembler.plan": "Crafting Plan",
+  "planetaryfactory_core.assembler.to_craft": "To Craft",
+  "planetaryfactory_core.assembler.missing": "Missing",
+  "planetaryfactory_core.assembler.locked": "Locked",
+  "planetaryfactory_core.assembler.start": "Start",
+  "planetaryfactory_core.assembler.back": "Back",
+  "planetaryfactory_core.assembler.incomplete": "This plan is incomplete and cannot be started",
+  "planetaryfactory_core.assembler.show_plan": "Show Plan"
 }

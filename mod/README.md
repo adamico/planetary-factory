@@ -27,6 +27,19 @@ API in this pack exposes:
   research (issue #79). The answer is derived from the machine's current contents at the moment of
   asking and never stored; ADR-0027 is why the refusal cannot speak for itself, and #76 is what the
   stored alternative costs.
+- **The Personal Assembler** — the panel, its two server-opened dialogs, the packets between them
+  and the serial queue behind all three (ADR-0038, #160). The panel carries the player's own
+  inventory, so it stands in for the inventory screen while it is open. It is here for the bluntest reason in
+  ADR-0015's table: KubeJS cannot register a `MenuType` or a `Screen` on 1.21.1 at all (#96). The
+  split inside the package is the one the testing policy asks for — `AssemblerQueue`, `CraftingPlan`
+  and everything they touch name items by string and hold no Minecraft type, so the reservation, the
+  refund and the pause are unit-tested, and so is the attachment's codec, which is DataFixerUpper's
+  rather than Minecraft's for exactly that reason; `InventoryPlayerItems` is the single class where an
+  item id becomes an `ItemStack`. The resolver that fills a plan is #161's, and `PlanSource` is the seam it
+  replaces. EMI's fill button reaches the panel from `compat/emi`, implementing `EmiRecipeHandler`
+  directly rather than `StandardRecipeHandler`, whose default `canCraft` would grey the button out
+  precisely when the plan has something to say.
+
 - **The lock annotation** — a recipe the viewing team has not researched is marked in both recipe
   viewers, from `compat/emi` and `compat/jei` over the shared `research/client` note (issue #75).
   JEI is a plugin its own annotation scan discovers. EMI is a mixin instead: its decorator API
@@ -90,8 +103,9 @@ crashing obscurely. When the pack's NeoForge build moves, move `neoforge_version
 JUnit 5, run on a plain JVM. This is the pack's "this pack logic computes something" row in
 [what to check](../docs/testing/what-to-check.md), and it covers exactly that: `research/` holds the
 recipe-to-research index, the lock-bypass dedupe, the retry that keeps a locked machine ticking, the
-viewer's lock lookup and the idle machine's derived status, and all of them are written free of any
-Minecraft type so the check needs no game. What touches Minecraft is glue that
+viewer's lock lookup and the idle machine's derived status, plus `assembler/` — the Assembler queue's
+reservation, its serial execution, its refund on cancel and its pause on a full inventory — and all of
+them are written free of any Minecraft type so the check needs no game. What touches Minecraft is glue that
 holds no rules — `ResearchLocks`, `research/client` and the two viewers' compat code — and it is the
 "looks or feels right" row instead: checked by a human on delivery. Registration — blocks, items, trees — still has nothing to assert that
 the game does not assert louder at startup, and gets no test.

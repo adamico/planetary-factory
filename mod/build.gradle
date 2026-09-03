@@ -72,6 +72,12 @@ dependencies {
     compileOnly fileTree(dir: layout.buildDirectory.dir('ldlib'), include: ['*.jar'])
             .builtBy(extractLdLib)
 
+    // DataFixerUpper, and only DataFixerUpper. `Codec` is Mojang's serialisation library rather
+    // than a Minecraft type, so the Assembler's attachment codec can be round-tripped on a plain
+    // JVM -- which is what ADR-0038's "round-trip the data attachment" asks for. Minecraft itself
+    // stays off this classpath; the version is the one Minecraft 1.21.1 ships.
+    testImplementation 'com.mojang:datafixerupper:8.0.16'
+
     testImplementation platform('org.junit:junit-bom:5.10.2')
     testImplementation 'org.junit.jupiter:junit-jupiter'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
