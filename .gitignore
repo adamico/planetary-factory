@@ -93,6 +93,7 @@ docs/scratch/
 config/InventoryHUD/
 config/justzoom/
 config/runelic.json
+config/sound_physics_remastered/sound_rates.properties
 
 # Profiler output, regenerated per run
 config/spark/
@@ -114,6 +115,7 @@ build/
 *.log
 
 .probe
+kubejs/config/probe-settings.json
 
 # Agent worktrees. Each is a second checkout of this repo, not pack content, and a
 # `git add -A` from the repo root would otherwise commit every session's copy of it.
