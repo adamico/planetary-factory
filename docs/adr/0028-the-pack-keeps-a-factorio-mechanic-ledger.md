@@ -57,9 +57,10 @@ row ships with a proposed verdict even where the proposal is weak.
 
 ## `via` must exist; `candidates` commits to nothing
 
-`via` reuses `subgroup-owner.json`'s owner tokens verbatim — `gregtech`, `create`, `mekanism`,
+`via` reuses `subgroup-owner.json`'s owner tokens verbatim — `gregtech`, `create`,
 `electro`, `pack`, `kubejs`, `native_mechanic` — so the two files speak one language and one `grep`
-crosses both. **A `via` value must exist in `index.toml`.** That constraint is the whole thing
+crosses both. *`mekanism` was one of them until ADR-0035 took the mod out of the manifest; the
+must-exist rule below is what retired the token.* **A `via` value must exist in `index.toml`.** That constraint is the whole thing
 keeping the ledger from drifting into fiction about jars the pack does not ship. The routing-only
 tokens (`split`, `deferred`, `not_emitted`) are not imported; the five verdicts already cover what
 they say.

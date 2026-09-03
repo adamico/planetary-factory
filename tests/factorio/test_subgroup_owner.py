@@ -30,8 +30,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent.parent
 
 # ADR-0017's owners, plus `pack` for the three rows that name a machine this pack registers
-# on a GT chassis rather than a mod (ADR-0025, ADR-0026).
-MODS = {"gregtech", "create", "mekanism", "electro", "pack"}
+# on a GT chassis rather than a mod (ADR-0025, ADR-0026). `mekanism` is not an owner: ADR-0035
+# took the mod out of the pack, and this set is what catches a stale `owner` string left behind.
+MODS = {"gregtech", "create", "electro", "pack"}
 
 # Terminal values: not a machine, and deliberately so. `undecided` means ADR-0017 has no row
 # for the capability -- a decision nobody has taken, not an oversight. `undecided:smelting` was

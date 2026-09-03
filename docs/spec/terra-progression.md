@@ -152,7 +152,8 @@ unfamiliar machines.
 ## Rung 3 — `chemical`
 
 **Granted**: advanced oil processing, heavy and light cracking, lubricant (ADR-0025), the blue
-circuit (`#55`), the Electric Furnace as Mekanism's renamed Energized Smelter (`#91`), uranium past
+circuit (`#55`), the Electric Furnace — `#91` had it as Mekanism's renamed Energized Smelter;
+ADR-0035 took the mod out and `#149` registers it on a GT chassis instead — uranium past
 its acid gate (`#58`, and whether the nuclear chapter ships at all is `#89`).
 
 **What rung 4 needs it for**: cracking is what produces launch-fuel feedstock in quantity, and blue

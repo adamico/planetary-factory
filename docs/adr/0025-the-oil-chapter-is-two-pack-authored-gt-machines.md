@@ -175,6 +175,9 @@ non-petroleum routes documented in `docs/research/sulfur-and-oil-chains.md` are 
 
 1. Mekanism coal/charcoal gasification (`reaction/coal_gasification/*`) — the renewable route.
 2. Mekanism `injecting/gunpowder_to_sulfur.json` — the mob-drop bootstrap.
+
+   *(1) and (2) are amended by ADR-0035: both routes left with the mod, so neither needs removing.
+   The removal that still has to happen is (3), which is GregTech's and the pack's own.*
 3. The `gtceu:sulfur` slot at weight 1 in `terra_polymetallic_deposit.json`, and its line in
    `tests/worldgen/expected.json`.
 

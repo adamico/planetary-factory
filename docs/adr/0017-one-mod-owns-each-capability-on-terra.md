@@ -5,10 +5,13 @@ supersedes: [90]
 
 # One mod owns each capability on Terra, and the losing block is recipe-removed
 
-Terra runs three tech mods in series on one ladder — GregTech, Create, Mekanism — plus Create: Electro
-Energetics for the grid, and each of the three ships a full-stack answer to mining, moving, processing
-and powering. Left alone, that is three
-parallel routes to the same capability, and a Factorio-literate player finds the cheapest one and
+Terra runs two tech mods in series on one ladder — GregTech and Create — plus Create: Electro
+Energetics for the grid, and each ships a full-stack answer to mining, moving, processing
+and powering. *Amended by ADR-0035: this read "three tech mods … GregTech, Create, Mekanism".
+Mekanism left the pack after every row below that named it had been taken back one at a time; the
+rule this ADR states is what took them. Two tech mods is the count on this ladder; ADR-0035's "three
+mods plus the grid" counts GCyR, which owns rockets rather than a rung.* Left alone, that is two
+parallel routes to the same capability — three, while Mekanism was here — and a Factorio-literate player finds the cheapest one and
 never learns the line the quest book teaches. The spine (ADR-0018) is only a spine if
 exactly one mod owns each rung.
 
@@ -25,9 +28,10 @@ craftable has not made the choice.
 
 **The column has three values, not two — amended by ADR-0034.** *Cut* and *—* were the only two this
 table admitted, and they cannot express the case `#91` actually produced: the Electric Furnace is
-Mekanism's Energized Smelter, kept, renamed, and **granted at rung 3**. It is not cut, and it is not
-freely available either. The third value is **gated**: the recipe ships, and a science rung decides
-when.
+**granted at rung 3**. It is not cut, and it is not freely available either. *Amended by ADR-0035:
+the block was Mekanism's Energized Smelter, kept and renamed; it becomes a pack-registered machine
+on a GT chassis, which `#149` builds. The grant is what survives the mod.* The third value is
+**gated**: the recipe ships, and a science rung decides when.
 
 Gated is not a softer cut. It is the *opposite* claim — a cut block is one the pack decided against,
 a gated block is one the pack wants and is spending a rung on. Reading a gated row as "kept but
@@ -49,14 +53,14 @@ crafting surface named too. Late is not an argument for shipping something nobod
 | Power generation (steam, solar) | **Electro** — *amended by #101, then by #104; this row read "**Create** generates first (Steam Engine, rung 0); **Mekanism** generates at scale as FE"*. Create's Steam Engine is the prime mover and emits SU, not electricity; the **Alternator** is what makes power. Solar is Electro's outright. **#104 struck the Mekanism clause as a mistake of fact**: the pack installs base Mekanism, which registers **no generator block at all** — every generator and the Industrial Turbine live in MekanismGenerators, the jar ADR-0033 refused *for this row*. Terra's chain is four steps, not three: **GT boiler → Create Steam Engine (SU) → Electro Alternator (W) → grid** | GT's power layer removed entire. **No Mekanism generator is recipe-removed, because none exists** — the default below removes a *losing block*, and Mekanism supplies none here |
 | Power generation (superheated steam) | **The pack** (ADR-0033) — a registered Nuclear Reactor and Steam Turbine on a GT chassis. Named for the fluid, not for fission: Terra's reactor and Ignus's acid neutralisation are the same row | **MekanismGenerators not adopted** — it brings six other generators onto the row above; GT's own Steam Turbines stay removed with the rest of its power layer (`#37`) |
 | Power transmission (between areas) | **Create: Electro Energetics** — poles, wire, catenary | GT cables removed with the power layer |
-| Power distribution (inside an area) | **Mekanism** (Universal Cables) | — |
-| Energy storage | **Electro** (Accumulator) grid-side; **Mekanism** (Energy Cube, Induction Matrix) FE-side | GT quantum batteries removed with the power layer |
-| Item logistics | **Create** (belts, chutes, trains) | Mekanism Logistical Transporters recipe-removed; GT item pipes and covers removed with the power layer |
-| Fluid logistics | **Create** (fluid pipes, pumps) — *amended by #101; this row read "Mekanism (Mechanical Pipes)" and kept Create's pipes as a hand-placed exception* | Mekanism Mechanical Pipes **recipe-removed** |
-| Bulk storage (item) | **Create** (Item Vault) | Mekanism Bins and QIO **cut**; GT quantum chests removed |
-| Bulk storage (fluid) | **Create** (Fluid Tanks) — *amended by #101; this row read "Mekanism (Dynamic Tank)"* | Mekanism Dynamic Tank **recipe-removed**; GT quantum tanks removed |
+| Power distribution (inside an area) | **The pack** — a supply-area pole (ADR-0036) — *amended by ADR-0035; this row read "**Mekanism** (Universal Cables)"* | — |
+| Energy storage | **Electro** (Accumulator), grid-side, full stop — *amended by ADR-0035; this row read "grid-side; **Mekanism** (Energy Cube, Induction Matrix) FE-side". Nothing stores FE, because nothing distributes it* | GT quantum batteries removed with the power layer |
+| Item logistics | **Create** (belts, chutes, trains) | Mekanism Logistical Transporters recipe-removed *(removed with the mod instead, ADR-0035)*; GT item pipes and covers removed with the power layer |
+| Fluid logistics | **Create** (fluid pipes, pumps) — *amended by #101; this row read "Mekanism (Mechanical Pipes)" and kept Create's pipes as a hand-placed exception* | Mekanism Mechanical Pipes **recipe-removed** *(removed with the mod instead, ADR-0035)* |
+| Bulk storage (item) | **Create** (Item Vault) | Mekanism Bins and QIO **cut** *(removed with the mod instead, ADR-0035)*; GT quantum chests removed |
+| Bulk storage (fluid) | **Create** (Fluid Tanks) — *amended by #101; this row read "Mekanism (Dynamic Tank)"* | Mekanism Dynamic Tank **recipe-removed** *(removed with the mod instead, ADR-0035)*; GT quantum tanks removed |
 | Oil processing | **The pack** — a registered **Oil Refinery** on a GT chassis (ADR-0025) | GT Distillation Tower and Distillery **recipe-removed on Terra**; Create: Petrochem and Create: Diesel Generators declined |
-| Chemistry | **The pack** — a registered **Chemical Plant** on a GT chassis (ADR-0025), carrying Factorio's whole chemical-plant list | Mekanism keeps chemistry only where the oil chapter does not reach it; GT's chem line is not Terra's |
+| Chemistry | **The pack** — a registered **Chemical Plant** on a GT chassis (ADR-0025), carrying Factorio's whole chemical-plant list | ~~Mekanism keeps chemistry only where the oil chapter does not reach it~~ *(ADR-0035: there is no Mekanism chemistry left to reach)*; GT's chem line is not Terra's |
 | Refining | **The pack** (ADR-0025) — *this row was "Mekanism, by pack-authored recipes on machines it owns" and was written without checking that Mekanism can express the recipe. It cannot: advanced oil processing is two fluids in and three out, and no Mekanism machine has that shape.* | as above |
 | Assembly | **The pack** — three registered Assembling Machines on a GT chassis (ADR-0026) | GT's stock Assembler and its whole recipe corpus removed |
 | Hand-crafting surface | **The pack** — the Personal Assembler, a panel on the inventory screen (`#90`, `#95`) | vanilla Crafting Table, Crafting on a Stick and CraftingTweaks **cut**; Sophisticated Backpacks' Crafting Upgrade and AE2's terminals recipe-removed; **Create's Mechanical Crafter and Mekanism's Formulaic Assemblicator cut** — *amended by `#34`, which supersedes `#90`'s decision to keep the two executors* |
@@ -122,15 +126,19 @@ for audit.
 ## Transmission is Electro's, and the Converter is the boundary
 
 The transmission row was written in pencil until Create: Electro Energetics was adopted as the pack's
-**fourth mod** (`#46`). It does not displace Mekanism — it **layers above** it:
+**fourth mod** (`#46`). *Amended by ADR-0035: it was adopted layering above Mekanism's cables, which
+have since left with the mod. The boundary survives the mod that motivated it — the pack's own
+supply-area pole (ADR-0036) distributes inside the area, and the Converter is still where the grid
+ends.*
 
 - **Poles transmit** between areas; **cables distribute** inside them.
 - The **Converter is the mandatory boundary**. The grid never touches a machine directly. This is a
   teachable beat — the grid ends where the machines begin — and it makes the converter's 100 kW
   rating a real per-area budget rather than a number nobody meets.
-- **Energy storage splits on the same boundary**, which is why the row above is new: the Accumulator
-  stores on the grid side, Mekanism's Energy Cube and Induction Matrix on the FE side. One boundary
-  rule to teach, not two.
+- **Energy storage no longer splits on that boundary** — *amended by ADR-0035; this bullet read that
+  the Accumulator stores grid-side and Mekanism's Energy Cube and Induction Matrix FE-side.* Storage
+  is the Accumulator's, grid-side only. FE is an endpoint format some third-party blocks speak, not a
+  currency: there is no FE network and no FE storage block.
 - The grid is **granted at a science rung, not available at rung 0** — rung 0 already teaches steam,
   kinetics and Create ore processing, and SU → W → FE is a third unit hop on top of that. Which rung
   is the beat sheet's call.

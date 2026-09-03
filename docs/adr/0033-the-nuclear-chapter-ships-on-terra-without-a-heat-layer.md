@@ -116,6 +116,8 @@ to"*. The pack now registers five machines, so that argument is spent rather tha
 
 The gate moves onto the pack's **Chemical Plant**, and the **Chemical Dissolution Chamber is cut** —
 closing the lever ADR-0032 deliberately left open, and taking Mekanism's ore chain to zero blocks.
+*Amended by ADR-0035: this was the last Mekanism block any decision named, and reaching zero here is
+what left the mod with nothing. The cut is now the jar's removal — there is no recipe to remove.*
 
 Recorded as a knowing divergence, because the next reader will notice: **Factorio puts the acid in the
 mining drill, not in a machine hop.** `#58` chose the hop and ADR-0021 recorded it; this ADR changes
@@ -155,7 +157,8 @@ because the reason the row exists is that refusal.
   puzzle entire.
 - **Gelida inherits two things**: the thermal system as its own build, and the fact that its ledger
   row's `via: mekanism` means a jar the pack does not install.
-- **The Chemical Dissolution Chamber is cut**, resolving ADR-0032's open lever.
+- **The Chemical Dissolution Chamber is cut**, resolving ADR-0032's open lever — *and, per ADR-0035,
+  removed with the mod rather than recipe-removed.*
 - `data/pack/category-map.json` routes `centrifuging` to the Centrifuge;
   `data/pack/subgroup-owner.json` resolves all seven deferred rows; both static checks extended and
   passing.

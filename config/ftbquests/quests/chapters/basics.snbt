@@ -32,7 +32,7 @@
 			id: "046E6D86CEE899E9"
 			tasks: [{
 				id: "1C60E3C540FB78B4"
-				item: { count: 1, id: "mekanism:dust_bronze" }
+				item: { count: 1, id: "gtceu:bronze_dust" }
 				type: "item"
 			}]
 			x: -4.5d
@@ -62,7 +62,7 @@
 			id: "511863ADA487BB10"
 			tasks: [{
 				id: "73023B86D5D7DBBD"
-				item: { count: 1, id: "mekanism:ingot_tin" }
+				item: { count: 1, id: "gtceu:tin_ingot" }
 				type: "item"
 			}]
 			x: -5.5d

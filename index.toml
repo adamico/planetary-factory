@@ -330,7 +330,7 @@ hash = "efa63b81a301b1a1ec638c33d085f8e0120f2f14f970e210c6ab5201a7d32b9d"
 
 [[files]]
 file = "config/ftbquests/quests/chapters/basics.snbt"
-hash = "0ab1a93184360e85ee4c6255b4bf52fbea92aa9cc96c2ddc91d7742fe8a126f7"
+hash = "efa389a1c2eb9ece0a4841070775dc13b8e91c1155d08822e60e9eb8f74ba0f4"
 
 [[files]]
 file = "config/ftbquests/quests/data.snbt"
@@ -654,7 +654,7 @@ hash = "8e5a00c0575787cca8d664ec45326ae76531c5df5caa0dbfa07ff288392b8a46"
 
 [[files]]
 file = "data/pack/subgroup-owner.json"
-hash = "00239f2596ed29d863a1aab15d21389d9fd8daad94aff0699c40194990e0b3f8"
+hash = "ff3689d49b9c2b49c4ecd75efeb29300af6215a5aff37a28ed1a4d5b0e759090"
 
 [[files]]
 file = "defaultconfigs/ftbessentials-server.snbt"

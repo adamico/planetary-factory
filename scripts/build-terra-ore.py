@@ -2,13 +2,13 @@
 """Cut Terra's ore to Factorio's set and re-band the survivors (ADR-0019/0021, issue #59).
 
 Terra had four ore systems and three of them were invisible to prospecting, to depletion and
-to the miner ladder. This closes all four:
+to the miner ladder. This closes the three that remain -- Mekanism's left with the mod
+(ADR-0035), and its six worldgen toggles with it:
 
 - **Vanilla and Create** die by construction: Terra's palette biomes are authored by
   scripts/build-terra-worldgen.py with an empty `underground_ores` step, and they are
   deliberately *not* members of `#minecraft:is_overworld`, which is the tag every biome
   modifier in the jar set targets.
-- **Mekanism** ships its own config toggles; they are flipped here.
 - **GregTech** keeps four veins. The cut ones lose their `kubejs/data` override and the mod's
   originals are filtered out by packs/remove-terra-cut-veins.
 
@@ -42,8 +42,6 @@ KEEP = {
 # dimension filter around, Terra gets its own, built from pitchblende's generator.
 URANIUM_SOURCE = "pitchblende"
 URANIUM = {"min_y": 6, "max_y": 24, "weight": 40}
-
-MEK_WORLD = os.path.join(ROOT, "config", "Mekanism", "world.toml")
 
 
 def load(name):
@@ -143,14 +141,6 @@ def main():
         }, fh, indent=2)
         fh.write("\n")
     print("wrote kubejs/data/planetaryfactory/tags/worldgen/biome/terra.json")
-
-    # Mekanism's six ore toggles.
-    with open(MEK_WORLD) as fh:
-        toml = fh.read()
-    toml, n = re.subn(r"shouldGenerate = true", "shouldGenerate = false", toml)
-    with open(MEK_WORLD, "w") as fh:
-        fh.write(toml)
-    print("config/Mekanism/world.toml: %d shouldGenerate toggles set false" % n)
 
 
 if __name__ == "__main__":

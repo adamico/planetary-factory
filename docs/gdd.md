@@ -50,12 +50,14 @@ ladder — the ladder is Factorio's science packs (ADR-0018).
   routing capabilities are gated rather than cut: **AE2**, unlocked at endgame once every planet's
   puzzle is done, and **Create 6's package logistics**, granted at the `logistic` science rung.
 
-**Mekanism is decided out of the pack, and the manifest has not caught up.** ADR-0035 removed it:
-fifteen months of amendments took back all seven of its ADR-0017 rows one at a time, and nothing was
-left underneath. The two `mods/*.pw.toml` entries the ADR says go are still tracked, so
-`scripts/pack-check.sh` still sees a mod this document does not. Prose anywhere in the corpus
-describing a four-mod pack predates the decision; the jars are execution ADR-0035 asks for and this
-document does not perform.
+**Mekanism is out of the pack, jars and all.** ADR-0035 removed it: fifteen months of amendments
+took back all seven of its ADR-0017 rows one at a time, and nothing was left underneath. `#146`
+executed the removal — both `mods/*.pw.toml` entries, `config/Mekanism/` and its six worldgen
+toggles are gone, and `scripts/pack-check.sh` sees what this document describes. **The pack is three
+mods plus the grid**, not four plus the grid (ADR-0035). Prose elsewhere in the corpus describing a
+four-mod pack predates the decision. FE went with it: nothing distributes FE and nothing stores it,
+so it survives only as the format AE2, Charging Gadgets and Building Gadgets happen to speak, fed
+where they are touched.
 
 ## 2. The Solar System
 

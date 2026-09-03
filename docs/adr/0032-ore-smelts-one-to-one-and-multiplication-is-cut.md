@@ -25,7 +25,9 @@ modded or vanilla.
   Chemical Washer, Chemical Crystallizer. They exist only to multiply, and ADR-0017's rule is that a
   losing block is recipe-removed rather than left craftable-but-outclassed.
 - **The Enrichment Chamber loses its ore recipes.** The block is Mekanism's own and keeps whatever
-  non-ore work the pack gives it; what dies is 2x ore → 2 dust.
+  non-ore work the pack gives it; what dies is 2x ore → 2 dust. *Amended by ADR-0035: Mekanism has
+  left the pack, so the block is gone and there is no non-ore work left to keep. Nothing here needs
+  recipe-removing, because none of these blocks is registered.*
 - **Create's Crushing Wheels and the Millstone keep their blocks and lose their ore recipes.** They
   remain rung-0 kinetic machines for everything that is not ore.
 - **The Chemical Dissolution Chamber is deliberately not decided here** — see below.
@@ -124,12 +126,15 @@ clean lever — cut uranium and the block goes with it, keep uranium and the blo
   Electric Furnace, chemistry where the oil chapter does not reach, fluid logistics and storage, the
   upgrade economy `#42` spends in the `production` pack, and the Dissolution Chamber if `#89` keeps
   it. This is a real cost and it is accepted: `#91` already judged the Electric Furnace tier stays
-  Mekanism's regardless, on the recipe type rather than on footprint.
+  Mekanism's regardless, on the recipe type rather than on footprint. ***Amended by ADR-0035: it
+  shrank to nothing, and the mod left. The Electric Furnace is a pack-registered machine on a GT
+  chassis; the recipe-type judgement quoted here turned out to be wrong on its own terms.***
 - **Ore throughput is now purely a mining problem**, which is what ADR-0020 wanted. The binding
   constraint on a mature Terra factory is raw ore, and there is no machine that eases it.
 - **Recipe removal is wide.** Every ore recipe on four Mekanism machines, the Enrichment Chamber's
   ore rows, and Create's Crushing Wheel and Millstone ore rows. The blocks mostly survive; the
-  recipes do not.
+  recipes do not. *Amended by ADR-0035: the Mekanism half of this work is deleted rather than done —
+  removing the jar removes every recipe on it. What remains is Create's two rows.*
 - **`docs/factorio-mechanics.md`'s two Smelting sub-rules move from `planned, subject to #69` to
   settled**, and the Modules and beacons row stays `blocked` — this ADR does not decide it, and
   `#120` still owns the retrofit-tradeoff argument.

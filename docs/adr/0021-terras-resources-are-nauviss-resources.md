@@ -56,9 +56,11 @@ So the cut is applied to all four:
 
 - **GregTech veins** — the survivors are iron, copper, coal and an authored uranium vein; every
   other override is deleted.
-- **Mekanism `config/Mekanism/world.toml`** — `shouldGenerate = false` for tin, osmium, uranium,
+- ~~**Mekanism `config/Mekanism/world.toml`** — `shouldGenerate = false` for tin, osmium, uranium,
   fluorite, lead and salt. Mekanism's uranium is off too: Terra's uranium is a GregTech vein, so it
-  is charted and depletable like the rest.
+  is charted and depletable like the rest.~~ *Amended by ADR-0035: Mekanism left the pack, so its six
+  toggles have nothing to switch off. The file, and the block in `scripts/build-terra-ore.py` that
+  rewrote it, are both gone; the cut is applied to three ore systems, not four.*
 - **Create worldgen** — zinc and copper stripe features off.
 - **Vanilla ore features** — suppressed in Terra's `noise_settings`, which ADR-0019 introduced and
   which now carries this as a requirement it did not previously have.
@@ -97,7 +99,9 @@ So the cut is applied to all four:
   committed to. **Amended by ADR-0032, then settled by ADR-0033**: the ore chain is cut, so the
   Dissolution Chamber's only remaining job was this gate — and the pack now registers five machines,
   so *"no custom machine"* is spent rather than wrong. The gate moves onto the pack's **Chemical
-  Plant** and the **Chemical Dissolution Chamber is cut**. Uranium itself stays, and the nuclear
+  Plant** and the **Chemical Dissolution Chamber is cut**. *Then ADR-0035: `mekanism:dissolution` is
+  not a recipe type this pack has — the mod is out of the manifest, and the gate's only surface is
+  the Chemical Plant.* Uranium itself stays, and the nuclear
   chapter it feeds ships at rungs 3 and 4.
 - **Uranium is not a starting patch**, on the same fidelity grounds: Factorio never places it in the
   starting area.

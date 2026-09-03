@@ -65,7 +65,7 @@
     "(`intermediate-product`, `belt`, `terrain`, `uranium-processing`, `space-interactors`) split down the",
     "middle. A shelf is the wrong granularity for it, which is why it is not stored at all.",
     "",
-    "`owner` values: `gregtech`, `create`, `mekanism`, `electro`, `pack` (a machine this pack registers",
+    "`owner` values: `gregtech`, `create`, `electro`, `pack` (a machine this pack registers",
     "on a GT chassis -- ADR-0025's Oil Refinery and Chemical Plant, ADR-0026's Assembling Machines),",
     "`split` (the shelf straddles a seam; see `per_recipe`, written `owner / process` where the two",
     "differ), `undecided` (ADR-0017 has no row for this capability -- a decision, not an oversight),",
@@ -131,9 +131,10 @@
         "container collapses them to one. That is a real divergence from ADR-0021's axis, and it is taken",
         "because the mechanic it buys is native, free and the one Factorio's barrel exists to provide.",
         "",
-        "Mekanism's part is the container, not the process: the Spout fills a Mekanism portable tank,",
-        "which carries far more per item than a vanilla bucket. Which container the `barrel` item maps to",
-        "is #87's item map, not this file's routing."
+        "The container is not the process: the Spout fills whatever container the item map names, which",
+        "carries far more per item than a vanilla bucket. THIS READ `a Mekanism portable tank` UNTIL",
+        "ADR-0035 took the mod out; which container the `barrel` item maps to is #87's item map, not",
+        "this file's routing."
       ],
       "count": 9
     },
@@ -388,9 +389,10 @@
         "Plant rather than Assembling Machine even though the owner reads `pack` either way -- which is why",
         "the qualifier exists. The circuit rows are #55's authored three-tier ladder, not Factorio's items.",
         "",
-        "HAND-OFF TO #87: `barrel` now emits a `pack:assembling` recipe for the container item. If the item",
-        "map points that at Mekanism's portable tank, the pack has two ways to make one thing, and",
-        "ADR-0017's losing-recipe-is-removed idiom says Mekanism's goes."
+        "HAND-OFF TO #87: `barrel` now emits a `pack:assembling` recipe for the container item. This",
+        "warned that pointing the item map at Mekanism's portable tank would give the pack two ways to",
+        "make one thing; ADR-0035 removed the mod, so the collision cannot arise and the emitted recipe",
+        "is the only route."
       ],
       "count": 12
     },

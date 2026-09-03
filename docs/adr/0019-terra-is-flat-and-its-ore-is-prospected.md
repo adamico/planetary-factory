@@ -199,8 +199,9 @@ Two further corrections found while building:
   pack-namespace biomes authored from scratch, so vanilla ore is absent by omission — the
   `underground_ores` step is simply empty. The same fact closes Create's ore and every other
   biome-modifier feature: the palette biomes are deliberately **not** members of
-  `#minecraft:is_overworld`, which is the tag those modifiers target. Mekanism, which generates from
-  its own config rather than a biome modifier, is switched off in `config/Mekanism/world.toml`.
+  `#minecraft:is_overworld`, which is the tag those modifiers target. *This bullet also named
+  Mekanism, which generated from its own config rather than a biome modifier and was switched off in
+  `config/Mekanism/world.toml`; ADR-0035 removed the mod, so there is nothing left to switch off.*
 
 ## Amended in build: vein spacing is a config number, and the default makes ore continuous
 

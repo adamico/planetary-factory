@@ -30,8 +30,10 @@ first place it has been written down, or `by-consequence` where it fell out of a
 something else and was never argued on its own merits. **`by-consequence` rows are owned by this
 ledger**, not by the ticket that caused them.
 
-`via` reuses `subgroup-owner.json`'s owner tokens — `gregtech`, `create`, `mekanism`, `electro`,
-`pack`, `kubejs`, `native_mechanic` — and a value must exist in `index.toml`. `candidates` is free
+`via` reuses `subgroup-owner.json`'s owner tokens — `gregtech`, `create`, `electro`,
+`pack`, `kubejs`, `native_mechanic` — and a value must exist in `index.toml`. **`mekanism` is no
+longer one of them** (ADR-0035): the mod is out of the manifest, so a row naming it would fail the
+must-exist rule. `candidates` is free
 text and commits to no jar; **`pack` is admissible as a candidate only with a named mechanism**
 (ADR-0015).
 
@@ -151,7 +153,7 @@ Sub-rules:
 - **where**: all bodies
 - **via**: `create`
 - **owner**: ADR-0017 as amended by #101 (Create owns fluid handling entire — pipes and pumps for
-  moving, tanks for storing; Mekanism has no fluid role)
+  moving, tanks for storing; Mekanism had no fluid role, and left the pack entirely with ADR-0035)
 - **ticket**: #106
 
 Sub-rules:
@@ -410,13 +412,15 @@ Create needs no emitted recipe to exist.
   real voltage over wire with a real gauge, the run loses power over distance, and a bad circuit
   damages components instead of merely underfeeding them.
 - **where**: all bodies
-- **via**: `electro`, `mekanism`
-- **owner**: ADR-0017
+- **via**: `electro`, `pack`
+- **owner**: ADR-0017 as amended by ADR-0035 and ADR-0036
 
 **Create: Electro Energetics owns the grid** — poles, wire and catenary — and GregTech's power layer
-was removed entire to make room for it, cables included. Mekanism's Universal Cables distribute
-inside an area, which is the one seam: the grid moves power between places, Mekanism moves it inside
-one.
+was removed entire to make room for it, cables included. A **pack-authored supply-area pole**
+(ADR-0036) distributes inside an area, which is the one seam: the grid moves power between places,
+the pole feeds the machines standing in one. *Amended by ADR-0035: this read "Mekanism's Universal
+Cables distribute inside an area"; the mod left the pack and in-area distribution became the pack's
+own.*
 
 The mod runs at **shipped physics defaults** (ADR-0017), which is the decision this row turns on:
 voltage drop, per-material wire gauge, grounding, fuses, brownouts and component damage are all on.
@@ -967,13 +971,14 @@ elevated-rail tier, so the mechanic has nothing to add.
 
 - **verdict**: `planned`
 - **where**: Gelida
-- **via**: `mekanism`
+- **candidates**: MekanismGenerators
 - **owner**: `docs/planets.md`
 - **ticket**: #15, then Gelida's `Puzzle:` ticket
 
-Fusion generator and reactor, craftable only on Gelida. **`via: mekanism` here means
-  MekanismGenerators, which the pack does not install** — the same absent jar ADR-0033 refused for
-  Terra's fission. Adopting it is a manifest decision Gelida's puzzle must argue, not inherit.
+Fusion generator and reactor, craftable only on Gelida. **This row has no `via`, and cannot have
+  one**: it named MekanismGenerators, which the pack has never installed, and ADR-0035 has since
+  taken base Mekanism out of the manifest too — so the jar is now two manifest decisions away, not
+  one. Adopting it is a decision Gelida's puzzle must argue, not inherit.
 
 ### The Shattered Planet
 
