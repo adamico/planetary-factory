@@ -105,9 +105,10 @@
       "ticket": 118
     },
     "big-electric-pole": {
-      "status": "undecided",
-      "note": "As `small-electric-pole`.",
-      "ticket": 148
+      "kind": "item",
+      "target": "planetaryfactory:big_electric_pole",
+      "source": "authored",
+      "note": "ADR-0036's supply-area pole, registered in `planetaryfactory_core` by #147. A tier is a footprint and nothing else -- it grants no voltage and changes nothing a machine receives -- so the four sit on one shelf with one process. The supply areas are Factorio's own, big pole included, which covers LESS ground than the medium one because in Factorio it buys wire reach the pack has no use for."
     },
     "boiler": {
       "status": "undecided",
@@ -498,9 +499,10 @@
       "note": "One container, filled by Create's Spout and drained by its Item Drain (#93). Which container is the same question as `barrel`, and is #106's."
     },
     "medium-electric-pole": {
-      "status": "undecided",
-      "note": "As `small-electric-pole`.",
-      "ticket": 148
+      "kind": "item",
+      "target": "planetaryfactory:medium_electric_pole",
+      "source": "authored",
+      "note": "ADR-0036's supply-area pole, registered in `planetaryfactory_core` by #147. A tier is a footprint and nothing else -- it grants no voltage and changes nothing a machine receives -- so the four sit on one shelf with one process. The supply areas are Factorio's own, big pole included, which covers LESS ground than the medium one because in Factorio it buys wire reach the pack has no use for."
     },
     "metallic-asteroid-chunk": {
       "status": "undecided",
@@ -707,9 +709,10 @@
       "ticket": 118
     },
     "small-electric-pole": {
-      "status": "undecided",
-      "note": "Electro's poles are the rows #148's mod swap moves.",
-      "ticket": 148
+      "kind": "item",
+      "target": "planetaryfactory:small_electric_pole",
+      "source": "authored",
+      "note": "ADR-0036's supply-area pole, registered in `planetaryfactory_core` by #147. A tier is a footprint and nothing else -- it grants no voltage and changes nothing a machine receives -- so the four sit on one shelf with one process. The supply areas are Factorio's own, big pole included, which covers LESS ground than the medium one because in Factorio it buys wire reach the pack has no use for."
     },
     "small-lamp": {
       "status": "undecided",
@@ -826,9 +829,10 @@
       "ticket": 118
     },
     "substation": {
-      "status": "undecided",
-      "note": "As `small-electric-pole`.",
-      "ticket": 148
+      "kind": "item",
+      "target": "planetaryfactory:substation_electric_pole",
+      "source": "authored",
+      "note": "ADR-0036's supply-area pole, registered in `planetaryfactory_core` by #147. A tier is a footprint and nothing else -- it grants no voltage and changes nothing a machine receives -- so the four sit on one shelf with one process. The supply areas are Factorio's own, big pole included, which covers LESS ground than the medium one because in Factorio it buys wire reach the pack has no use for."
     },
     "sulfur": {
       "kind": "item",

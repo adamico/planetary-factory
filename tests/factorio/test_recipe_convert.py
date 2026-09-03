@@ -35,6 +35,9 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent.parent
 STARTUP = ROOT / "kubejs/startup_scripts"
+MOD = ROOT / "mod/src/main/java/com/planetaryfactory/core"
+PF_BLOCKS = MOD / "PFBlocks.java"
+POLE_TIER = MOD / "energy/PoleTier.java"
 
 # The namespaces an item-map target may live in: this pack, the game, and the three mods whose
 # capabilities ADR-0017 puts on Terra. Mekanism is deliberately absent -- ADR-0035 takes it out
@@ -52,14 +55,38 @@ NAMESPACES = {"minecraft", "planetaryfactory", "gtceu", "create", "electroenerge
               "researchd", "planetary_factory"}
 
 
+def mod_registered_blocks():
+    """The `planetaryfactory:` blocks `planetaryfactory_core` registers, not KubeJS.
+
+    ADR-0015 splits registration by what a thing is: content goes to KubeJS, mechanism to the mod.
+    Both land in the same namespace, so an item-map row cannot tell which side registered its
+    target -- and until the supply-area poles (#147) nothing on the mod's side had a row at all.
+    Reading only the startup scripts would now report four registered blocks as unregistered, and
+    the natural "fix" for that is to weaken the check, which is the one thing it must not do.
+
+    The poles derive their ids from the `PoleTier` enum, so they are read the same way rather than
+    typed out: a fifth tier is then registered here without this file being edited.
+    """
+    blocks = set(re.findall(r'BLOCKS\.register\("([a-z0-9_]+)"',
+                            (PF_BLOCKS).read_text(encoding="utf-8")))
+    tiers = re.findall(r"^\s{4}([A-Z][A-Z_]*)\(\d+\)[,;]",
+                       POLE_TIER.read_text(encoding="utf-8"), re.MULTILINE)
+    blocks |= {f"{tier.lower()}_electric_pole" for tier in tiers}
+    return {f"planetaryfactory:{name}" for name in blocks}
+
+
 def first_party_items():
-    """The `planetaryfactory:` items and machines the startup scripts actually register."""
+    """The `planetaryfactory:` items and machines the pack actually registers.
+
+    Both halves of ADR-0015's split: the KubeJS startup scripts and `planetaryfactory_core`.
+    """
     items = set(re.findall(r"event\.create\('(planetaryfactory:[a-z0-9_]+)'",
                            (STARTUP / "items.js").read_text()))
     # A block registers an item too, and the chest ladder is a block (#133): its rows would
     # otherwise read as unregistered while sitting three lines away in `blocks.js`.
     items |= set(re.findall(r"event\.create\('(planetaryfactory:[a-z0-9_]+)'",
                             (STARTUP / "blocks.js").read_text()))
+    items |= mod_registered_blocks()
     machines = (STARTUP / "machines.js").read_text()
     for name in re.findall(r"event\.create\('([a-z0-9_]+)'\)", machines):
         # KJSTieredMachineBuilder registers through GregTech's registrate, so the ids come out

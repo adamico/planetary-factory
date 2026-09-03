@@ -234,17 +234,17 @@
     },
     "logistics/energy-pipe-distribution": {
       "owner": "split",
-      "reason": "The shelf straddles ADR-0017's transmission/fluid-handling seam -- Factorio files poles and pipes together because both carry stuff between machines; the pack does not. The pipes moved from `mekanism` to `create` with #101's amendment to ADR-0017; the seam is unchanged, only which side the pipes sit on.",
+      "reason": "The shelf straddles ADR-0017's transmission/fluid-handling seam -- Factorio files poles and pipes together because both carry stuff between machines; the pack does not. The pipes moved from `mekanism` to `create` with #101's amendment to ADR-0017. The four poles were `electro`, on the assumption that in-area distribution was a grid mod's to own; ADR-0036 made it the pack's own block and #147 built it, so they are `pack` and the seam now runs between the pack's poles and Create's pipes.",
       "per_recipe": {
-        "small-electric-pole": "electro / pack:assembling",
-        "medium-electric-pole": "electro / pack:assembling",
-        "big-electric-pole": "electro / pack:assembling",
-        "substation": "electro / pack:assembling",
+        "small-electric-pole": "pack:assembling",
+        "medium-electric-pole": "pack:assembling",
+        "big-electric-pole": "pack:assembling",
+        "substation": "pack:assembling",
         "pipe": "create / pack:assembling",
         "pipe-to-ground": "not_emitted",
         "pump": "create / pack:assembling"
       },
-      "note": "Written `owner / process`. Electro ships no machine of its own -- its own recipes use Create's `compacting`, `mixing`, `mechanical_crafting` and `sequenced_assembly` types in the `electroenergetics` namespace -- so an `electro` owner can never yield an `electro:` process. `pipe-to-ground` is `not_emitted`: Factorio's underground pipe solves a crossing problem that does not exist in three dimensions -- a Create pipe simply routes over or under -- and `create:encased_fluid_pipe` is decoration, not a buried run. Recorded as `excluded` in docs/factorio-mechanics.md, beside underground belts.",
+      "note": "Written `owner / process`. `pipe-to-ground` is `not_emitted`: Factorio's underground pipe solves a crossing problem that does not exist in three dimensions -- a Create pipe simply routes over or under -- and `create:encased_fluid_pipe` is decoration, not a buried run. Recorded as `excluded` in docs/factorio-mechanics.md, beside underground belts.",
       "count": 7
     },
     "logistics/storage": {
