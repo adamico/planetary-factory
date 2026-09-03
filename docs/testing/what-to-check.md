@@ -94,9 +94,18 @@ Minecraft. They get nothing.
 2. is not inherited unchanged from a vanilla superclass; **and**
 3. cannot be reached from a plain JVM unit test without a server.
 
-Nothing in the pack trips all three today, and there are no GameTests. The current mod content
-satisfies (1) and fails (2), which is why declining to test it was the right call. When something
-does trip the trigger, standing up the GameTest harness is its own ticket, filed at that moment.
+The supply-area pole (ADR-0036, `#147`) is the first thing in the pack to trip all three, and
+**the harness is `#156`** — which is what this section has always said happens at this moment.
+
+The shape of that decision generalises, so it is worth stating once. Most of what looked like
+in-world behaviour was arithmetic that had no business needing a server, and it was written to be
+reachable without one: the pole's geometry, its FE-to-EU conversion and its rationing are
+Minecraft-free classes with unit tests. What was genuinely left over — that a capability lookup
+finds a machine, and that inserting energy makes it run — is the part a GameTest exists for.
+**Split first, then check what remains**; the residue is usually much smaller than the feature.
+
+Nothing else in the pack trips all three. The rest of the mod content satisfies (1) and fails (2),
+which is why declining to test it was the right call.
 
 ### This looks or feels right
 

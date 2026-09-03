@@ -28,8 +28,10 @@ public final class PlanetaryFactoryCore {
     public PlanetaryFactoryCore(IEventBus modBus) {
         PFBlocks.register(modBus);
         PFItems.register(modBus);
+        PFBlockEntities.register(modBus);
         PFWorldgen.register(modBus);
         modBus.addListener(PFItems::addToCreativeTabs);
+        modBus.addListener(PFBlockEntities::registerCapabilities);
         // Game bus, not the mod bus: this one fires per running server, not per mod load.
         NeoForge.EVENT_BUS.addListener(TerraStartingArea::onServerStarted);
     }

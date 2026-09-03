@@ -1,6 +1,7 @@
 package com.planetaryfactory.core;
 
-import net.minecraft.core.registries.Registries;
+import com.planetaryfactory.core.energy.PoleTier;
+import com.planetaryfactory.core.energy.SupplyAreaPoleBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SaplingBlock;
 import net.minecraft.world.level.block.SoundType;
@@ -10,8 +11,17 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.DeferredHolder;
 
+import java.util.EnumMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 /**
- * The two saplings, and nothing else.
+ * The blocks the mod itself registers: the two saplings and the four supply-area poles.
+ *
+ * <p>The four supply-area poles are here too (ADR-0036). They are mechanism -- a block entity
+ * that scans and pushes energy -- so ADR-0015 puts them in the mod rather than in KubeJS, while
+ * their models, textures and names stay data in the pack like everything else.
  *
  * <p>Everything else the trees are made of -- logs, leaves, stems, fruit -- is registered by
  * {@code kubejs/startup_scripts/blocks.js}, into this same namespace. The boundary is ADR-0015;
@@ -27,7 +37,29 @@ public final class PFBlocks {
     public static final DeferredHolder<Block, SaplingBlock> JELLYSTEM_SAPLING =
             sapling("jellystem_sapling", PFTrees.JELLYSTEM);
 
+    /**
+     * One block per {@link PoleTier}, in declaration order, so the four ids are derived from the
+     * tier rather than typed out twice.
+     */
+    private static final Map<PoleTier, DeferredHolder<Block, SupplyAreaPoleBlock>> POLES =
+            new EnumMap<>(PoleTier.class);
+
+    static {
+        for (PoleTier tier : PoleTier.values()) {
+            POLES.put(tier, BLOCKS.register(tier.blockName(), () -> new SupplyAreaPoleBlock(tier)));
+        }
+    }
+
     private PFBlocks() {
+    }
+
+    public static DeferredHolder<Block, SupplyAreaPoleBlock> pole(PoleTier tier) {
+        return POLES.get(tier);
+    }
+
+    /** The four pole blocks, for the block entity type that serves all of them. */
+    public static Set<Block> poleBlocks() {
+        return POLES.values().stream().map(DeferredHolder::get).collect(Collectors.toUnmodifiableSet());
     }
 
     static void register(IEventBus modBus) {

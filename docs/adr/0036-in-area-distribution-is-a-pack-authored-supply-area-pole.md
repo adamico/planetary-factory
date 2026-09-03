@@ -30,9 +30,9 @@ its power layer (`#37`), no voltage-tier ladder is re-admitted, and `enableFECon
 `false` in `config/gtceu.yaml` so the LV-through-LuV × 1A/4A/8A/16A converter grid never enters JEI.
 
 **All four Factorio pole tiers ship** — small, medium, big, substation. Fidelity over the cheaper
-option of shipping two now and one later. It is a **reach-and-footprint ladder, not a power
-ladder**: a bigger pole covers more ground and spans further, and none of them changes what a
-machine receives. That distinction is what keeps the pole off the science spine, where a power
+option of shipping two now and one later. It is a **footprint ladder, not a power ladder**: the
+tiers differ in the ground they cover and in nothing else, and none of them changes what a machine
+receives. That distinction is what keeps the pole off the science spine, where a power
 ladder would compete with it.
 
 ## Three facts from the jars that decide this, and must not be re-derived
@@ -131,6 +131,45 @@ bench test.
 refactors the internals it mixes into still satisfies the range and aborts startup — the same trap
 ADR-0017 recorded for Electro. Accepted as a side effect. It was never a goal and never a tiebreaker.
 
+## Amended by #147, on building it
+
+Five things this document either got wrong or never said. They are recorded here rather than in the
+code that discovered them, because tickets are the route and ADRs are the state.
+
+**The supply areas are Factorio's own, and they do not increase monotonically.** 5x5, 7x7,
+**4x4** and 18x18. The big pole's area really is smaller than the medium pole's: in Factorio it
+buys *wire reach* instead, 30 tiles against 9, and a player who knows Factorio knows the big pole
+as the one you run a line with rather than the one you cover a base with. This document originally
+said "a bigger pole covers more ground and spans further"; **neither clause is true**. The second
+was never available at all -- Power Grid owns transmission and does it with catenary whose span is
+a material property of the wire, so a pole here has no span to differ in. Fidelity won over the
+tidier ladder, and the four values are pinned by `PoleTierTest` so the inversion is not "fixed" by
+someone reading it as a typo.
+
+**Even-sided areas are offset, not rounded.** Factorio's big pole and substation are 2x2 entities,
+so their even-sided areas centre on a seam between tiles. The pole here is one block. The tile
+count is kept exact and the area sits half a block off, taking its extra block on the negative
+side -- the same relationship Factorio's 2x2 pole has to any single tile beneath it.
+
+**The supply area has a vertical extent, which Factorio has no answer for.** Two blocks up and
+down, the same for every tier. That covers a machine on the pole's own floor, one sunk into it and
+one on a platform above, without a pole quietly powering the floor below through the ceiling. It is
+deliberately much shallower than the horizontal reach, so the area still reads as a footprint on
+the ground.
+
+**A shortfall is shared out, not raced for.** When the area asks for more than the grid is giving,
+the pole water-fills: every machine gets an equal cut, and a machine whose demand is below that cut
+takes only what it asked for while its spare goes back to the machines that can still use it. The
+alternative was first-come-first-served, which would have starved the machines the scan happens to
+reach last -- permanently, on an iteration order that is an implementation detail and invisible to
+the player. Factorio shares a shortfall out, and this is the one place the pole needed a rule
+rather than an arithmetic.
+
+**Energy is inserted directly, not accepted from a network.** GregTech's
+`acceptEnergyFromNetwork` enforces the voltage tiers `#37` deleted entire and can overvolt a
+machine into exploding. There is no tier for a pole to respect and no face for a wireless supply to
+arrive through, so the pole calls `addEnergy` and the question does not arise.
+
 ## Considered Options
 
 - **Keep Electro and give in-area distribution to the pole anyway.** The pole does not require the
@@ -143,7 +182,7 @@ ADR-0017 recorded for Electro. Accepted as a side effect. It was never a goal an
 - **Author a real cable network in `planetaryfactory_core`.** Rejected: it is the expensive half of
   a power mod, and it buys an idiom Factorio does not have.
 - **Two pole tiers now, the other two later.** Rejected for fidelity. The tiers are cheap once the
-  supply-area scan exists — they differ by two numbers.
+  supply-area scan exists — they differ by one number.
 - **Keep the per-area cap by other means.** Rejected: the emergent limit is better teaching, and a
   synthetic ceiling on top of a solver that already models current is two answers to one question.
 
