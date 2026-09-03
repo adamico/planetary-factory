@@ -24,6 +24,7 @@
   "block.planetaryfactory.small_electric_pole": "Small Electric Pole",
   "block.planetaryfactory.medium_electric_pole": "Medium Electric Pole",
   "block.planetaryfactory.substation_electric_pole": "Substation",
+  "item.planetaryfactory.barrel": "Barrel",
   "tooltip.planetaryfactory.pole.area": "Supplies a %sx%s area, %s blocks up and down",
   "tooltip.planetaryfactory.pole.wireless": "Powers machines directly — no wires needed",
   "tooltip.planetaryfactory.pole.column": "Measured at the base; extend with another %s (up to %s tall)",

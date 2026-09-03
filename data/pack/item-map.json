@@ -79,9 +79,10 @@
       "note": "ADR-0018's rung 1. A Researchd RESEARCH PACK, not an item of this pack's own: `kubejs/server_scripts/researchd.js` declares it with `registerResearchPacks` and the player holds `researchd:research_pack` carrying a `researchd:research_pack` data component. The declared id is `planetary_factory:` -- an underscore, and not this pack's item namespace. Registering a plain item of the same name would ship a second, inert pack the Lab cannot read."
     },
     "barrel": {
-      "status": "undecided",
-      "note": "DECIDED BY ADR-0037, NOT YET FLIPPED. The container is `planetaryfactory:barrel`, pack-registered in `planetaryfactory_core` as an `IFluidHandlerItem`: 50 mB -- Factorio's 50 units under the converter's 1:1 fluid rule -- stacking to 10, accepting any fluid. The row stays `undecided` only because flipping it makes the converter emit `assembling/barrel`, whose output item does not exist until the mod work lands; the flip, the item and the converter re-run are one change (#106).",
-      "ticket": 106
+      "kind": "item",
+      "target": "planetaryfactory:barrel",
+      "source": "authored",
+      "note": "ADR-0037. Registered in `planetaryfactory_core` as an `IFluidHandlerItem`: 50 mB -- Factorio's 50 units under the converter's 1:1 fluid rule -- stacking to 10, accepting any fluid. GregTech's cells were the only installed candidates and are a six-material ladder with a temperature band, for a concept that has one tier. Filled and emptied by Create's Spout and Item Drain with no recipes at all (#93), so this row is the only place the container is named."
     },
     "battery": {
       "kind": "item",

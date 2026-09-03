@@ -37,6 +37,7 @@ ROOT = Path(__file__).resolve().parent.parent.parent
 STARTUP = ROOT / "kubejs/startup_scripts"
 MOD = ROOT / "mod/src/main/java/com/planetaryfactory/core"
 PF_BLOCKS = MOD / "PFBlocks.java"
+PF_ITEMS = MOD / "PFItems.java"
 POLE_TIER = MOD / "energy/PoleTier.java"
 
 # The namespaces an item-map target may live in: this pack, the game, and the three mods whose
@@ -75,6 +76,19 @@ def mod_registered_blocks():
     return {f"planetaryfactory:{name}" for name in blocks}
 
 
+def mod_registered_items():
+    """The `planetaryfactory:` items `planetaryfactory_core` registers with no block behind them.
+
+    Everything the mod registered used to be a block, so reading `PFBlocks` and `PoleTier` covered
+    it. The barrel (ADR-0037) is the first item that is only an item: it carries a fluid capability,
+    which is mechanism and therefore the mod's under ADR-0015, and it has nothing to place. Without
+    this its row would read as unregistered while sitting in `PFItems` -- and the natural "fix" for
+    that is to weaken the check, which is the one thing it must not do.
+    """
+    return {f"planetaryfactory:{name}" for name in re.findall(
+        r'ITEMS\.registerSimpleItem\(\s*"([a-z0-9_]+)"', PF_ITEMS.read_text(encoding="utf-8"))}
+
+
 def first_party_items():
     """The `planetaryfactory:` items and machines the pack actually registers.
 
@@ -87,6 +101,7 @@ def first_party_items():
     items |= set(re.findall(r"event\.create\('(planetaryfactory:[a-z0-9_]+)'",
                             (STARTUP / "blocks.js").read_text()))
     items |= mod_registered_blocks()
+    items |= mod_registered_items()
     machines = (STARTUP / "machines.js").read_text()
     for name in re.findall(r"event\.create\('([a-z0-9_]+)'\)", machines):
         # KJSTieredMachineBuilder registers through GregTech's registrate, so the ids come out
