@@ -127,11 +127,27 @@ Sub-rules:
 ### Manual mining
 
 - **verdict**: `adapted`
-- **notice**: mining is a Minecraft block break, so it is per-block and tool-tiered rather than a
-  hold-to-mine timer against a patch total.
+- **notice**: mining is a Minecraft block break, so it is per-block rather than a hold-to-mine timer
+  against a patch total. It is **not** tool-tiered: one tool in two tiers, the Engineer's Pick,
+  mines every block class, and Factorio's own seconds-per-item stand — 2.0s for Terra's four
+  resources and stone, halved to 1.0s by `steel-axe`. *This row read "per-block and tool-tiered";
+  ADR-0039 reverses that half. Nothing supplied a tool at all, so the claim described a mechanic
+  the pack could not deliver.*
 - **where**: all bodies
 - **via**: `native_mechanic`
-- **owner**: `unargued`
+- **owner**: ADR-0039
+
+Sub-rules:
+
+- **Mining speed is doubled by research** — `shipped` at the design level, ADR-0039. Factorio's
+  `steel-axe` is a trigger technology costing no packs; the pack declares it as `CheckItemPresence`
+  on 50 steel plates, because Researchd has no craft-triggered research method, and swaps its
+  `character-mining-speed` effect for an `unlock-recipe` granting the Engineer's Steel Pick.
+- **Picking up a placed entity is the same gesture as mining** — `adapted`. The Engineer's Pick
+  absorbs GregTech's wrench dismantle verb; the wrench's rotate and pipe-connection verbs are
+  `planned` and unowned (ADR-0039).
+- **Rotating a placed entity (`R`)** — `planned`, no owner yet. Not deletable: Factorio has the
+  verb, so a pack with no way to turn a machine is missing a mechanic rather than simplifying one.
 
 ### Mining drills
 

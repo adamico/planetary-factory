@@ -55,11 +55,17 @@ Beat 6 is the twenty-minute mark and the first machine-fed beat in the pack.
 **What you start with.** Factorio's own split — tools in your pockets, materials from the ship
 (`#100`), and Factorio is famously stingy about both.
 
-- **Pocket**: the prospector (ADR-0019), one Furnace, one LP Steam Miner.
+- **Pocket**: the prospector (ADR-0019), one Furnace, one LP Steam Miner, the **Engineer's Iron Pick** (ADR-0039).
 - **Hold**: iron plate, copper plate, coal. Single digits, matching freeplay's eight-plate debris
   chest.
 - **No weapon.** Factorio hands you a pistol; here the wreck is the answer to night one (`#134`),
   and a door is a better answer than a pistol.
+
+**The Pick is the one tool, and it is craftable.** `wood ×1` plus `iron plate ×1`, both of which the
+opening already puts within reach — a log comes off a tree barehanded and the hold carries plates.
+It is in the pocket so that beat 4 does not open on a crafting detour, and craftable so that losing
+it is not a dead save. There is no axe, no shovel and no shears; there is no second tier until
+`steel-axe` at rung 1 (ADR-0039).
 
 Nothing in the hold is otherwise unobtainable. It removes the pre-tool grind; it does not seed a
 tier. The moment the hold contains a green circuit, rung 0 stops being taught.
@@ -96,7 +102,7 @@ argument for rung 1, made by the game rather than by the book.
 
 ## Rung 1 — `automation`
 
-**Granted**: the Alternator and the FE grid, Assembling Machine I.
+**Granted**: the Alternator and the FE grid, Assembling Machine I, **steel** (ADR-0039), and — off `steel-processing`, at no pack cost — **`steel-axe` and the Engineer's Steel Pick**, which halves seconds-per-ore from 2.0 to 1.0.
 
 **Why the grid arrives here**: the Alternator turns Create's rotation into watts (`#92`), and
 Assembling Machine I is FE-native (`#37`) — the grid arrives with its first customer and not one
@@ -111,6 +117,7 @@ past here is assembled.
 | Assembling Machine I. The Personal Assembler stops being how you *produce* — it never stops being how you *craft*. | machine |
 | Feed the Assembler from the belt, not from your hands. | machine |
 | Pipe the Lab. `logistic` packs arrive without you. | machine |
+| Steel, and the Steel Pick it triggers. Mining doubles, in the chapter where hand-mining feels worst. | Personal Assembler |
 
 **Assembling Machine I has no fluid tanks** (ADR-0018, amended by `#125`). It cannot run the
 corpus's `crafting-with-fluid` rows, and it is not meant to — oil arrives at rung 2 alongside the

@@ -902,9 +902,9 @@
     },
     "wood": {
       "kind": "tag",
-      "target": "minecraft:planks",
+      "target": "minecraft:logs",
       "source": "borrowed",
-      "note": "Factorio's wood is a raw building material. A tag, because Terra's trees are Sapros's business and no single plank is the pack's."
+      "note": "Factorio's tree drops `wood` directly with no intermediate, so a LOG is Factorio's wood. A tag, because no single species is the pack's. This row read `minecraft:planks` until ADR-0039: log-to-planks is a vanilla shaped recipe, so ADR-0034's sweep removes it, #140 removes the 2x2 that would make it, #97 forbids re-emitting it, and the corpus has no plank to author -- planks were unobtainable, which made the Engineer's Iron Pick unbuildable. Moves `small-electric-pole` and `wooden-chest` with it."
     },
     "wooden-chest": {
       "kind": "item",

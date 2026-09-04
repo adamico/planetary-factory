@@ -161,6 +161,10 @@ _Avoid_: abstraction, going virtual
 
 ### Making things
 
+**Engineer's Pick**:
+The player's only mining tool, in two tiers — **Engineer's Iron Pick** and **Engineer's Steel Pick** — both indestructible, the steel one unlocked by the `steel-axe` research and crafted from the iron one, which it consumes. It mines every block class, so the pack has no axe, shovel or shears, and it is what dismantles a GregTech machine. The tiers differ only in mining speed, at Factorio's own numbers (ADR-0039).
+_Avoid_: pickaxe, the pick, mining tool, wrench
+
 **Personal Assembler**:
 The permanent panel on the inventory screen that is the player's only hand-crafting surface. It is a surface, not a machine, and has no recipe type of its own: it runs the **Assembling Machine**'s recipes that Factorio marks hand-craftable — first category `crafting`, minus the eleven Factorio withholds (`#88`) — at speed 1, serially (ADR-0029). It **replaces** the crafting grid, which the pack removes (`#90`), and crafts nothing by hand directly: every craft is a **Crafting Plan** (ADR-0038). The panel is always present and always full: it is taught by the opening, never granted by it (`#100`).
 _Avoid_: hand crafter, personal crafter, portable crafter
