@@ -24,13 +24,21 @@ class PickAbilitiesTest {
     }
 
     @Test
-    void theConfigureVerbsAreDeclined() {
-        // ADR-0017 gives fluid and item logistics to Create and GT's pipes went with the power
-        // layer, so these would be verbs declared against blocks the pack does not ship.
-        assertFalse(PickAbilities.grants("wrench_configure"));
-        assertFalse(PickAbilities.grants("wrench_configure_all"));
-        assertFalse(PickAbilities.grants("wrench_configure_items"));
-        assertFalse(PickAbilities.grants("wrench_configure_fluids"));
+    void theConfigureVerbsAreGranted() {
+        // A machine's auto-output face, not a pipe's connection. GregTech reads wrench_configure
+        // first and the other three only after it, so the gate has to be in the set or the rest
+        // perform nothing.
+        assertTrue(PickAbilities.grants("wrench_configure"));
+        assertTrue(PickAbilities.grants("wrench_configure_all"));
+        assertTrue(PickAbilities.grants("wrench_configure_items"));
+        assertTrue(PickAbilities.grants("wrench_configure_fluids"));
+    }
+
+    @Test
+    void theConnectVerbIsDeclined() {
+        // This is the actual pipe-connection verb, on the pipe block's own path. ADR-0017 gives
+        // fluid and item logistics to Create and GT's pipes went with the power layer, so it would
+        // be declared against blocks the pack does not ship.
         assertFalse(PickAbilities.grants("wrench_connect"));
     }
 

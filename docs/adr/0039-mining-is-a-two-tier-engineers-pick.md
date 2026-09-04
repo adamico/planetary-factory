@@ -150,7 +150,7 @@ GTCEu 7.0.2's own `en_us.json` shows the wrench doing four distinct things, not 
 | --- | --- | --- |
 | Dismantle | `"Hold left click to dismantle Machines"` | **The Engineer's Pick absorbs it.** Delivered by the tags below and confirmed in-game: a machine breaks and drops its item. |
 | Rotate / set facing | `"Rotates Blocks on Rightclick"` | **The Engineer's Pick absorbs it** — *#168, which settled what this row deferred.* The Pick declares the `wrench_rotate` ability; the tags below were never enough. |
-| Pipe connections | `"Use Wrench to set Connections, sneak to block Connections"` | **Declined outright** — *#168.* ADR-0017 gives fluid and item logistics to Create and GT's pipes left with its power layer, so the four `wrench_configure*` abilities are deliberately not declared. |
+| Pipe connections | `"Use Wrench to set Connections, sneak to block Connections"` | **Split by #168.** This string describes `wrench_connect` on a pipe block, which is **declined** — ADR-0017 gives fluid and item logistics to Create and GT's pipes left with its power layer. The `wrench_configure*` abilities are **not** that verb, despite the string: they set a *machine's* auto-output face, and the Pick declares them. |
 | Multiblock maintenance | `"Pipe is loose. (Wrench)"` | **Already dead** — `config/gtceu.yaml:218` sets `enableMaintenance: false`. |
 
 Rotation is **not** deletable: Factorio has a rotate verb (`R`), so a pack with no way to turn a

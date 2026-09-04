@@ -153,21 +153,24 @@ Sub-rules:
 - **Picking up a placed entity is the same gesture as mining** — `adapted`. The Engineer's Pick
   absorbs GregTech's wrench dismantle verb, which rides the ordinary break path and is delivered by
   the two wrench item tags (ADR-0039). *This entry read "the wrench's rotate and pipe-connection
-  verbs are `planned` and unowned"; #168 settled both.* The Pick now declares NeoForge's
-  `wrench_rotate` ability and none of the four `wrench_configure*` ones, so the wrench's
-  pipe-connection verb is **not** carried over. That is a decision, not a gap, and it costs Factorio
-  nothing: ADR-0017 gives fluid and item logistics to Create, GregTech's pipes left with its power
-  layer, and under ADR-0034's default-deny sweep nothing re-surfaces them — the verb would be
-  declared against blocks Terra does not ship. Factorio's own fluid connections are geometric rather
-  than a wrench gesture, so no Factorio mechanic is behind the declined verb. It is recorded here
-  rather than as a row of its own because it is GregTech's verb, not Factorio's, and ADR-0028 keys
-  rows on Factorio's names.
+  verbs are `planned` and unowned"; #168 settled them.* The Pick also declares GregTech's
+  `wrench_configure*` abilities, which set a **machine's** auto-output face — which side it pushes
+  items or fluids into. *#168 first declined those, reading GTCEu's "Use Wrench to set Connections"
+  string as meaning pipes; they are not pipes, and the decline was reversed in the same ticket once
+  a machine turned out to have no way to be pointed at a Create belt. Create owning the belts is why
+  the verb is needed, not why it is moot.* What stays declined is `wrench_connect`, the actual
+  pipe-connection verb on the pipe block's own path: ADR-0017 gives fluid and item logistics to
+  Create, GregTech's pipes left with its power layer, and ADR-0034's sweep leaves them unobtainable,
+  so it would be declared against blocks Terra does not ship.
 - **Rotating a placed entity (`R`)** — `shipped`, #168. The Engineer's Pick declares NeoForge's
   `wrench_rotate` ability, which is what GregTech gates the verb on; the wrench item tags never
   carried it, so until #168 the rotation overlay drew on every machine while the right-click did
-  nothing. The ability set is held by a unit test; **the world load that confirms a machine actually
-  turns is outstanding**, which is the one thing between this row and the `shipped` bar as this table
-  defines it. *This entry read "`planned`, no owner yet".*
+  nothing. Declaring the ability was necessary and not sufficient: GregTech only sets a front face
+  for a **sneaking** player, while vanilla skips a block's interaction entirely when a sneaking
+  player holds a non-empty stack, so the one gesture GregTech accepts was the one that never
+  arrived. The Pick answers `doesSneakBypassUse` to get past that, which is the hook NeoForge
+  provides where GregTech's own tools use `onItemUseFirst`. Confirmed turning a machine in-game.
+  *This entry read "`planned`, no owner yet".*
 
 ### Mining drills
 

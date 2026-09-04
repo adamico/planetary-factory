@@ -10,6 +10,9 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.common.ItemAbility;
 
@@ -102,6 +105,27 @@ public final class EngineersPick extends Item {
     @Override
     public boolean canPerformAction(ItemStack stack, ItemAbility ability) {
         return PickAbilities.grants(ability.name());
+    }
+
+    /**
+     * Sneaking does not hide the block from this tool, which is what makes rotation reachable.
+     *
+     * <p>Declaring {@code wrench_rotate} was necessary and not sufficient. GregTech's
+     * {@code onWrenchClick} only sets a machine's front face when the player is sneaking -- a plain
+     * click falls through to the configure verbs this pack declines -- but vanilla's
+     * {@code ServerPlayerGameMode.useItemOn} skips the block's interaction entirely when a sneaking
+     * player holds a non-empty stack. So the one gesture GregTech accepts was the one gesture that
+     * never arrived, and rotation was unreachable by any input: the overlay drew, both clicks did
+     * nothing. GregTech's own tools dodge this by implementing {@code onItemUseFirst}, which runs
+     * before that check; this is the same escape through the hook NeoForge provides for it.
+     *
+     * <p>The Pick places nothing, so there is no block-placement gesture for this to swallow -- the
+     * usual reason an item wants sneak to bypass a container is exactly the reason this one does.
+     */
+    @Override
+    public boolean doesSneakBypassUse(ItemStack stack, LevelReader level, BlockPos pos,
+                                      Player player) {
+        return true;
     }
 
     @Override
