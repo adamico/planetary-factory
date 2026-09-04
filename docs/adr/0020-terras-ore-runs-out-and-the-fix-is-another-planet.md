@@ -15,6 +15,14 @@ midgame — and, as it turns out, how Terra ends.
 
 ## Depletion is not a mechanism this pack builds
 
+> **Amended by #176, extending #57's amendment below.** The refusal in this section stands as written — a counter
+> *layered on top of* blocks that also disappear gives two readings that can disagree. #176 is not that: the
+> amount an ore block carries **is** the resource, and the block breaking is the count reaching zero. One event,
+> one reading. It follows #57's line rather than crossing it — that section already accepted a number so long as
+> it is a *view of* the world rather than a rival to it. **The consequence for that readout: yield is derived by
+> summing the amounts of the blocks in the vein's bounds, not by counting the blocks.** Counting would read a
+> fresh patch and a nearly-spent one alike. Still derived, still no persisted state.
+
 The framing this decision started with was that GregTech's veins are "bounded in area but not
 depletable: mine one forever, never move." That is not what the code does. A GregTech vein is
 ordinary blocks. Mining removes them, nothing regenerates them, and a GregTech Miner **replaces
@@ -86,7 +94,10 @@ against, explicitly tuning rather than a discrete choice, exactly as the 20–25
 ADR-0019 fixes the starting area as a spawn-anchored structure with a fixed resource set and a
 randomized layout and patch sizes. Two things are settled here.
 
-**The materials: iron, copper, zinc, tin and coal.** The set is chosen to bootstrap the three things
+> **Amended by #124 — dead list.** The input alphabet closed to iron, copper, coal and uranium; `sphalerite`
+> and `cassiterite` are in Terra's `forbidden_ore_veins`. Three fields ship, not five.
+
+~~**The materials: iron, copper, zinc, tin and coal.**~~ The set is chosen to bootstrap the three things
 the opening needs — brass for Create, bronze for steam, and an LV miner — and it maps onto veins
 Terra already registers: `gtceu:iron`, `gtceu:copper`, `planetaryfactory:sphalerite`,
 `gtceu:cassiterite`, `gtceu:coal`. Nothing new is registered for it.
@@ -97,7 +108,13 @@ for a player, not for a document. Terra's other veins — galena, magnetite, nic
 are currently outside it, which makes everything past bronze gated on prospecting. If playtest says
 that gate lands wrong, the set moves.
 
-**The patches are ore veins pinned to spawn, not ore placed by the structure.** The structure
+> **Amended by #176 — this paragraph is false, and was never marked superseded.** The shipped
+> `kubejs/data/planetaryfactory/structure/terra_start_{iron,copper,coal}_*.nbt` templates carry literal
+> `gtceu:iron_ore`, `gtceu:copper_ore` and `gtceu:coal_ore` blocks. `scripts/build-terra-start.py` gives the
+> reason: a vein cannot be spawn-anchored. The consequence this paragraph predicted is real and accepted — the
+> starting fields have no map readout and are read with Jade instead.
+
+~~**The patches are ore veins pinned to spawn, not ore placed by the structure.**~~ The structure
 anchors placement; the patches themselves are ordinary GregTech veins. This matters for a mechanical
 reason: the map readout below is written against `GeneratedVeinMetadata`, which hand-placed ore in a
 structure would not have. Authoring the patches as blobs would make the tutorial area the one place
@@ -125,6 +142,8 @@ the map**, and Terra does the same. Almost all of this already ships:
 
 The one gap: **stock GregTech never sets `depleted` itself.** The only writers are worldgen and a
 debug command; what players get is a manual "Mark as Depleted" button on the map icon.
+
+> **Unbuilt as of #176.** `grep -rn 'GeneratedVein\|depleted' mod/src/main/java` returns nothing.
 
 So `planetaryfactory_core` **flips the flag automatically when a GregTech Miner exhausts its working
 area**. The miner that drained the vein is the machine that knows, it has the information for free,
@@ -165,7 +184,9 @@ safe. Raise it and it stops being a consolation and starts being a reason to sta
 
 - **A per-patch yield counter, or ore blocks that thin out as they are mined.** Rejected under the
   two-readings argument: a counter competes with the hole in the ground, and the player believes the
-  hole.
+  hole. *#176 revisits the first half: an amount carried by the block itself is not a competing
+  reading, because the block breaks when the amount is spent. The second half — blocks that thin out
+  visually — stays rejected, and #176 rejects it again for the same reason.*
 - **Different curves for the starting patches and the outfield.** Rejected. Under physical removal
   there is no second curve to assign — the difference is size and access, and authoring two rules
   would be a second mechanism returning through the back door.

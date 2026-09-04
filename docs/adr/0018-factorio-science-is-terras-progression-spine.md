@@ -23,7 +23,7 @@ Four packs plus an unscienced rung 0 (`#26`):
 
 | Rung | Pack | What the rung is about |
 | --- | --- | --- |
-| 0 | *(none)* | Steam and Create kinetics. LP Solid Boiler, LP Steam Miner, the Furnace, Create's belts and the Steam Engine. **ADR-0032 removed Crushing Wheels from this row** — ore smelts 1:1, so the chain is Miner → Furnace → plate, one hop. |
+| 0 | *(none)* | Steam and Create kinetics. **The pack-authored Burner Mining Drill** (ADR-0040), the Furnace, Create's belts and the Steam Engine. *This row read "LP Solid Boiler, LP Steam Miner, the Furnace, Create's belts and the Steam Engine"; ADR-0040 removed the LP Steam Miner and took the boiler's last justification with it.* **ADR-0032 removed Crushing Wheels from this row** — ore smelts 1:1, so the chain is Miner → Furnace → plate, one hop. |
 | 1 | `automation` | **Electricity, and the first assembler** — the Alternator, the FE grid and Assembling Machine I (`#34`), **plus steel** (ADR-0039). *This row read "First machines and Mekanism enrichment"; ADR-0032 cut enrichment, and `#34` had already hung the grid on the Assembler so the rung's reward did not depend on it.* |
 | 2 | `logistic` | Movement at scale — Create 6 package logistics — **plus the Oil Refinery, the Chemical Plant, basic oil processing, solid fuel, sulfur, sulfuric acid and plastic** (ADR-0025), **and the red circuit, which plastic makes** (`#125`). |
 | 3 | `chemical` | **Advanced oil processing, heavy and light cracking, lubricant** (ADR-0025), the blue circuit and the Electric Furnace (`#91`), and **the nuclear chapter** — `uranium-mining`, `uranium-processing` and `nuclear-power` are all chemical science in Factorio (ADR-0033). *The 5x dissolution tier is gone — ADR-0032.* |
@@ -34,7 +34,7 @@ Four packs plus an unscienced rung 0 (`#26`):
 no home. Factorio's own placement settles it: `steel-processing` costs 50 automation packs, which is
 this rung. The Steel Furnace stays at rung 2, so the metal arrives a rung before the block made of
 it, and `steel-axe` — which doubles mining speed and hangs off `steel-processing` — lands at rung 1
-too, where the Steam Miner is carrying the player and hand-mining feels worst.
+too. *That clause read "where the Steam Miner is carrying the player and hand-mining feels worst" — ADR-0040 deleted the Steam Miner, and #176 re-reads what `steel-axe` buys once an ore block carries an amount and the burner drill is in the opening pocket.*
 
 **Rungs 2–4 were re-cut by ADR-0025.** Rung 4 was "the oil chapter entire"; the chapter now starts
 at rung 2. The cause is sulfur: making it petroleum-derived, as Factorio does, puts it and sulfuric

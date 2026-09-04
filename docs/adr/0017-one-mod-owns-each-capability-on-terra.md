@@ -48,7 +48,7 @@ crafting surface named too. Late is not an argument for shipping something nobod
 | --- | --- | --- |
 | Extraction (ore) | **GregTech** | Create Mechanical Drill **cut**; Mekanism Digital Miner **cut** |
 | Extraction (fluid) | **GregTech** — Fluid Drilling Rig, **rung 2** (was rung 4; moved with the oil chapter, ADR-0025) | — |
-| Mining automation | **GregTech** — LP Steam Miner (rung 0) → Basic Ore Drilling Rig → Advanced, one rig per rung, each granted by a science tier | as above |
+| Mining automation | **GregTech — the *electric* ladder only, amended by ADR-0040.** `electric-mining-drill` is `gtceu:lv_miner` at rung 1. **Rung 0's burner drill is pack-authored** and the LP Steam Miner leaves the pack: Factorio's opening machine burns solid fuel and GregTech has no solid-fuel miner, so fidelity to the opening and this row could not both hold. Terra's ladder is two rigs; the third is Vulcanus's Big Mining Drill, that body's puzzle. *This row read "**GregTech** — LP Steam Miner (rung 0) → Basic Ore Drilling Rig → Advanced, one rig per rung, each granted by a science tier"* | as above |
 | ~~Ore processing~~ | **Row deleted by ADR-0032** — ore smelts 1:1 and no block in the pack multiplies it, so there is no capability between extraction and smelting to own. This row read "**Create** at rung 0 (Crushing Wheels, Millstone); **Mekanism** from rung 1 (enrichment → 5x)" | Mekanism's Purification, Injection, Washer and Crystallizer **recipe-removed**; Create's and Mekanism's ore recipes removed; GT's ore-processing line was already removed (`#37`) |
 | Power generation (steam, solar) | **Create: Power Grid** — *amended by #101, then by #104, then by #148; this row read "**Create** generates first (Steam Engine, rung 0); **Mekanism** generates at scale as FE"*. Create's Steam Engine is the prime mover and emits SU, not electricity; the **Alternator** is what makes power. Solar is the grid mod's outright. **#104 struck the Mekanism clause as a mistake of fact**: the pack installs base Mekanism, which registers **no generator block at all** — every generator and the Industrial Turbine live in MekanismGenerators, the jar ADR-0033 refused *for this row*. Terra's chain is four steps, not three: **GT boiler → Create Steam Engine (SU) → Power Grid generation multiblock (W) → grid**. *#148: the third step was Electro's Alternator, one block; Power Grid's counterpart is a Create-kinetic multiblock — rotor, winding, housing, commutator — in exactly the same place in the chain* | GT's power layer removed entire. **No Mekanism generator is recipe-removed, because none exists** — the default below removes a *losing block*, and Mekanism supplies none here |
 | Power generation (superheated steam) | **The pack** (ADR-0033) — a registered Nuclear Reactor and Steam Turbine on a GT chassis. Named for the fluid, not for fission: Terra's reactor and Ignus's acid neutralisation are the same row | **MekanismGenerators not adopted** — it brings six other generators onto the row above; GT's own Steam Turbines stay removed with the rest of its power layer (`#37`) |
@@ -81,7 +81,10 @@ is a block this pack registers, because no installed mod can express the recipe 
 **Plant Oil and Transformer Oil keep their one-way rule below, and ADR-0025 adds its mirror:**
 lubricant must not become an input to anything grid-side.
 
-## The extraction ladder is GregTech's end to end
+## ~~The extraction ladder is GregTech's end to end~~ GregTech owns the electric ladder
+
+> **Amended by ADR-0040.** Rung 0's burner drill is `planetaryfactory_core`'s. GregTech keeps the
+> electric rig and the fluid rig; the heading below is kept as written for provenance.
 
 LP Steam Miner at rung 0, Basic Ore Drilling Rig, Advanced Ore Drilling Rig — one rig per rung, each
 granted by a science tier. That ladder is the reason two blocks die rather than merely lose:

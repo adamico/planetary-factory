@@ -165,6 +165,18 @@ _Avoid_: abstraction, going virtual
 The player's only mining tool, in two tiers — **Engineer's Iron Pick** and **Engineer's Steel Pick** — both indestructible, the steel one unlocked by the `steel-axe` research and crafted from the iron one, which it consumes. It mines every block class, so the pack has no axe, shovel or shears, and it is what dismantles a GregTech machine. The tiers differ only in mining speed: Terra's ores, coal and stone take a flat second by hand and half a second after the research, while everything else keeps vanilla hardness. Factorio's two mining speeds and the ratio between the tiers are kept, but the mining time itself is the pack's — half of Factorio's, after 2.0s failed ADR-0039's human-on-delivery check.
 _Avoid_: pickaxe, the pick, mining tool, wrench
 
+**Burner Mining Drill**:
+Terra's rung 0 drill and the pack's own block: it burns solid fuel, occupies one place, and breaks the ore blocks in an area beneath it. It exists because Factorio's opening machine is a fuel-burning drill and GregTech ships none — its extraction line starts at a steam miner fed by a boiler — so ADR-0040 authors it first-party and removes the LP Steam Miner. It is in the opening pocket rather than crafted, because a drill covering four tiles beats hand-mining from the first minute.
+_Avoid_: burner drill, steam miner, LP Steam Miner, mining rig
+
+**Basic Miner**:
+Terra's rung 1 drill, `gtceu:lv_miner`, and the ladder's second and last rung — it arrives with the electricity that runs it and is what makes the veins near bedrock worth reaching. GregTech owns the electric ladder; rung 0's drill is the pack's (ADR-0040).
+_Avoid_: Basic Ore Drilling Rig, electric drill, LV miner
+
+**Operation**:
+One unit of mining work against an ore block: it consumes one unit of the block's amount and pays out `yield` items. Drills and hands both perform them, which is what makes "seconds per ore" literal rather than aspirational. Terra's two drills differ in operations per second, footprint and reach, never in yield, which stays 1.0 until a productivity bonus raises it on another body.
+_Avoid_: mining tick, drill cycle, swing
+
 **Personal Assembler**:
 The permanent panel on the inventory screen that is the player's only hand-crafting surface. It is a surface, not a machine, and has no recipe type of its own: it runs the **Assembling Machine**'s recipes that Factorio marks hand-craftable — first category `crafting`, minus the eleven Factorio withholds (`#88`) — at speed 1, serially (ADR-0029). It **replaces** the crafting grid, which the pack removes (`#90`), and crafts nothing by hand directly: every craft is a **Crafting Plan** (ADR-0038). The panel is always present and always full: it is taught by the opening, never granted by it (`#100`).
 _Avoid_: hand crafter, personal crafter, portable crafter
