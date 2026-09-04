@@ -1,6 +1,9 @@
 package com.planetaryfactory.core.assembler.client;
 
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
@@ -30,6 +33,20 @@ abstract class AssemblerScreen<T extends AbstractContainerMenu> extends Abstract
     protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
         graphics.fill(leftPos, topPos, leftPos + imageWidth, topPos + imageHeight, PANEL);
         renderPanel(graphics, mouseX, mouseY);
+    }
+
+    /**
+     * An item id as the player reads it.
+     *
+     * <p>The plan travels as ids, because the queue and the resolver count strings and never learn
+     * what an {@code Item} is. Turning one back into a name is a client-side job, and this is the one
+     * place the three screens do it -- {@code gtceu:iron_plate} in a dialog would be the resolver's
+     * internals leaking onto the screen.
+     */
+    protected static Component itemName(String id) {
+        ResourceLocation key = ResourceLocation.tryParse(id);
+        Item item = key == null ? null : BuiltInRegistries.ITEM.get(key);
+        return item == null ? Component.literal(id) : item.getDescription();
     }
 
     /** What this particular screen puts on the panel. */

@@ -51,7 +51,7 @@ model to texture. The two builders land in different namespaces, so the lang ass
 cosmetic. Run it after editing that script, the category map or the machine lang files. Whether a
 machine's GUI and pattern behave is a world load, not a static check.
 
-### Assembler queue check
+### Assembler queue and resolver check
 
 `mod/src/test/java/com/planetaryfactory/core/assembler/` asserts the Personal Assembler's queue:
 Start takes the whole raw cost at once, a chain runs its steps in order and delivers only what no
@@ -59,10 +59,21 @@ remaining step needs, cancelling refunds the unspent reservation plus the interm
 a craft that will not fit pauses the head instead of dropping, and a paused head stops the plans
 behind it. `AssemblerCodecsTest` is the data attachment's round trip, which ADR-0038 asks for by
 name — a codec that drops a field does not crash, it returns a queue that silently emptied over a
-logout. Both are `./gradlew :planetaryfactory_core:test` with no game launch: the queue names items by
-string and its codec is DataFixerUpper's rather than Minecraft's, which is what keeps them checkable.
-Run them after editing anything under `core/assembler/`. Whether EMI's Fill Recipe reaches the panel
-and a plan delivers is a world load, not a static check.
+logout. `PlanResolverTest` is the other half: chain-crafting, an intermediate already held being used
+rather than remade, `Missing` against `Locked`, and `all` as the largest count the inventory covers.
+`PlanToQueueTest` is the seam between them, and the one neither side can assert alone — a plan the
+resolver calls complete must be one the queue can run to the end, because a step the buffer cannot
+feed throws *after* the reservation was taken. All four are
+`./gradlew :planetaryfactory_core:test` with no game launch: the queue and the resolver name items by
+string and the codec is DataFixerUpper's rather than Minecraft's, which is what keeps them checkable.
+
+`tests/factorio/test_hand_resolver.py` is the corpus half — that the *design* terminates. All 113
+category-`crafting` recipes resolve to plans bottoming out in the 21 known leaves, no item has two
+hand recipes (the resolver picks a route with no cost model), and there are no cycles. It reads
+`data/factorio/recipe.json` and fails the day a regeneration adds a recipe nothing hand-makes.
+
+Run them after editing anything under `core/assembler/` or after re-extracting the corpus. Whether
+EMI's Fill Recipe reaches the panel and a plan delivers is a world load, not a static check.
 
 ### Starting-area geometry check
 

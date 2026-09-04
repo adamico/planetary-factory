@@ -44,7 +44,9 @@ public final class AssemblerPanelScreen extends AssemblerScreen<AssemblerPanelMe
             boolean isPausedHead = index == 0 && AssemblerQueueView.blocked();
             graphics.fill(leftPos + 8, y + ROW_HEIGHT - 6, leftPos + 8 + barWidth, y + ROW_HEIGHT - 4,
                     isPausedHead ? BAR_BLOCKED : BAR);
-            graphics.drawString(font, entry.rootItem() + " x" + entry.amount(), leftPos + 10, y + 2, 0xFFFFFF, false);
+            graphics.drawString(font,
+                    itemName(entry.rootItem()).copy().append(" x" + entry.amount()),
+                    leftPos + 10, y + 2, 0xFFFFFF, false);
             int cancelX = cancelLeft();
             graphics.fill(cancelX, y + 2, cancelX + CANCEL_SIZE, y + 2 + CANCEL_SIZE, 0xFF5A2B2B);
             graphics.drawString(font, "x", cancelX + 4, y + 4, 0xFFDDDD, false);

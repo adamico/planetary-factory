@@ -58,7 +58,14 @@ public final class PersonalAssembler {
         // answer must not quietly rewrite the count the button asked for: clamping against a zero
         // would land every request on 1, and a shift-click and a plain click -- Factorio's
         // one-and-all, and the one thing this packet carries -- would arrive indistinguishable.
-        int initial = all > 0 ? Math.max(1, Math.min(amount, all)) : Math.max(1, amount);
+        // A resolver with an `all` clamps to it. One without -- nothing is affordable -- must not
+        // clamp against the zero, because that would land every request on 1 and make a shift-click
+        // and a plain click, Factorio's one-and-all and the one thing this packet carries, arrive
+        // indistinguishable. It is capped at what the resolver will plan for so the field shows a
+        // number rather than Integer.MAX_VALUE.
+        int initial = all > 0
+                ? Math.max(1, Math.min(amount, all))
+                : Math.min(Math.max(1, amount), PlanResolver.MAX_CRAFTS);
         player.openMenu(
                 new SimpleMenuProvider(
                         (id, inventory, who) -> new SelectAmountMenu(id, inventory, recipe, initial, all),
@@ -75,7 +82,11 @@ public final class PersonalAssembler {
      * opening data, so the answer and the screen arrive together.
      */
     public static void openPlan(ServerPlayer player, ResourceLocation recipe, int amount) {
-        PlanSource.ResolvedPlan resolved = PlanSource.ACTIVE.resolve(player, recipe, Math.max(1, amount));
+        // Clamped to what the resolver will plan for, so an over-large typed count comes back as a
+        // plan the player can read rather than as an empty dialog with no reason on it. A packet
+        // arrives from wherever it likes, and the field it comes from accepts any number of digits.
+        int wanted = Math.min(Math.max(1, amount), PlanResolver.MAX_CRAFTS);
+        PlanSource.ResolvedPlan resolved = PlanSource.ACTIVE.resolve(player, recipe, wanted);
         if (resolved.complete()) {
             PENDING.put(player.getUUID(), resolved.plan());
         } else {

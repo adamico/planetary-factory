@@ -19,8 +19,11 @@ import net.minecraft.server.level.ServerPlayer;
  */
 public interface PlanSource {
 
-    /** The resolver in force. #161 assigns the real one; until then nothing resolves. */
-    PlanSource ACTIVE = new Unresolved();
+    /**
+     * The resolver in force. #161 assigned the real one; {@link Unresolved} is kept as the shape a
+     * resolver that cannot answer takes, and as what the dialogs were built against.
+     */
+    PlanSource ACTIVE = new RuntimePlanSource();
 
     /**
      * Resolves {@code amount} of a recipe against what the player has and what their team has

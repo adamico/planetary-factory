@@ -32,9 +32,13 @@ public final class SelectAmountScreen extends AssemblerScreen<SelectAmountMenu> 
                 .bounds(leftPos + 8, y, 32, 20).build());
         addRenderableWidget(Button.builder(Component.literal("x5"), b -> request(5))
                 .bounds(leftPos + 44, y, 32, 20).build());
-        addRenderableWidget(Button.builder(Component.translatable("planetaryfactory_core.assembler.all"),
+        // Greyed when the resolver says nothing is affordable, which is a real answer and the one
+        // thing `all` must never do is quietly ask for one instead.
+        Button all = Button.builder(Component.translatable("planetaryfactory_core.assembler.all"),
                         b -> request(menu.largestAffordable()))
-                .bounds(leftPos + 80, y, 40, 20).build());
+                .bounds(leftPos + 80, y, 40, 20).build();
+        all.active = menu.largestAffordable() > 0;
+        addRenderableWidget(all);
         typed = new EditBox(font, leftPos + 8, y + 26, 80, 18,
                 Component.translatable("planetaryfactory_core.assembler.amount"));
         typed.setValue(Integer.toString(Math.max(1, menu.amount())));

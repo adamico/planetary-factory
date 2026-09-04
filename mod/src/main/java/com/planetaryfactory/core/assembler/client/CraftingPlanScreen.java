@@ -28,6 +28,14 @@ public final class CraftingPlanScreen extends AssemblerScreen<CraftingPlanMenu> 
 
     private static final int COLUMN = 3;
 
+    /**
+     * How many lines a column shows before it says how many it did not.
+     *
+     * <p>A flattened plan can be long and the dialog does not scroll. Truncating with a count is the
+     * honest failure: a column that silently stopped would tell a player they have everything.
+     */
+    private static final int MAX_LINES = 6;
+
     public CraftingPlanScreen(CraftingPlanMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title, 260, 160);
     }
@@ -68,9 +76,17 @@ public final class CraftingPlanScreen extends AssemblerScreen<CraftingPlanMenu> 
                 Component.translatable("planetaryfactory_core.assembler." + key).withStyle(colour),
                 x, topPos + 22, 0xFFFFFF, false);
         int y = topPos + 34;
-        for (ItemAmount amount : amounts) {
-            graphics.drawString(font, amount.count() + " " + amount.item(), x, y, 0xCCCCCC, false);
+        for (ItemAmount amount : amounts.subList(0, Math.min(MAX_LINES, amounts.size()))) {
+            graphics.drawString(font,
+                    Component.literal(amount.count() + " ").append(itemName(amount.item())),
+                    x, y, 0xCCCCCC, false);
             y += 10;
+        }
+        if (amounts.size() > MAX_LINES) {
+            graphics.drawString(font,
+                    Component.translatable("planetaryfactory_core.assembler.and_more",
+                            amounts.size() - MAX_LINES),
+                    x, y, 0x888888, false);
         }
     }
 }

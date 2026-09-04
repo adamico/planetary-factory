@@ -35,8 +35,10 @@ API in this pack exposes:
   and everything they touch name items by string and hold no Minecraft type, so the reservation, the
   refund and the pause are unit-tested, and so is the attachment's codec, which is DataFixerUpper's
   rather than Minecraft's for exactly that reason; `InventoryPlayerItems` is the single class where an
-  item id becomes an `ItemStack`. The resolver that fills a plan is #161's, and `PlanSource` is the seam it
-  replaces. EMI's fill button reaches the panel from `compat/emi`, implementing `EmiRecipeHandler`
+  item id becomes an `ItemStack`. `PlanResolver` fills a plan and is Minecraft-free by the same rule,
+  so chain-crafting -- the one genuinely hard thing in the Assembler -- is unit-tested; the graph it
+  plans over is read off the loaded recipes by `RuntimeHandRecipes`, keyed on the `factorio_category`
+  the converter stamps, because ADR-0038 gives the Assembler no recipe type of its own (#161). EMI's fill button reaches the panel from `compat/emi`, implementing `EmiRecipeHandler`
   directly rather than `StandardRecipeHandler`, whose default `canCraft` would grey the button out
   precisely when the plan has something to say.
 
