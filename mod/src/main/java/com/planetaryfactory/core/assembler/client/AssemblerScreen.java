@@ -4,6 +4,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
@@ -47,6 +48,19 @@ abstract class AssemblerScreen<T extends AbstractContainerMenu> extends Abstract
         ResourceLocation key = ResourceLocation.tryParse(id);
         Item item = key == null ? null : BuiltInRegistries.ITEM.get(key);
         return item == null ? Component.literal(id) : item.getDescription();
+    }
+
+    /**
+     * An item id as one stack of it, for drawing and for the vanilla tooltip.
+     *
+     * <p>Count one, not the plan's: the number beside the icon is the plan's and a stack count
+     * painted into the corner of the sprite would say it twice, differently, once a plan asks for
+     * more than a stack.
+     */
+    protected static ItemStack itemStack(String id) {
+        ResourceLocation key = ResourceLocation.tryParse(id);
+        Item item = key == null ? null : BuiltInRegistries.ITEM.get(key);
+        return item == null ? ItemStack.EMPTY : new ItemStack(item);
     }
 
     /** What this particular screen puts on the panel. */

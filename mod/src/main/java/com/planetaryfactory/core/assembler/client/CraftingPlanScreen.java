@@ -11,6 +11,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 /**
@@ -44,10 +45,21 @@ public final class CraftingPlanScreen extends AssemblerScreen<CraftingPlanMenu> 
      */
     private static final int MAX_LINES = 6;
 
+    /** Tall enough for a 16-pixel icon and the count beside it. */
+    private static final int ROW_HEIGHT = 18;
+
+    /**
+     * The item under the cursor, or empty.
+     *
+     * <p>Collected while the panel draws and spent after the rest of the screen has, because a
+     * tooltip painted from inside the background would be drawn over by everything after it.
+     */
+    private ItemStack hovered = ItemStack.EMPTY;
+
     public CraftingPlanScreen(CraftingPlanMenu menu, Inventory inventory, Component title) {
         // Wider than the other two dialogs: four columns of item names at 3-space-per-character do
         // not fit in the panel's width, and a name that elides is a name the player cannot shop for.
-        super(menu, inventory, title, 340, 160);
+        super(menu, inventory, title, 340, 190);
     }
 
     @Override
@@ -64,13 +76,22 @@ public final class CraftingPlanScreen extends AssemblerScreen<CraftingPlanMenu> 
     }
 
     @Override
+    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+        hovered = ItemStack.EMPTY;
+        super.render(graphics, mouseX, mouseY, partialTick);
+        if (!hovered.isEmpty()) {
+            graphics.renderTooltip(font, hovered, mouseX, mouseY);
+        }
+    }
+
+    @Override
     protected void renderPanel(GuiGraphics graphics, int mouseX, int mouseY) {
         PlanDisplay display = menu.display();
         int width = (imageWidth - 16) / COLUMN;
-        column(graphics, leftPos + 8, "consume", display.consume(), ChatFormatting.AQUA, width);
-        column(graphics, leftPos + 8 + width, "to_craft", display.toCraft(), ChatFormatting.WHITE, width);
-        column(graphics, leftPos + 8 + 2 * width, "missing", display.missing(), ChatFormatting.RED, width);
-        column(graphics, leftPos + 8 + 3 * width, "locked", display.locked(), ChatFormatting.GOLD, width);
+        column(graphics, leftPos + 8, "consume", display.consume(), ChatFormatting.AQUA, mouseX, mouseY);
+        column(graphics, leftPos + 8 + width, "to_craft", display.toCraft(), ChatFormatting.WHITE, mouseX, mouseY);
+        column(graphics, leftPos + 8 + 2 * width, "missing", display.missing(), ChatFormatting.RED, mouseX, mouseY);
+        column(graphics, leftPos + 8 + 3 * width, "locked", display.locked(), ChatFormatting.GOLD, mouseX, mouseY);
         if (!display.complete()) {
             // Its own line above the buttons, not beside them: the reason a plan cannot start is a
             // translated sentence of unknown width, and sharing the row with Start and Back means
@@ -93,16 +114,24 @@ public final class CraftingPlanScreen extends AssemblerScreen<CraftingPlanMenu> 
         }
     }
 
-    private void column(GuiGraphics graphics, int x, String key, List<ItemAmount> amounts, ChatFormatting colour, int width) {
+    private void column(GuiGraphics graphics, int x, String key, List<ItemAmount> amounts,
+            ChatFormatting colour, int mouseX, int mouseY) {
         graphics.drawString(font,
                 Component.translatable("planetaryfactory_core.assembler." + key).withStyle(colour),
                 x, topPos + 22, 0xFFFFFF, false);
         int y = topPos + 34;
         for (ItemAmount amount : amounts.subList(0, Math.min(MAX_LINES, amounts.size()))) {
-            graphics.drawString(font,
-                    Component.literal(amount.count() + " ").append(itemName(amount.item())),
-                    x, y, 0xCCCCCC, false);
-            y += 10;
+            // The icon and not the name: four columns of "8 Steel Plate" is more text than the
+            // dialog has room for, and the sprite is the thing a player already recognises from
+            // their own inventory. The name is one hover away, from vanilla's own tooltip, so
+            // nothing is lost -- including the id, which F3+H puts back for anyone who wants it.
+            ItemStack stack = itemStack(amount.item());
+            graphics.renderItem(stack, x, y);
+            graphics.drawString(font, "x " + amount.count(), x + 20, y + 5, 0xCCCCCC, false);
+            if (!stack.isEmpty() && mouseX >= x && mouseX < x + 16 && mouseY >= y && mouseY < y + 16) {
+                hovered = stack;
+            }
+            y += ROW_HEIGHT;
         }
         if (amounts.size() > MAX_LINES) {
             graphics.drawString(font,
