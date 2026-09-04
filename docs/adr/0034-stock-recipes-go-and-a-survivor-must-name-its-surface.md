@@ -62,6 +62,15 @@ surface" and that this "closes by accident rather than by decision". That is tru
 pack authors and false of the ones it merely fails to remove. **This is the exception with the
 sharpest teeth, because it is the one nobody chose.**
 
+**Closed by [`#140`](https://github.com/adamico/planetary-factory/issues/140).** The grid is removed
+in `planetaryfactory_core`, where it always had to be: an `InventoryMenu` mixin replaces the result
+and the four input slots with slots that are inactive and refuse both directions, and cancels
+`slotsChanged` so the result container is never filled by anything — including the recipe book,
+which writes to the container without going through a slot and whose button is removed client-side
+with the painted grid. The exception is not dissolved, only defanged: **every stock recipe that fits
+2x2 is still loaded, and is now unreachable rather than craftable**, which is exactly this ADR's
+reading of the rest of the shaped set.
+
 ### 2. Recipe types that are not the grid
 
 The grid is gone; the furnace is not. [`#91`](https://github.com/adamico/planetary-factory/issues/91)
@@ -178,6 +187,11 @@ grep is empty apart from ADR-0016's Sapros loot tables, which are about the oppo
   is the live hazard. Widening it means reading the loaded recipe manager rather than the pack's own
   files, so it is a world-load check and not a `tests/` static assertion — a different check kind, and
   `docs/testing/what-to-check.md` should say which.
+  **`#140` named the kind and declined to build it**: `docs/testing/what-to-check.md` now carries the
+  *world-load recipe-manager assertion* as a kind, and records that the 2x2's own removal is not one
+  of its claims — a recipe dump sees recipes, not surfaces, so it could neither have caught the grid
+  working nor catch it coming back. That removal's check is a human on delivery; the widened sweep
+  stays `#97`'s.
 - **ADR-0017's losing-blocks column gains a third value.** *Gated* is not *removed*, and at least the
   Energized Smelter row means it. Recording it is a one-line edit; leaving it means the table
   continues to read as a binary it is not.

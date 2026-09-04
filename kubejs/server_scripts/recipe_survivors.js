@@ -23,7 +23,9 @@
 //   - `native_mechanic` (#93): Create's Spout and Item Drain key on `IFluidHandlerItem`, so the
 //     eighteen barrel fill/empty rows were never recipes. Nothing to keep, nothing to remove,
 //     and authoring one would duplicate a free mechanic.
-//   - The 2x2 inventory grid: not recipe-removable, and #140's, not this sweep's.
+//   - The 2x2 inventory grid: not recipe-removable, and #140's, not this sweep's. #140 shipped
+//     it in `planetaryfactory_core` -- the grid's slots are inactive and craft nothing, so the
+//     stock shaped recipes this sweep leaves loaded are unreachable rather than craftable.
 //   - GCyR's twelve compiled Java recipes (ADR-0026): expressed in a form no removal call
 //     reaches. The pack's answer there is re-authoring, not removal.
 //   - Gated-not-removed (ADR-0034 §4): the Energized Smelter was its only live case and ADR-0035

@@ -2,6 +2,7 @@ package com.planetaryfactory.core;
 
 import com.planetaryfactory.core.assembler.AssemblerTicker;
 import com.planetaryfactory.core.assembler.client.AssemblerClient;
+import com.planetaryfactory.core.crafting.client.InventoryGridBlank;
 import com.planetaryfactory.core.network.PFNetwork;
 import com.planetaryfactory.core.worldgen.PFWorldgen;
 import com.planetaryfactory.core.worldgen.TerraStartingArea;
@@ -51,6 +52,8 @@ public final class PlanetaryFactoryCore {
         NeoForge.EVENT_BUS.addListener(AssemblerTicker::onLogout);
         if (FMLEnvironment.dist == Dist.CLIENT) {
             AssemblerClient.register(modBus);
+            // The 2x2 grid is gone (#140); what is left of it on the inventory texture goes too.
+            InventoryGridBlank.register();
         }
     }
 }

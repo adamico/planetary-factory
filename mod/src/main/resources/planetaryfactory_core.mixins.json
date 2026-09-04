@@ -5,6 +5,7 @@
   "mixins": [
     "gtceu.RecipeLogicMixin",
     "gtceu.RecipeLogicStatusMixin",
+    "minecraft.InventoryMenuMixin",
     "researchd.ResearchdBEPlacementHandlerMixin"
   ],
   "injectors": {

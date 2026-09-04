@@ -69,6 +69,23 @@ a lock on an id that no longer resolves. ADR-0034's sweep therefore splits in tw
 delivery. `#97`'s widened form, which has to see a *surviving stock* grid recipe rather than a
 pack-emitted one, is a world load for the same reason.
 
+**That check kind has a name: a world-load recipe-manager assertion.** It is the fixture check's
+harness pointed at a different registry — `scripts/worldgen-check.py` already launches a world and
+recovers a dump written by a KubeJS script, so asserting the loaded `RecipeManager` is an extra
+section in that dump rather than a second harness. It is named here so that a ticket needing it
+finds a kind rather than inventing one.
+
+**No such assertion is built, and what each removal gets is decided per claim.** A recipe-manager
+dump sees recipes; it does not see *surfaces*. `#140` removed the 2x2 inventory grid, and it did so
+in `planetaryfactory_core` — the slots are inactive and refuse both directions, and `slotsChanged`
+never resolves a recipe — so every `crafting_shaped` recipe the dump would list is still there and
+still unreachable. Nothing the dump could assert would have caught that grid working, and nothing it
+could assert would catch it coming back. **That removal's check is therefore a human on delivery**,
+with the steps in the ticket, and this paragraph is the recorded reason rather than an omission.
+`#97`'s widened form — *no surviving stock recipe is reachable on a surface the pack keeps* — is the
+claim the dump does fit, and it is still unbuilt; it is that ticket's to build, at the moment the
+pack keeps a surface where reachability is in doubt.
+
 ### This pack logic computes something
 
 Where the pack computes rather than declares — Decay's sampler, a Freshness transition, anything
