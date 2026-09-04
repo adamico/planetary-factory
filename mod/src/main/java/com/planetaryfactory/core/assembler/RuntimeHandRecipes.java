@@ -64,66 +64,88 @@ public final class RuntimeHandRecipes {
 
     private static RecipeGraph build(RecipeManager manager) {
         RecipeGraph.Builder builder = RecipeGraph.builder();
+        List<String> refused = new ArrayList<>();
         for (RecipeHolder<?> holder : manager.getRecipes()) {
             if (!(holder.value() instanceof GTRecipe recipe)) continue;
             if (!isHandCraftable(recipe)) continue;
-            HandRecipe hand = read(recipe);
-            if (hand != null) builder.add(hand);
+            String reason = unreadable(recipe);
+            if (reason != null) {
+                refused.add(recipe.id + " (" + reason + ")");
+                continue;
+            }
+            builder.add(read(recipe));
+        }
+        if (!refused.isEmpty()) {
+            // Named, not counted. A recipe in the hand category that the Assembler will not plan
+            // reaches the player as a Crafting Plan with nothing in it, and the only way to tell
+            // which recipe and why is to say so here.
+            LOGGER.warn("Personal Assembler: {} hand recipe(s) refused: {}", refused.size(), refused);
         }
         return builder.build();
+    }
+
+    /**
+     * Why this recipe cannot be planned, or null if it can.
+     *
+     * <p>Separate from {@link #read} so the refusal has a reason to log. A recipe in the hand
+     * category that the Assembler silently ignores is worse than one it refuses out loud: the player
+     * gets a plan dialog with three empty columns and no way to find out why.
+     */
+    private static String unreadable(GTRecipe recipe) {
+        if (!recipe.inputs.keySet().stream().allMatch(cap -> cap == ItemRecipeCapability.CAP)) {
+            return "a non-item input, which the Assembler has nowhere to hold";
+        }
+        if (!recipe.outputs.keySet().stream().allMatch(cap -> cap == ItemRecipeCapability.CAP)) {
+            return "a non-item output";
+        }
+        if (recipe.hasTick()) return "a per-tick input or output";
+        String inputs = unreadableSide(recipe.getInputContents(ItemRecipeCapability.CAP), false);
+        if (inputs != null) return "an input with " + inputs;
+        String outputs = unreadableSide(recipe.getOutputContents(ItemRecipeCapability.CAP), true);
+        if (outputs != null) return "an output with " + outputs;
+        if (recipe.getOutputContents(ItemRecipeCapability.CAP).isEmpty()) return "no item output";
+        return null;
+    }
+
+    private static String unreadableSide(List<Content> contents, boolean isOutput) {
+        for (Content content : contents) {
+            if (isOutput && content.isChanced()) return "a chance attached";
+            if (!(content.content instanceof SizedIngredient sized)) return "no fixed count";
+            ItemStack[] matches = sized.getItems();
+            if (matches.length == 0) return "no item at all";
+            if (matches.length > 1) {
+                return matches.length + " possible items (" + matches[0].getItem() + ", ...)";
+            }
+            if (!matches[0].getComponentsPatch().isEmpty()) {
+                return "data components on " + matches[0].getItem();
+            }
+            if (matches[0].getCount() <= 0) return "a count of zero";
+        }
+        return null;
     }
 
     private static boolean isHandCraftable(GTRecipe recipe) {
         return recipe.data != null && HAND_CATEGORY.equals(recipe.data.getString(CATEGORY_KEY));
     }
 
-    /**
-     * One GregTech recipe as the resolver sees it, or null when it cannot be read as one.
-     *
-     * <p>A recipe with a non-item input is refused rather than read partially. The Assembler holds
-     * no fluid and has no tank, so a plan that quietly dropped a fluid ingredient would reserve too
-     * little and then craft something out of nothing -- the exact duplication
-     * {@code QueuedPlan.completeStep} exists to make loud.
-     */
+    /** One GregTech recipe as the resolver sees it. Only ever called after {@link #unreadable}. */
     private static HandRecipe read(GTRecipe recipe) {
-        if (hasNonItemContents(recipe)) return null;
-        List<ItemAmount> inputs = amounts(recipe.getInputContents(ItemRecipeCapability.CAP), false);
-        List<ItemAmount> outputs = amounts(recipe.getOutputContents(ItemRecipeCapability.CAP), true);
-        if (inputs == null || outputs == null || outputs.isEmpty()) return null;
-        return new HandRecipe(recipe.id.toString(), inputs, outputs, recipe.duration);
+        return new HandRecipe(
+                recipe.id.toString(),
+                amounts(recipe.getInputContents(ItemRecipeCapability.CAP)),
+                amounts(recipe.getOutputContents(ItemRecipeCapability.CAP)),
+                recipe.duration);
     }
 
-    private static boolean hasNonItemContents(GTRecipe recipe) {
-        return recipe.inputs.keySet().stream().anyMatch(cap -> cap != ItemRecipeCapability.CAP)
-                || recipe.outputs.keySet().stream().anyMatch(cap -> cap != ItemRecipeCapability.CAP)
-                || recipe.hasTick();
-    }
-
-    /**
-     * Reads one side of a recipe, or null if any entry is not a plain fixed item.
-     *
-     * <p>A {@code SizedIngredient} can match several items -- a tag -- and the resolver names one
-     * item per amount, so the first match would be a guess about what the player is expected to
-     * spend. The converter emits fixed items for everything it routes to the Assembling Machine, so
-     * refusing the ambiguous case costs the pack nothing and keeps the reservation exact.
-     *
-     * <p>A chanced output is refused for the same reason: the plan reserves and delivers exact
-     * counts, and an output that might not appear would leave a later step short.
-     */
-    private static List<ItemAmount> amounts(List<Content> contents, boolean isOutput) {
+    private static List<ItemAmount> amounts(List<Content> contents) {
         List<ItemAmount> read = new ArrayList<>(contents.size());
         for (Content content : contents) {
-            if (isOutput && content.isChanced()) return null;
-            if (!(content.content instanceof SizedIngredient sized)) return null;
-            ItemStack[] matches = sized.getItems();
-            if (matches.length != 1) return null;
+            ItemStack stack = ((SizedIngredient) content.content).getItems()[0];
             // getItems() has already applied the SizedIngredient's count -- read out of NeoForge's
             // bytecode, where it maps the ingredient's stacks through copyWithCount(count). Reading
             // count() as well would double every ingredient in the pack.
-            var key = BuiltInRegistries.ITEM.getKey(matches[0].getItem());
-            int count = matches[0].getCount();
-            if (count <= 0) return null;
-            read.add(new ItemAmount(key.toString(), count));
+            read.add(new ItemAmount(
+                    BuiltInRegistries.ITEM.getKey(stack.getItem()).toString(), stack.getCount()));
         }
         return read;
     }
