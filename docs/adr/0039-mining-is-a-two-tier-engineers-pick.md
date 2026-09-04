@@ -149,13 +149,16 @@ GTCEu 7.0.2's own `en_us.json` shows the wrench doing four distinct things, not 
 | Verb | String | Disposition |
 | --- | --- | --- |
 | Dismantle | `"Hold left click to dismantle Machines"` | **The Engineer's Pick absorbs it.** Delivered by the tags below and confirmed in-game: a machine breaks and drops its item. |
-| Rotate / set facing | `"Rotates Blocks on Rightclick"` | **Deferred to its own ticket.** |
-| Pipe connections | `"Use Wrench to set Connections, sneak to block Connections"` | **Deferred with rotation.** |
+| Rotate / set facing | `"Rotates Blocks on Rightclick"` | **The Engineer's Pick absorbs it** — *#168, which settled what this row deferred.* The Pick declares the `wrench_rotate` ability; the tags below were never enough. |
+| Pipe connections | `"Use Wrench to set Connections, sneak to block Connections"` | **Declined outright** — *#168.* ADR-0017 gives fluid and item logistics to Create and GT's pipes left with its power layer, so the four `wrench_configure*` abilities are deliberately not declared. |
 | Multiblock maintenance | `"Pipe is loose. (Wrench)"` | **Already dead** — `config/gtceu.yaml:218` sets `enableMaintenance: false`. |
 
 Rotation is **not** deletable: Factorio has a rotate verb (`R`), so a pack with no way to turn a
-machine is missing a mechanic rather than simplifying one. It is deferred rather than decided because
-it is a separate interaction from mining and does not block the Terra Slice.
+machine is missing a mechanic rather than simplifying one. This ADR deferred it rather than deciding
+it, because it is a separate interaction from mining and does not block the Terra Slice. *#168 has
+since decided both rows: rotation is taken and pipe connections are declined. The two paragraphs
+above and the consequence below are left as written and amended in place, rather than rewritten, so
+that what this ADR actually decided stays legible.*
 
 ## Wood is a log, not a plank
 
@@ -212,3 +215,6 @@ corpus recipes — `small-electric-pole`, `wooden-chest` and `shotgun` (the last
   ordinary break path this ADR already covers. Until #168 lands there is one visible seam: GTCEu's
   rotation overlay draws on `toolTypes.contains(WRENCH) || canPerformAction(WRENCH_ROTATE)`, and the
   Pick satisfies the first half, so the overlay appears on a machine while right-click does nothing.
+  *#168 has landed and closed that seam from the other end: the Pick declares `wrench_rotate`, so the
+  overlay the tags already drew is now honest. The configure verbs stay undeclared, which is a
+  decision rather than a remaining gap — see `docs/factorio-mechanics.md`'s Manual mining sub-rules.*

@@ -151,10 +151,23 @@ Sub-rules:
   on 50 steel plates, because Researchd has no craft-triggered research method, and swaps its
   `character-mining-speed` effect for an `unlock-recipe` granting the Engineer's Steel Pick.
 - **Picking up a placed entity is the same gesture as mining** — `adapted`. The Engineer's Pick
-  absorbs GregTech's wrench dismantle verb; the wrench's rotate and pipe-connection verbs are
-  `planned` and unowned (ADR-0039).
-- **Rotating a placed entity (`R`)** — `planned`, no owner yet. Not deletable: Factorio has the
-  verb, so a pack with no way to turn a machine is missing a mechanic rather than simplifying one.
+  absorbs GregTech's wrench dismantle verb, which rides the ordinary break path and is delivered by
+  the two wrench item tags (ADR-0039). *This entry read "the wrench's rotate and pipe-connection
+  verbs are `planned` and unowned"; #168 settled both.* The Pick now declares NeoForge's
+  `wrench_rotate` ability and none of the four `wrench_configure*` ones, so the wrench's
+  pipe-connection verb is **not** carried over. That is a decision, not a gap, and it costs Factorio
+  nothing: ADR-0017 gives fluid and item logistics to Create, GregTech's pipes left with its power
+  layer, and under ADR-0034's default-deny sweep nothing re-surfaces them — the verb would be
+  declared against blocks Terra does not ship. Factorio's own fluid connections are geometric rather
+  than a wrench gesture, so no Factorio mechanic is behind the declined verb. It is recorded here
+  rather than as a row of its own because it is GregTech's verb, not Factorio's, and ADR-0028 keys
+  rows on Factorio's names.
+- **Rotating a placed entity (`R`)** — `shipped`, #168. The Engineer's Pick declares NeoForge's
+  `wrench_rotate` ability, which is what GregTech gates the verb on; the wrench item tags never
+  carried it, so until #168 the rotation overlay drew on every machine while the right-click did
+  nothing. The ability set is held by a unit test; **the world load that confirms a machine actually
+  turns is outstanding**, which is the one thing between this row and the `shipped` bar as this table
+  defines it. *This entry read "`planned`, no owner yet".*
 
 ### Mining drills
 

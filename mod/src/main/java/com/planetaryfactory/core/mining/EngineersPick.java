@@ -11,6 +11,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.common.ItemAbility;
 
 import java.util.List;
 
@@ -22,6 +23,10 @@ import java.util.List;
  * at block registration and no datapack reaches it, which is why the answer lives in the jar. It is
  * also the tool that dismantles a GregTech machine: that half is the two wrench item tags in
  * {@code kubejs/data}, not code, because GregTech and Create both ask a tag.
+ *
+ * <p><b>It also turns machines.</b> Rotation is a NeoForge {@code ItemAbility} rather than a tag,
+ * which is why the wrench tags alone never delivered it; {@link PickAbilities} holds which verbs the
+ * Pick claims and why the pipe-connection ones are declined (#168).
  *
  * <p><b>Indestructible.</b> No durability component at all, so there is no bar to read and nothing
  * to repair. Factorio's engineer never sharpens anything.
@@ -80,6 +85,23 @@ public final class EngineersPick extends Item {
     @Override
     public boolean isCorrectToolForDrops(ItemStack stack, BlockState state) {
         return true;
+    }
+
+    /**
+     * Rotation, and none of the wrench's other gated verbs.
+     *
+     * <p>GregTech asks this before it will turn a machine, and until it was answered the pack had a
+     * verb it advertised without performing: the rotation overlay draws on
+     * {@code getToolTypes(stack).contains(WRENCH) || canPerformAction(WRENCH_ROTATE)}, an OR whose
+     * first half the Pick's wrench tags already satisfied -- so the highlight appeared on every
+     * machine while the right-click did nothing.
+     *
+     * <p>The tier is not consulted. Turning a machine is not work, so there is nothing for the
+     * research to double.
+     */
+    @Override
+    public boolean canPerformAction(ItemStack stack, ItemAbility ability) {
+        return PickAbilities.grants(ability.name());
     }
 
     @Override
