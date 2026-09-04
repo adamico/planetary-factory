@@ -54,10 +54,6 @@ public final class PersonalAssembler {
     public static void openSelectAmount(ServerPlayer player, ResourceLocation recipe, int amount) {
         PENDING.remove(player.getUUID());
         int all = PlanSource.ACTIVE.largestAffordable(player, recipe);
-        // Clamped to `all` only when the resolver has an `all` to give. A resolver that cannot
-        // answer must not quietly rewrite the count the button asked for: clamping against a zero
-        // would land every request on 1, and a shift-click and a plain click -- Factorio's
-        // one-and-all, and the one thing this packet carries -- would arrive indistinguishable.
         // A resolver with an `all` clamps to it. One without -- nothing is affordable -- must not
         // clamp against the zero, because that would land every request on 1 and make a shift-click
         // and a plain click, Factorio's one-and-all and the one thing this packet carries, arrive

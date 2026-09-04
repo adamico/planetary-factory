@@ -63,11 +63,15 @@ public final class PlanResolver {
         }
         if (locked.test(root.id())) {
             for (ItemAmount output : root.outputs()) {
-                walk.locked.add(output.item(), output.count() * crafts);
+                walk.locked.add(output.item(), scaled(output.count(), crafts));
             }
             return walk.finish();
         }
-        walk.craft(root, crafts, List.of());
+        if (!walk.craft(root, crafts, List.of())) {
+            for (ItemAmount output : root.outputs()) {
+                walk.missing.add(output.item(), scaled(output.count(), crafts));
+            }
+        }
         return walk.finish();
     }
 
@@ -123,12 +127,19 @@ public final class PlanResolver {
         }
 
         /**
-         * Plans {@code n} runs of {@code recipe}, its ingredients first.
+         * Plans {@code n} runs of {@code recipe}, its ingredients first, and says whether it could.
          *
          * <p>The step is appended after the recursion, so the list comes out in dependency order and
          * the queue can run it front to back without ever looking a recipe up again.
+         *
+         * <p>It refuses when scaling the recipe would overflow an {@code int}. {@link #MAX_CRAFTS}
+         * bounds the craft count and not the product of a count with an ingredient's amount, and a
+         * wrapped negative demand reads as already satisfied -- a complete plan that reserves
+         * nothing and then cannot feed its own first step. The caller turns the refusal into a
+         * shortfall the player can read.
          */
-        private void craft(HandRecipe recipe, int n, List<String> ancestors) {
+        private boolean craft(HandRecipe recipe, int n, List<String> ancestors) {
+            if (overflows(recipe, n)) return false;
             List<String> path = new ArrayList<>(ancestors);
             path.add(recipe.id());
             List<ItemAmount> inputs = new ArrayList<>(recipe.inputs().size());
@@ -145,12 +156,27 @@ public final class PlanResolver {
                 toCraft.add(output.item(), made);
             }
             steps.add(new CraftStep(recipe.id(), inputs, outputs, recipe.durationTicks() * n));
+            return true;
+        }
+
+        /** Whether scaling this recipe by {@code n} would put any quantity past an {@code int}. */
+        private boolean overflows(HandRecipe recipe, int n) {
+            if ((long) recipe.durationTicks() * n > Integer.MAX_VALUE) return true;
+            for (ItemAmount input : recipe.inputs()) {
+                if ((long) input.count() * n > Integer.MAX_VALUE) return true;
+            }
+            for (ItemAmount output : recipe.outputs()) {
+                if ((long) output.count() * n > Integer.MAX_VALUE) return true;
+            }
+            return false;
         }
 
         /** Finds {@code quantity} of {@code item}, crafting it if that is what it takes. */
         private void need(String item, int quantity, List<String> ancestors) {
-            int owed = quantity - drawDown(surplus, item, quantity, false);
-            owed -= drawDown(available, item, owed, true);
+            int owed = quantity - drawDown(surplus, item, quantity);
+            int fromInventory = drawDown(available, item, owed);
+            rawCost.add(item, fromInventory);
+            owed -= fromInventory;
             if (owed <= 0) return;
 
             HandRecipe maker = graph.makerOf(item);
@@ -169,19 +195,29 @@ public final class PlanResolver {
                 missing.add(item, owed);
                 return;
             }
-            int perCraft = maker.perCraft(item);
-            int runs = Math.min(MAX_CRAFTS, ceilDiv(owed, perCraft));
-            craft(maker, runs, ancestors);
-            surplus.remove(item, Math.min(owed, surplus.count(item)));
+            int runs = ceilDiv(owed, maker.perCraft(item));
+            if (runs > MAX_CRAFTS) {
+                // Refused, not clamped. Clamping would make fewer intermediates than the parent
+                // step's inputs name and nothing downstream would notice: the plan would report
+                // complete, Start would take the reservation, and the queue would throw on a step
+                // it cannot feed. Reporting it as missing is what puts the refusal in front of the
+                // player, where every other shortfall already goes.
+                missing.add(item, owed);
+                return;
+            }
+            if (!craft(maker, runs, ancestors)) {
+                missing.add(item, owed);
+                return;
+            }
+            surplus.remove(item, owed);
         }
 
         /** Spends up to {@code wanted} of {@code item} out of {@code bag}, and says how much. */
-        private int drawDown(ItemBag bag, String item, int wanted, boolean isRawCost) {
+        private static int drawDown(ItemBag bag, String item, int wanted) {
             if (wanted <= 0) return 0;
             int taken = Math.min(wanted, bag.count(item));
             if (taken <= 0) return 0;
             bag.remove(item, taken);
-            if (isRawCost) rawCost.add(item, taken);
             return taken;
         }
 
@@ -197,6 +233,11 @@ public final class PlanResolver {
 
     private static int ceilDiv(int quantity, int per) {
         return per <= 0 ? quantity : (quantity + per - 1) / per;
+    }
+
+    /** {@code count x times}, saturated rather than wrapped -- this only ever feeds a display list. */
+    private static int scaled(int count, int times) {
+        return (int) Math.min(Integer.MAX_VALUE, (long) count * times);
     }
 
     /**

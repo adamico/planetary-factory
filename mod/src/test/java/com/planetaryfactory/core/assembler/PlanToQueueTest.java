@@ -1,5 +1,8 @@
 package com.planetaryfactory.core.assembler;
 
+import static com.planetaryfactory.core.assembler.TestBags.asMap;
+import static com.planetaryfactory.core.assembler.TestBags.have;
+import static com.planetaryfactory.core.assembler.TestBags.stocked;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -31,18 +34,7 @@ class PlanToQueueTest {
                     List.of(new ItemAmount("gear", 1)), 5))
             .build();
 
-    private static ItemBag have(Object... pairs) {
-        ItemBag bag = new ItemBag();
-        for (int i = 0; i < pairs.length; i += 2) bag.add((String) pairs[i], (Integer) pairs[i + 1]);
-        return bag;
-    }
 
-    /** A player holding exactly what the resolver was shown. */
-    private static TestPlayerItems stocked(ItemBag inventory) {
-        TestPlayerItems items = new TestPlayerItems();
-        inventory.asMap().forEach(items::with);
-        return items;
-    }
 
     /** Runs a plan to the end, and says how many ticks it took. Fails loudly if it never finishes. */
     private static int runToCompletion(AssemblerQueue queue, TestPlayerItems items) {

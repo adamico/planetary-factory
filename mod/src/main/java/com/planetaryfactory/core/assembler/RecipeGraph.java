@@ -1,6 +1,5 @@
 package com.planetaryfactory.core.assembler;
 
-import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -15,8 +14,10 @@ import java.util.Map;
  *
  * <p><b>One recipe per item.</b> The corpus admits no item with two hand recipes, asserted by
  * {@code tests/factorio/test_hand_resolver.py} -- which is what lets the resolver plan without a
- * cost model to choose between routes. If a second one ever appears here the first registered wins,
- * silently and stably, because the alternative is a resolver whose answer depends on load order.
+ * cost model to choose between routes. If a second one ever appears here the first registered wins.
+ * That is an arbitrary answer, not a stable one: nothing promises the recipe manager iterates in the
+ * same order twice. It is the right arbitrary answer anyway, because the alternative is refusing to
+ * plan an item at all, and the case is one the corpus check catches before a player can meet it.
  */
 public final class RecipeGraph {
 
@@ -52,9 +53,6 @@ public final class RecipeGraph {
         return byId.size();
     }
 
-    public Collection<HandRecipe> recipes() {
-        return byId.values();
-    }
 
     public static final class Builder {
 

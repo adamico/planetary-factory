@@ -64,8 +64,18 @@ public final class CraftingPlanScreen extends AssemblerScreen<CraftingPlanMenu> 
             // Its own line above the buttons, not beside them: the reason a plan cannot start is a
             // translated sentence of unknown width, and sharing the row with Start and Back means
             // the longest translation is the one that gets cut in half.
+            //
+            // Three empty columns is not "you are short of something" -- it is the resolver saying
+            // it could not read the recipe at all, which happens to one carrying a tag ingredient,
+            // a fluid or a chanced output. Telling the player they are missing nothing while
+            // refusing to start would be the worst of both.
+            boolean nothingToShow = display.toCraft().isEmpty()
+                    && display.missing().isEmpty()
+                    && display.locked().isEmpty();
             graphics.drawString(font,
-                    Component.translatable("planetaryfactory_core.assembler.incomplete")
+                    Component.translatable(nothingToShow
+                                    ? "planetaryfactory_core.assembler.unplannable"
+                                    : "planetaryfactory_core.assembler.incomplete")
                             .withStyle(ChatFormatting.RED),
                     leftPos + 8, topPos + imageHeight - 38, 0xFF5555, false);
         }

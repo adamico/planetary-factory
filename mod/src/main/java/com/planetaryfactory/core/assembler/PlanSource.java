@@ -9,8 +9,8 @@ import net.minecraft.server.level.ServerPlayer;
  *
  * <p>#160 owns the panel, the two dialog menus, the packets and the queue, and deliberately not the
  * resolver -- so this interface is the line between the two tickets. {@link #ACTIVE} is what the
- * server calls, and #161's edit is to point it at a real resolver instead of {@link Unresolved};
- * nothing outside this file has to move.
+ * server calls, and #161's whole edit to this file was to point it at {@code RuntimePlanSource}
+ * instead of {@link Unresolved}; nothing outside it had to move.
  *
  * <p>Resolving is server-side because a plan is server truth (ADR-0038): it reads the player's
  * inventory <em>and</em> the team's Researchd state, and Start takes the reservation off the back of

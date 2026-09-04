@@ -20,5 +20,6 @@
   "planetaryfactory_core.assembler.back": "Back",
   "planetaryfactory_core.assembler.incomplete": "This plan is incomplete and cannot be started",
   "planetaryfactory_core.assembler.show_plan": "Show Plan",
-  "planetaryfactory_core.assembler.and_more": "... and %s more"
+  "planetaryfactory_core.assembler.and_more": "... and %s more",
+  "planetaryfactory_core.assembler.unplannable": "The Assembler cannot plan this recipe"
 }

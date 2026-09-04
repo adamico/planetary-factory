@@ -1,5 +1,8 @@
 package com.planetaryfactory.core.assembler;
 
+import static com.planetaryfactory.core.assembler.TestBags.asMap;
+import static com.planetaryfactory.core.assembler.TestBags.have;
+import static com.planetaryfactory.core.assembler.TestBags.stocked;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -35,17 +38,7 @@ class PlanResolverTest {
         return new PlanResolver(graph(), Set.of()::contains);
     }
 
-    private static ItemBag have(Object... pairs) {
-        ItemBag bag = new ItemBag();
-        for (int i = 0; i < pairs.length; i += 2) {
-            bag.add((String) pairs[i], (Integer) pairs[i + 1]);
-        }
-        return bag;
-    }
 
-    private static Map<String, Integer> asMap(List<ItemAmount> amounts) {
-        return ItemBag.ofAmounts(amounts).asMap();
-    }
 
     @Test
     void aRecipeWhoseIngredientsAreOnHandIsOneStep() {
@@ -168,6 +161,57 @@ class PlanResolverTest {
 
         assertFalse(resolution.complete());
         assertEquals(Map.of("a", 1), asMap(resolution.missing()));
+    }
+
+    @Test
+    void aLockedRootIsLockedRatherThanSilentlyUnplannable() {
+        PlanResolver locked = new PlanResolver(graph(), Set.of("gear")::contains);
+
+        PlanResolver.Resolution resolution = locked.resolve("gear", 4, have("plate", 64));
+
+        assertFalse(resolution.complete());
+        assertEquals(Map.of("gear", 4), asMap(resolution.locked()));
+        assertTrue(resolution.missing().isEmpty());
+        assertTrue(resolution.steps().isEmpty());
+    }
+
+    @Test
+    void aQuantityThatWouldOverflowAnIntIsRefusedRatherThanWrappingNegative() {
+        // The cap is on the craft count, not on the product of a count and an ingredient's amount.
+        // A wrapped negative demand reads as already satisfied, which would report a complete plan
+        // that reserves nothing and then cannot feed its own first step.
+        RecipeGraph greedy = RecipeGraph.builder()
+                .add(new HandRecipe("greedy", List.of(new ItemAmount("leaf", 1_000_000)),
+                        List.of(new ItemAmount("greedy", 1)), 1))
+                .build();
+
+        PlanResolver.Resolution resolution = new PlanResolver(greedy, Set.of()::contains)
+                .resolve("greedy", PlanResolver.MAX_CRAFTS, have("leaf", Integer.MAX_VALUE));
+
+        assertFalse(resolution.complete());
+        for (ItemAmount amount : resolution.rawCost()) {
+            assertTrue(amount.count() > 0, "raw cost went negative: " + amount);
+        }
+    }
+
+    @Test
+    void aSubCraftBeyondTheCraftLimitIsMissingRatherThanQuietlyShort() {
+        // The cap has to refuse rather than clamp. A clamped sub-craft makes fewer intermediates
+        // than the parent step's inputs name, and nothing downstream notices: the plan reports
+        // complete, Start takes the reservation, and the queue throws on a step it cannot feed.
+        RecipeGraph deep = RecipeGraph.builder()
+                .add(new HandRecipe("sub", List.of(new ItemAmount("leaf", 1)),
+                        List.of(new ItemAmount("sub", 1)), 1))
+                .add(new HandRecipe("bulk", List.of(new ItemAmount("sub", 3)),
+                        List.of(new ItemAmount("bulk", 1)), 1))
+                .build();
+        ItemBag plenty = have("leaf", Integer.MAX_VALUE);
+
+        PlanResolver.Resolution resolution = new PlanResolver(deep, Set.of()::contains)
+                .resolve("bulk", PlanResolver.MAX_CRAFTS / 2, plenty);
+
+        assertFalse(resolution.complete());
+        assertEquals(Map.of("sub", 3 * (PlanResolver.MAX_CRAFTS / 2)), asMap(resolution.missing()));
     }
 
     @Test
