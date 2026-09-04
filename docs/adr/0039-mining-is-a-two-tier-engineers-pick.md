@@ -81,6 +81,10 @@ block properties. What it gives up is the claim that the seconds are Factorio's.
 pack's, and this section is why — a fidelity argument that loses to a playability one is worth
 recording as such rather than quietly retuning.
 
+The halved number was then played and confirmed in-game, which is the same check that rejected the
+first one — this row's evidence is a person mining, and it is recorded here because there is no
+other place it could be checked.
+
 Note that this is a different kind of divergence from the `steel-axe` effect below. That one changes
 the *mechanism* and keeps the outcome; this one changes the *number* and keeps the shape.
 
