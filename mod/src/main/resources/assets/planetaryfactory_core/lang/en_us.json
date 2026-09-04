@@ -7,7 +7,6 @@
   "planetaryfactory_core.assembler.panel": "Personal Assembler",
   "planetaryfactory_core.assembler.tab": "Assembler",
   "planetaryfactory_core.assembler.tab.tooltip": "Your crafting queue. Open it, then pick a recipe in EMI.",
-  "planetaryfactory_core.assembler.to_inventory": "%s: inventory",
   "planetaryfactory_core.assembler.queue_empty": "Nothing queued",
   "planetaryfactory_core.assembler.paused": "Paused: no room for the finished craft",
   "planetaryfactory_core.assembler.select_amount": "Select Amount",

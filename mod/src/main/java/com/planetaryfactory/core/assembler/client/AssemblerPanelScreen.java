@@ -33,16 +33,6 @@ public final class AssemblerPanelScreen extends AssemblerScreen<AssemblerPanelMe
         super(menu, inventory, title, 176, 186);
     }
 
-    /** The title, plus which key leaves for the inventory -- a way back nothing else advertises. */
-    @Override
-    protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
-        super.renderLabels(graphics, mouseX, mouseY);
-        if (minecraft == null) return;
-        Component hint = Component.translatable("planetaryfactory_core.assembler.to_inventory",
-                minecraft.options.keyInventory.getTranslatedKeyMessage());
-        graphics.drawString(font, hint, imageWidth - 6 - font.width(hint), 6, 0x808080, false);
-    }
-
     @Override
     protected void renderPanel(GuiGraphics graphics, int mouseX, int mouseY) {
         renderSlots(graphics);
