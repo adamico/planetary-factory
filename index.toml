@@ -610,7 +610,7 @@ hash = "5970899b24a3a9e717111c32e012165bcb2102eb4bc9a4fd11377e3447abc3c9"
 
 [[files]]
 file = "data/pack/item-map.json"
-hash = "905b11a4bfbc3cf551d68c53fa85199f63dfa1853940e9600a80b0b707cbbde7"
+hash = "7281320e1543e17d8194f7fff20509e5181bbd71d4e637357b4e7a9d227917a1"
 
 [[files]]
 file = "data/pack/recipe-overrides.json"
@@ -618,7 +618,7 @@ hash = "1f7c305c8895ca64fb3cdccdebbc9241707a2f08d080641fc6b2ef11f3962949"
 
 [[files]]
 file = "data/pack/subgroup-owner.json"
-hash = "a2f69845cd5ec396647dd127988c1f17835a36ed4aeff24e475d5fdc03af7518"
+hash = "29898aa4b725c77fe6427fea2e85906fd2a77db6ade121518a791f83c9af8941"
 
 [[files]]
 file = "defaultconfigs/ftbessentials-server.snbt"
@@ -1133,6 +1133,10 @@ file = "kubejs/data/planetaryfactory/recipe/assembling/copper_cable.json"
 hash = "20939a9cffff97d404ca90886c9eccb99c94d99f62fb1f78766a9390655af47b"
 
 [[files]]
+file = "kubejs/data/planetaryfactory/recipe/assembling/display_panel.json"
+hash = "041b567bef9268dfef20023111fef5dc006bffcd266112e4d6c225895f4062f9"
+
+[[files]]
 file = "kubejs/data/planetaryfactory/recipe/assembling/electric_engine_unit.json"
 hash = "c5ad32a3280ecffdf54a2d922aee97d5d7db9c2ac9c4381bb5eeabf510ec1cec"
 
@@ -1177,6 +1181,14 @@ file = "kubejs/data/planetaryfactory/recipe/assembling/pipe.json"
 hash = "0efcf74366c8dcd284308ade61c9a06fa6bfaa7fde67a44ed7ae3e8f6028dc3a"
 
 [[files]]
+file = "kubejs/data/planetaryfactory/recipe/assembling/power_switch.json"
+hash = "7efafd75b11d893c53296a7502182ff69f970056fe87a2dac98f2d2947762780"
+
+[[files]]
+file = "kubejs/data/planetaryfactory/recipe/assembling/programmable_speaker.json"
+hash = "94145e404af32eef5629a5365001f4f058430d80dc88aba2fa25305713681792"
+
+[[files]]
 file = "kubejs/data/planetaryfactory/recipe/assembling/pump.json"
 hash = "87d83f8c8de737cc5a20ed85884932efc08b4aa0fc25624d86481fe84c5b439e"
 
@@ -1199,6 +1211,10 @@ hash = "ec81ddea37726216571dd48448551c70abd67e4fc5c972b5c925be2443c43096"
 [[files]]
 file = "kubejs/data/planetaryfactory/recipe/assembling/small_electric_pole.json"
 hash = "45d526d953657e16682cd23511cb8a6c85a630f571f83a0f550ec5c0f22f0830"
+
+[[files]]
+file = "kubejs/data/planetaryfactory/recipe/assembling/small_lamp.json"
+hash = "cbe19421346447674c12b12aebb100cd9d759a37f0c051e7ad512184b533f647"
 
 [[files]]
 file = "kubejs/data/planetaryfactory/recipe/assembling/steel_chest.json"

@@ -1,0 +1,47 @@
+{
+  "type": "gtceu:assembling",
+  "inputs": {
+    "item": [
+      {
+        "content": {
+          "ingredient": {
+            "item": "planetaryfactory:electronic_circuit"
+          },
+          "count": 1
+        }
+      },
+      {
+        "content": {
+          "ingredient": {
+            "item": "powergrid:wire"
+          },
+          "count": 3
+        }
+      },
+      {
+        "content": {
+          "ingredient": {
+            "item": "gtceu:iron_plate"
+          },
+          "count": 1
+        }
+      }
+    ]
+  },
+  "outputs": {
+    "item": [
+      {
+        "content": {
+          "ingredient": {
+            "item": "powergrid:light_fixture"
+          },
+          "count": 1
+        }
+      }
+    ]
+  },
+  "duration": 10,
+  "data": {
+    "factorio_category": "crafting"
+  }
+}

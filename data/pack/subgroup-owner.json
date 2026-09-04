@@ -68,7 +68,7 @@
     "(`intermediate-product`, `belt`, `terrain`, `uranium-processing`, `space-interactors`) split down the",
     "middle. A shelf is the wrong granularity for it, which is why it is not stored at all.",
     "",
-    "`owner` values: `gregtech`, `create`, `electro`, `pack` (a machine this pack registers",
+    "`owner` values: `gregtech`, `create`, `powergrid`, `pack` (a machine this pack registers",
     "on a GT chassis -- ADR-0025's Oil Refinery and Chemical Plant, ADR-0026's Assembling Machines),",
     "`split` (the shelf straddles a seam; see `per_recipe`, written `owner / process` where the two",
     "differ), `undecided` (ADR-0017 has no row for this capability -- a decision, not an oversight),",
@@ -239,7 +239,7 @@
     },
     "logistics/energy-pipe-distribution": {
       "owner": "split",
-      "reason": "The shelf straddles ADR-0017's transmission/fluid-handling seam -- Factorio files poles and pipes together because both carry stuff between machines; the pack does not. The pipes moved from `mekanism` to `create` with #101's amendment to ADR-0017. The poles were `electro`, on the assumption that in-area distribution was a grid mod's to own; ADR-0036 made it the pack's own block and #147 built it, so they are `pack` and the seam now runs between the pack's poles and Create's pipes. `big-electric-pole` is `not_emitted`: #147 dropped the tier, which in Factorio pays for its small area with wire reach the pack's catenary does not price.",
+      "reason": "The shelf straddles ADR-0017's transmission/fluid-handling seam -- Factorio files poles and pipes together because both carry stuff between machines; the pack does not. The pipes moved from `mekanism` to `create` with #101's amendment to ADR-0017. The poles were the grid mod's, on the assumption that in-area distribution was a grid mod's to own; ADR-0036 made it the pack's own block and #147 built it, so they are `pack` and the seam now runs between the pack's poles and Create's pipes. `big-electric-pole` is `not_emitted`: #147 dropped the tier, which in Factorio pays for its small area with wire reach the pack's catenary does not price.",
       "per_recipe": {
         "small-electric-pole": "pack:assembling",
         "medium-electric-pole": "pack:assembling",
@@ -265,12 +265,12 @@
     },
     "production/energy": {
       "owner": "split",
-      "reason": "Half this shelf is the nuclear chapter, deferred to #89. The rest is settled: ADR-0017's Power generation row, as amended by #101, gives Electro steam and solar, and #92's question -- what turns rung-0 steam into electricity -- is answered by the Alternator.",
+      "reason": "Half this shelf is the nuclear chapter, deferred to #89. The rest is settled: ADR-0017's Power generation row, as amended by #101 and #148, gives the grid mod steam and solar, and #92's question -- what turns rung-0 steam into electricity -- is answered by Power Grid's generation multiblock (Electro's Alternator until the swap).",
       "per_recipe": {
         "boiler": "gregtech / pack:assembling",
-        "steam-engine": "electro / pack:assembling",
-        "solar-panel": "electro / pack:assembling",
-        "accumulator": "electro / pack:assembling",
+        "steam-engine": "powergrid / pack:assembling",
+        "solar-panel": "powergrid / pack:assembling",
+        "accumulator": "powergrid / pack:assembling",
         "heat-exchanger": "not_emitted",
         "heat-pipe": "not_emitted",
         "steam-turbine": "pack:assembling",
@@ -282,10 +282,11 @@
         "things GregTech still does on Terra outside extraction, and it is why this row reads `gregtech`",
         "rather than following ADR-0017's Power generation row.",
         "",
-        "`steam-engine` IS THE ELECTRO ALTERNATOR (#92, answered by #101). Factorio's `steam-engine`",
+        "`steam-engine` IS THE GRID MOD'S GENERATOR (#92, answered by #101; retargeted by #148 from",
+        "Electro's Alternator to Power Grid's generation multiblock). Factorio's `steam-engine`",
         "is an electricity generator; Create's Steam Engine emits ROTATIONAL FORCE and is the prime",
         "mover, not this row. Terra's chain is three steps -- GT boiler makes steam, Create Steam",
-        "Engine turns steam into SU, Electro Alternator turns SU into watts -- and only the last step",
+        "Engine turns steam into SU, the grid mod's generator turns SU into watts -- and only the last step",
         "is Factorio's `steam-engine`. ADR-0017's amendment records the fix; the row it broke is the",
         "one #93 had already flagged and left standing.",
         "",
@@ -299,7 +300,7 @@
         "",
         "THE TURBINE IS NOT A PARALLEL ESCAPE. Superheated steam is its own GT material and the Turbine is",
         "the only machine that accepts it; ordinary steam keeps the rung-0 chain (GT boiler -> Create Steam",
-        "Engine -> Electro Alternator), which the Turbine will not take. That is Factorio's own model --",
+        "Engine -> the grid mod's generator), which the Turbine will not take. That is Factorio's own model --",
         "turbine output is a property of the steam, not the building -- with the continuum flattened to the",
         "two values the game actually uses. Ignus's acid neutralisation is the Turbine's second consumer.",
         "",
@@ -438,11 +439,21 @@
       "count": 3
     },
     "logistics/circuit-network": {
-      "owner": "undecided",
-      "reason": "ADR-0017 has no row for a circuit network, and no installed mod owns one as a capability. #58 cut redstone from Terra entirely -- no vein, empty `underground_ores` step -- so the shelf's whole idiom has no source on the planet.",
-      "note": "Eight recipes: five combinators, a power switch, a display panel, a programmable speaker, a small lamp. ADR-0030 settled the MECHANIC -- the pack has Factorio's circuit network, `adapted`, on vanilla redstone plus Create's redstone line -- so this shelf is not a cut. What is open is which BLOCK each row names, and Create: Power Grid ships candidates for most of them (lamps, CRT and Modular Display, LV/MV/HV switches, relays, the Alarm Bell). That makes the swap the decider.",
-      "count": 8,
-      "ticket": 148
+      "owner": "split",
+      "reason": "ADR-0030 settled the MECHANIC -- the pack has Factorio's circuit network, `adapted`, on vanilla redstone plus Create's redstone line -- and said in as many words that a mechanic supplied by vanilla and Create needs no emitted recipe, so `not_emitted` here would contradict nothing. What was open was which BLOCK each row names, and ADR-0030 left that to this file. #148 takes it, because the swap to Create: Power Grid is what put candidates on the table. The shelf splits on a real seam rather than a convenient one: the four rows that name a PHYSICAL DEVICE the network drives -- a lamp, a display, a switch, a speaker -- borrow the Power Grid block that does that job and are emitted; the four COMBINATORS are `not_emitted`, because they are the rows whose job is arithmetic and decision, and Power Grid ships nothing that does either. A potentiometer is a dial and a relay is a switch. Emitting them against those blocks would ship a Factorio name on a block that does not do the Factorio thing, which is worse than not shipping it: vanilla's comparator and Create's Threshold Switch, Stockpile Switch and Smart Observer already ARE the mechanic (ADR-0030), so the player loses a recipe and keeps the capability. #58 cut redstone from Terra, so the shelf's idiom still has no source on the planet; that is #119's supply question and does not change which block a row names.",
+      "adr_row": "Power transmission -- Create: Power Grid (ADR-0017 as amended by #148); the circuit network itself -- ADR-0030",
+      "cross_owner": "The four emitted rows are Power Grid's blocks crafted on the pack's Assembling Machine, which is the normal case this file records rather than a confession: the corpus files them under `crafting`, ADR-0031 has the corpus authoring every recipe it contains, and ADR-0017 gives the pack the assembly surface. The grid mod owns the BLOCK; the pack owns the SURFACE it is made on. Power Grid registers two recipe types of its own and the pack routes nothing onto them.",
+      "per_recipe": {
+        "small-lamp": "powergrid / pack:assembling",
+        "display-panel": "powergrid / pack:assembling",
+        "power-switch": "powergrid / pack:assembling",
+        "programmable-speaker": "powergrid / pack:assembling",
+        "arithmetic-combinator": "not_emitted",
+        "decider-combinator": "not_emitted",
+        "constant-combinator": "not_emitted",
+        "selector-combinator": "not_emitted"
+      },
+      "count": 8
     },
     "logistics/terrain": {
       "owner": "pack",

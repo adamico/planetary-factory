@@ -42,9 +42,8 @@
       "note": "As `electronic-circuit`. ADR-0031's three tiers, one item each."
     },
     "arithmetic-combinator": {
-      "status": "undecided",
-      "note": "Create: Power Grid ships the counterpart -- lamps, CRT and Modular Display, LV/MV/HV switches, relays and the Alarm Bell -- so the whole `logistics/circuit-network` shelf is decided by the Electro-to-Power-Grid swap, not before it. ADR-0030 keeps the MECHANIC (vanilla redstone plus Create's redstone line); what waits here is which block each row names.",
-      "ticket": 148
+      "status": "not_emitted",
+      "note": "`not_emitted` by #148. This row's job is arithmetic or a decision, and Power Grid ships nothing that does either -- a potentiometer is a dial, a relay is a switch. Emitting the row against one of those would put a Factorio name on a block that does not do the Factorio thing, which costs more than leaving it unemitted: ADR-0030 already supplies the capability from vanilla's comparator and Create's Threshold Switch, Stockpile Switch and Smart Observer, so the player loses a recipe and keeps the mechanic. ADR-0030 anticipated this exact outcome -- 'a mechanic supplied by vanilla and Create needs no emitted recipe to exist, so `logistics/circuit-network` staying `not_emitted` would contradict nothing here'."
     },
     "assembling-machine-1": {
       "kind": "item",
@@ -192,9 +191,8 @@
       "note": "Vanilla concrete. Factorio's concrete is a walking-speed floor; Block Runner supplies that mechanic and the colour carries the hazard fiction the texture already has."
     },
     "constant-combinator": {
-      "status": "undecided",
-      "note": "Create: Power Grid ships the counterpart -- lamps, CRT and Modular Display, LV/MV/HV switches, relays and the Alarm Bell -- so the whole `logistics/circuit-network` shelf is decided by the Electro-to-Power-Grid swap, not before it. ADR-0030 keeps the MECHANIC (vanilla redstone plus Create's redstone line); what waits here is which block each row names.",
-      "ticket": 148
+      "status": "not_emitted",
+      "note": "`not_emitted` by #148. This row's job is arithmetic or a decision, and Power Grid ships nothing that does either -- a potentiometer is a dial, a relay is a switch. Emitting the row against one of those would put a Factorio name on a block that does not do the Factorio thing, which costs more than leaving it unemitted: ADR-0030 already supplies the capability from vanilla's comparator and Create's Threshold Switch, Stockpile Switch and Smart Observer, so the player loses a recipe and keeps the mechanic. ADR-0030 anticipated this exact outcome -- 'a mechanic supplied by vanilla and Create needs no emitted recipe to exist, so `logistics/circuit-network` staying `not_emitted` would contradict nothing here'."
     },
     "construction-robot": {
       "status": "undecided",
@@ -235,9 +233,8 @@
       "ticket": 114
     },
     "decider-combinator": {
-      "status": "undecided",
-      "note": "Create: Power Grid ships the counterpart -- lamps, CRT and Modular Display, LV/MV/HV switches, relays and the Alarm Bell -- so the whole `logistics/circuit-network` shelf is decided by the Electro-to-Power-Grid swap, not before it. ADR-0030 keeps the MECHANIC (vanilla redstone plus Create's redstone line); what waits here is which block each row names.",
-      "ticket": 148
+      "status": "not_emitted",
+      "note": "`not_emitted` by #148. This row's job is arithmetic or a decision, and Power Grid ships nothing that does either -- a potentiometer is a dial, a relay is a switch. Emitting the row against one of those would put a Factorio name on a block that does not do the Factorio thing, which costs more than leaving it unemitted: ADR-0030 already supplies the capability from vanilla's comparator and Create's Threshold Switch, Stockpile Switch and Smart Observer, so the player loses a recipe and keeps the mechanic. ADR-0030 anticipated this exact outcome -- 'a mechanic supplied by vanilla and Create needs no emitted recipe to exist, so `logistics/circuit-network` staying `not_emitted` would contradict nothing here'."
     },
     "depleted-uranium-fuel-cell": {
       "status": "undecided",
@@ -245,9 +242,10 @@
       "ticket": 135
     },
     "display-panel": {
-      "status": "undecided",
-      "note": "Create: Power Grid ships the counterpart -- lamps, CRT and Modular Display, LV/MV/HV switches, relays and the Alarm Bell -- so the whole `logistics/circuit-network` shelf is decided by the Electro-to-Power-Grid swap, not before it. ADR-0030 keeps the MECHANIC (vanilla redstone plus Create's redstone line); what waits here is which block each row names.",
-      "ticket": 148
+      "kind": "item",
+      "target": "powergrid:modular_display",
+      "source": "borrowed",
+      "note": "Factorio's display panel shows a signal as an icon or text. Power Grid's Modular Display is a segmented panel you slot digit, letter, hex and symbol modules into, which is the same job. The CRT is the other candidate and is rejected: it needs 12 V on a heater, ~1000 V on the anode and deflection coils to steer a dot, so it is a subsystem rather than a panel. `display_module` is a component OF the Modular Display, not a placed block. ADR-0030 keeps the MECHANIC -- Factorio's circuit network is vanilla redstone plus Create's redstone line -- and left which BLOCK each row names to `data/pack/subgroup-owner.json`, whose `logistics/circuit-network` shelf #148 splits: the four rows naming a physical device the network drives borrow a Power Grid block, the four combinators do not."
     },
     "electric-engine-unit": {
       "kind": "item",
@@ -591,9 +589,10 @@
       "ticket": 118
     },
     "power-switch": {
-      "status": "undecided",
-      "note": "Create: Power Grid ships the counterpart -- lamps, CRT and Modular Display, LV/MV/HV switches, relays and the Alarm Bell -- so the whole `logistics/circuit-network` shelf is decided by the Electro-to-Power-Grid swap, not before it. ADR-0030 keeps the MECHANIC (vanilla redstone plus Create's redstone line); what waits here is which block each row names.",
-      "ticket": 148
+      "kind": "item",
+      "target": "powergrid:contactor",
+      "source": "borrowed",
+      "note": "Factorio's power switch cuts or joins two electrical networks on a control signal. Power Grid's Contactor is that exact device -- its own ponder calls it a heavy-duty relay that 'lets you switch high currents with a lower voltage input'. The LV/MV/HV Switches are rejected because they are toggled by hand or by a kinetic input rather than by a signal, which makes them a lever and not a switch the factory operates. Redstone reaches the Contactor's coil through Power Grid's own Redstone Converter, so ADR-0030's redstone-is-the-wire answer still supplies the control side. ADR-0030 keeps the MECHANIC -- Factorio's circuit network is vanilla redstone plus Create's redstone line -- and left which BLOCK each row names to `data/pack/subgroup-owner.json`, whose `logistics/circuit-network` shelf #148 splits: the four rows naming a physical device the network drives borrow a Power Grid block, the four combinators do not."
     },
     "processing-unit": {
       "kind": "item",
@@ -616,9 +615,10 @@
       "ticket": 120
     },
     "programmable-speaker": {
-      "status": "undecided",
-      "note": "Create: Power Grid ships the counterpart -- lamps, CRT and Modular Display, LV/MV/HV switches, relays and the Alarm Bell -- so the whole `logistics/circuit-network` shelf is decided by the Electro-to-Power-Grid swap, not before it. ADR-0030 keeps the MECHANIC (vanilla redstone plus Create's redstone line); what waits here is which block each row names.",
-      "ticket": 148
+      "kind": "item",
+      "target": "powergrid:alarm_bell",
+      "source": "borrowed",
+      "note": "ADAPTED, and the weakest of the four. Factorio's programmable speaker plays a chosen sound and raises a named alert on a circuit condition; Power Grid's Alarm Bell rings, once, when powered. The trigger survives -- a condition makes a noise -- and the programmability does not. It is borrowed anyway because the alternative is `not_emitted`, and an alarm that rings on a condition is most of what the row is for in play. `docs/factorio-mechanics.md` carries the notice. ADR-0030 keeps the MECHANIC -- Factorio's circuit network is vanilla redstone plus Create's redstone line -- and left which BLOCK each row names to `data/pack/subgroup-owner.json`, whose `logistics/circuit-network` shelf #148 splits: the four rows naming a physical device the network drives borrow a Power Grid block, the four combinators do not."
     },
     "pump": {
       "kind": "item",
@@ -693,9 +693,8 @@
       "ticket": 41
     },
     "selector-combinator": {
-      "status": "undecided",
-      "note": "Create: Power Grid ships the counterpart -- lamps, CRT and Modular Display, LV/MV/HV switches, relays and the Alarm Bell -- so the whole `logistics/circuit-network` shelf is decided by the Electro-to-Power-Grid swap, not before it. ADR-0030 keeps the MECHANIC (vanilla redstone plus Create's redstone line); what waits here is which block each row names.",
-      "ticket": 148
+      "status": "not_emitted",
+      "note": "`not_emitted` by #148. This row's job is arithmetic or a decision, and Power Grid ships nothing that does either -- a potentiometer is a dial, a relay is a switch. Emitting the row against one of those would put a Factorio name on a block that does not do the Factorio thing, which costs more than leaving it unemitted: ADR-0030 already supplies the capability from vanilla's comparator and Create's Threshold Switch, Stockpile Switch and Smart Observer, so the player loses a recipe and keeps the mechanic. ADR-0030 anticipated this exact outcome -- 'a mechanic supplied by vanilla and Create needs no emitted recipe to exist, so `logistics/circuit-network` staying `not_emitted` would contradict nothing here'. It is doubly unemittable: its corpus recipe takes five `decider-combinator`, which is itself `not_emitted`, so a target here would name an ingredient nothing makes."
     },
     "shotgun": {
       "status": "undecided",
@@ -714,9 +713,10 @@
       "note": "ADR-0036's supply-area pole, registered in `planetaryfactory_core` by #147. A tier is a footprint and nothing else -- it grants no voltage and changes nothing a machine receives -- so the four sit on one shelf with one process. The supply areas are Factorio's own, big pole included, which covers LESS ground than the medium one because in Factorio it buys wire reach the pack has no use for."
     },
     "small-lamp": {
-      "status": "undecided",
-      "note": "Create: Power Grid ships the counterpart -- lamps, CRT and Modular Display, LV/MV/HV switches, relays and the Alarm Bell -- so the whole `logistics/circuit-network` shelf is decided by the Electro-to-Power-Grid swap, not before it. ADR-0030 keeps the MECHANIC (vanilla redstone plus Create's redstone line); what waits here is which block each row names.",
-      "ticket": 148
+      "kind": "item",
+      "target": "powergrid:light_fixture",
+      "source": "borrowed",
+      "note": "Factorio's small lamp is a single placed, powered light. Power Grid's Light Fixture is the plainest of its lamps and the only one that is just a lamp: `factory_light` is a housing you right-click a bulb into, `growth_lamp` is a crop bulb, and `ceiling_tile_lamp` belongs to the ceiling-tile system. ADR-0030 keeps the MECHANIC -- Factorio's circuit network is vanilla redstone plus Create's redstone line -- and left which BLOCK each row names to `data/pack/subgroup-owner.json`, whose `logistics/circuit-network` shelf #148 splits: the four rows naming a physical device the network drives borrow a Power Grid block, the four combinators do not."
     },
     "solar-panel": {
       "status": "undecided",

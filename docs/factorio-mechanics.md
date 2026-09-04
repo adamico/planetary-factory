@@ -397,8 +397,8 @@ Sub-rules:
   circuit rather than a named channel on a coloured wire — there is no reading a whole belt's contents
   off one wire, and no arithmetic on a signal beyond what a comparator does.
 - **where**: all bodies
-- **via**: `native_mechanic`, `create`
-- **owner**: ADR-0030
+- **via**: `native_mechanic`, `create`, `powergrid`
+- **owner**: ADR-0030, and #148 for which block the four device rows name
 
 **Factorio's circuit network is Minecraft's redstone system**, and this row belongs to redstone
 rather than to a missing mod. Vanilla supplies the wire, the comparator, the repeater and the
@@ -419,7 +419,15 @@ Sub-rules:
   substitution.
 - **Wireless signal over distance** — `shipped`, and better than Factorio's: Create's Redstone Link
   needs no wire and no relay, where Factorio needs a wire or a radar-linked circuit.
-- **Lamps and display panels as readouts** — `adapted`. Nixie Tubes and the Display Link.
+- **Lamps and display panels as readouts** — `adapted`. Nixie Tubes and the Display Link for the
+  redstone-driven readout, and, since #148, **Power Grid's own devices for the placed hardware**:
+  `small-lamp` is the Light Fixture, `display-panel` the Modular Display, `power-switch` the
+  Contactor. They are grid-powered rather than signal-powered, which is the seam — redstone decides,
+  the grid drives.
+- **An alert that fires on a condition** — `adapted`, and the weakest row on this shelf. Factorio's
+  programmable speaker plays a chosen sound and raises a named alert; #148 borrows Power Grid's
+  **Alarm Bell**, which rings when powered. The trigger survives and the programmability does not —
+  one sound, no alert text, no per-signal selection.
 - **Two independent networks on one wire (red and green)** — `excluded`. Redstone has one channel;
   the whole trick of running two circuits down one pole has no analogue.
 - **Circuit-controlled inserters and belts** — `unargued`, no verdict, and it depends on #102's
@@ -430,10 +438,23 @@ empty `underground_ores` step — so the mechanic exists while its crafting mate
 #62 already records the same problem hitting the authored green circuit. That is a resource question
 for #25, not a verdict on the mechanic, and the two were previously conflated in this row.
 
-`subgroup-owner.json` still parks `logistics/circuit-network` `undecided` with a note guessing
-`not_emitted`. **That is the other axis and this row does not settle it**: whether Factorio's eight
-combinator-and-lamp recipes are emitted is a routing decision, and a mechanic supplied by vanilla and
-Create needs no emitted recipe to exist.
+**The other axis — whether the eight recipes are emitted — was settled by #148, not by this row.**
+It was open because ADR-0030 deliberately left it to `subgroup-owner.json`: a mechanic supplied by
+vanilla and Create needs no emitted recipe to exist, so `not_emitted` would have contradicted nothing.
+The Electro-to-Power-Grid swap is what put candidate blocks on the table, so the swap decided it, and
+the shelf now **splits** rather than going one way whole:
+
+- **The four rows naming a physical device the network drives are emitted**, borrowing a Power Grid
+  block — Light Fixture, Modular Display, Contactor, Alarm Bell.
+- **The four combinators are `not_emitted`.** Their job is arithmetic and decision, and Power Grid
+  ships nothing that does either: a potentiometer is a dial, a relay is a switch. Naming one anyway
+  would put a Factorio name on a block that does not do the Factorio thing, and ADR-0030 already
+  supplies the capability from the comparator and Create's switches — so the player loses a recipe
+  and keeps the mechanic. `selector-combinator` is doubly unemittable: its recipe takes five
+  `decider-combinator`.
+
+This is the same split the sub-rules above describe, seen from the recipe side: **redstone decides
+and the grid drives**, so the deciding half needs no recipe and the driven half does.
 
 ### Electric network and transmission
 
