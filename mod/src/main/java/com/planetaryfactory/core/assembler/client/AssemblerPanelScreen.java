@@ -22,7 +22,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
  */
 public final class AssemblerPanelScreen extends AssemblerScreen<AssemblerPanelMenu> {
 
-    private static final int ROW_HEIGHT = 20;
+    private static final int ROW_HEIGHT = 22;
     private static final int ROWS_TOP = 20;
     private static final int CANCEL_SIZE = 12;
     private static final int BAR = 0xFF4FA84F;
@@ -44,9 +44,23 @@ public final class AssemblerPanelScreen extends AssemblerScreen<AssemblerPanelMe
             boolean isPausedHead = index == 0 && AssemblerQueueView.blocked();
             graphics.fill(leftPos + 8, y + ROW_HEIGHT - 6, leftPos + 8 + barWidth, y + ROW_HEIGHT - 4,
                     isPausedHead ? BAR_BLOCKED : BAR);
-            graphics.drawString(font,
-                    itemName(entry.rootItem()).copy().append(" x" + entry.amount()),
-                    leftPos + 10, y + 2, 0xFFFFFF, false);
+            // The plan on the left, the step under way on the right. A row naming only the plan
+            // says nothing is happening for as long as a transport belt spends crafting iron gears,
+            // which is most of its life.
+            int textY = y + 5;
+            graphics.renderItem(itemStack(entry.rootItem()), leftPos + 9, y + 2);
+            int after = leftPos + 27;
+            graphics.drawString(font, "x" + entry.amount(), after, textY, 0xFFFFFF, false);
+            after += font.width("x" + entry.amount()) + 6;
+            if (entry.hasStep()) {
+                graphics.drawString(font, ">", after, textY, 0x777777, false);
+                graphics.renderItem(itemStack(entry.stepItem()), after + 8, y + 2);
+                graphics.drawString(font, "x" + entry.stepAmount(), after + 26, textY, 0xCCCCCC, false);
+            }
+            if (entry.steps() > 1) {
+                Component of = Component.literal((entry.step() + 1) + "/" + entry.steps());
+                graphics.drawString(font, of, cancelLeft() - font.width(of) - 4, textY, 0x999999, false);
+            }
             int cancelX = cancelLeft();
             graphics.fill(cancelX, y + 2, cancelX + CANCEL_SIZE, y + 2 + CANCEL_SIZE, 0xFF5A2B2B);
             graphics.drawString(font, "x", cancelX + 4, y + 4, 0xFFDDDD, false);

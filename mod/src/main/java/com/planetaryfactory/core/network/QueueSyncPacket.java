@@ -2,6 +2,8 @@ package com.planetaryfactory.core.network;
 
 import com.planetaryfactory.core.PlanetaryFactoryCore;
 import com.planetaryfactory.core.assembler.AssemblerQueue;
+import com.planetaryfactory.core.assembler.CraftStep;
+import com.planetaryfactory.core.assembler.ItemAmount;
 import com.planetaryfactory.core.assembler.QueuedPlan;
 import com.planetaryfactory.core.assembler.AssemblerQueueView;
 import io.netty.buffer.ByteBuf;
@@ -24,17 +26,50 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
  */
 public record QueueSyncPacket(List<Entry> entries, boolean blocked) implements CustomPacketPayload {
 
-    /** One plan, as a row on the panel. */
-    public record Entry(UUID planId, String rootItem, int amount, int step, int steps, float progress) {
+    /**
+     * One plan, as a row on the panel.
+     *
+     * <p>{@code stepItem} and {@code stepAmount} are what the plan is making <em>now</em>, which is
+     * not usually what the plan is for: a queued transport belt spends most of its life crafting
+     * iron gears, and a row naming only the belt says nothing is happening for the whole of it. It
+     * is the current step's first output, and it is empty on a plan whose last step has finished.
+     */
+    public record Entry(
+            UUID planId,
+            String rootItem,
+            int amount,
+            String stepItem,
+            int stepAmount,
+            int step,
+            int steps,
+            float progress) {
 
-        public static final StreamCodec<ByteBuf, Entry> STREAM_CODEC = StreamCodec.composite(
-                UUIDUtil.STREAM_CODEC, Entry::planId,
-                ByteBufCodecs.STRING_UTF8, Entry::rootItem,
-                ByteBufCodecs.VAR_INT, Entry::amount,
-                ByteBufCodecs.VAR_INT, Entry::step,
-                ByteBufCodecs.VAR_INT, Entry::steps,
-                ByteBufCodecs.FLOAT, Entry::progress,
-                Entry::new);
+        /** Written out by hand: eight components, and {@code StreamCodec.composite} stops at six. */
+        public static final StreamCodec<ByteBuf, Entry> STREAM_CODEC = StreamCodec.of(
+                (buffer, entry) -> {
+                    UUIDUtil.STREAM_CODEC.encode(buffer, entry.planId());
+                    ByteBufCodecs.STRING_UTF8.encode(buffer, entry.rootItem());
+                    ByteBufCodecs.VAR_INT.encode(buffer, entry.amount());
+                    ByteBufCodecs.STRING_UTF8.encode(buffer, entry.stepItem());
+                    ByteBufCodecs.VAR_INT.encode(buffer, entry.stepAmount());
+                    ByteBufCodecs.VAR_INT.encode(buffer, entry.step());
+                    ByteBufCodecs.VAR_INT.encode(buffer, entry.steps());
+                    ByteBufCodecs.FLOAT.encode(buffer, entry.progress());
+                },
+                buffer -> new Entry(
+                        UUIDUtil.STREAM_CODEC.decode(buffer),
+                        ByteBufCodecs.STRING_UTF8.decode(buffer),
+                        ByteBufCodecs.VAR_INT.decode(buffer),
+                        ByteBufCodecs.STRING_UTF8.decode(buffer),
+                        ByteBufCodecs.VAR_INT.decode(buffer),
+                        ByteBufCodecs.VAR_INT.decode(buffer),
+                        ByteBufCodecs.VAR_INT.decode(buffer),
+                        ByteBufCodecs.FLOAT.decode(buffer)));
+
+        /** Whether there is a step under way to name. */
+        public boolean hasStep() {
+            return !stepItem.isEmpty() && stepAmount > 0;
+        }
     }
 
     public static final Type<QueueSyncPacket> TYPE = new Type<>(
@@ -48,12 +83,20 @@ public record QueueSyncPacket(List<Entry> entries, boolean blocked) implements C
     public static QueueSyncPacket of(AssemblerQueue queue) {
         List<Entry> entries = new ArrayList<>();
         for (QueuedPlan entry : queue.entries()) {
+            List<CraftStep> steps = entry.plan().steps();
+            int index = entry.stepIndex();
+            CraftStep current = index >= 0 && index < steps.size() ? steps.get(index) : null;
+            ItemAmount making = current == null || current.outputs().isEmpty()
+                    ? null
+                    : current.outputs().get(0);
             entries.add(new Entry(
                     entry.plan().id(),
                     entry.plan().rootItem(),
                     entry.plan().amount(),
-                    entry.stepIndex(),
-                    entry.plan().steps().size(),
+                    making == null ? "" : making.item(),
+                    making == null ? 0 : making.count(),
+                    index,
+                    steps.size(),
                     entry.progress()));
         }
         return new QueueSyncPacket(List.copyOf(entries), queue.isBlocked());

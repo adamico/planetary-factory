@@ -1,9 +1,6 @@
 package com.planetaryfactory.core.assembler.client;
 
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
@@ -36,31 +33,14 @@ abstract class AssemblerScreen<T extends AbstractContainerMenu> extends Abstract
         renderPanel(graphics, mouseX, mouseY);
     }
 
-    /**
-     * An item id as the player reads it.
-     *
-     * <p>The plan travels as ids, because the queue and the resolver count strings and never learn
-     * what an {@code Item} is. Turning one back into a name is a client-side job, and this is the one
-     * place the three screens do it -- {@code gtceu:iron_plate} in a dialog would be the resolver's
-     * internals leaking onto the screen.
-     */
+    /** The player-facing name of an item id. See {@link PlanItems}. */
     protected static Component itemName(String id) {
-        ResourceLocation key = ResourceLocation.tryParse(id);
-        Item item = key == null ? null : BuiltInRegistries.ITEM.get(key);
-        return item == null ? Component.literal(id) : item.getDescription();
+        return PlanItems.name(id);
     }
 
-    /**
-     * An item id as one stack of it, for drawing and for the vanilla tooltip.
-     *
-     * <p>Count one, not the plan's: the number beside the icon is the plan's and a stack count
-     * painted into the corner of the sprite would say it twice, differently, once a plan asks for
-     * more than a stack.
-     */
+    /** One stack of an item id, for drawing and for its tooltip. See {@link PlanItems}. */
     protected static ItemStack itemStack(String id) {
-        ResourceLocation key = ResourceLocation.tryParse(id);
-        Item item = key == null ? null : BuiltInRegistries.ITEM.get(key);
-        return item == null ? ItemStack.EMPTY : new ItemStack(item);
+        return PlanItems.stack(id);
     }
 
     /** What this particular screen puts on the panel. */

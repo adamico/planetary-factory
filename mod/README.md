@@ -29,7 +29,9 @@ API in this pack exposes:
   stored alternative costs.
 - **The Personal Assembler** — the panel, its two server-opened dialogs, the packets between them
   and the serial queue behind all three (ADR-0038, #160). The panel carries the player's own
-  inventory, so it stands in for the inventory screen while it is open. It is here for the bluntest reason in
+  inventory, so it stands in for the inventory screen while it is open, and a read-only GUI layer
+  repeats the queue beside the hotbar — the queue runs with every screen shut, so needing to stop
+  playing to see it was the opposite of what a background queue is for. It is here for the bluntest reason in
   ADR-0015's table: KubeJS cannot register a `MenuType` or a `Screen` on 1.21.1 at all (#96). The
   split inside the package is the one the testing policy asks for — `AssemblerQueue`, `CraftingPlan`
   and everything they touch name items by string and hold no Minecraft type, so the reservation, the
