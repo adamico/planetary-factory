@@ -1,6 +1,7 @@
 package com.planetaryfactory.core.compat.emi;
 
 import com.planetaryfactory.core.assembler.AssemblerPanelMenu;
+import com.planetaryfactory.core.assembler.HandRecipeSet;
 import com.planetaryfactory.core.network.SelectAmountPacket;
 import dev.emi.emi.api.recipe.EmiPlayerInventory;
 import dev.emi.emi.api.recipe.EmiRecipe;
@@ -54,27 +55,32 @@ public final class PersonalAssemblerEmiHandler implements EmiRecipeHandler<Assem
     }
 
     /**
-     * Any recipe EMI can name.
+     * A recipe the Assembler can actually plan, and no other.
      *
-     * <p>Deliberately wide, and the width is the ticket's. The hand-craftable set -- first category
-     * {@code crafting}, minus the eleven Factorio withholds (#88) -- is a fact about the Factorio
-     * corpus, which lives on the server; a client-side answer would need that set synced, and the
-     * thing that knows it is #161's resolver. Until then the refusal happens one screen later and
-     * says more: a recipe the Assembler cannot make comes back as an incomplete plan naming what is
-     * wrong, rather than as a button that is silently absent.
+     * <p>The hand-craftable set -- first category {@code crafting}, minus the eleven Factorio
+     * withholds (#88) -- is a fact about the loaded recipes and therefore server truth, so it is
+     * synced as ids and read here from {@link HandRecipeSet}. Smelting raw copper is a furnace's
+     * job, and offering to hand-craft it could only ever end in a dialog that says no.
      *
-     * <p>An id is all the server needs to be asked about a recipe, so that is all this checks.
+     * <p>This used to be every recipe EMI could name, on the argument that a refusal one screen
+     * later says more than a missing button. That holds for a recipe the Assembler <em>does</em>
+     * make and the player cannot afford -- which is the Crafting Plan's whole job, and why
+     * {@link #canCraft} still returns true unconditionally. It does not hold for a recipe no
+     * Assembler will ever make: there the dialog has nothing to teach, and the button is a dead end
+     * the player has to open to discover.
      */
     @Override
     public boolean supportsRecipe(EmiRecipe recipe) {
-        return recipe.getId() != null;
+        ResourceLocation id = recipe.getId();
+        return id != null && HandRecipeSet.contains(id.toString());
     }
 
     /**
      * Always, and this is the non-standard half of the contract.
      *
      * <p>The button must stay enabled when the player lacks the ingredients, because showing what is
-     * missing is the Crafting Plan's entire job.
+     * missing is the Crafting Plan's entire job. Which recipes get a button at all is
+     * {@link #supportsRecipe}'s question, and a different one.
      */
     @Override
     public boolean canCraft(EmiRecipe recipe, EmiCraftContext<AssemblerPanelMenu> context) {

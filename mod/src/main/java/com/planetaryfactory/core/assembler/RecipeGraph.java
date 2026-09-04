@@ -2,6 +2,7 @@ package com.planetaryfactory.core.assembler;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * The hand-craftable set, in the two directions the resolver walks it: by recipe id, which is what
@@ -51,6 +52,11 @@ public final class RecipeGraph {
 
     public int size() {
         return byId.size();
+    }
+
+    /** Every recipe id in the set, which is what the client is told so EMI can gate its button. */
+    public Set<String> ids() {
+        return byId.keySet();
     }
 
 

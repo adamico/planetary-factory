@@ -47,6 +47,7 @@ public final class PlanetaryFactoryCore {
         // The Personal Assembler's queue runs whether or not its panel is open (ADR-0038).
         NeoForge.EVENT_BUS.addListener(AssemblerTicker::onPlayerTick);
         NeoForge.EVENT_BUS.addListener(AssemblerTicker::onLogin);
+        NeoForge.EVENT_BUS.addListener(AssemblerTicker::onDatapackSync);
         NeoForge.EVENT_BUS.addListener(AssemblerTicker::onLogout);
         if (FMLEnvironment.dist == Dist.CLIENT) {
             AssemblerClient.register(modBus);

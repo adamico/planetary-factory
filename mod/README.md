@@ -47,7 +47,9 @@ API in this pack exposes:
   ingredients into unified tags at load; a resolver reading only the first match refuses plans the
   crafting grid accepts. EMI's fill button reaches the panel from `compat/emi`, implementing `EmiRecipeHandler`
   directly rather than `StandardRecipeHandler`, whose default `canCraft` would grey the button out
-  precisely when the plan has something to say.
+  precisely when the plan has something to say. Which recipes get a button is the other question:
+  the hand set's ids are synced to the client on datapack sync, so a furnace recipe never offers a
+  button that could only open a dialog to refuse.
 
 - **The lock annotation** — a recipe the viewing team has not researched is marked in both recipe
   viewers, from `compat/emi` and `compat/jei` over the shared `research/client` note (issue #75).

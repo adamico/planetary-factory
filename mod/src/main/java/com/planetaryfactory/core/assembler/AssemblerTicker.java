@@ -1,6 +1,9 @@
 package com.planetaryfactory.core.assembler;
 
+import com.planetaryfactory.core.network.HandRecipeSetPacket;
+import com.planetaryfactory.core.network.PFNetwork;
 import net.minecraft.server.level.ServerPlayer;
+import net.neoforged.neoforge.event.OnDatapackSyncEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
@@ -38,6 +41,25 @@ public final class AssemblerTicker {
         if (event.getEntity() instanceof ServerPlayer player) {
             PersonalAssembler.sync(player);
         }
+    }
+
+    /**
+     * The hand set, sent on the two occasions it can change.
+     *
+     * <p>Datapack sync fires on login with one player and on {@code /reload} with none, which is
+     * exactly the pair of moments the loaded recipes can differ from what a client was last told.
+     */
+    public static void onDatapackSync(OnDatapackSyncEvent event) {
+        if (event.getPlayer() != null) {
+            sendHandRecipes(event.getPlayer());
+        } else {
+            event.getPlayerList().getPlayers().forEach(AssemblerTicker::sendHandRecipes);
+        }
+    }
+
+    private static void sendHandRecipes(ServerPlayer player) {
+        PFNetwork.sendToPlayer(player,
+                HandRecipeSetPacket.of(RuntimeHandRecipes.graph(player.level()).ids()));
     }
 
     /** A pending plan is an open dialog, and an open dialog does not survive a logout. */
