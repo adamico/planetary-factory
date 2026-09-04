@@ -1,6 +1,10 @@
 package com.planetaryfactory.core.assembler.client;
 
 import com.planetaryfactory.core.PFMenus;
+import com.planetaryfactory.core.PlanetaryFactoryCore;
+import net.minecraft.resources.ResourceLocation;
+import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
+import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.common.NeoForge;
@@ -19,8 +23,16 @@ public final class AssemblerClient {
 
     public static void register(IEventBus modBus) {
         modBus.addListener(AssemblerClient::registerScreens);
+        modBus.addListener(AssemblerClient::registerHud);
         NeoForge.EVENT_BUS.addListener(InventoryAssemblerTab::onScreenInit);
         NeoForge.EVENT_BUS.addListener(InventoryAssemblerTab::onScreenRender);
+    }
+
+    /** Above the hotbar in draw order, so the queue is not painted under it. */
+    private static void registerHud(RegisterGuiLayersEvent event) {
+        event.registerAbove(VanillaGuiLayers.HOTBAR,
+                ResourceLocation.fromNamespaceAndPath(PlanetaryFactoryCore.NAMESPACE, "assembler_queue"),
+                new AssemblerHud());
     }
 
     private static void registerScreens(RegisterMenuScreensEvent event) {
