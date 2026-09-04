@@ -148,7 +148,7 @@ GTCEu 7.0.2's own `en_us.json` shows the wrench doing four distinct things, not 
 
 | Verb | String | Disposition |
 | --- | --- | --- |
-| Dismantle | `"Hold left click to dismantle Machines"` | **The Engineer's Pick absorbs it.** |
+| Dismantle | `"Hold left click to dismantle Machines"` | **The Engineer's Pick absorbs it.** Delivered by the tags below and confirmed in-game: a machine breaks and drops its item. |
 | Rotate / set facing | `"Rotates Blocks on Rightclick"` | **Deferred to its own ticket.** |
 | Pipe connections | `"Use Wrench to set Connections, sneak to block Connections"` | **Deferred with rotation.** |
 | Multiblock maintenance | `"Pipe is loose. (Wrench)"` | **Already dead** — `config/gtceu.yaml:218` sets `enableMaintenance: false`. |
@@ -205,4 +205,10 @@ corpus recipes — `small-electric-pole`, `wooden-chest` and `shotgun` (the last
   it.
 - Two pack-authored recipes exist that no corpus regeneration will ever produce. A converter run must
   not remove them.
-- Rotation and pipe connections have no owner until their ticket lands.
+- Rotation and pipe connections are `#168`'s. The wrench item tags this ADR grants do **not** hand
+  them over, which is worth stating because it looks as though they would: GregTech gates rotate and
+  the configure verbs on NeoForge `ItemAbility` declarations (`GTItemAbilities.WRENCH_ROTATE`,
+  `WRENCH_CONFIGURE` and friends) that a plain `Item` answers false to, while dismantle rides the
+  ordinary break path this ADR already covers. Until #168 lands there is one visible seam: GTCEu's
+  rotation overlay draws on `toolTypes.contains(WRENCH) || canPerformAction(WRENCH_ROTATE)`, and the
+  Pick satisfies the first half, so the overlay appears on a machine while right-click does nothing.
