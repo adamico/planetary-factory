@@ -1,0 +1,55 @@
+{
+  "type": "gtceu:assembling",
+  "inputs": {
+    "item": [
+      {
+        "content": {
+          "ingredient": {
+            "tag": "c:copper_coils"
+          },
+          "count": 1
+        }
+      },
+      {
+        "content": {
+          "ingredient": {
+            "item": "planetaryfactory:plastic_bar"
+          },
+          "count": 1
+        }
+      },
+      {
+        "content": {
+          "ingredient": {
+            "item": "planetaryfactory:advanced_circuit"
+          },
+          "count": 1
+        }
+      },
+      {
+        "content": {
+          "ingredient": {
+            "item": "powergrid:pins"
+          },
+          "count": 1
+        }
+      }
+    ]
+  },
+  "outputs": {
+    "item": [
+      {
+        "content": {
+          "ingredient": {
+            "item": "powergrid:fe_inverter"
+          },
+          "count": 1
+        }
+      }
+    ]
+  },
+  "duration": 20,
+  "data": {
+    "factorio_category": "crafting"
+  }
+}

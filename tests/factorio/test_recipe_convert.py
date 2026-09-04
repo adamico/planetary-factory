@@ -34,6 +34,9 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent.parent
+EMITTED = ROOT / "kubejs/data/planetaryfactory/recipe"
+# Subtrees of EMITTED written by a different converter, with a different input table.
+FOREIGN_SUBTREES = ("grid",)
 STARTUP = ROOT / "kubejs/startup_scripts"
 MOD = ROOT / "mod/src/main/java/com/planetaryfactory/core"
 PF_BLOCKS = MOD / "PFBlocks.java"
@@ -206,7 +209,14 @@ def check_emitted(items, recipe_types, failures):
             failures.append(f"{path.name}: {field} names {target}, which is blocked_by "
                             f"#{awaited[target]} and is not registered yet -- re-run the converter")
 
-    for path in sorted((ROOT / "kubejs/data/planetaryfactory/recipe").rglob("*.json")):
+    # `recipe/grid/` is not this converter's output: it is Create: Power Grid's line, re-authored
+    # by `scripts/powergrid-recipe-convert.py` against `data/pack/grid-substitutions.json` (#172).
+    # Its items are Power Grid's and Create's, which have no Factorio name and so no item-map row
+    # by construction. `tests/factorio/test_grid_recipes.py` is what holds that subtree to its own
+    # table; scanning it here would report every one of its items as an unmapped name.
+    for path in sorted(EMITTED.rglob("*.json")):
+        if path.relative_to(EMITTED).parts[0] in FOREIGN_SUBTREES:
+            continue
         recipe = json.loads(path.read_text())
         if recipe.get("type") == "minecraft:smelting":
             named = [recipe["ingredient"].get("item") or recipe["ingredient"].get("tag"),
@@ -258,9 +268,10 @@ def main():
     if failures:
         return 1
     decided = sum(1 for row in items.values() if "target" in row)
+    ours = sum(1 for p in EMITTED.rglob("*.json")
+               if p.relative_to(EMITTED).parts[0] not in FOREIGN_SUBTREES)
     print(f"ok   {len(items)} item-map rows ({decided} decided), "
-          f"{len(list((ROOT / 'kubejs/data/planetaryfactory/recipe').rglob('*.json')))} "
-          "recipes emitted and current")
+          f"{ours} recipes emitted and current")
     return 0
 
 

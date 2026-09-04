@@ -1,0 +1,274 @@
+{
+  "_comment": [
+    "Create: Power Grid's own ingredients -> what Terra crafts them from instead (#172).",
+    "",
+    "WHY THIS FILE EXISTS. ADR-0034's sweep is default-deny, so a Power Grid recipe ships only if",
+    "the pack authors it. `scripts/powergrid-recipe-convert.py` re-authors the 84 recipes the mod",
+    "puts on surfaces no block in this pack executes -- 43 `minecraft:crafting_shaped`, 28",
+    "`minecraft:crafting_shapeless` and 13 `create:mechanical_crafting`. The conversion is",
+    "mechanical (a pattern is flattened to an unordered ingredient list, counts preserved exactly),",
+    "and every judgement it makes is a row in this file rather than a branch in the script.",
+    "",
+    "THE PROBLEM THIS FILE SOLVES. Power Grid is built for a Create pack, and Terra is not one.",
+    "ADR-0021 closes the input alphabet to iron, copper, coal and uranium plus stone and what the",
+    "surface grows, and cuts zinc outright with no exception -- which takes andesite alloy, andesite",
+    "casing, brass, the conductive casing and the shaft with it. ADR-0034 then removes every recipe",
+    "the pack does not author, so a vanilla item is obtainable only if it DROPS: glass, glass panes,",
+    "sticks, paper, terracotta and redstone are all grid-crafted and all gone, and even vanilla's",
+    "own `raw iron -> iron ingot` smelt is swept, which is why the ingot tags substitute and the",
+    "plate tags do not.",
+    "",
+    "So the obtainable set is exactly: what a block drops, plus the outputs of the pack's own",
+    "emitted recipes. Every ingredient below is classified against that set and nothing else.",
+    "",
+    "THE RULE: COUNTS ARE NEVER CHANGED. A substitution replaces an ingredient one-for-one at the",
+    "amount Power Grid asked for. Where that is lossy it is called out in the row's `reason` -- the",
+    "nugget rows are the loud case, since a nugget is a ninth of an ingot and its substitute is a",
+    "whole plate. Preserving the shape of the mod's own recipes was judged worth more than",
+    "re-costing 84 recipes by hand, and re-costing them is a later ticket's call, not this one's.",
+    "",
+    "FIELDS.",
+    "  `keep`        an ingredient that is already obtainable, passed through untouched. Every",
+    "                entry names why it is obtainable, because 'it looks vanilla' is not a reason",
+    "                under a default-deny sweep.",
+    "  `substitute`  `to` is the replacement item, `reason` is the role being preserved.",
+    "  `skip`        a recipe not emitted at all, and the pack recipe that already outputs it.",
+    "",
+    "AN INGREDIENT IN NEITHER `keep` NOR `substitute` IS A HARD FAILURE, following",
+    "`item-map.json`'s rule: a name nobody has looked at must never be quietly passed through into",
+    "a recipe the player cannot craft. That is the whole failure this ticket was filed against.",
+    "",
+    "`machine_only` is the second lever, and the reason `skip` is not used for the conversion rows.",
+    "Power Grid's `*_from_conversion` recipes turn a block into its other orientation, in BOTH",
+    "directions. Left as hand recipes they are three 2-cycles and three items with two routes, which",
+    "`RecipeGraph` resolves by taking whichever the recipe manager happened to hand it first -- 'an",
+    "arbitrary answer, not a stable one' -- and which `PlanResolver` has no cost model to escape.",
+    "Forcing them onto the machine takes them out of the Personal Assembler's graph entirely, so the",
+    "cycle cannot form, and BOTH directions still exist on the Assembling Machine. Skipping three of",
+    "them would have broken the cycle too, at the price of deleting the return trip from the game."
+  ],
+  "keep": {
+    "powergrid:current_gauge": "emitted by this converter, from Power Grid's own `current_gauge_from_conversion` recipe.",
+    "powergrid:device_connector": "emitted by this converter, from Power Grid's own `device_connector` recipe.",
+    "powergrid:electric_motor": "emitted by this converter, from Power Grid's own `electric_motor` recipe.",
+    "powergrid:generator_commutator": "emitted by this converter, from Power Grid's own `generator_commutator_from_conversion` recipe.",
+    "powergrid:generator_housing": "emitted by this converter, from Power Grid's own `generator_housing_from_conversion` recipe.",
+    "powergrid:generator_induction_rotor": "emitted by this converter, from Power Grid's own `generator_induction_rotor` recipe.",
+    "powergrid:insulated_copper_wire": "emitted by this converter, from Power Grid's own `insulated_copper_wire` recipe.",
+    "powergrid:pins": "emitted by this converter, from Power Grid's own `pins` recipe.",
+    "powergrid:relay": "emitted by this converter, from Power Grid's own `relay` recipe.",
+    "powergrid:resistive_coil": "emitted by this converter, from Power Grid's own `resistive_coil` recipe.",
+    "powergrid:socket": "emitted by this converter, from Power Grid's own `socket` recipe.",
+    "powergrid:voltage_gauge": "emitted by this converter, from Power Grid's own `voltage_gauge_from_conversion` recipe.",
+    "#c:plates/iron": "gtceu:iron_plate -- the pack smelts it from raw iron (#91, `recipe/iron_plate.json`).",
+    "#c:plates/copper": "gtceu:copper_plate -- the pack smelts it from raw copper (#91, `recipe/copper_plate.json`).",
+    "#c:copper_coils": "powergrid:copper_coil -- emitted by this converter, from Power Grid's own `copper_coil` recipe.",
+    "#c:wires/copper": "powergrid:wire -- #148 emits it as Factorio's copper cable (`assembling/copper_cable.json`).",
+    "#minecraft:coals": "minecraft:coal -- a Terra ore drop, and one of ADR-0021's four (#124).",
+    "powergrid:battery": "#148 emits it as Factorio's accumulator (`assembling/accumulator.json`).",
+    "create:fluid_pipe": "the pack emits it (`assembling/pipe.json`); ADR-0017 gives Create fluid logistics.",
+    "powergrid:vertical_generator_housing": "emitted by this converter, from Power Grid's own `vertical_generator_housing_from_conversion` recipe.",
+    "powergrid:generator_vertical_commutator": "emitted by this converter, from Power Grid's own `generator_vertical_commutator_from_conversion` recipe."
+  },
+  "substitute": {
+    "create:andesite_alloy": {
+      "to": "#c:plates/iron",
+      "reason": "Create's base structural alloy is andesite plus zinc, and ADR-0021 cuts zinc with no exception. Terra's base structural material is the iron plate, which is the role andesite alloy plays in every recipe here."
+    },
+    "create:andesite_casing": {
+      "to": "#c:plates/iron",
+      "reason": "Andesite alloy again, one tier up. Same role, same substitute -- the pack has no casing item, and inventing one is ADR-0015's business rather than this converter's."
+    },
+    "powergrid:conductive_casing": {
+      "to": "#c:plates/copper",
+      "reason": "An andesite casing plus a zinc ingot, so doubly out of alphabet. Its role is the conductive shell, and copper is Terra's conductor."
+    },
+    "#c:plates/zinc": {
+      "to": "#c:plates/copper",
+      "reason": "Zinc is cut (ADR-0021). Copper is the pack's second plate and the electrical one, which is the role zinc plays in an electrical mod."
+    },
+    "#c:ingots/zinc": {
+      "to": "#c:plates/copper",
+      "reason": "As above. The ingot form substitutes to the plate because no ingot is obtainable -- vanilla's raw-ore smelt is swept and only the pack's plate smelt survives."
+    },
+    "#c:plates/brass": {
+      "to": "#c:plates/copper",
+      "reason": "Brass is copper plus zinc (ADR-0021 names it explicitly when cutting Create's Deployer). The copper half is the half Terra has."
+    },
+    "#c:ingots/iron": {
+      "to": "#c:plates/iron",
+      "reason": "Not obtainable: vanilla `raw iron -> iron ingot` is a `minecraft:`-namespace smelt and the sweep removes it. The pack's iron plate is the surviving iron form."
+    },
+    "#c:ingots/copper": {
+      "to": "#c:plates/copper",
+      "reason": "As the iron ingot row, for copper."
+    },
+    "#c:nuggets/iron": {
+      "to": "#c:plates/iron",
+      "reason": "No nugget is obtainable -- the vanilla ingot-to-nugget recipe is a grid recipe and is swept. LOSSY: a nugget is a ninth of an ingot and this pays a whole plate for it. Re-costing is a later ticket's."
+    },
+    "#c:nuggets/copper": {
+      "to": "#c:plates/copper",
+      "reason": "As the iron nugget row, and lossy in the same way. Vanilla has no copper nugget at all; the tag is Create's, whose items are swept too."
+    },
+    "#c:wires/iron": {
+      "to": "powergrid:wire",
+      "reason": "Power Grid's iron wire is made on a surface this ticket does not convert, so nothing produces it. The copper wire the pack already emits is the same role."
+    },
+    "powergrid:copper_plating": {
+      "to": "#c:plates/copper",
+      "reason": "Made by a Create process the pack has no executor for. It is a copper sheet, which is what the pack's copper plate is."
+    },
+    "powergrid:magnet": {
+      "to": "#c:plates/iron",
+      "reason": "`powergrid:magnetization` is the mod's own recipe type and this ticket does not admit that surface. A magnet is magnetised iron, so the iron plate is the honest stand-in."
+    },
+    "powergrid:electrical_gizmo": {
+      "to": "planetaryfactory:advanced_circuit",
+      "reason": "A sequenced-assembly item built on a zinc plate, so unreachable twice over. It is the mod's advanced electronic component and the pack's is the advanced circuit."
+    },
+    "powergrid:transformer_core": {
+      "to": "#c:plates/iron",
+      "reason": "Made on a surface this ticket does not convert. A transformer core is laminated iron."
+    },
+    "create:shaft": {
+      "to": "gtceu:iron_rod",
+      "reason": "Andesite alloy, so zinc-bearing. The pack emits an iron rod (`assembling/iron_stick.json`) and it is the same rotational-shaft role."
+    },
+    "create:cogwheel": {
+      "to": "gtceu:iron_gear",
+      "reason": "Andesite alloy again. The pack emits an iron gear (`assembling/iron_gear_wheel.json`), which is Factorio's own name for the part."
+    },
+    "create:clutch": {
+      "to": "gtceu:iron_gear",
+      "reason": "A brass-bearing Create component. Its role here is a geared coupling, which the iron gear covers."
+    },
+    "create:encased_fan": {
+      "to": "planetaryfactory:engine_unit",
+      "reason": "Andesite casing plus a shaft. Its role is the powered rotating assembly, which is what the pack's engine unit is."
+    },
+    "create:precision_mechanism": {
+      "to": "planetaryfactory:advanced_circuit",
+      "reason": "Brass, gold and cogs -- three separate reasons it cannot be made here. It is Create's high-tier precision component and the advanced circuit is the pack's."
+    },
+    "create:display_board": {
+      "to": "powergrid:modular_display",
+      "reason": "A Create block with no pack recipe. #148 already emits Power Grid's own display as Factorio's display panel, and it is the same part."
+    },
+    "create:electron_tube": {
+      "to": "planetaryfactory:electronic_circuit",
+      "reason": "Rose quartz plus an iron nugget; rose quartz is not on Terra. Its role is the basic electronic component, which is the electronic circuit."
+    },
+    "create:polished_rose_quartz": {
+      "to": "planetaryfactory:electronic_circuit",
+      "reason": "Rose quartz is a Create worldgen material and ADR-0021 closes the alphabet against it. It appears here only as electronics substrate."
+    },
+    "create:cardboard": {
+      "to": "planetaryfactory:plastic_bar",
+      "reason": "Create makes it from dough, i.e. wheat, and its recipes are swept. Its role is a cheap sheet material and the pack's is the plastic bar (ADR-0025's chemistry emits it)."
+    },
+    "create:empty_schematic": {
+      "to": "planetaryfactory:electronic_circuit",
+      "reason": "Paper plus a Create process. It appears once, as the substrate a circuit is printed on, so it takes the electronic circuit like the other substrates."
+    },
+    "minecraft:redstone": {
+      "to": "powergrid:wire",
+      "reason": "Redstone ore is not one of ADR-0021's four and nothing on Terra drops it. Every use here is as a conductor, which is the copper wire the pack already emits. #144's circuit-network split is the reason this does not silently become a circuit."
+    },
+    "minecraft:comparator": {
+      "to": "planetaryfactory:electronic_circuit",
+      "reason": "Redstone and quartz, both out of alphabet, and its own recipe is a swept grid recipe. It is a logic component."
+    },
+    "minecraft:lever": {
+      "to": "planetaryfactory:electronic_circuit",
+      "reason": "Craftable only on the vanilla grid, which no block executes (ADR-0034). Its role is a switch, which is a logic component here."
+    },
+    "minecraft:compass": {
+      "to": "planetaryfactory:electronic_circuit",
+      "reason": "Needs redstone, and its recipe is a swept grid recipe. It appears in the gauges, as their instrument movement."
+    },
+    "minecraft:glass": {
+      "to": "planetaryfactory:plastic_bar",
+      "reason": "Sand smelts to glass on a `minecraft:`-namespace recipe, which the sweep removes -- only the pack's own smelts survive. The plastic bar is the pack's transparent-cover material."
+    },
+    "minecraft:glass_pane": {
+      "to": "planetaryfactory:plastic_bar",
+      "reason": "Glass plus a swept grid recipe, so unobtainable twice. Same role and same substitute as glass."
+    },
+    "minecraft:paper": {
+      "to": "planetaryfactory:plastic_bar",
+      "reason": "Sugar cane on a swept grid recipe. It is a sheet material here, not a book."
+    },
+    "minecraft:terracotta": {
+      "to": "minecraft:cobblestone",
+      "reason": "Clay smelted on a swept `minecraft:` recipe. Its role is fired earthen block, and cobblestone is the obtainable stone Terra drops."
+    },
+    "minecraft:stone_button": {
+      "to": "minecraft:cobblestone",
+      "reason": "A swept grid recipe. It is stone, and cobblestone is the stone that drops."
+    },
+    "#minecraft:wooden_slabs": {
+      "to": "#minecraft:logs",
+      "reason": "A swept grid recipe. Logs are what Terra's surface actually grows (ADR-0016's Sapros trees)."
+    },
+    "minecraft:stick": {
+      "to": "gtceu:iron_rod",
+      "reason": "A swept grid recipe, and the pack has no wooden intermediate. Every use here is structural rather than fuel, so the iron rod is the role-preserving choice."
+    },
+    "minecraft:dried_kelp": {
+      "to": "#minecraft:logs",
+      "reason": "Kelp is not part of what Terra's surface grows and the drying smelt is swept. It appears as Create's cardboard feedstock; logs are the obtainable organic material."
+    },
+    "minecraft:potato": {
+      "to": "#minecraft:logs",
+      "reason": "Not part of Terra's surface growth (ADR-0021). Same organic-feedstock role as the kelp row."
+    },
+    "minecraft:coal_block": {
+      "to": "minecraft:coal",
+      "reason": "The compacting recipe is a swept grid recipe. Coal itself drops, so the block substitutes to the item -- LOSSY by a factor of nine, in the pack's favour."
+    },
+    "minecraft:gold_nugget": {
+      "to": "planetaryfactory:electronic_circuit",
+      "reason": "Gold is cut by ADR-0021's closed alphabet. It appears only as a contact material in electronics."
+    },
+    "minecraft:lapis_lazuli": {
+      "to": "planetaryfactory:electronic_circuit",
+      "reason": "Not one of Terra's four ores. It appears once, as electronics decoration."
+    },
+    "minecraft:quartz": {
+      "to": "planetaryfactory:electronic_circuit",
+      "reason": "Nether quartz, and #124 removed the Nether outright. Its role is the electronics substrate."
+    },
+    "minecraft:amethyst_shard": {
+      "to": "planetaryfactory:electronic_circuit",
+      "reason": "Amethyst geodes are not part of Terra's worldgen. It appears once, as a resonant electronics part."
+    },
+    "minecraft:glowstone_dust": {
+      "to": "planetaryfactory:electronic_circuit",
+      "reason": "Nether-only, and #124 removed the Nether. It appears in the indicator parts, where its role is the light-emitting element."
+    },
+    "minecraft:diamond": {
+      "to": "planetaryfactory:advanced_circuit",
+      "reason": "Not one of ADR-0021's four ores. It appears once and marks the most expensive part in its recipe, which is what the advanced circuit marks in the pack."
+    }
+  },
+  "skip": {
+    "alarm_bell": "#148 already emits `assembling/programmable_speaker.json`, which outputs `powergrid:alarm_bell`. A second route would be a progression escape.",
+    "contactor": "#148 already emits `assembling/power_switch.json`, which outputs `powergrid:contactor`.",
+    "light_fixture": "#148 already emits `assembling/small_lamp.json`, which outputs `powergrid:light_fixture`.",
+    "modular_display": "#148 already emits `assembling/display_panel.json`, which outputs `powergrid:modular_display`."
+  },
+  "machine_only": {
+    "voltage_gauge_from_conversion": "One half of a 2-cycle with `current_gauge_from_conversion`, and a second route to `powergrid:voltage_gauge`, which `voltage_gauge` already makes.",
+    "current_gauge_from_conversion": "The other half. It is also the ONLY route to `powergrid:current_gauge`, which is why the pair moves to the machine rather than one of them being dropped.",
+    "generator_housing_from_conversion": "One half of a 2-cycle with `vertical_generator_housing_from_conversion`, and a second route to `powergrid:generator_housing`.",
+    "vertical_generator_housing_from_conversion": "The other half, and the only route to `powergrid:vertical_generator_housing`.",
+    "generator_commutator_from_conversion": "One half of a 2-cycle with `generator_vertical_commutator_from_conversion`, and a second route to `powergrid:generator_commutator`.",
+    "generator_vertical_commutator_from_conversion": "The other half, and the only route to `powergrid:generator_vertical_commutator`."
+  },
+  "duration": {
+    "_reason": "Ticks per recipe, by the Factorio category the source surface maps to. A vanilla grid recipe carries no duration, so one has to be chosen; it is here rather than in the converter because CLAUDE.md's rule is that nothing is decided in the script. These match the pack's own emitted hand recipes, which sit at 10-20 ticks. Re-costing the grid line against Factorio's own timings is a later ticket's.",
+    "crafting": 20,
+    "advanced-crafting": 40
+  }
+}

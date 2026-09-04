@@ -1,0 +1,1622 @@
+{
+  "alarm_bell": {
+    "ingredients": [
+      {
+        "amount": 1,
+        "ingredient": "#c:copper_coils"
+      },
+      {
+        "amount": 1,
+        "ingredient": "#c:ingots/iron"
+      },
+      {
+        "amount": 3,
+        "ingredient": "#c:plates/brass"
+      },
+      {
+        "amount": 1,
+        "ingredient": "create:andesite_alloy"
+      }
+    ],
+    "result": "powergrid:alarm_bell",
+    "result_count": 1,
+    "source_type": "minecraft:crafting_shaped"
+  },
+  "barretter_tube": {
+    "ingredients": [
+      {
+        "amount": 1,
+        "ingredient": "#c:plates/iron"
+      },
+      {
+        "amount": 1,
+        "ingredient": "#c:wires/iron"
+      },
+      {
+        "amount": 1,
+        "ingredient": "minecraft:quartz"
+      }
+    ],
+    "result": "powergrid:barretter_tube",
+    "result_count": 1,
+    "source_type": "minecraft:crafting_shaped"
+  },
+  "basin_heater": {
+    "ingredients": [
+      {
+        "amount": 4,
+        "ingredient": "#c:plates/copper"
+      },
+      {
+        "amount": 1,
+        "ingredient": "powergrid:conductive_casing"
+      },
+      {
+        "amount": 5,
+        "ingredient": "powergrid:resistive_coil"
+      }
+    ],
+    "result": "powergrid:basin_heater",
+    "result_count": 1,
+    "source_type": "create:mechanical_crafting"
+  },
+  "capacitor": {
+    "ingredients": [
+      {
+        "amount": 1,
+        "ingredient": "#c:plates/copper"
+      },
+      {
+        "amount": 2,
+        "ingredient": "#c:plates/iron"
+      },
+      {
+        "amount": 1,
+        "ingredient": "#c:plates/zinc"
+      },
+      {
+        "amount": 1,
+        "ingredient": "minecraft:paper"
+      }
+    ],
+    "result": "powergrid:capacitor",
+    "result_count": 1,
+    "source_type": "minecraft:crafting_shaped"
+  },
+  "carbon_pile_coil": {
+    "ingredients": [
+      {
+        "amount": 4,
+        "ingredient": "#c:copper_coils"
+      },
+      {
+        "amount": 2,
+        "ingredient": "#c:plates/iron"
+      },
+      {
+        "amount": 2,
+        "ingredient": "#c:plates/zinc"
+      },
+      {
+        "amount": 1,
+        "ingredient": "powergrid:conductive_casing"
+      }
+    ],
+    "result": "powergrid:carbon_pile_coil",
+    "result_count": 1,
+    "source_type": "create:mechanical_crafting"
+  },
+  "circuit_design_table": {
+    "ingredients": [
+      {
+        "amount": 1,
+        "ingredient": "create:electron_tube"
+      },
+      {
+        "amount": 1,
+        "ingredient": "create:empty_schematic"
+      },
+      {
+        "amount": 1,
+        "ingredient": "powergrid:conductive_casing"
+      },
+      {
+        "amount": 1,
+        "ingredient": "powergrid:copper_plating"
+      },
+      {
+        "amount": 1,
+        "ingredient": "powergrid:socket"
+      }
+    ],
+    "result": "powergrid:circuit_design_table",
+    "result_count": 1,
+    "source_type": "minecraft:crafting_shaped"
+  },
+  "constant_speed_motor": {
+    "ingredients": [
+      {
+        "amount": 1,
+        "ingredient": "create:precision_mechanism"
+      },
+      {
+        "amount": 1,
+        "ingredient": "powergrid:electric_motor"
+      }
+    ],
+    "result": "powergrid:constant_speed_motor",
+    "result_count": 1,
+    "source_type": "minecraft:crafting_shapeless"
+  },
+  "contactor": {
+    "ingredients": [
+      {
+        "amount": 1,
+        "ingredient": "#c:copper_coils"
+      },
+      {
+        "amount": 1,
+        "ingredient": "#c:ingots/iron"
+      },
+      {
+        "amount": 4,
+        "ingredient": "#c:plates/copper"
+      },
+      {
+        "amount": 1,
+        "ingredient": "powergrid:conductive_casing"
+      }
+    ],
+    "result": "powergrid:contactor",
+    "result_count": 1,
+    "source_type": "minecraft:crafting_shaped"
+  },
+  "copper_coil": {
+    "ingredients": [
+      {
+        "amount": 4,
+        "ingredient": "#c:wires/copper"
+      },
+      {
+        "amount": 2,
+        "ingredient": "create:cardboard"
+      },
+      {
+        "amount": 1,
+        "ingredient": "minecraft:stick"
+      }
+    ],
+    "result": "powergrid:copper_coil",
+    "result_count": 1,
+    "source_type": "minecraft:crafting_shaped"
+  },
+  "copper_cord": {
+    "ingredients": [
+      {
+        "amount": 1,
+        "ingredient": "minecraft:dried_kelp"
+      },
+      {
+        "amount": 2,
+        "ingredient": "powergrid:insulated_copper_wire"
+      }
+    ],
+    "result": "powergrid:copper_cord",
+    "result_count": 1,
+    "source_type": "minecraft:crafting_shapeless"
+  },
+  "copper_plating_slab": {
+    "ingredients": [
+      {
+        "amount": 3,
+        "ingredient": "powergrid:copper_plating"
+      }
+    ],
+    "result": "powergrid:copper_plating_slab",
+    "result_count": 6,
+    "source_type": "minecraft:crafting_shaped"
+  },
+  "copper_plating_stairs": {
+    "ingredients": [
+      {
+        "amount": 6,
+        "ingredient": "powergrid:copper_plating"
+      }
+    ],
+    "result": "powergrid:copper_plating_stairs",
+    "result_count": 4,
+    "source_type": "minecraft:crafting_shaped"
+  },
+  "cord_junction": {
+    "ingredients": [
+      {
+        "amount": 1,
+        "ingredient": "#c:nuggets/iron"
+      },
+      {
+        "amount": 1,
+        "ingredient": "#c:plates/iron"
+      },
+      {
+        "amount": 1,
+        "ingredient": "powergrid:conductive_casing"
+      }
+    ],
+    "result": "powergrid:cord_junction",
+    "result_count": 3,
+    "source_type": "minecraft:crafting_shapeless"
+  },
+  "crt": {
+    "ingredients": [
+      {
+        "amount": 4,
+        "ingredient": "#c:copper_coils"
+      },
+      {
+        "amount": 1,
+        "ingredient": "create:electron_tube"
+      },
+      {
+        "amount": 4,
+        "ingredient": "minecraft:glass"
+      },
+      {
+        "amount": 1,
+        "ingredient": "minecraft:glowstone_dust"
+      }
+    ],
+    "result": "powergrid:crt",
+    "result_count": 1,
+    "source_type": "create:mechanical_crafting"
+  },
+  "current_gauge_from_conversion": {
+    "ingredients": [
+      {
+        "amount": 1,
+        "ingredient": "powergrid:voltage_gauge"
+      }
+    ],
+    "result": "powergrid:current_gauge",
+    "result_count": 1,
+    "source_type": "minecraft:crafting_shapeless"
+  },
+  "device_connector": {
+    "ingredients": [
+      {
+        "amount": 2,
+        "ingredient": "#c:plates/copper"
+      },
+      {
+        "amount": 1,
+        "ingredient": "#c:plates/zinc"
+      },
+      {
+        "amount": 1,
+        "ingredient": "create:andesite_alloy"
+      }
+    ],
+    "result": "powergrid:device_connector",
+    "result_count": 1,
+    "source_type": "minecraft:crafting_shaped"
+  },
+  "diode": {
+    "ingredients": [
+      {
+        "amount": 1,
+        "ingredient": "#c:plates/copper"
+      },
+      {
+        "amount": 1,
+        "ingredient": "create:polished_rose_quartz"
+      }
+    ],
+    "result": "powergrid:diode",
+    "result_count": 1,
+    "source_type": "minecraft:crafting_shaped"
+  },
+  "display_module": {
+    "ingredients": [
+      {
+        "amount": 1,
+        "ingredient": "#c:copper_coils"
+      },
+      {
+        "amount": 2,
+        "ingredient": "#c:plates/iron"
+      },
+      {
+        "amount": 1,
+        "ingredient": "create:andesite_alloy"
+      },
+      {
+        "amount": 1,
+        "ingredient": "minecraft:paper"
+      }
+    ],
+    "result": "powergrid:display_module",
+    "result_count": 1,
+    "source_type": "minecraft:crafting_shaped"
+  },
+  "electric_fan": {
+    "ingredients": [
+      {
+        "amount": 1,
+        "ingredient": "create:encased_fan"
+      },
+      {
+        "amount": 1,
+        "ingredient": "powergrid:electric_motor"
+      }
+    ],
+    "result": "powergrid:electric_fan",
+    "result_count": 1,
+    "source_type": "minecraft:crafting_shapeless"
+  },
+  "electric_motor": {
+    "ingredients": [
+      {
+        "amount": 4,
+        "ingredient": "#c:copper_coils"
+      },
+      {
+        "amount": 4,
+        "ingredient": "#c:plates/iron"
+      },
+      {
+        "amount": 1,
+        "ingredient": "create:shaft"
+      },
+      {
+        "amount": 1,
+        "ingredient": "powergrid:conductive_casing"
+      },
+      {
+        "amount": 2,
+        "ingredient": "powergrid:magnet"
+      }
+    ],
+    "result": "powergrid:electric_motor",
+    "result_count": 1,
+    "source_type": "create:mechanical_crafting"
+  },
+  "electric_pump": {
+    "ingredients": [
+      {
+        "amount": 1,
+        "ingredient": "create:fluid_pipe"
+      },
+      {
+        "amount": 1,
+        "ingredient": "powergrid:electric_motor"
+      }
+    ],
+    "result": "powergrid:electric_pump",
+    "result_count": 1,
+    "source_type": "minecraft:crafting_shapeless"
+  },
+  "electrobaton": {
+    "ingredients": [
+      {
+        "amount": 1,
+        "ingredient": "#c:copper_coils"
+      },
+      {
+        "amount": 2,
+        "ingredient": "#c:ingots/zinc"
+      },
+      {
+        "amount": 1,
+        "ingredient": "create:andesite_alloy"
+      },
+      {
+        "amount": 1,
+        "ingredient": "powergrid:electrical_gizmo"
+      }
+    ],
+    "result": "powergrid:electrobaton",
+    "result_count": 1,
+    "source_type": "create:mechanical_crafting"
+  },
+  "electromagnet": {
+    "ingredients": [
+      {
+        "amount": 5,
+        "ingredient": "#c:copper_coils"
+      },
+      {
+        "amount": 1,
+        "ingredient": "#c:plates/iron"
+      },
+      {
+        "amount": 1,
+        "ingredient": "powergrid:conductive_casing"
+      }
+    ],
+    "result": "powergrid:electromagnet",
+    "result_count": 1,
+    "source_type": "minecraft:crafting_shaped"
+  },
+  "electrozapper": {
+    "ingredients": [
+      {
+        "amount": 1,
+        "ingredient": "#c:copper_coils"
+      },
+      {
+        "amount": 2,
+        "ingredient": "#c:ingots/zinc"
+      },
+      {
+        "amount": 1,
+        "ingredient": "#c:nuggets/copper"
+      },
+      {
+        "amount": 1,
+        "ingredient": "#c:plates/copper"
+      },
+      {
+        "amount": 1,
+        "ingredient": "create:andesite_alloy"
+      },
+      {
+        "amount": 1,
+        "ingredient": "powergrid:electrical_gizmo"
+      }
+    ],
+    "result": "powergrid:electrozapper",
+    "result_count": 1,
+    "source_type": "create:mechanical_crafting"
+  },
+  "energy_meter": {
+    "ingredients": [
+      {
+        "amount": 6,
+        "ingredient": "create:cogwheel"
+      },
+      {
+        "amount": 1,
+        "ingredient": "create:display_board"
+      },
+      {
+        "amount": 1,
+        "ingredient": "powergrid:conductive_casing"
+      },
+      {
+        "amount": 1,
+        "ingredient": "powergrid:pins"
+      }
+    ],
+    "result": "powergrid:energy_meter",
+    "result_count": 1,
+    "source_type": "minecraft:crafting_shaped"
+  },
+  "factory_light": {
+    "ingredients": [
+      {
+        "amount": 1,
+        "ingredient": "#c:plates/iron"
+      },
+      {
+        "amount": 1,
+        "ingredient": "create:andesite_alloy"
+      },
+      {
+        "amount": 1,
+        "ingredient": "minecraft:glass_pane"
+      }
+    ],
+    "result": "powergrid:factory_light",
+    "result_count": 1,
+    "source_type": "minecraft:crafting_shaped"
+  },
+  "fe_inverter": {
+    "ingredients": [
+      {
+        "amount": 1,
+        "ingredient": "#c:copper_coils"
+      },
+      {
+        "amount": 1,
+        "ingredient": "create:cardboard"
+      },
+      {
+        "amount": 1,
+        "ingredient": "powergrid:electrical_gizmo"
+      },
+      {
+        "amount": 1,
+        "ingredient": "powergrid:pins"
+      }
+    ],
+    "result": "powergrid:fe_inverter",
+    "result_count": 1,
+    "source_type": "minecraft:crafting_shaped"
+  },
+  "fuse_holder": {
+    "ingredients": [
+      {
+        "amount": 1,
+        "ingredient": "#c:plates/copper"
+      },
+      {
+        "amount": 1,
+        "ingredient": "#c:plates/iron"
+      },
+      {
+        "amount": 1,
+        "ingredient": "powergrid:conductive_casing"
+      }
+    ],
+    "result": "powergrid:fuse_holder",
+    "result_count": 2,
+    "source_type": "minecraft:crafting_shaped"
+  },
+  "generator_clutch": {
+    "ingredients": [
+      {
+        "amount": 1,
+        "ingredient": "create:andesite_alloy"
+      },
+      {
+        "amount": 1,
+        "ingredient": "create:clutch"
+      }
+    ],
+    "result": "powergrid:generator_clutch",
+    "result_count": 1,
+    "source_type": "minecraft:crafting_shapeless"
+  },
+  "generator_commutator": {
+    "ingredients": [
+      {
+        "amount": 1,
+        "ingredient": "#c:plates/copper"
+      },
+      {
+        "amount": 2,
+        "ingredient": "#minecraft:coals"
+      },
+      {
+        "amount": 2,
+        "ingredient": "create:andesite_alloy"
+      },
+      {
+        "amount": 1,
+        "ingredient": "create:andesite_casing"
+      },
+      {
+        "amount": 1,
+        "ingredient": "create:shaft"
+      },
+      {
+        "amount": 1,
+        "ingredient": "powergrid:pins"
+      }
+    ],
+    "result": "powergrid:generator_commutator",
+    "result_count": 1,
+    "source_type": "create:mechanical_crafting"
+  },
+  "generator_commutator_from_conversion": {
+    "ingredients": [
+      {
+        "amount": 1,
+        "ingredient": "powergrid:generator_vertical_commutator"
+      }
+    ],
+    "result": "powergrid:generator_commutator",
+    "result_count": 1,
+    "source_type": "minecraft:crafting_shapeless"
+  },
+  "generator_housing": {
+    "ingredients": [
+      {
+        "amount": 1,
+        "ingredient": "#c:plates/copper"
+      },
+      {
+        "amount": 2,
+        "ingredient": "#c:plates/iron"
+      },
+      {
+        "amount": 1,
+        "ingredient": "powergrid:conductive_casing"
+      }
+    ],
+    "result": "powergrid:generator_housing",
+    "result_count": 1,
+    "source_type": "minecraft:crafting_shaped"
+  },
+  "generator_housing_from_conversion": {
+    "ingredients": [
+      {
+        "amount": 1,
+        "ingredient": "powergrid:vertical_generator_housing"
+      }
+    ],
+    "result": "powergrid:generator_housing",
+    "result_count": 1,
+    "source_type": "minecraft:crafting_shapeless"
+  },
+  "generator_induction_rotor": {
+    "ingredients": [
+      {
+        "amount": 4,
+        "ingredient": "#c:copper_coils"
+      },
+      {
+        "amount": 4,
+        "ingredient": "create:andesite_alloy"
+      },
+      {
+        "amount": 1,
+        "ingredient": "create:shaft"
+      }
+    ],
+    "result": "powergrid:generator_induction_rotor",
+    "result_count": 1,
+    "source_type": "create:mechanical_crafting"
+  },
+  "generator_large_induction_rotor": {
+    "ingredients": [
+      {
+        "amount": 4,
+        "ingredient": "#c:copper_coils"
+      },
+      {
+        "amount": 4,
+        "ingredient": "#c:plates/iron"
+      },
+      {
+        "amount": 4,
+        "ingredient": "create:andesite_alloy"
+      },
+      {
+        "amount": 1,
+        "ingredient": "powergrid:generator_induction_rotor"
+      }
+    ],
+    "result": "powergrid:generator_large_induction_rotor",
+    "result_count": 1,
+    "source_type": "create:mechanical_crafting"
+  },
+  "generator_vertical_commutator_from_conversion": {
+    "ingredients": [
+      {
+        "amount": 1,
+        "ingredient": "powergrid:generator_commutator"
+      }
+    ],
+    "result": "powergrid:generator_vertical_commutator",
+    "result_count": 1,
+    "source_type": "minecraft:crafting_shapeless"
+  },
+  "grounding_rod": {
+    "ingredients": [
+      {
+        "amount": 2,
+        "ingredient": "#c:ingots/copper"
+      },
+      {
+        "amount": 1,
+        "ingredient": "#c:plates/copper"
+      }
+    ],
+    "result": "powergrid:grounding_rod",
+    "result_count": 1,
+    "source_type": "minecraft:crafting_shaped"
+  },
+  "growth_lamp": {
+    "ingredients": [
+      {
+        "amount": 1,
+        "ingredient": "#c:plates/iron"
+      },
+      {
+        "amount": 1,
+        "ingredient": "#c:wires/iron"
+      },
+      {
+        "amount": 4,
+        "ingredient": "minecraft:glass_pane"
+      },
+      {
+        "amount": 1,
+        "ingredient": "minecraft:quartz"
+      }
+    ],
+    "result": "powergrid:growth_lamp",
+    "result_count": 1,
+    "source_type": "minecraft:crafting_shaped"
+  },
+  "heating_coil": {
+    "ingredients": [
+      {
+        "amount": 4,
+        "ingredient": "#c:plates/iron"
+      },
+      {
+        "amount": 1,
+        "ingredient": "powergrid:pins"
+      },
+      {
+        "amount": 2,
+        "ingredient": "powergrid:resistive_coil"
+      }
+    ],
+    "result": "powergrid:heating_coil",
+    "result_count": 1,
+    "source_type": "minecraft:crafting_shaped"
+  },
+  "heavy_wire_connector": {
+    "ingredients": [
+      {
+        "amount": 3,
+        "ingredient": "#c:nuggets/iron"
+      },
+      {
+        "amount": 2,
+        "ingredient": "minecraft:terracotta"
+      }
+    ],
+    "result": "powergrid:heavy_wire_connector",
+    "result_count": 1,
+    "source_type": "minecraft:crafting_shaped"
+  },
+  "hv_breaker": {
+    "ingredients": [
+      {
+        "amount": 1,
+        "ingredient": "#c:ingots/iron"
+      },
+      {
+        "amount": 4,
+        "ingredient": "#c:plates/copper"
+      },
+      {
+        "amount": 1,
+        "ingredient": "create:precision_mechanism"
+      },
+      {
+        "amount": 1,
+        "ingredient": "powergrid:conductive_casing"
+      }
+    ],
+    "result": "powergrid:hv_breaker",
+    "result_count": 1,
+    "source_type": "minecraft:crafting_shaped"
+  },
+  "hv_switch": {
+    "ingredients": [
+      {
+        "amount": 3,
+        "ingredient": "#c:plates/iron"
+      },
+      {
+        "amount": 1,
+        "ingredient": "create:andesite_casing"
+      },
+      {
+        "amount": 1,
+        "ingredient": "create:cogwheel"
+      }
+    ],
+    "result": "powergrid:hv_switch",
+    "result_count": 1,
+    "source_type": "minecraft:crafting_shaped"
+  },
+  "insulated_copper_wire": {
+    "ingredients": [
+      {
+        "amount": 1,
+        "ingredient": "#c:wires/copper"
+      },
+      {
+        "amount": 1,
+        "ingredient": "minecraft:dried_kelp"
+      }
+    ],
+    "result": "powergrid:insulated_copper_wire",
+    "result_count": 1,
+    "source_type": "minecraft:crafting_shapeless"
+  },
+  "integrated_circuit": {
+    "ingredients": [
+      {
+        "amount": 1,
+        "ingredient": "create:polished_rose_quartz"
+      },
+      {
+        "amount": 3,
+        "ingredient": "minecraft:gold_nugget"
+      },
+      {
+        "amount": 1,
+        "ingredient": "minecraft:lapis_lazuli"
+      },
+      {
+        "amount": 4,
+        "ingredient": "minecraft:redstone"
+      }
+    ],
+    "result": "powergrid:integrated_circuit",
+    "result_count": 1,
+    "source_type": "create:mechanical_crafting"
+  },
+  "light_bulb": {
+    "ingredients": [
+      {
+        "amount": 1,
+        "ingredient": "#c:plates/iron"
+      },
+      {
+        "amount": 1,
+        "ingredient": "#c:wires/iron"
+      },
+      {
+        "amount": 3,
+        "ingredient": "minecraft:glass_pane"
+      }
+    ],
+    "result": "powergrid:light_bulb",
+    "result_count": 1,
+    "source_type": "minecraft:crafting_shaped"
+  },
+  "light_fixture": {
+    "ingredients": [
+      {
+        "amount": 1,
+        "ingredient": "#c:plates/iron"
+      },
+      {
+        "amount": 1,
+        "ingredient": "#c:plates/zinc"
+      },
+      {
+        "amount": 1,
+        "ingredient": "powergrid:pins"
+      }
+    ],
+    "result": "powergrid:light_fixture",
+    "result_count": 1,
+    "source_type": "minecraft:crafting_shaped"
+  },
+  "lv_button": {
+    "ingredients": [
+      {
+        "amount": 1,
+        "ingredient": "minecraft:stone_button"
+      },
+      {
+        "amount": 1,
+        "ingredient": "powergrid:conductive_casing"
+      },
+      {
+        "amount": 1,
+        "ingredient": "powergrid:pins"
+      }
+    ],
+    "result": "powergrid:lv_button",
+    "result_count": 1,
+    "source_type": "minecraft:crafting_shapeless"
+  },
+  "lv_light_bulb": {
+    "ingredients": [
+      {
+        "amount": 1,
+        "ingredient": "#c:plates/iron"
+      },
+      {
+        "amount": 1,
+        "ingredient": "#minecraft:coals"
+      },
+      {
+        "amount": 3,
+        "ingredient": "minecraft:glass_pane"
+      }
+    ],
+    "result": "powergrid:lv_light_bulb",
+    "result_count": 1,
+    "source_type": "minecraft:crafting_shaped"
+  },
+  "lv_switch": {
+    "ingredients": [
+      {
+        "amount": 1,
+        "ingredient": "minecraft:lever"
+      },
+      {
+        "amount": 1,
+        "ingredient": "powergrid:conductive_casing"
+      },
+      {
+        "amount": 1,
+        "ingredient": "powergrid:pins"
+      }
+    ],
+    "result": "powergrid:lv_switch",
+    "result_count": 1,
+    "source_type": "minecraft:crafting_shapeless"
+  },
+  "modular_display": {
+    "ingredients": [
+      {
+        "amount": 1,
+        "ingredient": "#c:plates/iron"
+      },
+      {
+        "amount": 1,
+        "ingredient": "powergrid:conductive_casing"
+      },
+      {
+        "amount": 3,
+        "ingredient": "powergrid:pins"
+      }
+    ],
+    "result": "powergrid:modular_display",
+    "result_count": 1,
+    "source_type": "minecraft:crafting_shaped"
+  },
+  "multimeter": {
+    "ingredients": [
+      {
+        "amount": 2,
+        "ingredient": "#c:wires/copper"
+      },
+      {
+        "amount": 1,
+        "ingredient": "powergrid:conductive_casing"
+      },
+      {
+        "amount": 1,
+        "ingredient": "powergrid:current_gauge"
+      },
+      {
+        "amount": 1,
+        "ingredient": "powergrid:electrical_gizmo"
+      },
+      {
+        "amount": 1,
+        "ingredient": "powergrid:voltage_gauge"
+      }
+    ],
+    "result": "powergrid:multimeter",
+    "result_count": 1,
+    "source_type": "minecraft:crafting_shaped"
+  },
+  "mv_switch": {
+    "ingredients": [
+      {
+        "amount": 1,
+        "ingredient": "#c:plates/copper"
+      },
+      {
+        "amount": 1,
+        "ingredient": "minecraft:lever"
+      },
+      {
+        "amount": 1,
+        "ingredient": "powergrid:conductive_casing"
+      }
+    ],
+    "result": "powergrid:mv_switch",
+    "result_count": 1,
+    "source_type": "minecraft:crafting_shapeless"
+  },
+  "neon_bulb": {
+    "ingredients": [
+      {
+        "amount": 1,
+        "ingredient": "#c:plates/iron"
+      },
+      {
+        "amount": 1,
+        "ingredient": "minecraft:glass"
+      },
+      {
+        "amount": 1,
+        "ingredient": "minecraft:glowstone_dust"
+      }
+    ],
+    "result": "powergrid:neon_bulb",
+    "result_count": 1,
+    "source_type": "minecraft:crafting_shaped"
+  },
+  "pins": {
+    "ingredients": [
+      {
+        "amount": 2,
+        "ingredient": "#c:nuggets/copper"
+      }
+    ],
+    "result": "powergrid:pins",
+    "result_count": 1,
+    "source_type": "minecraft:crafting_shapeless"
+  },
+  "plotter": {
+    "ingredients": [
+      {
+        "amount": 1,
+        "ingredient": "create:andesite_casing"
+      },
+      {
+        "amount": 1,
+        "ingredient": "create:shaft"
+      },
+      {
+        "amount": 1,
+        "ingredient": "minecraft:paper"
+      },
+      {
+        "amount": 1,
+        "ingredient": "powergrid:voltage_gauge"
+      }
+    ],
+    "result": "powergrid:plotter",
+    "result_count": 1,
+    "source_type": "minecraft:crafting_shaped"
+  },
+  "portable_battery": {
+    "ingredients": [
+      {
+        "amount": 4,
+        "ingredient": "#c:plates/zinc"
+      },
+      {
+        "amount": 1,
+        "ingredient": "powergrid:battery"
+      },
+      {
+        "amount": 1,
+        "ingredient": "powergrid:device_connector"
+      },
+      {
+        "amount": 1,
+        "ingredient": "powergrid:electrical_gizmo"
+      }
+    ],
+    "result": "powergrid:portable_battery",
+    "result_count": 1,
+    "source_type": "minecraft:crafting_shaped"
+  },
+  "portable_drill": {
+    "ingredients": [
+      {
+        "amount": 1,
+        "ingredient": "#c:ingots/zinc"
+      },
+      {
+        "amount": 1,
+        "ingredient": "#c:plates/zinc"
+      },
+      {
+        "amount": 4,
+        "ingredient": "create:andesite_alloy"
+      },
+      {
+        "amount": 1,
+        "ingredient": "create:precision_mechanism"
+      },
+      {
+        "amount": 1,
+        "ingredient": "minecraft:diamond"
+      },
+      {
+        "amount": 1,
+        "ingredient": "powergrid:electrical_gizmo"
+      }
+    ],
+    "result": "powergrid:portable_drill",
+    "result_count": 1,
+    "source_type": "create:mechanical_crafting"
+  },
+  "portable_saw": {
+    "ingredients": [
+      {
+        "amount": 1,
+        "ingredient": "#c:ingots/zinc"
+      },
+      {
+        "amount": 4,
+        "ingredient": "#c:plates/iron"
+      },
+      {
+        "amount": 1,
+        "ingredient": "#c:plates/zinc"
+      },
+      {
+        "amount": 2,
+        "ingredient": "create:andesite_alloy"
+      },
+      {
+        "amount": 1,
+        "ingredient": "create:precision_mechanism"
+      },
+      {
+        "amount": 1,
+        "ingredient": "powergrid:electrical_gizmo"
+      }
+    ],
+    "result": "powergrid:portable_saw",
+    "result_count": 1,
+    "source_type": "create:mechanical_crafting"
+  },
+  "potato_battery": {
+    "ingredients": [
+      {
+        "amount": 1,
+        "ingredient": "#c:plates/copper"
+      },
+      {
+        "amount": 1,
+        "ingredient": "#c:plates/zinc"
+      },
+      {
+        "amount": 1,
+        "ingredient": "minecraft:potato"
+      }
+    ],
+    "result": "powergrid:potato_battery",
+    "result_count": 1,
+    "source_type": "minecraft:crafting_shapeless"
+  },
+  "potentiometer": {
+    "ingredients": [
+      {
+        "amount": 1,
+        "ingredient": "#c:nuggets/copper"
+      },
+      {
+        "amount": 1,
+        "ingredient": "#minecraft:coals"
+      },
+      {
+        "amount": 1,
+        "ingredient": "create:andesite_alloy"
+      }
+    ],
+    "result": "powergrid:potentiometer",
+    "result_count": 1,
+    "source_type": "minecraft:crafting_shaped"
+  },
+  "power_gauge": {
+    "ingredients": [
+      {
+        "amount": 1,
+        "ingredient": "powergrid:current_gauge"
+      },
+      {
+        "amount": 1,
+        "ingredient": "powergrid:voltage_gauge"
+      }
+    ],
+    "result": "powergrid:power_gauge",
+    "result_count": 1,
+    "source_type": "minecraft:crafting_shapeless"
+  },
+  "power_resistor": {
+    "ingredients": [
+      {
+        "amount": 2,
+        "ingredient": "#c:plates/copper"
+      },
+      {
+        "amount": 1,
+        "ingredient": "minecraft:coal_block"
+      },
+      {
+        "amount": 1,
+        "ingredient": "powergrid:conductive_casing"
+      }
+    ],
+    "result": "powergrid:power_resistor",
+    "result_count": 1,
+    "source_type": "minecraft:crafting_shaped"
+  },
+  "punch_card_reader": {
+    "ingredients": [
+      {
+        "amount": 2,
+        "ingredient": "#c:plates/zinc"
+      },
+      {
+        "amount": 2,
+        "ingredient": "create:cogwheel"
+      },
+      {
+        "amount": 1,
+        "ingredient": "create:precision_mechanism"
+      },
+      {
+        "amount": 1,
+        "ingredient": "create:shaft"
+      },
+      {
+        "amount": 1,
+        "ingredient": "powergrid:conductive_casing"
+      },
+      {
+        "amount": 4,
+        "ingredient": "powergrid:pins"
+      }
+    ],
+    "result": "powergrid:punch_card_reader",
+    "result_count": 1,
+    "source_type": "create:mechanical_crafting"
+  },
+  "redstone_converter": {
+    "ingredients": [
+      {
+        "amount": 1,
+        "ingredient": "minecraft:comparator"
+      },
+      {
+        "amount": 1,
+        "ingredient": "powergrid:conductive_casing"
+      },
+      {
+        "amount": 1,
+        "ingredient": "powergrid:pins"
+      }
+    ],
+    "result": "powergrid:redstone_converter",
+    "result_count": 1,
+    "source_type": "minecraft:crafting_shapeless"
+  },
+  "redstone_relay": {
+    "ingredients": [
+      {
+        "amount": 1,
+        "ingredient": "minecraft:redstone"
+      },
+      {
+        "amount": 1,
+        "ingredient": "powergrid:relay"
+      }
+    ],
+    "result": "powergrid:redstone_relay",
+    "result_count": 1,
+    "source_type": "minecraft:crafting_shapeless"
+  },
+  "regulator_tube": {
+    "ingredients": [
+      {
+        "amount": 1,
+        "ingredient": "#c:plates/iron"
+      },
+      {
+        "amount": 1,
+        "ingredient": "minecraft:amethyst_shard"
+      },
+      {
+        "amount": 1,
+        "ingredient": "minecraft:glowstone_dust"
+      }
+    ],
+    "result": "powergrid:regulator_tube",
+    "result_count": 1,
+    "source_type": "minecraft:crafting_shaped"
+  },
+  "relay": {
+    "ingredients": [
+      {
+        "amount": 1,
+        "ingredient": "#c:copper_coils"
+      },
+      {
+        "amount": 1,
+        "ingredient": "#c:plates/iron"
+      },
+      {
+        "amount": 1,
+        "ingredient": "create:andesite_alloy"
+      }
+    ],
+    "result": "powergrid:relay",
+    "result_count": 1,
+    "source_type": "minecraft:crafting_shapeless"
+  },
+  "relay_dpdt": {
+    "ingredients": [
+      {
+        "amount": 1,
+        "ingredient": "#c:copper_coils"
+      },
+      {
+        "amount": 2,
+        "ingredient": "#c:plates/iron"
+      },
+      {
+        "amount": 1,
+        "ingredient": "create:andesite_alloy"
+      }
+    ],
+    "result": "powergrid:relay_dpdt",
+    "result_count": 1,
+    "source_type": "minecraft:crafting_shapeless"
+  },
+  "resistive_coil": {
+    "ingredients": [
+      {
+        "amount": 4,
+        "ingredient": "#c:wires/iron"
+      },
+      {
+        "amount": 1,
+        "ingredient": "minecraft:stick"
+      }
+    ],
+    "result": "powergrid:resistive_coil",
+    "result_count": 1,
+    "source_type": "minecraft:crafting_shapeless"
+  },
+  "resistor": {
+    "ingredients": [
+      {
+        "amount": 1,
+        "ingredient": "#minecraft:coals"
+      },
+      {
+        "amount": 1,
+        "ingredient": "powergrid:resistive_coil"
+      }
+    ],
+    "result": "powergrid:resistor",
+    "result_count": 1,
+    "source_type": "minecraft:crafting_shapeless"
+  },
+  "rheostat": {
+    "ingredients": [
+      {
+        "amount": 1,
+        "ingredient": "#minecraft:coals"
+      },
+      {
+        "amount": 1,
+        "ingredient": "create:shaft"
+      },
+      {
+        "amount": 1,
+        "ingredient": "powergrid:conductive_casing"
+      },
+      {
+        "amount": 5,
+        "ingredient": "powergrid:resistive_coil"
+      }
+    ],
+    "result": "powergrid:rheostat",
+    "result_count": 1,
+    "source_type": "minecraft:crafting_shaped"
+  },
+  "servo": {
+    "ingredients": [
+      {
+        "amount": 1,
+        "ingredient": "create:precision_mechanism"
+      },
+      {
+        "amount": 1,
+        "ingredient": "powergrid:electric_motor"
+      },
+      {
+        "amount": 1,
+        "ingredient": "powergrid:electrical_gizmo"
+      }
+    ],
+    "result": "powergrid:servo",
+    "result_count": 1,
+    "source_type": "minecraft:crafting_shapeless"
+  },
+  "socket": {
+    "ingredients": [
+      {
+        "amount": 1,
+        "ingredient": "#c:plates/brass"
+      },
+      {
+        "amount": 1,
+        "ingredient": "#c:plates/copper"
+      },
+      {
+        "amount": 1,
+        "ingredient": "powergrid:conductive_casing"
+      }
+    ],
+    "result": "powergrid:socket",
+    "result_count": 1,
+    "source_type": "minecraft:crafting_shapeless"
+  },
+  "solar_panel_bearing": {
+    "ingredients": [
+      {
+        "amount": 1,
+        "ingredient": "#minecraft:wooden_slabs"
+      },
+      {
+        "amount": 1,
+        "ingredient": "powergrid:conductive_casing"
+      },
+      {
+        "amount": 1,
+        "ingredient": "powergrid:copper_plating"
+      }
+    ],
+    "result": "powergrid:solar_panel_bearing",
+    "result_count": 1,
+    "source_type": "minecraft:crafting_shaped"
+  },
+  "spark_gap": {
+    "ingredients": [
+      {
+        "amount": 2,
+        "ingredient": "#c:plates/iron"
+      },
+      {
+        "amount": 1,
+        "ingredient": "create:andesite_casing"
+      },
+      {
+        "amount": 1,
+        "ingredient": "powergrid:pins"
+      }
+    ],
+    "result": "powergrid:spark_gap",
+    "result_count": 1,
+    "source_type": "minecraft:crafting_shaped"
+  },
+  "thermometer": {
+    "ingredients": [
+      {
+        "amount": 1,
+        "ingredient": "#c:plates/copper"
+      },
+      {
+        "amount": 1,
+        "ingredient": "#c:plates/iron"
+      },
+      {
+        "amount": 1,
+        "ingredient": "minecraft:compass"
+      },
+      {
+        "amount": 1,
+        "ingredient": "powergrid:resistive_coil"
+      }
+    ],
+    "result": "powergrid:thermometer",
+    "result_count": 1,
+    "source_type": "minecraft:crafting_shaped"
+  },
+  "variac": {
+    "ingredients": [
+      {
+        "amount": 4,
+        "ingredient": "#c:copper_coils"
+      },
+      {
+        "amount": 1,
+        "ingredient": "#minecraft:coals"
+      },
+      {
+        "amount": 1,
+        "ingredient": "create:shaft"
+      },
+      {
+        "amount": 1,
+        "ingredient": "powergrid:conductive_casing"
+      },
+      {
+        "amount": 1,
+        "ingredient": "powergrid:transformer_core"
+      }
+    ],
+    "result": "powergrid:variac",
+    "result_count": 1,
+    "source_type": "minecraft:crafting_shaped"
+  },
+  "varistor": {
+    "ingredients": [
+      {
+        "amount": 1,
+        "ingredient": "#minecraft:coals"
+      },
+      {
+        "amount": 1,
+        "ingredient": "minecraft:redstone"
+      },
+      {
+        "amount": 1,
+        "ingredient": "powergrid:resistive_coil"
+      }
+    ],
+    "result": "powergrid:varistor",
+    "result_count": 1,
+    "source_type": "minecraft:crafting_shapeless"
+  },
+  "vertical_generator_housing_from_conversion": {
+    "ingredients": [
+      {
+        "amount": 1,
+        "ingredient": "powergrid:generator_housing"
+      }
+    ],
+    "result": "powergrid:vertical_generator_housing",
+    "result_count": 1,
+    "source_type": "minecraft:crafting_shapeless"
+  },
+  "vfet": {
+    "ingredients": [
+      {
+        "amount": 1,
+        "ingredient": "#c:plates/copper"
+      },
+      {
+        "amount": 1,
+        "ingredient": "#c:plates/iron"
+      },
+      {
+        "amount": 1,
+        "ingredient": "create:polished_rose_quartz"
+      }
+    ],
+    "result": "powergrid:vfet",
+    "result_count": 1,
+    "source_type": "minecraft:crafting_shaped"
+  },
+  "voltage_gauge": {
+    "ingredients": [
+      {
+        "amount": 1,
+        "ingredient": "#c:copper_coils"
+      },
+      {
+        "amount": 1,
+        "ingredient": "minecraft:compass"
+      },
+      {
+        "amount": 1,
+        "ingredient": "powergrid:conductive_casing"
+      }
+    ],
+    "result": "powergrid:voltage_gauge",
+    "result_count": 1,
+    "source_type": "minecraft:crafting_shaped"
+  },
+  "voltage_gauge_from_conversion": {
+    "ingredients": [
+      {
+        "amount": 1,
+        "ingredient": "powergrid:current_gauge"
+      }
+    ],
+    "result": "powergrid:voltage_gauge",
+    "result_count": 1,
+    "source_type": "minecraft:crafting_shapeless"
+  },
+  "wire_connector": {
+    "ingredients": [
+      {
+        "amount": 3,
+        "ingredient": "#c:nuggets/copper"
+      },
+      {
+        "amount": 1,
+        "ingredient": "create:andesite_alloy"
+      }
+    ],
+    "result": "powergrid:wire_connector",
+    "result_count": 1,
+    "source_type": "minecraft:crafting_shaped"
+  },
+  "wire_cutter": {
+    "ingredients": [
+      {
+        "amount": 2,
+        "ingredient": "#c:plates/iron"
+      }
+    ],
+    "result": "powergrid:wire_cutter",
+    "result_count": 1,
+    "source_type": "minecraft:crafting_shaped"
+  }
+}

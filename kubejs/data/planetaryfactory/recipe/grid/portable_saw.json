@@ -1,0 +1,47 @@
+{
+  "type": "gtceu:assembling",
+  "inputs": {
+    "item": [
+      {
+        "content": {
+          "ingredient": {
+            "tag": "c:plates/copper"
+          },
+          "count": 2
+        }
+      },
+      {
+        "content": {
+          "ingredient": {
+            "tag": "c:plates/iron"
+          },
+          "count": 6
+        }
+      },
+      {
+        "content": {
+          "ingredient": {
+            "item": "planetaryfactory:advanced_circuit"
+          },
+          "count": 2
+        }
+      }
+    ]
+  },
+  "outputs": {
+    "item": [
+      {
+        "content": {
+          "ingredient": {
+            "item": "powergrid:portable_saw"
+          },
+          "count": 1
+        }
+      }
+    ]
+  },
+  "duration": 40,
+  "data": {
+    "factorio_category": "advanced-crafting"
+  }
+}

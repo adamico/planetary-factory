@@ -125,6 +125,22 @@ that machine — so a machine landing later without a survivor entry fails
 check after editing either script, the category map or the emitted recipes; whether the sweep
 removed the right things in a running game is a world load, not a static check.
 
+### Grid recipe check
+
+`tests/factorio/test_grid_recipes.py` covers Create: Power Grid's recipes, re-authored onto the
+pack's Assembling Machine because ADR-0034's sweep removes the mod's own and 84 of its 112 sit on
+surfaces no block here executes (#172). `scripts/powergrid-recipe-convert.py` generates them from
+two committed inputs — `data/powergrid/recipe.json`, the extracted corpus, and
+`data/pack/grid-substitutions.json`, where every ingredient judgement lives with its reason.
+Nothing is decided in the script, and an ingredient in neither the `keep` nor the `substitute`
+table is a hard failure: under a default-deny sweep a vanilla item is not obtainable just because
+it is vanilla, and half of Power Grid's ingredients are zinc-bearing against an alphabet ADR-0021
+closed. The check also asserts one hand recipe per item and no cycles over the **union** the
+Personal Assembler loads, which `test_hand_resolver.py` cannot see — it reads only the Factorio
+corpus. Note that this converter and `factorio-recipe-convert.py` share an output directory and
+each leaves the other's subtree alone; run both checks after touching either. Whether the sweep
+kept the recipes in a running game is a world load. See `docs/testing/grid-recipe-check.md`.
+
 ### Research unlock check
 
 `tests/factorio/test_research_unlocks.py` asserts every recipe id a research grants is a recipe the

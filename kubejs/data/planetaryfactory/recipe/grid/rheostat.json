@@ -1,0 +1,55 @@
+{
+  "type": "gtceu:assembling",
+  "inputs": {
+    "item": [
+      {
+        "content": {
+          "ingredient": {
+            "tag": "minecraft:coals"
+          },
+          "count": 1
+        }
+      },
+      {
+        "content": {
+          "ingredient": {
+            "item": "gtceu:iron_rod"
+          },
+          "count": 1
+        }
+      },
+      {
+        "content": {
+          "ingredient": {
+            "tag": "c:plates/copper"
+          },
+          "count": 1
+        }
+      },
+      {
+        "content": {
+          "ingredient": {
+            "item": "powergrid:resistive_coil"
+          },
+          "count": 5
+        }
+      }
+    ]
+  },
+  "outputs": {
+    "item": [
+      {
+        "content": {
+          "ingredient": {
+            "item": "powergrid:rheostat"
+          },
+          "count": 1
+        }
+      }
+    ]
+  },
+  "duration": 20,
+  "data": {
+    "factorio_category": "crafting"
+  }
+}

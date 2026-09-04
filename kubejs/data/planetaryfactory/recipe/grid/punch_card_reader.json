@@ -1,0 +1,63 @@
+{
+  "type": "gtceu:assembling",
+  "inputs": {
+    "item": [
+      {
+        "content": {
+          "ingredient": {
+            "tag": "c:plates/copper"
+          },
+          "count": 3
+        }
+      },
+      {
+        "content": {
+          "ingredient": {
+            "item": "gtceu:iron_gear"
+          },
+          "count": 2
+        }
+      },
+      {
+        "content": {
+          "ingredient": {
+            "item": "planetaryfactory:advanced_circuit"
+          },
+          "count": 1
+        }
+      },
+      {
+        "content": {
+          "ingredient": {
+            "item": "gtceu:iron_rod"
+          },
+          "count": 1
+        }
+      },
+      {
+        "content": {
+          "ingredient": {
+            "item": "powergrid:pins"
+          },
+          "count": 4
+        }
+      }
+    ]
+  },
+  "outputs": {
+    "item": [
+      {
+        "content": {
+          "ingredient": {
+            "item": "powergrid:punch_card_reader"
+          },
+          "count": 1
+        }
+      }
+    ]
+  },
+  "duration": 40,
+  "data": {
+    "factorio_category": "advanced-crafting"
+  }
+}

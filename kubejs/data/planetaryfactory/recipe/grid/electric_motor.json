@@ -1,0 +1,55 @@
+{
+  "type": "gtceu:assembling",
+  "inputs": {
+    "item": [
+      {
+        "content": {
+          "ingredient": {
+            "tag": "c:copper_coils"
+          },
+          "count": 4
+        }
+      },
+      {
+        "content": {
+          "ingredient": {
+            "tag": "c:plates/iron"
+          },
+          "count": 6
+        }
+      },
+      {
+        "content": {
+          "ingredient": {
+            "item": "gtceu:iron_rod"
+          },
+          "count": 1
+        }
+      },
+      {
+        "content": {
+          "ingredient": {
+            "tag": "c:plates/copper"
+          },
+          "count": 1
+        }
+      }
+    ]
+  },
+  "outputs": {
+    "item": [
+      {
+        "content": {
+          "ingredient": {
+            "item": "powergrid:electric_motor"
+          },
+          "count": 1
+        }
+      }
+    ]
+  },
+  "duration": 40,
+  "data": {
+    "factorio_category": "advanced-crafting"
+  }
+}

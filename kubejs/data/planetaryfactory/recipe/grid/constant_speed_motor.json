@@ -1,0 +1,39 @@
+{
+  "type": "gtceu:assembling",
+  "inputs": {
+    "item": [
+      {
+        "content": {
+          "ingredient": {
+            "item": "planetaryfactory:advanced_circuit"
+          },
+          "count": 1
+        }
+      },
+      {
+        "content": {
+          "ingredient": {
+            "item": "powergrid:electric_motor"
+          },
+          "count": 1
+        }
+      }
+    ]
+  },
+  "outputs": {
+    "item": [
+      {
+        "content": {
+          "ingredient": {
+            "item": "powergrid:constant_speed_motor"
+          },
+          "count": 1
+        }
+      }
+    ]
+  },
+  "duration": 20,
+  "data": {
+    "factorio_category": "crafting"
+  }
+}

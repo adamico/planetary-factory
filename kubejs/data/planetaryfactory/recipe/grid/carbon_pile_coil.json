@@ -1,0 +1,47 @@
+{
+  "type": "gtceu:assembling",
+  "inputs": {
+    "item": [
+      {
+        "content": {
+          "ingredient": {
+            "tag": "c:copper_coils"
+          },
+          "count": 4
+        }
+      },
+      {
+        "content": {
+          "ingredient": {
+            "tag": "c:plates/iron"
+          },
+          "count": 2
+        }
+      },
+      {
+        "content": {
+          "ingredient": {
+            "tag": "c:plates/copper"
+          },
+          "count": 3
+        }
+      }
+    ]
+  },
+  "outputs": {
+    "item": [
+      {
+        "content": {
+          "ingredient": {
+            "item": "powergrid:carbon_pile_coil"
+          },
+          "count": 1
+        }
+      }
+    ]
+  },
+  "duration": 40,
+  "data": {
+    "factorio_category": "advanced-crafting"
+  }
+}

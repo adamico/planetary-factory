@@ -1,0 +1,39 @@
+{
+  "type": "gtceu:assembling",
+  "inputs": {
+    "item": [
+      {
+        "content": {
+          "ingredient": {
+            "item": "planetaryfactory:electronic_circuit"
+          },
+          "count": 5
+        }
+      },
+      {
+        "content": {
+          "ingredient": {
+            "item": "powergrid:wire"
+          },
+          "count": 4
+        }
+      }
+    ]
+  },
+  "outputs": {
+    "item": [
+      {
+        "content": {
+          "ingredient": {
+            "item": "powergrid:integrated_circuit"
+          },
+          "count": 1
+        }
+      }
+    ]
+  },
+  "duration": 40,
+  "data": {
+    "factorio_category": "advanced-crafting"
+  }
+}

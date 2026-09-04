@@ -1,0 +1,47 @@
+{
+  "type": "gtceu:assembling",
+  "inputs": {
+    "item": [
+      {
+        "content": {
+          "ingredient": {
+            "tag": "c:copper_coils"
+          },
+          "count": 1
+        }
+      },
+      {
+        "content": {
+          "ingredient": {
+            "tag": "c:plates/iron"
+          },
+          "count": 3
+        }
+      },
+      {
+        "content": {
+          "ingredient": {
+            "item": "planetaryfactory:plastic_bar"
+          },
+          "count": 1
+        }
+      }
+    ]
+  },
+  "outputs": {
+    "item": [
+      {
+        "content": {
+          "ingredient": {
+            "item": "powergrid:display_module"
+          },
+          "count": 1
+        }
+      }
+    ]
+  },
+  "duration": 20,
+  "data": {
+    "factorio_category": "crafting"
+  }
+}

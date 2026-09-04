@@ -1,0 +1,47 @@
+{
+  "type": "gtceu:assembling",
+  "inputs": {
+    "item": [
+      {
+        "content": {
+          "ingredient": {
+            "tag": "minecraft:coals"
+          },
+          "count": 1
+        }
+      },
+      {
+        "content": {
+          "ingredient": {
+            "item": "powergrid:wire"
+          },
+          "count": 1
+        }
+      },
+      {
+        "content": {
+          "ingredient": {
+            "item": "powergrid:resistive_coil"
+          },
+          "count": 1
+        }
+      }
+    ]
+  },
+  "outputs": {
+    "item": [
+      {
+        "content": {
+          "ingredient": {
+            "item": "powergrid:varistor"
+          },
+          "count": 1
+        }
+      }
+    ]
+  },
+  "duration": 20,
+  "data": {
+    "factorio_category": "crafting"
+  }
+}

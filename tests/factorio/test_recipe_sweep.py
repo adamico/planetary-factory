@@ -103,6 +103,27 @@ def main():
     check(re.search(r"event\.remove\(\s*\{\s*not:", sweep),
           "recipes.js does not remove by the negation of the allowlist (ADR-0034's default-deny)")
 
+    # ADR-0034 as amended by #172: A SURVIVOR NAMES A SURFACE, NOT A MOD. #144 asked whether the
+    # allowlist could admit a whole mod's line in one row -- `{ mod: 'powergrid' }` -- and the
+    # answer is no: 84 of Create: Power Grid's 112 recipes sit on surfaces no block in this pack
+    # executes, so a mod-wide admission would have put 84 entries in EMI that are craftable
+    # nowhere. That is the failure ADR-0034 exists to name, and it is a one-word edit away, so it
+    # is asserted rather than trusted. The pack's namespace is applied ONCE, in recipes.js, to
+    # every entry; a row carrying its own `mod` would escape that.
+    check(re.search(r"mod:\s*'planetaryfactory'", sweep),
+          "recipes.js does not apply `mod: 'planetaryfactory'` to the survivors. Every survivor "
+          "is by definition a recipe the pack authored (ADR-0034 as amended by #172) -- dropping "
+          "the namespace admits every other mod's recipes on the same surface")
+    check("RECIPE_SURVIVORS.map" in sweep,
+          "recipes.js no longer maps EVERY survivor onto the pack namespace -- if entries can opt "
+          "out, a survivor can name a foreign mod, which ADR-0034 refuses (#172)")
+    allowlist = (SCRIPTS / "recipe_survivors.js").read_text()
+    stray = re.search(r"^\s*mod:", allowlist, re.M)
+    check(stray is None,
+          "recipe_survivors.js declares a `mod:` key. A survivor names a SURFACE and the pack's "
+          "own namespace is applied in recipes.js (ADR-0034 as amended by #172); admitting a mod "
+          "ships recipes on surfaces nothing in the pack executes")
+
     by_surface = {}
     for entry in entries:
         name = entry["surface"]

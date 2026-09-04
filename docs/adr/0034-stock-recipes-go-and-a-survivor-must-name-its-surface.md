@@ -211,6 +211,88 @@ grep is empty apart from ADR-0016's Sapros loot tables, which are about the oppo
   rule for work that had not started, which is the cheapest moment to write it and the reason it was
   worth writing then.
 
+## A survivor names a surface, not a mod
+
+**Amendment, [`#172`](https://github.com/adamico/planetary-factory/issues/172).** `#144` asked
+whether the allowlist could admit a whole mod's line as one decision — `{ mod: 'powergrid' }`
+rather than a row per surface — because Create: Power Grid arrived on the critical path with its
+own recipes swept and its blocks uncraftable. That would bend the rule at the top of this ADR,
+which requires a decision to name the recipe *and* the surface it is crafted on. A mod-wide
+admission names a mod.
+
+**The answer is no, and the reason turned out to be arithmetic rather than principle.** Power Grid
+ships 112 recipes:
+
+| surface | count | is there a block in this pack that executes it? |
+| --- | --- | --- |
+| `minecraft:crafting_shaped` | 43 | **no** — `#90`/`#34` cut every grid, `#140` made the 2x2 inert |
+| `minecraft:crafting_shapeless` | 28 | **no**, as above |
+| `create:mechanical_crafting` | 13 | **no** — ADR-0017 cuts the Mechanical Crafter by name |
+| `create:sequenced_assembly` and the rest | 28 | undecided; ADR-0021 cuts zinc, so the Deployer is brass and unbuildable |
+
+**Seventy-five per cent of the mod's recipes are on surfaces nothing here executes.** Admitting by
+mod would not have made the grid craftable — it would have put 84 entries in EMI that are craftable
+nowhere, which is precisely the failure §*"Why 'wholesale' was never quite the right word"* names:
+a surviving stock recipe is not *kept*, it is *unreachable*. The rule was not protecting a
+formality. It was the only thing that would have caught this before a world load.
+
+So the survivor shape is unchanged, `recipes.js` still applies `mod: 'planetaryfactory'` once to
+every entry, and `tests/factorio/test_recipe_sweep.py` now asserts that it does — a survivor that
+named a foreign mod would otherwise be a one-word edit away.
+
+### What was done instead, which ADR-0017 had already decided
+
+The 84 unreachable recipes are **re-authored onto the pack's own Assembling Machine**, which is not
+a new answer: ADR-0017 §*"The two crafting executors are cut, not kept"* says exactly this of
+Create's own casings, which "fall through to where every other fluid-free `crafting` row already
+goes (`#88`): the Personal Assembler, and the Assembling Machines above it. They become ordinary
+corpus recipes with no special beat." Power Grid is that case arriving later.
+
+The mechanism is `scripts/powergrid-recipe-convert.py` over two committed inputs —
+`data/powergrid/recipe.json` (the extracted corpus) and `data/pack/grid-substitutions.json` (every
+ingredient judgement, with its reason). A shaped pattern is flattened to an unordered ingredient
+list and **no count is changed**. The source surface picks the Factorio category, so a recipe the
+mod put on the Mechanical Crafter becomes `advanced-crafting` and needs the machine, while a hand
+recipe becomes `crafting` and the Personal Assembler plans it: **the mod's own progression
+distinction survives the move rather than being re-invented.**
+
+### The `crafting_shaped` reachability question, answered in writing
+
+`#172` asked this to be confirmed rather than assumed, and the answer is **no, a
+`minecraft:crafting_shaped` survivor is not reachable on the Personal Assembler** — so admitting
+the six connector and housing recipes would have shipped six uncraftable blocks.
+
+`RuntimeHandRecipes` builds the hand set by walking the loaded recipe manager and keeping
+`GTRecipe` instances stamped `factorio_category: crafting`. A `minecraft:crafting_shaped` recipe
+is a `CraftingRecipe` and never a `GTRecipe`, so the filter cannot see it whatever it is stamped
+with. Nothing else executes one either, after `#34` and `#140`. **The Personal Assembler is not a
+crafting-grid replacement that happens to be shaped differently; it runs Assembling Machine
+recipes and nothing else.** This is the same fact as §1's, read from the other side.
+
+### Two consequences worth recording
+
+- **The input alphabet, not the surface, was the expensive part.** ADR-0021 closes Terra to iron,
+  copper, coal and uranium plus stone and what the surface grows, and cuts zinc with no exception.
+  Power Grid is built for a Create pack: andesite alloy, andesite casing, brass, the conductive
+  casing and the shaft are all zinc-bearing, and rose quartz is not on Terra either. And because
+  this ADR's sweep removes every recipe the pack does not author, a *vanilla* ingredient is
+  obtainable only if a block drops it — glass, glass panes, sticks, paper, terracotta and redstone
+  are all grid-crafted and all gone, and even vanilla's own `raw iron -> iron ingot` smelt is
+  swept. Roughly half of Power Grid's 66 distinct ingredients had to be substituted. **The lesson
+  for the tail (`#144`) is that admitting a mod's recipes is the cheap half; the ingredients those
+  recipes name are the expensive one**, and nothing in this ADR previously said so.
+- **A hand recipe per item, and no cycles, is now a shipping constraint rather than a corpus
+  property.** `RecipeGraph` records that a second hand recipe for one item means "the first
+  registered wins — an arbitrary answer, not a stable one", and `tests/factorio/test_hand_resolver.py`
+  asserts the *corpus* has neither duplicates nor cycles. It reads `data/factorio/recipe.json` and
+  cannot see recipes admitted from anywhere else. Power Grid ships six `*_from_conversion` recipes
+  that turn a block into its other orientation, which are three 2-cycles and three duplicate
+  routes. They are moved onto the **machine** rather than dropped -- `advanced-crafting` takes
+  them out of the Assembler's graph entirely, so no cycle can form and both directions of the
+  swap survive in game, where skipping three of them would have broken the cycle by deleting the
+  return trip. `tests/factorio/test_grid_recipes.py` asserts the property over the **union** the
+  Assembler actually loads. Any future admission has to clear the same bar.
+
 ## The state on the ground, recorded because it is not what the docs imply
 
 **Amended by [`#143`](https://github.com/adamico/planetary-factory/issues/143): the first two

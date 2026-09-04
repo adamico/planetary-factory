@@ -42,6 +42,19 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 OUT_DIR = ROOT / "kubejs/data/planetaryfactory/recipe"
 
+# The one subtree of OUT_DIR this converter does NOT own. `scripts/powergrid-recipe-convert.py`
+# writes Create: Power Grid's re-authored recipes there (#172), in the same namespace because the
+# survivor allowlist admits recipes by namespace and surface -- a second namespace would need a
+# second survivor and would put that line outside ADR-0034's rule. Both scripts wipe what they
+# own before writing, so without this exclusion whichever ran last would delete the other's
+# output, and `--check` would report the survivors as unexpected files.
+FOREIGN_SUBTREES = ("grid",)
+
+
+def is_ours(path):
+    """True for a generated file this converter owns, false for another script's."""
+    return path.relative_to(OUT_DIR).parts[0] not in FOREIGN_SUBTREES
+
 # `subgroup-owner.json` names a process as `<owner>:<machine>`; `category-map.json` names the same
 # machines and holds their recipe types. The two vocabularies meet here and nowhere else -- the
 # recipe type itself, and the ticket that registers one that does not exist yet, are read from the
@@ -281,7 +294,8 @@ def main():
 
     if args.check:
         written = {p.relative_to(OUT_DIR).with_suffix("").as_posix(): json.loads(p.read_text())
-                   for p in OUT_DIR.rglob("*.json")} if OUT_DIR.exists() else {}
+                   for p in OUT_DIR.rglob("*.json")
+                   if is_ours(p)} if OUT_DIR.exists() else {}
         if written != emitted:
             added = sorted(set(emitted) - set(written))
             removed = sorted(set(written) - set(emitted))
@@ -294,8 +308,11 @@ def main():
             return 1
     else:
         if OUT_DIR.exists():
-            shutil.rmtree(OUT_DIR)
-        OUT_DIR.mkdir(parents=True)
+            for path in sorted(OUT_DIR.iterdir()):
+                if path.is_dir() and path.name in FOREIGN_SUBTREES:
+                    continue
+                shutil.rmtree(path) if path.is_dir() else path.unlink()
+        OUT_DIR.mkdir(parents=True, exist_ok=True)
         for stem, body in emitted.items():
             path = OUT_DIR / f"{stem}.json"
             path.parent.mkdir(parents=True, exist_ok=True)
