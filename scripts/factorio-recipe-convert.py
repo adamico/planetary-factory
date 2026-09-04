@@ -51,7 +51,11 @@ OUT_DIR = ROOT / "kubejs/data/planetaryfactory/recipe"
 #
 # `pack/` is the second, and it is not generated at all: ADR-0039's two Engineer's Pick recipes are
 # hand-written, because Factorio has no mining-tool prototype and so the corpus can never author
-# them. ADR-0031's exception is stated there and does not generalise -- see `pack/README.md`.
+# them. ADR-0031's exception is stated there and does not generalise -- see ADR-0039 and
+# `docs/testing/hand-written-recipe-check.md`. Note that nothing may explain itself in place
+# next to those recipes: KubeJS validates every file name under `kubejs/` and rejects an
+# uppercase letter with an error that stops a world loading, so a README beside them is not
+# an option -- the documentation for that subtree lives here and in `docs/`.
 FOREIGN_SUBTREES = ("grid", "pack")
 
 

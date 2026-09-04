@@ -14,6 +14,22 @@ stated exception, taken by ADR-0039: the corpus authors every recipe it contains
 mining-tool prototype, and so the two Engineer's Pick recipes cannot be extracted, converted or
 regenerated. They are written by hand, and without this file nothing checks them at all.
 
+Both recipes land on the `assembling` surface, which `recipe_survivors.js` already names, and both
+carry `factorio_category: crafting`, which is what makes them hand-craftable in the Personal
+Assembler at rung 0 with no machine built yet.
+
+`duration: 10` on both is the corpus's own convention rather than a new decision: the converter
+writes `energy x 20`, and Factorio's cheapest crafting rows — `wooden-chest` and
+`small-electric-pole`, the two that moved with ADR-0039's `wood` row — land on exactly 10. A pick
+costs what a chest costs, which is the closest thing to a corpus price for a recipe the corpus
+cannot hold.
+
+**Nothing may document that subtree in place.** KubeJS validates every file name under `kubejs/`
+and rejects an uppercase letter outright — `Invalid file name: Uppercase 'R' in
+kubejs/data/planetaryfactory/recipe/pack/README.md`, logged as an ERROR that stops a world from
+loading. A README beside the recipes is not an option, which is why this page carries what would
+otherwise sit next to them.
+
 ## What it asserts, and what each failure would look like in a game
 
 | Assertion | The silent failure it catches |

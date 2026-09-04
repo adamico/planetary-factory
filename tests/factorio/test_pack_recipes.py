@@ -20,6 +20,12 @@ What fails quietly without it:
   - dropping `factorio_category: crafting`, which is the entire definition of the Personal
     Assembler's hand set (`RuntimeHandRecipes`). The recipe survives, is craftable in a machine the
     player cannot build yet, and rung 0 is a dead end.
+  - a file under `kubejs/` whose name carries an uppercase letter. KubeJS validates every name it
+    scans and rejects one outright -- `Invalid file name: Uppercase 'R' in
+    kubejs/data/planetaryfactory/recipe/pack/README.md` -- and that ERROR stops a world from
+    loading. It is asserted here because this subtree is the one place a human writes files under
+    `kubejs/` by hand rather than generating them, and a README next to the recipes is the obvious
+    thing to reach for.
   - a pick with no model, texture or lang key -- the black-and-magenta cube and a raw translation
     key, neither of which is logged as an error.
   - the steel recipe not consuming the iron pick, which ADR-0039 states in one line and which no
@@ -44,6 +50,9 @@ PICK_ITEM = ROOT / "mod/src/main/java/com/planetaryfactory/core/mining/Engineers
 ASSETS = ROOT / "kubejs/assets/planetaryfactory"
 DATA = ROOT / "kubejs/data"
 SURVIVORS = ROOT / "kubejs/server_scripts/recipe_survivors.js"
+# The two trees KubeJS scans and name-validates. `kubejs/README.txt` sits above both, which is why
+# the roots are named rather than `kubejs/` itself.
+SCANNED = (ROOT / "kubejs/data", ROOT / "kubejs/assets")
 CONVERTER = ROOT / "scripts/factorio-recipe-convert.py"
 CONVERT_CHECK = ROOT / "tests/factorio/test_recipe_convert.py"
 NAMESPACE = "planetaryfactory"
@@ -174,6 +183,17 @@ def main():
                 check(("%s:%s" % (NAMESPACE, item)) in values,
                       "%s is not in %s -- ADR-0039 gives the Pick the wrench's dismantle verb"
                       % (item, tag))
+
+    # Every name KubeJS will scan, lowercase. This is not about tidiness: the validator refuses an
+    # uppercase letter with an ERROR, and the world does not load.
+    for root in SCANNED:
+        for path in sorted(root.rglob("*")):
+            if not path.is_file():
+                continue
+            check(path.name == path.name.lower(),
+                  "`%s` has an uppercase letter in its name. KubeJS rejects it -- `Invalid file "
+                  "name` -- and that stops a world from loading"
+                  % path.relative_to(ROOT).as_posix())
 
     # The flat-time block tag the jar asks for by name. A tag that does not exist is empty, and an
     # empty one silently reverts every ore to vanilla hardness -- the Factorio number the ADR is
