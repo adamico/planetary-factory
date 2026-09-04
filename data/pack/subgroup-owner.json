@@ -265,10 +265,10 @@
     },
     "production/energy": {
       "owner": "split",
-      "reason": "Half this shelf is the nuclear chapter, deferred to #89. The rest is settled: ADR-0017's Power generation row, as amended by #101 and #148, gives the grid mod steam and solar, and #92's question -- what turns rung-0 steam into electricity -- is answered by Power Grid's generation multiblock (Electro's Alternator until the swap).",
+      "reason": "Half this shelf is the nuclear chapter, deferred to #89. The rest is settled: ADR-0017's Power generation row, as amended by #101 and #148, gives the grid mod steam and solar, and #92's question -- what turns rung-0 steam into electricity -- is answered by Power Grid's generation multiblock (Electro's Alternator until the swap). `steam-engine` is `not_emitted` for a reason that is about SHAPE and not about ownership: the row is still the grid mod's, but Factorio's steam engine is one placed entity and Power Grid's generator is a four-part multiblock, so there is no single item for the row to name. `solar-panel` is the contrast -- one block in both games, so it transcribes.",
       "per_recipe": {
         "boiler": "gregtech / pack:assembling",
-        "steam-engine": "powergrid / pack:assembling",
+        "steam-engine": "not_emitted",
         "solar-panel": "powergrid / pack:assembling",
         "accumulator": "powergrid / pack:assembling",
         "heat-exchanger": "not_emitted",
@@ -304,7 +304,8 @@
         "turbine output is a property of the steam, not the building -- with the continuum flattened to the",
         "two values the game actually uses. Ignus's acid neutralisation is the Turbine's second consumer.",
         "",
-        "`steam-engine` is NOT among them: it is the Alternator, settled above.",
+        "`steam-engine` is NOT among them: it is the grid mod's generator, settled above -- `not_emitted` for want",
+        "of a single item to name, not for want of an owner.",
         "",
         "MEKANISM OWNS NOTHING ON THIS SHELF, AND #104 MAKES THAT DELIBERATE RATHER THAN INCIDENTAL.",
         "ADR-0017's Power generation row carried a clause reading `Mekanism generates at scale as FE`; the",

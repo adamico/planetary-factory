@@ -610,7 +610,7 @@ hash = "5970899b24a3a9e717111c32e012165bcb2102eb4bc9a4fd11377e3447abc3c9"
 
 [[files]]
 file = "data/pack/item-map.json"
-hash = "7281320e1543e17d8194f7fff20509e5181bbd71d4e637357b4e7a9d227917a1"
+hash = "f834d847f144101bfca069667a861ebe8debf543c0a89b35f1df65050d0662f0"
 
 [[files]]
 file = "data/pack/recipe-overrides.json"
@@ -618,7 +618,7 @@ hash = "1f7c305c8895ca64fb3cdccdebbc9241707a2f08d080641fc6b2ef11f3962949"
 
 [[files]]
 file = "data/pack/subgroup-owner.json"
-hash = "29898aa4b725c77fe6427fea2e85906fd2a77db6ade121518a791f83c9af8941"
+hash = "0bb9875762ce4f273dd1e7b008aa714d595ba6d71d4b8d78f8d21ce15f8d52a5"
 
 [[files]]
 file = "defaultconfigs/ftbessentials-server.snbt"
@@ -1215,6 +1215,10 @@ hash = "45d526d953657e16682cd23511cb8a6c85a630f571f83a0f550ec5c0f22f0830"
 [[files]]
 file = "kubejs/data/planetaryfactory/recipe/assembling/small_lamp.json"
 hash = "cbe19421346447674c12b12aebb100cd9d759a37f0c051e7ad512184b533f647"
+
+[[files]]
+file = "kubejs/data/planetaryfactory/recipe/assembling/solar_panel.json"
+hash = "f0022ea9206af0349f427a9e6a766fe4e3006469d56944f4e8532e6b53e04c40"
 
 [[files]]
 file = "kubejs/data/planetaryfactory/recipe/assembling/steel_chest.json"

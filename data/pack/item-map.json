@@ -719,9 +719,10 @@
       "note": "Factorio's small lamp is a single placed, powered light. Power Grid's Light Fixture is the plainest of its lamps and the only one that is just a lamp: `factory_light` is a housing you right-click a bulb into, `growth_lamp` is a crop bulb, and `ceiling_tile_lamp` belongs to the ceiling-tile system. ADR-0030 keeps the MECHANIC -- Factorio's circuit network is vanilla redstone plus Create's redstone line -- and left which BLOCK each row names to `data/pack/subgroup-owner.json`, whose `logistics/circuit-network` shelf #148 splits: the four rows naming a physical device the network drives borrow a Power Grid block, the four combinators do not."
     },
     "solar-panel": {
-      "status": "undecided",
-      "note": "As `steam-engine`.",
-      "ticket": 148
+      "kind": "item",
+      "target": "powergrid:solar_panel",
+      "source": "borrowed",
+      "note": "ADR-0017's solar row, borrowed whole (#148's swap; recorded after that ticket closed). Power Grid's Solar Panel is a real-PV panel whose output follows the light it actually receives, which is what Factorio's does, so the row is a 1:1 transcription rather than a judgement. It sits beside `steam-engine`, which is `not_emitted` for the opposite reason: solar is ONE placed block in both games, and the grid mod's steam generator is not."
     },
     "solar-panel-equipment": {
       "status": "undecided",
@@ -759,9 +760,8 @@
       "note": "Create owns item logistics (ADR-0017) and ships ONE belt: speed comes from the drivetrain's RPM, not from a faster belt item, so Factorio's three-tier ladder has no item to land on. A splitter is a funnel-and-belt arrangement and an underground belt is a belt under a block -- both are shapes the player builds, not blocks the player crafts."
     },
     "steam-engine": {
-      "status": "undecided",
-      "note": "Electro's generator row (#92, #104), and #148 may move it.",
-      "ticket": 148
+      "status": "not_emitted",
+      "note": "`not_emitted`. Factorio's `steam-engine` is ONE placed entity -- the block that turns steam into electricity. Power Grid's counterpart is a four-part Create-kinetic MULTIBLOCK (generator housing, induction rotor, commutator, winding), and no one of those parts is the machine: a housing is a shell and a rotor is a rotor. Emitting this row against any single part would put a Factorio machine's name on a component, which is the same objection that made the four combinators `not_emitted` -- a Factorio name on a block that does not do the Factorio thing. The row's CAPABILITY is not dropped: it is step 3 of #101's four-step chain (GT boiler -> Create Steam Engine (SU) -> the grid mod's generator (W) -> grid) and ADR-0017 still names it. What is dropped is a pack-authored recipe for it; the parts become craftable through Power Grid's own recipes when #172 admits them past ADR-0034's sweep. Decided after #148 closed, which is why this row cites #172 rather than that ticket."
     },
     "steam-turbine": {
       "status": "undecided",

@@ -1,0 +1,47 @@
+{
+  "type": "gtceu:assembling",
+  "inputs": {
+    "item": [
+      {
+        "content": {
+          "ingredient": {
+            "item": "gtceu:steel_plate"
+          },
+          "count": 5
+        }
+      },
+      {
+        "content": {
+          "ingredient": {
+            "item": "planetaryfactory:electronic_circuit"
+          },
+          "count": 15
+        }
+      },
+      {
+        "content": {
+          "ingredient": {
+            "item": "gtceu:copper_plate"
+          },
+          "count": 5
+        }
+      }
+    ]
+  },
+  "outputs": {
+    "item": [
+      {
+        "content": {
+          "ingredient": {
+            "item": "powergrid:solar_panel"
+          },
+          "count": 1
+        }
+      }
+    ]
+  },
+  "duration": 200,
+  "data": {
+    "factorio_category": "crafting"
+  }
+}
