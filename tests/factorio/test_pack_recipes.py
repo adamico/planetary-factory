@@ -38,7 +38,9 @@ Usage: tests/factorio/test_pack_recipes.py
 """
 import json
 import re
+import subprocess
 import sys
+import zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -55,6 +57,8 @@ SURVIVORS = ROOT / "kubejs/server_scripts/recipe_survivors.js"
 SCANNED = (ROOT / "kubejs/data", ROOT / "kubejs/assets")
 CONVERTER = ROOT / "scripts/factorio-recipe-convert.py"
 CONVERT_CHECK = ROOT / "tests/factorio/test_recipe_convert.py"
+TEXTURE_BUILDER = ROOT / "scripts/build-pick-textures.py"
+MODS = ROOT / "mods"
 NAMESPACE = "planetaryfactory"
 
 # The category the Personal Assembler's predicate keeps, and nothing else is hand-craftable.
@@ -110,6 +114,40 @@ def items_of(recipe, side):
     return out
 
 
+def texture_resolves(item, layer):
+    """That an item model's texture is one that will actually be there at load.
+
+    The two picks are dressed from three different places on purpose, so this cannot be a single
+    equality: the Iron Pick wears vanilla's own `minecraft:item/iron_pickaxe` (nothing to copy), and
+    the Steel Pick wears GTCEu's Damascus Steel pickaxe flattened into our namespace by
+    `scripts/build-pick-textures.py`, because GT's tool art is three greyscale layers that only
+    become a material under GregTech's item-colour handler -- which never sees an item that is not
+    a GT tool.
+
+    A texture that is not there renders as the black-and-magenta checkerboard with only a
+    client-side warning, so each namespace is resolved where it can be: our own against the file,
+    a mod's against the jar the pack ships, and vanilla's against nothing -- the client jar is not
+    in this repo, and `minecraft:item/iron_pickaxe` is not a name that moves.
+    """
+    namespace, _, path = layer.partition(":")
+    if namespace == NAMESPACE:
+        check((ASSETS / "textures" / (path + ".png")).is_file(),
+              "%s's model points at %r and that file is missing, which renders as the "
+              "missing-texture checkerboard" % (item, layer))
+    elif namespace == "minecraft":
+        return
+    else:
+        jars = sorted(MODS.glob("%s-*.jar" % namespace))
+        if check(len(jars) == 1,
+                 "%s's model points at %r, and mods/ holds %d %s jar(s) to resolve it against"
+                 % (item, layer, len(jars), namespace)):
+            with zipfile.ZipFile(jars[0]) as jar:
+                names = set(jar.namelist())
+            check(("assets/%s/textures/%s.png" % (namespace, path)) in names,
+                  "%s's model points at %r, which the installed %s jar does not contain"
+                  % (item, layer, namespace))
+
+
 def main():
     picks = tiers()
 
@@ -163,11 +201,7 @@ def main():
         model = ASSETS / "models/item" / (item + ".json")
         if check(model.is_file(), "%s has no item model" % item):
             layer = json.loads(model.read_text())["textures"]["layer0"]
-            check(layer == "%s:item/%s" % (NAMESPACE, item),
-                  "%s's model points at %r rather than its own texture" % (item, layer))
-            check((ASSETS / "textures/item" / (item + ".png")).is_file(),
-                  "%s's texture is missing, which renders as the missing-texture checkerboard"
-                  % item)
+            texture_resolves(item, layer)
         check(item in recipes,
               "%s is registered but nothing crafts it -- under ADR-0034's sweep there is no stock "
               "recipe to fall back on" % item)
@@ -194,6 +228,16 @@ def main():
                   "`%s` has an uppercase letter in its name. KubeJS rejects it -- `Invalid file "
                   "name` -- and that stops a world from loading"
                   % path.relative_to(ROOT).as_posix())
+
+    # The generated half of the Steel Pick's texture. Generated output is never hand-edited here;
+    # a GTCEu update that changed its tool art would otherwise leave the pack showing the old one
+    # with nothing to say so.
+    if check(TEXTURE_BUILDER.is_file(), "scripts/build-pick-textures.py is missing"):
+        built = subprocess.run([sys.executable, str(TEXTURE_BUILDER), "--check"],
+                               capture_output=True, text=True)
+        check(built.returncode == 0,
+              "the Steel Pick's texture is stale against the installed GTCEu jar -- re-run "
+              "scripts/build-pick-textures.py (%s)" % built.stdout.strip())
 
     # The flat-time block tag the jar asks for by name. A tag that does not exist is empty, and an
     # empty one silently reverts every ore to vanilla hardness -- the Factorio number the ADR is

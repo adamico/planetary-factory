@@ -152,7 +152,11 @@ them, and the sweep leaves no stock pickaxe to fall back on), that both land on 
 `recipe_survivors.js` admits and carry `factorio_category: crafting` so the Personal Assembler
 plans them at rung 0, that the steel recipe consumes the iron pick, and that each registered tier
 has its model, texture, lang key, the two wrench tags that carry the dismantle verb and the block
-tag the jar asks for by name. The tier list is read out of `PickTier.java`. The pick's arithmetic —
+tag the jar asks for by name. The Iron Pick's sprite is vanilla's own and the Steel Pick's is
+GTCEu's Damascus Steel pickaxe, flattened by `scripts/build-pick-textures.py` because GT's tool art
+is three greyscale layers that only become a material under a colour handler our item never
+reaches; the check runs that script's `--check`, so a GTCEu update that redrew the art fails rather
+than shipping the old sprite. The tier list is read out of `PickTier.java`. The pick's arithmetic —
 that Factorio's seconds survive Minecraft's break-time formula — is `MiningSpeedTest` under
 `./gradlew :planetaryfactory_core:test`. Whether the Pick mines every block class, dismantles a GT
 machine and satisfies Create's wrench is a world load. See
