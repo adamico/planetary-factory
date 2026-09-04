@@ -27,14 +27,15 @@ public final class RuntimePlanSource implements PlanSource {
 
         if (!resolution.complete()) {
             return new ResolvedPlan(
-                    new PlanDisplay(PlanDisplay.NO_PLAN, recipe, amount,
+                    new PlanDisplay(PlanDisplay.NO_PLAN, recipe, amount, resolution.rawCost(),
                             resolution.toCraft(), resolution.missing(), resolution.locked(), false),
                     null);
         }
         UUID id = UUID.randomUUID();
         String root = rootItemOf(player, recipe);
         return new ResolvedPlan(
-                new PlanDisplay(id, recipe, amount, resolution.toCraft(), List.of(), List.of(), true),
+                new PlanDisplay(id, recipe, amount, resolution.rawCost(), resolution.toCraft(),
+                        List.of(), List.of(), true),
                 resolution.toPlan(id, root, amount));
     }
 

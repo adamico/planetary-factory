@@ -13,6 +13,7 @@
   "planetaryfactory_core.assembler.all": "all",
   "planetaryfactory_core.assembler.amount": "Amount",
   "planetaryfactory_core.assembler.plan": "Crafting Plan",
+  "planetaryfactory_core.assembler.consume": "Consumes",
   "planetaryfactory_core.assembler.to_craft": "To Craft",
   "planetaryfactory_core.assembler.missing": "Missing",
   "planetaryfactory_core.assembler.locked": "Locked",

@@ -61,7 +61,9 @@ public interface PlanSource {
         @Override
         public ResolvedPlan resolve(ServerPlayer player, ResourceLocation recipe, int amount) {
             return new ResolvedPlan(
-                    new PlanDisplay(PlanDisplay.NO_PLAN, recipe, amount, List.of(), List.of(), List.of(), false),
+                    new PlanDisplay(
+                            PlanDisplay.NO_PLAN, recipe, amount,
+                            List.of(), List.of(), List.of(), List.of(), false),
                     null);
         }
 
