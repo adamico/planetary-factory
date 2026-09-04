@@ -42,13 +42,17 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 OUT_DIR = ROOT / "kubejs/data/planetaryfactory/recipe"
 
-# The one subtree of OUT_DIR this converter does NOT own. `scripts/powergrid-recipe-convert.py`
+# The subtrees of OUT_DIR this converter does NOT own. `scripts/powergrid-recipe-convert.py`
 # writes Create: Power Grid's re-authored recipes there (#172), in the same namespace because the
 # survivor allowlist admits recipes by namespace and surface -- a second namespace would need a
 # second survivor and would put that line outside ADR-0034's rule. Both scripts wipe what they
 # own before writing, so without this exclusion whichever ran last would delete the other's
 # output, and `--check` would report the survivors as unexpected files.
-FOREIGN_SUBTREES = ("grid",)
+#
+# `pack/` is the second, and it is not generated at all: ADR-0039's two Engineer's Pick recipes are
+# hand-written, because Factorio has no mining-tool prototype and so the corpus can never author
+# them. ADR-0031's exception is stated there and does not generalise -- see `pack/README.md`.
+FOREIGN_SUBTREES = ("grid", "pack")
 
 
 def is_ours(path):

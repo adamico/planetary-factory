@@ -1,0 +1,39 @@
+{
+  "type": "gtceu:assembling",
+  "inputs": {
+    "item": [
+      {
+        "content": {
+          "ingredient": {
+            "item": "planetaryfactory:engineers_iron_pick"
+          },
+          "count": 1
+        }
+      },
+      {
+        "content": {
+          "ingredient": {
+            "item": "gtceu:steel_plate"
+          },
+          "count": 1
+        }
+      }
+    ]
+  },
+  "outputs": {
+    "item": [
+      {
+        "content": {
+          "ingredient": {
+            "item": "planetaryfactory:engineers_steel_pick"
+          },
+          "count": 1
+        }
+      }
+    ]
+  },
+  "duration": 10,
+  "data": {
+    "factorio_category": "crafting"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "__comment": "ADR-0039 gives the Engineer's Pick the wrench's DISMANTLE verb, and a tag is the only lever there is -- both Create and GregTech resolve wrench behaviour from tool tags, so this entry hands over GregTech's whole verb set, rotate-on-rightclick and pipe connections included. That is wider than ADR-0039 decided: it defers those two to their own ticket, and a tag has no way to withhold them. They ship working rather than absent, which is the safer direction of the two -- Factorio HAS a rotate verb, so a pack that could not turn a machine would be missing a mechanic. What the deferred ticket now owns is whether this is the right home for them, not whether they exist. Splitting the verbs would mean an IGTTool implementation in the jar rather than a tag. This is GregTech's own, the tag `GTToolType.WRENCH` is built with. GTCEu reads both it and the NeoForge one next to this file; naming both is cheaper than depending on which check a given machine runs.",
+  "replace": false,
+  "values": [
+    "planetaryfactory:engineers_iron_pick",
+    "planetaryfactory:engineers_steel_pick"
+  ]
+}

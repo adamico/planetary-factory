@@ -36,7 +36,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent.parent
 EMITTED = ROOT / "kubejs/data/planetaryfactory/recipe"
 # Subtrees of EMITTED written by a different converter, with a different input table.
-FOREIGN_SUBTREES = ("grid",)
+FOREIGN_SUBTREES = ("grid", "pack")
 STARTUP = ROOT / "kubejs/startup_scripts"
 MOD = ROOT / "mod/src/main/java/com/planetaryfactory/core"
 PF_BLOCKS = MOD / "PFBlocks.java"
@@ -209,6 +209,14 @@ def check_emitted(items, recipe_types, failures):
             failures.append(f"{path.name}: {field} names {target}, which is blocked_by "
                             f"#{awaited[target]} and is not registered yet -- re-run the converter")
 
+    # Neither foreign subtree is this converter's output.
+    #
+    # `recipe/pack/` is ADR-0039's exception to ADR-0031: the two Engineer's Pick recipes are
+    # hand-written because Factorio has no mining-tool prototype for the corpus to author, so their
+    # items have no Factorio name and no item-map row either -- by construction, exactly as
+    # Power Grid's do not. `tests/factorio/test_pack_recipes.py` holds that subtree to its own
+    # rules.
+    #
     # `recipe/grid/` is not this converter's output: it is Create: Power Grid's line, re-authored
     # by `scripts/powergrid-recipe-convert.py` against `data/pack/grid-substitutions.json` (#172).
     # Its items are Power Grid's and Create's, which have no Factorio name and so no item-map row

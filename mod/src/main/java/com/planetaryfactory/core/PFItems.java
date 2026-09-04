@@ -5,6 +5,8 @@ import com.planetaryfactory.core.energy.SupplyAreaPoleItem;
 import com.planetaryfactory.core.fluid.BarrelFluidHandler;
 import com.planetaryfactory.core.fluid.BarrelItem;
 import com.planetaryfactory.core.fluid.BarrelSpec;
+import com.planetaryfactory.core.mining.EngineersPick;
+import com.planetaryfactory.core.mining.PickTier;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.neoforged.bus.api.IEventBus;
@@ -15,7 +17,9 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Block items for what {@link PFBlocks} registers.
@@ -49,7 +53,23 @@ public final class PFItems {
     public static final DeferredHolder<Item, Item> BARREL = ITEMS.register(
             "barrel", () -> new BarrelItem(new Item.Properties().stacksTo(BarrelSpec.STACK_SIZE)));
 
+    /**
+     * The Engineer's Pick, in its two tiers (ADR-0039).
+     *
+     * <p>In the jar rather than in KubeJS because the answer it gives is
+     * {@code isCorrectToolForDrops}, and that is a method on the item -- a block's
+     * {@code requires_correct_tool_for_drops} is fixed at registration, so under ADR-0034's sweep,
+     * which left the pack with no pickaxe recipe at all, there is nothing a datapack could have
+     * said instead. Both are indestructible: no durability component, so no bar and no repair.
+     */
+    private static final Map<PickTier, DeferredHolder<Item, EngineersPick>> PICKS =
+            new EnumMap<>(PickTier.class);
+
     static {
+        for (PickTier tier : PickTier.values()) {
+            PICKS.put(tier, ITEMS.register(tier.id(),
+                    () -> new EngineersPick(tier, new Item.Properties().stacksTo(1))));
+        }
         NATURAL.add(ITEMS.registerSimpleBlockItem(PFBlocks.YUMAKO_SAPLING));
         NATURAL.add(ITEMS.registerSimpleBlockItem(PFBlocks.JELLYSTEM_SAPLING));
         for (PoleTier tier : PoleTier.values()) {
@@ -59,7 +79,11 @@ public final class PFItems {
                     () -> new SupplyAreaPoleItem(PFBlocks.pole(tier).get(), new Item.Properties())));
         }
         FUNCTIONAL.add(BARREL);
+        // Tools sit with the machinery, not with the saplings: a pick is the first thing a player
+        // reaches for and the last place they would look for it is NATURAL_BLOCKS.
+        PICKS.values().forEach(FUNCTIONAL::add);
     }
+
 
     private PFItems() {
     }

@@ -141,6 +141,23 @@ corpus. Note that this converter and `factorio-recipe-convert.py` share an outpu
 each leaves the other's subtree alone; run both checks after touching either. Whether the sweep
 kept the recipes in a running game is a world load. See `docs/testing/grid-recipe-check.md`.
 
+### Hand-written recipe check
+
+`kubejs/data/planetaryfactory/recipe/pack/` is the one subtree no converter generates: ADR-0039's
+two Engineer's Pick recipes, which the corpus can never author because Factorio has no mining-tool
+prototype. `tests/factorio/test_pack_recipes.py` is what holds them, since every other recipe here
+is checked against the corpus and these are checked against nothing otherwise — that both
+converters and the converter's own check still list `pack` as foreign (a run that forgets deletes
+them, and the sweep leaves no stock pickaxe to fall back on), that both land on a surface
+`recipe_survivors.js` admits and carry `factorio_category: crafting` so the Personal Assembler
+plans them at rung 0, that the steel recipe consumes the iron pick, and that each registered tier
+has its model, texture, lang key, the two wrench tags that carry the dismantle verb and the block
+tag the jar asks for by name. The tier list is read out of `PickTier.java`. The pick's arithmetic —
+that Factorio's seconds survive Minecraft's break-time formula — is `MiningSpeedTest` under
+`./gradlew :planetaryfactory_core:test`. Whether the Pick mines every block class, dismantles a GT
+machine and satisfies Create's wrench is a world load. See
+`docs/testing/hand-written-recipe-check.md`.
+
 ### Research unlock check
 
 `tests/factorio/test_research_unlocks.py` asserts every recipe id a research grants is a recipe the
