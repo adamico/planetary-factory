@@ -37,10 +37,20 @@ final class AssemblerHud implements LayeredDraw.Layer {
 
     private static final int ROW_HEIGHT = 20;
     private static final int WIDTH = 96;
-    private static final int MARGIN = 6;
 
-    /** Clear of the hotbar and of the offhand slot beside it. */
-    private static final int ABOVE_HOTBAR = 26;
+    /** Vanilla's hotbar: 182 wide, centred, its top 22 pixels off the bottom. */
+    private static final int HOTBAR_HALF_WIDTH = 91;
+
+    private static final int HOTBAR_HEIGHT = 22;
+
+    /**
+     * Clear of the offhand slot, which vanilla puts 29 pixels beyond the hotbar's left edge.
+     *
+     * <p>The queue sits left of the hotbar at the hotbar's own height, so the offhand slot is the
+     * one thing it can collide with -- and it appears and disappears with what the player is
+     * holding, which is the worst kind of collision to leave to chance.
+     */
+    private static final int CLEAR_OF_OFFHAND = 32;
 
     private static final int BACKDROP = 0x90101010;
     private static final int BAR = 0xFF4FA84F;
@@ -54,10 +64,11 @@ final class AssemblerHud implements LayeredDraw.Layer {
         if (entries.isEmpty()) return;
 
         int shown = Math.min(MAX_ROWS, entries.size());
-        int left = graphics.guiWidth() - MARGIN - WIDTH;
-        int bottom = graphics.guiHeight() - ABOVE_HOTBAR;
-        int top = bottom - shown * ROW_HEIGHT;
-        graphics.fill(left - 3, top - 3, left + WIDTH + 3, bottom + 1, BACKDROP);
+        // Left of the hotbar, bottom row level with it, stacked upward from there.
+        int left = graphics.guiWidth() / 2 - HOTBAR_HALF_WIDTH - CLEAR_OF_OFFHAND - WIDTH;
+        int bottom = graphics.guiHeight() - (HOTBAR_HEIGHT - ROW_HEIGHT) / 2 - ROW_HEIGHT;
+        int top = bottom - (shown - 1) * ROW_HEIGHT;
+        graphics.fill(left - 3, top - 3, left + WIDTH + 3, bottom + ROW_HEIGHT - 1, BACKDROP);
 
         Font font = client.font;
         for (int index = 0; index < shown; index++) {

@@ -7,6 +7,7 @@
   "planetaryfactory_core.assembler.panel": "Personal Assembler",
   "planetaryfactory_core.assembler.tab": "Assembler",
   "planetaryfactory_core.assembler.tab.tooltip": "Your crafting queue. Open it, then pick a recipe in EMI.",
+  "planetaryfactory_core.assembler.to_inventory": "%s: inventory",
   "planetaryfactory_core.assembler.queue_empty": "Nothing queued",
   "planetaryfactory_core.assembler.paused": "Paused: no room for the finished craft",
   "planetaryfactory_core.assembler.select_amount": "Select Amount",
@@ -22,5 +23,6 @@
   "planetaryfactory_core.assembler.incomplete": "This plan is incomplete and cannot be started",
   "planetaryfactory_core.assembler.show_plan": "Show Plan",
   "planetaryfactory_core.assembler.and_more": "... and %s more",
-  "planetaryfactory_core.assembler.unplannable": "The Assembler cannot plan this recipe"
+  "planetaryfactory_core.assembler.unplannable": "The Assembler cannot plan this recipe",
+  "key.planetaryfactory_core.assembler": "Open Personal Assembler"
 }

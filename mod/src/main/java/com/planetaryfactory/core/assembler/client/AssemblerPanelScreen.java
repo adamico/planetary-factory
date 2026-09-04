@@ -6,6 +6,7 @@ import com.planetaryfactory.core.network.PlanCancelPacket;
 import com.planetaryfactory.core.network.QueueSyncPacket;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.neoforged.neoforge.network.PacketDistributor;
@@ -30,6 +31,16 @@ public final class AssemblerPanelScreen extends AssemblerScreen<AssemblerPanelMe
 
     public AssemblerPanelScreen(AssemblerPanelMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title, 176, 186);
+    }
+
+    /** The title, plus which key leaves for the inventory -- a way back nothing else advertises. */
+    @Override
+    protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
+        super.renderLabels(graphics, mouseX, mouseY);
+        if (minecraft == null) return;
+        Component hint = Component.translatable("planetaryfactory_core.assembler.to_inventory",
+                minecraft.options.keyInventory.getTranslatedKeyMessage());
+        graphics.drawString(font, hint, imageWidth - 6 - font.width(hint), 6, 0x808080, false);
     }
 
     @Override
@@ -76,6 +87,25 @@ public final class AssemblerPanelScreen extends AssemblerScreen<AssemblerPanelMe
                     Component.translatable("planetaryfactory_core.assembler.paused").withStyle(ChatFormatting.GOLD),
                     leftPos + 8, topPos + AssemblerPanelMenu.PLAYER_INVENTORY_Y - 12, 0xFFAA00, false);
         }
+    }
+
+    /**
+     * The inventory key goes to the inventory, not to the world.
+     *
+     * <p>The panel is opened from the inventory screen and stands in for it while it is up, so
+     * vanilla's "the inventory key closes this" left a player who wanted their inventory back
+     * pressing it twice, with a frame of world in between. Escape is untouched and still leaves for
+     * the game, which is what every other screen does with it.
+     */
+    @Override
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        if (minecraft != null && minecraft.player != null
+                && minecraft.options.keyInventory.matches(keyCode, scanCode)) {
+            onClose();
+            minecraft.setScreen(new InventoryScreen(minecraft.player));
+            return true;
+        }
+        return super.keyPressed(keyCode, scanCode, modifiers);
     }
 
     private int cancelLeft() {

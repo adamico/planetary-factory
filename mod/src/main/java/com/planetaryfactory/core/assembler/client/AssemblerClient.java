@@ -24,8 +24,10 @@ public final class AssemblerClient {
     public static void register(IEventBus modBus) {
         modBus.addListener(AssemblerClient::registerScreens);
         modBus.addListener(AssemblerClient::registerHud);
+        modBus.addListener(AssemblerKeys::register);
         NeoForge.EVENT_BUS.addListener(InventoryAssemblerTab::onScreenInit);
         NeoForge.EVENT_BUS.addListener(InventoryAssemblerTab::onScreenRender);
+        NeoForge.EVENT_BUS.addListener(AssemblerKeys::onClientTick);
     }
 
     /** Above the hotbar in draw order, so the queue is not painted under it. */
