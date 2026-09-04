@@ -9,10 +9,13 @@ import java.util.List;
  * a graph of these, and keeping the graph free of any Minecraft type is what lets the recursion --
  * the only genuinely hard thing in #161 -- be checked by an ordinary unit test.
  *
+ * <p>The inputs are {@link Ingredient}s and the outputs {@link ItemAmount}s, which is not an
+ * inconsistency: an ingredient is satisfied by any one of several items and a result is one item.
+ *
  * <p>{@code durationTicks} is one craft's, Factorio's {@code energy_required x 20} unmodified: the
  * Assembler runs at speed 1 and ADR-0029 leaves durations alone.
  */
-public record HandRecipe(String id, List<ItemAmount> inputs, List<ItemAmount> outputs, int durationTicks) {
+public record HandRecipe(String id, List<Ingredient> inputs, List<ItemAmount> outputs, int durationTicks) {
 
     public HandRecipe {
         if (id == null || id.isBlank()) throw new IllegalArgumentException("a recipe needs an id");

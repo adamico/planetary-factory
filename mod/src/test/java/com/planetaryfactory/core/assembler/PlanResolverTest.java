@@ -25,11 +25,11 @@ class PlanResolverTest {
     /** gear = 2 plate; circuit = 3 cable + 1 plate; cable = 1 copper, making 2. */
     private static RecipeGraph graph() {
         return RecipeGraph.builder()
-                .add(new HandRecipe("gear", List.of(new ItemAmount("plate", 2)),
+                .add(new HandRecipe("gear", List.of(Ingredient.of("plate", 2)),
                         List.of(new ItemAmount("gear", 1)), 10))
-                .add(new HandRecipe("cable", List.of(new ItemAmount("copper", 1)),
+                .add(new HandRecipe("cable", List.of(Ingredient.of("copper", 1)),
                         List.of(new ItemAmount("cable", 2)), 10))
-                .add(new HandRecipe("circuit", List.of(new ItemAmount("cable", 3), new ItemAmount("plate", 1)),
+                .add(new HandRecipe("circuit", List.of(Ingredient.of("cable", 3), Ingredient.of("plate", 1)),
                         List.of(new ItemAmount("circuit", 1)), 20))
                 .build();
     }
@@ -153,8 +153,8 @@ class PlanResolverTest {
         // The corpus check forbids this, and a runtime graph is assembled from whatever is loaded --
         // so the resolver must not be the thing that hangs when a pack author writes one.
         RecipeGraph cyclic = RecipeGraph.builder()
-                .add(new HandRecipe("a", List.of(new ItemAmount("b", 1)), List.of(new ItemAmount("a", 1)), 10))
-                .add(new HandRecipe("b", List.of(new ItemAmount("a", 1)), List.of(new ItemAmount("b", 1)), 10))
+                .add(new HandRecipe("a", List.of(Ingredient.of("b", 1)), List.of(new ItemAmount("a", 1)), 10))
+                .add(new HandRecipe("b", List.of(Ingredient.of("a", 1)), List.of(new ItemAmount("b", 1)), 10))
                 .build();
 
         PlanResolver.Resolution resolution = new PlanResolver(cyclic, Set.of()::contains).resolve("a", 1, have());
@@ -181,7 +181,7 @@ class PlanResolverTest {
         // A wrapped negative demand reads as already satisfied, which would report a complete plan
         // that reserves nothing and then cannot feed its own first step.
         RecipeGraph greedy = RecipeGraph.builder()
-                .add(new HandRecipe("greedy", List.of(new ItemAmount("leaf", 1_000_000)),
+                .add(new HandRecipe("greedy", List.of(Ingredient.of("leaf", 1_000_000)),
                         List.of(new ItemAmount("greedy", 1)), 1))
                 .build();
 
@@ -200,9 +200,9 @@ class PlanResolverTest {
         // than the parent step's inputs name, and nothing downstream notices: the plan reports
         // complete, Start takes the reservation, and the queue throws on a step it cannot feed.
         RecipeGraph deep = RecipeGraph.builder()
-                .add(new HandRecipe("sub", List.of(new ItemAmount("leaf", 1)),
+                .add(new HandRecipe("sub", List.of(Ingredient.of("leaf", 1)),
                         List.of(new ItemAmount("sub", 1)), 1))
-                .add(new HandRecipe("bulk", List.of(new ItemAmount("sub", 3)),
+                .add(new HandRecipe("bulk", List.of(Ingredient.of("sub", 3)),
                         List.of(new ItemAmount("bulk", 1)), 1))
                 .build();
         ItemBag plenty = have("leaf", Integer.MAX_VALUE);
@@ -231,5 +231,93 @@ class PlanResolverTest {
         PlanResolver locked = new PlanResolver(graph(), Set.of("gear")::contains);
 
         assertEquals(0, locked.largestAffordable("gear", have("plate", 64)));
+    }
+
+    /**
+     * AlmostUnified and tag ingredients both hand the resolver an ingredient several items satisfy.
+     * A gear that eats "two of either iron plate" has to be payable in whichever the player holds --
+     * refusing the plan because the first match is not the one in the inventory is the bug that
+     * reached a player as "the Assembler cannot craft this recipe" with a full bag of iron sheets.
+     */
+    private static RecipeGraph unifiedGraph() {
+        return RecipeGraph.builder()
+                .add(new HandRecipe("gear",
+                        List.of(new Ingredient(List.of("gtceu:iron_plate", "create:iron_sheet"), 2)),
+                        List.of(new ItemAmount("gear", 1)), 10))
+                .build();
+    }
+
+    @Test
+    void anIngredientSeveralItemsSatisfyIsPaidWithWhicheverOneIsHeld() {
+        PlanResolver.Resolution resolution = new PlanResolver(unifiedGraph(), Set.of()::contains)
+                .resolve("gear", 3, have("create:iron_sheet", 6));
+
+        assertTrue(resolution.complete());
+        assertEquals(Map.of("create:iron_sheet", 6), asMap(resolution.rawCost()));
+        assertEquals(Map.of("create:iron_sheet", 6), asMap(resolution.steps().get(0).inputs()));
+    }
+
+    @Test
+    void anIngredientPaidFromTwoItemsAtOnceLandsAsOneEntryPerItem() {
+        // Two entries naming the same item would each pass the queue's per-entry buffer check and
+        // then together over-consume it, so the step's inputs are merged by item.
+        PlanResolver.Resolution resolution = new PlanResolver(unifiedGraph(), Set.of()::contains)
+                .resolve("gear", 2, have("gtceu:iron_plate", 3, "create:iron_sheet", 5));
+
+        assertTrue(resolution.complete());
+        List<ItemAmount> inputs = resolution.steps().get(0).inputs();
+        assertEquals(inputs.size(), asMap(inputs).size(), "an item named twice in one step: " + inputs);
+        assertEquals(Map.of("gtceu:iron_plate", 3, "create:iron_sheet", 1), asMap(inputs));
+    }
+
+    @Test
+    void anIngredientNothingHeldSatisfiesIsMissingUnderTheNameItPrefers() {
+        PlanResolver.Resolution resolution = new PlanResolver(unifiedGraph(), Set.of()::contains)
+                .resolve("gear", 1, have());
+
+        assertFalse(resolution.complete());
+        assertEquals(Map.of("gtceu:iron_plate", 2), asMap(resolution.missing()));
+    }
+
+    @Test
+    void anAlternativeIsCraftedWhenTheOneAheadOfItIsLocked() {
+        // Locked is the answer only when nothing acceptable can be made. An ingredient with a second
+        // item the team has researched is not blocked by research at all.
+        RecipeGraph graph = RecipeGraph.builder()
+                .add(new HandRecipe("gear",
+                        List.of(new Ingredient(List.of("fancy_plate", "plain_plate"), 2)),
+                        List.of(new ItemAmount("gear", 1)), 10))
+                .add(new HandRecipe("fancy", List.of(Ingredient.of("ore", 1)),
+                        List.of(new ItemAmount("fancy_plate", 1)), 10))
+                .add(new HandRecipe("plain", List.of(Ingredient.of("ore", 1)),
+                        List.of(new ItemAmount("plain_plate", 1)), 10))
+                .build();
+
+        PlanResolver.Resolution resolution = new PlanResolver(graph, Set.of("fancy")::contains)
+                .resolve("gear", 1, have("ore", 8));
+
+        assertTrue(resolution.complete());
+        assertTrue(resolution.locked().isEmpty());
+        assertEquals(Map.of("plain_plate", 2, "gear", 1), asMap(resolution.toCraft()));
+    }
+
+    @Test
+    void anIngredientEveryAlternativeOfWhichIsLockedIsLockedAndNotMissing() {
+        RecipeGraph graph = RecipeGraph.builder()
+                .add(new HandRecipe("gear",
+                        List.of(new Ingredient(List.of("fancy_plate", "plain_plate"), 2)),
+                        List.of(new ItemAmount("gear", 1)), 10))
+                .add(new HandRecipe("fancy", List.of(Ingredient.of("ore", 1)),
+                        List.of(new ItemAmount("fancy_plate", 1)), 10))
+                .add(new HandRecipe("plain", List.of(Ingredient.of("ore", 1)),
+                        List.of(new ItemAmount("plain_plate", 1)), 10))
+                .build();
+
+        PlanResolver.Resolution resolution =
+                new PlanResolver(graph, Set.of("fancy", "plain")::contains).resolve("gear", 1, have("ore", 8));
+
+        assertFalse(resolution.complete());
+        assertEquals(Map.of("fancy_plate", 2), asMap(resolution.locked()));
+        assertTrue(resolution.missing().isEmpty());
     }
 }

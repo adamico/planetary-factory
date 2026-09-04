@@ -24,13 +24,13 @@ import org.junit.jupiter.api.Test;
 class PlanToQueueTest {
 
     private static final RecipeGraph GRAPH = RecipeGraph.builder()
-            .add(new HandRecipe("cable", List.of(new ItemAmount("copper", 1)),
+            .add(new HandRecipe("cable", List.of(Ingredient.of("copper", 1)),
                     List.of(new ItemAmount("cable", 2)), 5))
-            .add(new HandRecipe("circuit", List.of(new ItemAmount("cable", 3), new ItemAmount("plate", 1)),
+            .add(new HandRecipe("circuit", List.of(Ingredient.of("cable", 3), Ingredient.of("plate", 1)),
                     List.of(new ItemAmount("circuit", 1)), 10))
-            .add(new HandRecipe("inserter", List.of(new ItemAmount("circuit", 1), new ItemAmount("gear", 1),
-                    new ItemAmount("plate", 1)), List.of(new ItemAmount("inserter", 1)), 10))
-            .add(new HandRecipe("gear", List.of(new ItemAmount("plate", 2)),
+            .add(new HandRecipe("inserter", List.of(Ingredient.of("circuit", 1), Ingredient.of("gear", 1),
+                    Ingredient.of("plate", 1)), List.of(new ItemAmount("inserter", 1)), 10))
+            .add(new HandRecipe("gear", List.of(Ingredient.of("plate", 2)),
                     List.of(new ItemAmount("gear", 1)), 5))
             .build();
 

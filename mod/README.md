@@ -39,7 +39,10 @@ API in this pack exposes:
   rule, so chain-crafting — the one genuinely hard thing in the Assembler — is unit-tested; the
   graph it plans over is read off the loaded recipes by `RuntimeHandRecipes`, keyed on the
   `factorio_category` the converter stamps, because ADR-0038 gives the Assembler no recipe type of
-  its own (#161). EMI's fill button reaches the panel from `compat/emi`, implementing `EmiRecipeHandler`
+  its own (#161). A recipe's input is an `Ingredient` — a count of any one of several items — and
+  not a single id, because the pack emits tag ingredients and AlmostUnified rewrites plain item
+  ingredients into unified tags at load; a resolver reading only the first match refuses plans the
+  crafting grid accepts. EMI's fill button reaches the panel from `compat/emi`, implementing `EmiRecipeHandler`
   directly rather than `StandardRecipeHandler`, whose default `canCraft` would grey the button out
   precisely when the plan has something to say.
 

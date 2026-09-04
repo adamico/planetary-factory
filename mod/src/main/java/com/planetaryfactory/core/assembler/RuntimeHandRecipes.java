@@ -107,19 +107,33 @@ public final class RuntimeHandRecipes {
         return null;
     }
 
+    /**
+     * Why one side cannot be read, or null.
+     *
+     * <p>The two sides differ on the one question that matters: an input matching several items is
+     * a choice the resolver can make ({@link Ingredient}), while an output matching several is a
+     * recipe whose result is unknowable until it runs, and a plan cannot promise an item it cannot
+     * name. Tag ingredients and AlmostUnified's unification both land in the first case, which is
+     * most of this pack's hand set.
+     */
     private static String unreadableSide(List<Content> contents, boolean isOutput) {
         for (Content content : contents) {
             if (isOutput && content.isChanced()) return "a chance attached";
             if (!(content.content instanceof SizedIngredient sized)) return "no fixed count";
             ItemStack[] matches = sized.getItems();
             if (matches.length == 0) return "no item at all";
-            if (matches.length > 1) {
+            if (isOutput && matches.length > 1) {
                 return matches.length + " possible items (" + matches[0].getItem() + ", ...)";
             }
-            if (!matches[0].getComponentsPatch().isEmpty()) {
-                return "data components on " + matches[0].getItem();
+            for (ItemStack match : matches) {
+                // An item whose identity is partly in its data components cannot be named by its
+                // registry id, and naming it by that id anyway would fold Researchd's science packs
+                // -- which differ only by a component -- onto one another.
+                if (!match.getComponentsPatch().isEmpty()) {
+                    return "data components on " + match.getItem();
+                }
+                if (match.getCount() <= 0) return "a count of zero";
             }
-            if (matches[0].getCount() <= 0) return "a count of zero";
         }
         return null;
     }
@@ -132,18 +146,32 @@ public final class RuntimeHandRecipes {
     private static HandRecipe read(GTRecipe recipe) {
         return new HandRecipe(
                 recipe.id.toString(),
-                amounts(recipe.getInputContents(ItemRecipeCapability.CAP)),
+                ingredients(recipe.getInputContents(ItemRecipeCapability.CAP)),
                 amounts(recipe.getOutputContents(ItemRecipeCapability.CAP)),
                 recipe.duration);
+    }
+
+    private static List<Ingredient> ingredients(List<Content> contents) {
+        List<Ingredient> read = new ArrayList<>(contents.size());
+        for (Content content : contents) {
+            ItemStack[] matches = ((SizedIngredient) content.content).getItems();
+            List<String> items = new ArrayList<>(matches.length);
+            for (ItemStack match : matches) {
+                items.add(BuiltInRegistries.ITEM.getKey(match.getItem()).toString());
+            }
+            // Every match of one ingredient carries the same count, so the first one's is the
+            // ingredient's. getItems() has already applied it -- read out of NeoForge's bytecode,
+            // where it maps the ingredient's stacks through copyWithCount(count). Reading count()
+            // as well would double every ingredient in the pack.
+            read.add(new Ingredient(items, matches[0].getCount()));
+        }
+        return read;
     }
 
     private static List<ItemAmount> amounts(List<Content> contents) {
         List<ItemAmount> read = new ArrayList<>(contents.size());
         for (Content content : contents) {
             ItemStack stack = ((SizedIngredient) content.content).getItems()[0];
-            // getItems() has already applied the SizedIngredient's count -- read out of NeoForge's
-            // bytecode, where it maps the ingredient's stacks through copyWithCount(count). Reading
-            // count() as well would double every ingredient in the pack.
             read.add(new ItemAmount(
                     BuiltInRegistries.ITEM.getKey(stack.getItem()).toString(), stack.getCount()));
         }

@@ -142,11 +142,15 @@ public final class PlanResolver {
             if (overflows(recipe, n)) return false;
             List<String> path = new ArrayList<>(ancestors);
             path.add(recipe.id());
-            List<ItemAmount> inputs = new ArrayList<>(recipe.inputs().size());
-            for (ItemAmount input : recipe.inputs()) {
-                int wanted = input.count() * n;
-                need(input.item(), wanted, path);
-                inputs.add(new ItemAmount(input.item(), wanted));
+            // Merged rather than one entry per ingredient. An ingredient satisfied from two items --
+            // half the iron plates already held, half crafted -- yields two draws, and two entries
+            // naming the same item would each pass the queue's per-entry check and then together
+            // over-consume the buffer.
+            ItemBag spent = new ItemBag();
+            for (Ingredient input : recipe.inputs()) {
+                for (ItemAmount drawn : take(input, input.count() * n, path)) {
+                    spent.add(drawn.item(), drawn.count());
+                }
             }
             List<ItemAmount> outputs = new ArrayList<>(recipe.outputs().size());
             for (ItemAmount output : recipe.outputs()) {
@@ -155,14 +159,14 @@ public final class PlanResolver {
                 surplus.add(output.item(), made);
                 toCraft.add(output.item(), made);
             }
-            steps.add(new CraftStep(recipe.id(), inputs, outputs, recipe.durationTicks() * n));
+            steps.add(new CraftStep(recipe.id(), spent.amounts(), outputs, recipe.durationTicks() * n));
             return true;
         }
 
         /** Whether scaling this recipe by {@code n} would put any quantity past an {@code int}. */
         private boolean overflows(HandRecipe recipe, int n) {
             if ((long) recipe.durationTicks() * n > Integer.MAX_VALUE) return true;
-            for (ItemAmount input : recipe.inputs()) {
+            for (Ingredient input : recipe.inputs()) {
                 if ((long) input.count() * n > Integer.MAX_VALUE) return true;
             }
             for (ItemAmount output : recipe.outputs()) {
@@ -171,45 +175,81 @@ public final class PlanResolver {
             return false;
         }
 
-        /** Finds {@code quantity} of {@code item}, crafting it if that is what it takes. */
-        private void need(String item, int quantity, List<String> ancestors) {
-            int owed = quantity - drawDown(surplus, item, quantity);
-            int fromInventory = drawDown(available, item, owed);
-            rawCost.add(item, fromInventory);
-            owed -= fromInventory;
-            if (owed <= 0) return;
+        /**
+         * Finds {@code quantity} of anything {@code ingredient} accepts, crafting it if that is what
+         * it takes, and says what it actually took.
+         *
+         * <p>The concrete draws are the answer and not a detail: the step is what the queue spends,
+         * and "two of whatever satisfies iron plate" is not something a buffer can be checked
+         * against. What is spent is decided once, here, and never re-decided (ADR-0038).
+         *
+         * <p>Everything already crafted is drawn on before anything held, and both before anything
+         * is crafted, so a surplus is never left stranded while the plan makes more of it.
+         */
+        private List<ItemAmount> take(Ingredient ingredient, int quantity, List<String> ancestors) {
+            List<ItemAmount> drawn = new ArrayList<>();
+            int owed = quantity;
+            owed -= drawAcross(surplus, ingredient, owed, drawn, false);
+            owed -= drawAcross(available, ingredient, owed, drawn, true);
+            if (owed <= 0) return drawn;
 
-            HandRecipe maker = graph.makerOf(item);
-            if (maker == null) {
-                missing.add(item, owed);
-                return;
-            }
-            if (PlanResolver.this.locked.test(maker.id())) {
-                locked.add(item, owed);
-                return;
-            }
-            if (ancestors.contains(maker.id())) {
+            String makeable = null;
+            String blocked = null;
+            for (String item : ingredient.items()) {
+                HandRecipe maker = graph.makerOf(item);
+                if (maker == null) continue;
+                if (PlanResolver.this.locked.test(maker.id())) {
+                    if (blocked == null) blocked = item;
+                    continue;
+                }
                 // A cycle. The corpus forbids one and `test_hand_resolver.py` asserts that, but the
                 // runtime graph is assembled from whatever a pack author loaded, so the resolver
                 // must be the thing that stops rather than the thing that hangs.
-                missing.add(item, owed);
-                return;
+                if (ancestors.contains(maker.id())) continue;
+                makeable = item;
+                break;
             }
-            int runs = ceilDiv(owed, maker.perCraft(item));
-            if (runs > MAX_CRAFTS) {
-                // Refused, not clamped. Clamping would make fewer intermediates than the parent
-                // step's inputs name and nothing downstream would notice: the plan would report
-                // complete, Start would take the reservation, and the queue would throw on a step
-                // it cannot feed. Reporting it as missing is what puts the refusal in front of the
-                // player, where every other shortfall already goes.
-                missing.add(item, owed);
-                return;
+            if (makeable == null) {
+                // Locked beats missing when anything could have made it. One is fixed by research
+                // and the other by mining, and telling a player to go mining for an item that only
+                // needs a research is the worse of the two mistakes.
+                if (blocked != null) {
+                    locked.add(blocked, owed);
+                } else {
+                    missing.add(ingredient.preferred(), owed);
+                }
+                return drawn;
             }
-            if (!craft(maker, runs, ancestors)) {
-                missing.add(item, owed);
-                return;
+
+            HandRecipe maker = graph.makerOf(makeable);
+            int runs = ceilDiv(owed, maker.perCraft(makeable));
+            // Refused, not clamped. Clamping would make fewer intermediates than the parent step's
+            // inputs name and nothing downstream would notice: the plan would report complete, Start
+            // would take the reservation, and the queue would throw on a step it cannot feed.
+            // Reporting it as missing is what puts the refusal in front of the player, where every
+            // other shortfall already goes.
+            if (runs > MAX_CRAFTS || !craft(maker, runs, ancestors)) {
+                missing.add(makeable, owed);
+                return drawn;
             }
-            surplus.remove(item, owed);
+            surplus.remove(makeable, owed);
+            drawn.add(new ItemAmount(makeable, owed));
+            return drawn;
+        }
+
+        /** Spends up to {@code owed} out of {@code bag}, taking whatever the ingredient accepts. */
+        private int drawAcross(
+                ItemBag bag, Ingredient ingredient, int owed, List<ItemAmount> drawn, boolean fromInventory) {
+            int total = 0;
+            for (String item : ingredient.items()) {
+                if (total >= owed) break;
+                int taken = drawDown(bag, item, owed - total);
+                if (taken <= 0) continue;
+                if (fromInventory) rawCost.add(item, taken);
+                drawn.add(new ItemAmount(item, taken));
+                total += taken;
+            }
+            return total;
         }
 
         /** Spends up to {@code wanted} of {@code item} out of {@code bag}, and says how much. */
