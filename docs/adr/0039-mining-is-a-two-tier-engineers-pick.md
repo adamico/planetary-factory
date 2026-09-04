@@ -1,5 +1,6 @@
 ---
 status: accepted
+supersedes: [165]
 ---
 
 # Mining is a two-tier Engineer's Pick, and the corpus cannot author it
