@@ -28,7 +28,7 @@ import java.util.List;
  *
  * <p>Two speeds, one behaviour: which blocks take Factorio's flat time is the block tag
  * {@link #FACTORIO_MINING_TIME}, and how fast the tool is on them is {@link PickTier}. Everything
- * outside the tag keeps vanilla's hardness spread -- ADR-0039 rejected a flat two seconds on dirt
+ * outside the tag keeps vanilla's hardness spread -- ADR-0039 rejected a flat mining time on dirt
  * as tedium rather than fidelity.
  */
 public final class EngineersPick extends Item {
@@ -37,7 +37,7 @@ public final class EngineersPick extends Item {
      * The blocks that take Factorio's flat seconds-per-item instead of vanilla's hardness spread.
      *
      * <p>A tag, and therefore pack data: Terra's resource set is a design decision (ADR-0019), and
-     * this jar owns only the arithmetic that turns "two seconds" into a tool speed.
+     * this jar owns only the arithmetic that turns a stated duration into a tool speed.
      */
     public static final TagKey<Block> FACTORIO_MINING_TIME = TagKey.create(
             Registries.BLOCK,

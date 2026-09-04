@@ -5,9 +5,9 @@ package com.planetaryfactory.core.mining;
  *
  * <p>A held tool has a <em>speed</em>, not a duration: with the correct tool and no other modifier a
  * player breaks a block in {@code hardness * 30 / speed} ticks, so {@code 1.5 * hardness / speed}
- * seconds. ADR-0039 states a duration instead -- Factorio's flat two seconds a resource -- so the
+ * seconds. ADR-0039 states a duration instead -- a flat second a resource, halved by research -- so the
  * speed the item reports is solved for rather than tabulated, and a block whose hardness changes
- * keeps its Factorio time without anything here being edited.
+ * keeps its stated time without anything here being edited.
  *
  * <p>Free of every Minecraft type on purpose: this is the one part of the Pick that carries a claim
  * worth checking, and {@code MiningSpeedTest} checks it with no game.

@@ -42,7 +42,7 @@ otherwise sit next to them.
 | Each tier has a model, texture and lang key | The missing-texture checkerboard and a raw translation key. Neither is an error. The two picks are dressed from different places, so the texture is resolved per namespace: ours against the file, a mod's against the jar the pack ships, vanilla's against nothing. |
 | The Steel Pick's texture is current against the installed GTCEu jar | It is generated (below), and generated output is never hand-edited. A GTCEu update that redrew its tool art would otherwise leave the pack showing the old one silently. |
 | Both picks are in `c:tools/wrench` and `gtceu:crafting_tools/wrench` | The Pick stops dismantling machines, and the pack has no other wrench to reach for. |
-| The block tag `EngineersPick` names by id exists and is non-empty | An absent tag is an empty one: every block falls back to vanilla hardness and Factorio's flat 2.0s is gone with nothing logged. |
+| The block tag `EngineersPick` names by id exists and is non-empty | An absent tag is an empty one: every block falls back to vanilla hardness and the flat mining time is gone with nothing logged. |
 
 The tier list is parsed out of `PickTier.java`, so a third tier fails this check rather than
 shipping without assets or a recipe.
@@ -64,7 +64,7 @@ from the installed jar. Re-run it after a GTCEu update; the check above fails if
 ## What it cannot prove
 
 That the Pick mines a given block class, that GregTech accepts it as a wrench, that Create does, and
-that two seconds feels like Factorio's two seconds. The first three are a world load — ADR-0039's
+that the flat second an ore feels right in the hand (2.0s was tried first, and did not). The first three are a world load — ADR-0039's
 GameTests, which #165 names and which this repo has no GameTest harness for yet. The last is a human
 on delivery, in the Terra Slice run.
 

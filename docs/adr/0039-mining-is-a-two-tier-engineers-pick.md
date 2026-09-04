@@ -25,8 +25,10 @@ This ADR is the mining chapter, and it names its own exception to ADR-0031 rathe
 
 | Tier | Recipe | Mining speed | Seconds per ore |
 | --- | --- | --- | --- |
-| Engineer's Iron Pick | `wood ×1` + `iron plate ×1` | 0.5 | 2.0 |
-| Engineer's Steel Pick | Engineer's Iron Pick + steel plate | 1.0 | 1.0 |
+| Engineer's Iron Pick | `wood ×1` + `iron plate ×1` | 0.5 | 1.0 |
+| Engineer's Steel Pick | Engineer's Iron Pick + steel plate | 1.0 | 0.5 |
+
+*(Amended — this table first read 2.0 and 1.0. See **The mining time is ours** below.)*
 
 Both are **indestructible** — no durability bar on either. The steel recipe **consumes** the iron
 pick, so the player holds one or the other and never both.
@@ -44,11 +46,11 @@ hand-craftable at rung 0 with no machine, and no new survivor is needed.
 is not undroppable: losing it is recoverable by punching a tree, which is the most Minecraft opening
 available to a pack with no crafting grid.
 
-## The numbers are Factorio's, and they are transcribed
+## The speeds are Factorio's, and they are transcribed
 
 `mining_time / mining_speed = seconds per item`. Terra's four resources — iron ore, copper ore, coal
 and stone — all carry `mining_time: 1`; the character's base mining speed is `0.5`. Hence 2.0 seconds
-by hand, 1.0 after Steel axe.
+by hand and 1.0 after Steel axe **in Factorio**, which is what this ADR first shipped.
 
 **These are transcribed from the wiki, not extracted**, and that is a real weakness worth labelling.
 `data/factorio/` holds `machine.json`, `recipe.json`, `science_packs.json` and `technology.json` —
@@ -57,12 +59,37 @@ against the repo. ADR-0022's standard is "extracted rather than transcribed"; th
 it knowingly. Extending the extractor to emit `data/factorio/resource.json` is the follow-on, and
 until it lands a reader who finds these numbers wrong should suspect the transcription first.
 
+## The mining time is ours, because two seconds failed on delivery
+
+**Amendment.** The `mining_time` this ADR uses is **0.5, not Factorio's 1** — one second an ore by
+hand, half a second after `steel-axe`. Factorio's two speeds are unchanged and so is the ratio
+between the tiers; only the constant they divide moves.
+
+The first version shipped Factorio's 2.0s and failed the human check this ADR itself named
+("*2.0s actually feels like Factorio's 2.0s* — **Human on delivery**"). The reason is that the
+number is Factorio's *inside Factorio's economy*: there the engineer hand-mines perhaps thirty ore
+before a burner drill takes the job, whereas ADR-0019's starting area holds around 1150 ore blocks
+and ADR-0020 prices a patch at about an hour by hand. Next to that, and next to a game where every
+other block breaks in well under a second, ore alone ran three to five times heavier than the world
+around it — a vanilla iron pickaxe takes ~0.75s on iron ore, so the Pick was making its own
+signature material the slowest thing in the pack.
+
+What the halving keeps is everything the decision was actually about: the time is still **flat**
+across the four resources rather than following vanilla's hardness table, still **halved by
+research**, and still **one stated number** a reader can check rather than an emergent property of
+block properties. What it gives up is the claim that the seconds are Factorio's. They are the
+pack's, and this section is why — a fidelity argument that loses to a playability one is worth
+recording as such rather than quietly retuning.
+
+Note that this is a different kind of divergence from the `steel-axe` effect below. That one changes
+the *mechanism* and keeps the outcome; this one changes the *number* and keeps the shape.
+
 **Flat time for the four resources and stone; vanilla hardness for everything else.** Factorio gives
 all four resources the same `mining_time`, and reproducing that spread-free number is the point.
-ADR-0029 already puts Factorio's time on the machine; putting Factorio's time on the block is the
-same move one layer down, and it makes the pack's mining numbers checkable against Factorio rather
-than against vanilla's hardness table. Applying a flat 2.0s to *every* block was rejected — dirt
-taking two seconds is not fidelity, it is tedium Factorio never asked for.
+ADR-0029 already puts Factorio's time on the machine; putting a stated time on the block is the
+same move one layer down, and it makes the pack's mining numbers one line to read rather than a
+hardness table to derive. Applying the flat time to *every* block was rejected — dirt taking a full
+second is not fidelity, it is tedium Factorio never asked for.
 
 ## Steel axe keeps its trigger, and changes its effect
 
@@ -164,7 +191,9 @@ corpus recipes — `small-electric-pole`, `wooden-chest` and `shotgun` (the last
 ## Consequences
 
 - `docs/factorio-mechanics.md`'s **Manual mining** row takes owner `ADR-0039`, and its notice is
-  rewritten — the current text asserts tool-tiering, which this reverses.
+  rewritten — the current text asserts tool-tiering, which this reverses. The row carries the
+  amended seconds, and the verdict stays `adapted` rather than becoming `shipped`: the time is now
+  the pack's own.
 - `CONTEXT.md` gains **Engineer's Pick**.
 - ADR-0018's rung table gains steel at rung 1.
 - `item-map.json`'s `wood` row moves to a log tag; `small-electric-pole` and `wooden-chest` move with

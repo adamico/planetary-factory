@@ -132,8 +132,12 @@ Sub-rules:
 - **verdict**: `adapted`
 - **notice**: mining is a Minecraft block break, so it is per-block rather than a hold-to-mine timer
   against a patch total. It is **not** tool-tiered: one tool in two tiers, the Engineer's Pick,
-  mines every block class, and Factorio's own seconds-per-item stand — 2.0s for Terra's four
-  resources and stone, halved to 1.0s by `steel-axe`. *This row read "per-block and tool-tiered";
+  mines every block class, and a flat seconds-per-item stands in for vanilla's hardness spread —
+  1.0s for Terra's four resources and stone, halved to 0.5s by `steel-axe`. Factorio's two mining
+  speeds are kept and so is the ratio between the tiers, but the mining time is **the pack's own,
+  half of Factorio's**: 2.0s shipped first and failed ADR-0039's human-on-delivery check, because
+  Factorio's number assumes an engineer who hand-mines thirty ore, not ADR-0019's 1150-block
+  starting area. *This row read "per-block and tool-tiered";
   ADR-0039 reverses that half. Nothing supplied a tool at all, so the claim described a mechanic
   the pack could not deliver.*
 - **where**: all bodies

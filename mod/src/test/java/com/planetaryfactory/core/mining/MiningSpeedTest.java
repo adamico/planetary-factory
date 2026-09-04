@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * The Engineer's Pick's one checkable claim: that Factorio's seconds survive the trip through
+ * The Engineer's Pick's one checkable claim: that the stated seconds survive the trip through
  * Minecraft's break-time arithmetic (ADR-0039).
  *
  * <p>What this cannot prove is that a player standing in front of a block waits that long -- the
@@ -23,15 +23,15 @@ class MiningSpeedTest {
     private static final float TOLERANCE = 1.0e-4f;
 
     @Test
-    void ironPickTakesFactoriosTwoSecondsAnOre() {
+    void ironPickTakesOneSecondAnOre() {
         float speed = MiningSpeed.forSeconds(ORE_HARDNESS, PickTier.IRON.secondsPerResource());
-        assertEquals(2.0f, MiningSpeed.secondsAt(ORE_HARDNESS, speed), TOLERANCE);
+        assertEquals(1.0f, MiningSpeed.secondsAt(ORE_HARDNESS, speed), TOLERANCE);
     }
 
     @Test
     void steelPickHalvesIt() {
         float speed = MiningSpeed.forSeconds(ORE_HARDNESS, PickTier.STEEL.secondsPerResource());
-        assertEquals(1.0f, MiningSpeed.secondsAt(ORE_HARDNESS, speed), TOLERANCE);
+        assertEquals(0.5f, MiningSpeed.secondsAt(ORE_HARDNESS, speed), TOLERANCE);
     }
 
     @Test
@@ -40,20 +40,25 @@ class MiningSpeedTest {
         // harder block must not take longer. Vanilla's spread is what the tag excludes.
         for (float hardness : new float[] {0.5f, 3.0f, 30.0f, 50.0f}) {
             float speed = MiningSpeed.forSeconds(hardness, PickTier.IRON.secondsPerResource());
-            assertEquals(2.0f, MiningSpeed.secondsAt(hardness, speed), TOLERANCE,
+            assertEquals(1.0f, MiningSpeed.secondsAt(hardness, speed), TOLERANCE,
                          "hardness " + hardness);
         }
     }
 
     @Test
-    void factoriosOwnArithmeticIsTheSourceOfTheTwoSeconds() {
-        // seconds per item = mining_time / mining_speed. Transcribed, not extracted -- ADR-0039.
-        assertEquals(PickTier.FACTORIO_MINING_TIME / PickTier.IRON.miningSpeed(),
+    void theTimeIsThePacksAndTheSpeedsAreFactorios() {
+        // seconds per item = mining_time / mining_speed, with Factorio's two speeds and the pack's
+        // own halved mining time -- ADR-0039's amendment, after two seconds failed its human check.
+        assertEquals(PickTier.MINING_TIME / PickTier.IRON.miningSpeed(),
                      PickTier.IRON.secondsPerResource(), TOLERANCE);
-        assertEquals(PickTier.FACTORIO_MINING_TIME / PickTier.STEEL.miningSpeed(),
+        assertEquals(PickTier.MINING_TIME / PickTier.STEEL.miningSpeed(),
                      PickTier.STEEL.secondsPerResource(), TOLERANCE);
-        assertEquals(2.0f, PickTier.IRON.secondsPerResource(), TOLERANCE);
-        assertEquals(1.0f, PickTier.STEEL.secondsPerResource(), TOLERANCE);
+        assertEquals(1.0f, PickTier.IRON.secondsPerResource(), TOLERANCE);
+        assertEquals(0.5f, PickTier.STEEL.secondsPerResource(), TOLERANCE);
+        // Factorio's ratio between the tiers survives the halving, which is the half that is not
+        // ours to change: steel-axe doubles mining speed, so it halves the time.
+        assertEquals(2.0f, PickTier.IRON.secondsPerResource() / PickTier.STEEL.secondsPerResource(),
+                     TOLERANCE);
     }
 
     @Test
