@@ -117,11 +117,26 @@ def main():
           and 'grower("jellystem")' in grower,
           "each grower names its tree's configured feature")
 
+    # Only this file's own blocks. `loot_table/blocks/` is shared with every other pack-authored
+    # block, and `registered` above is built from the two sources flora is registered through --
+    # the mod's saplings and KubeJS -- so a block registered in Java anywhere else reads as a
+    # stray item here. It is not: the Electric Pole is registered from `PoleTier.java` and its
+    # loot tables are asserted by `tests/pack/test_pole_assets.py`, which reads that enum. Each
+    # family checks its own drops against its own registry, and sweeping the whole directory from
+    # here only lets this check fail for another family's content.
+    foreign = []
     for table in sorted((DATA / "loot_table/blocks").glob("*.json")):
+        if f"planetaryfactory:{table.stem}" not in blocks:
+            foreign.append(table.stem)
+            continue
         referenced = {s for s in json_strings(json.loads(table.read_text()))
                       if s.startswith("planetaryfactory:")}
         unknown = referenced - registered
         check(not unknown, f"{table.name} drops only registered items (stray: {unknown})")
+    # Said out loud rather than skipped in silence, so a flora block that stops being registered
+    # leaves its table sitting in this list instead of quietly dropping out of the sweep.
+    print(f"     ({len(foreign)} table(s) belong to other families, checked elsewhere: "
+          f"{', '.join(foreign) if foreign else 'none'})")
 
     # Both trees are felled to harvest them, so both materials come off loot tables -- but off
     # different blocks. Yumako out of the canopy, Jellynut out of the trunk. The check is that
