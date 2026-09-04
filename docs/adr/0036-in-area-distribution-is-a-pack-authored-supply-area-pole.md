@@ -78,7 +78,8 @@ instructive, the lever is accumulator size, not a machine buffer.
 
 **The per-area power cap is dropped.** ADR-0017 banked "a real per-area budget" on Electro's
 `converterMaxPower = 100.0` kW — verified as the mod's shipped default in
-`config/electroenergetics-server.toml`, not a pack invention. The argument was that one Converter per
+`config/electroenergetics-server.toml`, not a pack invention. *(#148 deleted that file with the mod;
+the citation is kept as provenance for where the figure came from, not as a live path.)* The argument was that one Converter per
 cluster at a 100 kW ceiling forces the player to partition the factory into power-bounded districts.
 **Two of its three premises are gone**: the bridge is no longer a placeable chokepoint, and Power
 Grid ships no equivalent single-block kW ceiling.
@@ -282,6 +283,10 @@ arrive through, so the pole calls `addEnergy` and the question does not arise.
   pack's problem.
 - **Manifest churn**: the `electroenergetics` entry is replaced by a `powergrid` one, and
   `config/electroenergetics-*.toml` goes with it. `scripts/pack-check.sh` will report the drift.
+  ***Executed by `#148`.*** The jar half landed early, during `#147`, which is what made that
+  ticket's bench test possible at all; `#148` finished the data half — the two dangling
+  `item-map.json` rows, the seven recipes they broke at world load, and the stale
+  `config/electroenergetics-server.toml` line left in `index.toml`.
 - **ADR-0017's transmission, distribution and energy-storage rows are all rewritten**, and its
   Converter paragraph is deleted rather than amended.
 - **`#37`'s four-facts doctrine stays spent.** `#46` recorded the cost of installing more electrical

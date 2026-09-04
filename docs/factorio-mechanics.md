@@ -30,10 +30,13 @@ first place it has been written down, or `by-consequence` where it fell out of a
 something else and was never argued on its own merits. **`by-consequence` rows are owned by this
 ledger**, not by the ticket that caused them.
 
-`via` reuses `subgroup-owner.json`'s owner tokens — `gregtech`, `create`, `electro`,
-`pack`, `kubejs`, `native_mechanic` — and a value must exist in `index.toml`. **`mekanism` is no
-longer one of them** (ADR-0035): the mod is out of the manifest, so a row naming it would fail the
-must-exist rule. `candidates` is free
+`via` reuses `subgroup-owner.json`'s owner tokens — `gregtech`, `create`, `powergrid`,
+`gcyr`, `pack`, `kubejs`, `native_mechanic` — and a value must exist in `index.toml`. **`mekanism` is
+no longer one of them** (ADR-0035): the mod is out of the manifest, so a row naming it would fail the
+must-exist rule. **`electro` is no longer one of them either** (#148): it named Create: Electro
+Energetics, which Create: Power Grid replaced, and it never satisfied the must-exist rule in the
+first place — the mod id was `electroenergetics`. The three rows that wrote `electro` (GCyR) meant
+GCyR and now say `gcyr`. `candidates` is free
 text and commits to no jar; **`pack` is admissible as a candidate only with a named mechanism**
 (ADR-0015).
 
@@ -439,11 +442,13 @@ Create needs no emitted recipe to exist.
   real voltage over wire with a real gauge, the run loses power over distance, and a bad circuit
   damages components instead of merely underfeeding them.
 - **where**: all bodies
-- **via**: `electro`, `pack`
+- **via**: `powergrid`, `pack`
 - **owner**: ADR-0017 as amended by ADR-0035 and ADR-0036
 
-**Create: Electro Energetics owns the grid** — poles, wire and catenary — and GregTech's power layer
-was removed entire to make room for it, cables included. A **pack-authored supply-area pole**
+**Create: Power Grid owns the grid** — poles, wire and catenary — and GregTech's power layer
+was removed entire to make room for it, cables included. *Amended by #148: this read "Create: Electro
+Energetics", which the swap replaced. The row did not change hands, only mods — the acceptance test
+was brownout propagation and a wire-tier ladder, and both mods were adopted for passing it.* A **pack-authored supply-area pole**
 (ADR-0036) distributes inside an area, which is the one seam: the grid moves power between places,
 the pole feeds the machines standing in one. *Amended by ADR-0035: this read "Mekanism's Universal
 Cables distribute inside an area"; the mod left the pack and in-area distribution became the pack's
@@ -472,8 +477,9 @@ Sub-rules:
   against GTCEu 7.0.2 while building #147; the fix is #157, and it is an ADR's worth of argument
   because GT will not derate without touching recipe logic that ADR-0036 forbids reaching into.
 - **Voltage tiers** — `adapted`. Factorio steps low to medium to high voltage at the transformer;
-  Electro's ladder is wire gauge and material, so upgrading a run means rewiring it rather than
-  swapping a pole tier.
+  Power Grid's ladder is wire gauge and material — copper, iron and gold, each with its own
+  resistance, span and current ceiling as physical data rather than a voltage rating in a `.toml` —
+  so upgrading a run means rewiring it rather than swapping a pole tier.
 - **Power poles have a supply area** — `shipped`. A pack-authored block in
   `planetaryfactory_core` (ADR-0036, #147) that scans its area on a tick and pushes into every
   machine inside it. Three tiers, 5x5, 7x7 and 18x18, Factorio's own numbers.
@@ -494,10 +500,12 @@ Sub-rules:
 
 - **verdict**: `planned`
 - **where**: all bodies
-- **via**: `gregtech`, `create`, `electro`, `pack`
-- **owner**: ADR-0017 as amended by #101 (Electro owns steam and solar) and #104. `via` is ordered
-  along the chain: GregTech's boiler, Create's Steam Engine, Electro's Alternator, the pack's Steam
-  Turbine. **`mekanism` was struck by #104** — the pack installs base Mekanism, which registers no
+- **via**: `gregtech`, `create`, `powergrid`, `pack`
+- **owner**: ADR-0017 as amended by #101 (the grid mod owns steam and solar), #104 and #148. `via`
+  is ordered along the chain: GregTech's boiler, Create's Steam Engine, Power Grid's generation
+  multiblock, the pack's Steam Turbine. *#148: the third step was Electro's Alternator, a single
+  block; Power Grid's counterpart is a Create-kinetic multiblock — rotor, winding, housing,
+  commutator — standing in exactly the same place in the chain.* **`mekanism` was struck by #104** — the pack installs base Mekanism, which registers no
   generator block at all, so the clause naming it never named anything.
 - **ticket**: #104
 
@@ -505,12 +513,14 @@ Sub-rules:
 
 - **Boiler and steam engine as the first power** — `adapted`. The chain is **four** steps, not two:
   **#37's LP Solid Boiler burns fuel and makes steam**, a Create Steam Engine turns that steam into
-  SU, an Electro Alternator turns SU into watts, and the grid carries them. A Factorio player's
+  SU, Power Grid's generation multiblock turns SU into watts, and the grid carries them. A Factorio player's
   boiler-and-engine pair has a rotational stage wedged in the middle of it, and the grid is granted
   at a rung rather than arriving with the first fire. *(#104 corrects "three steps" and "a Create
   Steam Engine burns fuel": the Steam Engine burns nothing — it is the prime mover, and the boiler
   is GregTech's.)*
-- **Solar panels and accumulators** — `planned`, Electro's outright, and Electro's identity.
+- **Solar panels and accumulators** — `planned`, and the grid mod's outright: Power Grid ships a
+  real-PV Solar Panel and the Battery the pack borrows as Factorio's accumulator (#148). It is also
+  the *planet* Electro's identity — see [Day and night cycle](#day-and-night-cycle).
 - **Steam as a stored, pipeable intermediate** — `planned`.
 - **The Steam Turbine, on superheated steam** — `planned`, the pack's, and **the pack's only FE-side
   generator**. *Moved here from [Nuclear fission](#nuclear-fission) by #104*: ADR-0033 names the row
@@ -705,7 +715,7 @@ Sub-rules:
 
 - **verdict**: `planned`
 - **where**: all bodies
-- **via**: `electro` (GCyR)
+- **via**: `gcyr`
 - **owner**: #41, ADR-0006
 - **ticket**: #25 — the map *is* this row's ticket, being Terra's flow to the first rocket launch
 
@@ -761,7 +771,7 @@ whole repair loop has nothing to repair.
 
 - **verdict**: `planned`
 - **where**: Terra
-- **via**: `pack`, `electro`
+- **via**: `pack`, `powergrid`
 - **owner**: #57
 - **ticket**: #116
 
@@ -807,7 +817,7 @@ Sub-rules:
 
 - **verdict**: `planned`
 - **where**: pack-wide
-- **via**: `electro` (GCyR)
+- **via**: `gcyr`
 - **owner**: ADR-0001, ADR-0006, `docs/gdd.md` §2
 - **ticket**: #112, #54
 
@@ -825,7 +835,7 @@ Sub-rules:
 
 - **verdict**: `planned`
 - **where**: Terra Orbit, and every body's orbit
-- **via**: `electro` (GCyR space stations)
+- **via**: `gcyr` (space stations)
 - **owner**: ADR-0006
 - **ticket**: #113
 
@@ -946,7 +956,7 @@ Sub-rules:
 
 - **verdict**: `planned`
 - **where**: Electro
-- **via**: `create`, `electro`
+- **via**: `create`, `powergrid`
 - **owner**: `docs/planets.md`
 - **ticket**: #13, then that body's `Puzzle:` ticket
 

@@ -1,0 +1,5 @@
+{
+  "_comment": "Power Grid's Battery is a placed store of electricity, which is what Factorio calls an accumulator -- and `data/pack/item-map.json`'s `accumulator` row borrows it as exactly that (#148). Renamed because the pack already registers `planetaryfactory:battery` for Factorio's battery, a crafting INTERMEDIATE (see `kubejs/startup_scripts/items.js`): without this the emitted `accumulator` recipe reads '5 Battery + 2 Iron Plate -> 1 Battery'. Same practice as the gcyr overrides -- a borrowed block is named for the row it fills, not for the mod it came from.",
+
+  "block.powergrid.battery": "Accumulator"
+}

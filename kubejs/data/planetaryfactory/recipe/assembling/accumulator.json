@@ -25,7 +25,7 @@
       {
         "content": {
           "ingredient": {
-            "item": "electroenergetics:accumulator"
+            "item": "powergrid:battery"
           },
           "count": 1
         }

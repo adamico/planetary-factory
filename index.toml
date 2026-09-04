@@ -257,10 +257,6 @@ file = "config/durabilitytooltip-common.toml"
 hash = "a00d2ddb5ff61267d17392e97800be0b7987d5f02d891f0de5ae1c429988baa6"
 
 [[files]]
-file = "config/electroenergetics-server.toml"
-hash = "b132ad48bb74ac34e154b14992136f8eea72008054fa5613a6e5704903571f38"
-
-[[files]]
 file = "config/elevatorid-server.toml"
 hash = "3861e1c9b5383e73030e33a4e00c34f64bce7a0f3f38dfb2be9c5ddedd2a7123"
 
@@ -614,7 +610,7 @@ hash = "5970899b24a3a9e717111c32e012165bcb2102eb4bc9a4fd11377e3447abc3c9"
 
 [[files]]
 file = "data/pack/item-map.json"
-hash = "ce05b0b003c505d1fd5ccd408b200dd4a924646e60ae4b4b77232e50a8217673"
+hash = "905b11a4bfbc3cf551d68c53fa85199f63dfa1853940e9600a80b0b707cbbde7"
 
 [[files]]
 file = "data/pack/recipe-overrides.json"
@@ -622,7 +618,7 @@ hash = "1f7c305c8895ca64fb3cdccdebbc9241707a2f08d080641fc6b2ef11f3962949"
 
 [[files]]
 file = "data/pack/subgroup-owner.json"
-hash = "17ea1cbd80a3c1b46d2568329463d5500f0f84d4001f47b2f37450866ac13392"
+hash = "a2f69845cd5ec396647dd127988c1f17835a36ed4aeff24e475d5fdc03af7518"
 
 [[files]]
 file = "defaultconfigs/ftbessentials-server.snbt"
@@ -811,6 +807,10 @@ hash = "f01897634fc01d7da89fb6c1970561af76e01f8c4adc98116e0fafdb6358131d"
 [[files]]
 file = "kubejs/assets/planetaryfactory/textures/item/yumako.png"
 hash = "ecafbd0c6b1dd0019e31731a53239f055684eb32fde4480e1ea8c382d365314e"
+
+[[files]]
+file = "kubejs/assets/powergrid/lang/en_us.json"
+hash = "823fbfa308f99a2a7fae112af876de22d0c9c1c2817b5a9038389c6bdaf6cbde"
 
 [[files]]
 file = "kubejs/client_scripts/jsconfig.json"
@@ -1094,11 +1094,11 @@ hash = "ec30199aaa8701f5453dfe974e46119aa845a6188bd265e9dc3fa11ced2c154c"
 
 [[files]]
 file = "kubejs/data/planetaryfactory/recipe/assembling/accumulator.json"
-hash = "ffe91fc883a7cb8ddb084eb7593bc8bbb4203a9ea6d00d7ef6f36f64f7e16751"
+hash = "b41c4968a0c6797d4f7e4793f1c63006149979fb6004c9558b34415e3e16d065"
 
 [[files]]
 file = "kubejs/data/planetaryfactory/recipe/assembling/advanced_circuit.json"
-hash = "416a013bf9e0274bd8fad7a691e201423f4327e221fabb33406dc25d63c4f37e"
+hash = "1518c2088c966e879f891f6faee38086965125cf0b6b0d9f2602abe9c98f01a8"
 
 [[files]]
 file = "kubejs/data/planetaryfactory/recipe/assembling/assembling_machine_1.json"
@@ -1130,7 +1130,7 @@ hash = "b909666ff197c990fb5a5b9d3aa121ca7e74ffa713d6e856d9de545ecf72bf50"
 
 [[files]]
 file = "kubejs/data/planetaryfactory/recipe/assembling/copper_cable.json"
-hash = "080642ab5362823037ce5f540b2cdc4f5573addea5aa1b85e05b4196c5a7cece"
+hash = "20939a9cffff97d404ca90886c9eccb99c94d99f62fb1f78766a9390655af47b"
 
 [[files]]
 file = "kubejs/data/planetaryfactory/recipe/assembling/electric_engine_unit.json"
@@ -1138,7 +1138,7 @@ hash = "c5ad32a3280ecffdf54a2d922aee97d5d7db9c2ac9c4381bb5eeabf510ec1cec"
 
 [[files]]
 file = "kubejs/data/planetaryfactory/recipe/assembling/electronic_circuit.json"
-hash = "d1cebfc0af2e9f34dab75086ea6ff881d904c5822c1cbdcadee4226151f006ad"
+hash = "143a592eea17e64de925aeb779e067248e04622348ba88ada8133d67bdb8442f"
 
 [[files]]
 file = "kubejs/data/planetaryfactory/recipe/assembling/engine_unit.json"
@@ -1166,7 +1166,7 @@ hash = "3039c8b4a2f0869678c29e2557d30376a881eee71c1d33cc8422e6fc4677c208"
 
 [[files]]
 file = "kubejs/data/planetaryfactory/recipe/assembling/medium_electric_pole.json"
-hash = "cc24face75c79d338ee5fe44097b0b976c3ed221f9aa8e76444bd5aa168820ff"
+hash = "4b6707f080e8cefb5de47e5a340d393d2e1865f0d1478a59cd177d5dacdc4cc0"
 
 [[files]]
 file = "kubejs/data/planetaryfactory/recipe/assembling/oil_refinery.json"
@@ -1198,7 +1198,7 @@ hash = "ec81ddea37726216571dd48448551c70abd67e4fc5c972b5c925be2443c43096"
 
 [[files]]
 file = "kubejs/data/planetaryfactory/recipe/assembling/small_electric_pole.json"
-hash = "8616e151a5a0985179937e29b32e7f9c8ab0d9580639b9c3951664886c8ad439"
+hash = "45d526d953657e16682cd23511cb8a6c85a630f571f83a0f550ec5c0f22f0830"
 
 [[files]]
 file = "kubejs/data/planetaryfactory/recipe/assembling/steel_chest.json"
@@ -1210,7 +1210,7 @@ hash = "41a306bcea2bf10e581c279d5b09ee6e7dd4a9267b1cd5d978791b2a11989649"
 
 [[files]]
 file = "kubejs/data/planetaryfactory/recipe/assembling/substation.json"
-hash = "26ced5b3a1f3850e6d92c161cc882ecdb63b034e15ad92b9d2bd2e7e90a44600"
+hash = "690f91668810f904c3f14d2cb5ebe1308237a9e9128fc65e6e8e31df89b6c2ba"
 
 [[files]]
 file = "kubejs/data/planetaryfactory/recipe/assembling/train_stop.json"
@@ -1222,7 +1222,7 @@ hash = "143bcdb043d179e0acbd6c9d6b22f7c8ca1f9231849c291def194f472978a486"
 
 [[files]]
 file = "kubejs/data/planetaryfactory/recipe/assembling/wooden_chest.json"
-hash = "58d918acd87b85d49c26b7ed8c39139d4b985ac157b650469aecf25353232053"
+hash = "15a360e8eb125db77798b455768d29de3ac1ccfc97c7a02a52d209bbf6f26ae6"
 
 [[files]]
 file = "kubejs/data/planetaryfactory/recipe/chemical_plant/battery.json"
@@ -1574,7 +1574,7 @@ hash = "dae099ae3be7f033c0c190ee8c3b023b42f6b235d9d0591be5926e8435dbd67f"
 
 [[files]]
 file = "kubejs/server_scripts/recipe_survivors.js"
-hash = "8bc14ecff7cf689d5506ac13d21badd616b6bf9a96f07feb9193ec536794f739"
+hash = "cb0a3d673fc2b3b3f142ab8713d3b52790d29902bc15d1cb05183113cab96f8a"
 
 [[files]]
 file = "kubejs/server_scripts/recipes.js"
@@ -1602,7 +1602,7 @@ hash = "46015fa25f232206fbbb92e1ac4600ab699b39d2a5bfaf866987f563dc478779"
 
 [[files]]
 file = "kubejs/startup_scripts/items.js"
-hash = "5c3b0cf66b1e08b9197ab2a352b3c673fb3fef10842399e3924f334bd2d113e3"
+hash = "d78f6f74078f260e82678c9920c3d52e5de93c8e492f56bc395b613862773495"
 
 [[files]]
 file = "kubejs/startup_scripts/jsconfig.json"

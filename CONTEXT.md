@@ -6,7 +6,7 @@ interplanetary scope of Factorio's Space Age expansion.
 **Factorio is the subject; the mods are the implementation.** What the pack reproduces, adapts or
 drops is the ledger in `docs/factorio-mechanics.md`, written in Factorio's terms and privileging no
 mod. Which mod owns each capability is ADR-0017's table, and exactly one does: Create owns logistics
-and fluids, Create: Electro Energetics owns the grid, GregTech owns extraction and lends its machine
+and fluids, Create: Power Grid owns the grid, GregTech owns extraction and lends its machine
 chassis, GCyR owns rockets, planets and orbits, Researchd owns the tech tree, and the pack registers
 its own machines where no installed mod can express Factorio's recipe shape. KubeJS binds them into
 a stationary, automation-first loop.

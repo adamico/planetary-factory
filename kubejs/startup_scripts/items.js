@@ -5,7 +5,7 @@ StartupEvents.registry('item', event => {
   // a rung boundary or a mod's competing line would give a parallel escape. The circuits carry
   // progression and #62 removed GregTech's and Mekanism's competing lines; plastic gates rung 2
   // (ADR-0025). `copper-cable` is the counter-example and borrows
-  // (`electroenergetics:copper_wire`) -- see `data/pack/item-map.json`.
+  // (`powergrid:wire`) -- see `data/pack/item-map.json`.
   //
   // THE SCIENCE PACKS ARE NOT HERE. They are Researchd research packs, not plain items:
   // `kubejs/server_scripts/researchd.js` declares them with `registerResearchPacks` under

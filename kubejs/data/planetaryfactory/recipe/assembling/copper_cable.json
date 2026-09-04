@@ -17,7 +17,7 @@
       {
         "content": {
           "ingredient": {
-            "item": "electroenergetics:copper_wire"
+            "item": "powergrid:wire"
           },
           "count": 2
         }

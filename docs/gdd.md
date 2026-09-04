@@ -22,10 +22,15 @@ ladder — the ladder is Factorio's science packs (ADR-0018).
   pipes, pumps, tanks and bulk storage, plus the Steam Engine that is Terra's first prime mover
   (ADR-0017 as amended by `#101`). Pinned; see ADR-0017 for why the pin is harder than the declared
   range says.
-- **Create: Electro Energetics 1.1.1** — The electrical grid: poles, wire, catenary, Alternator,
-  solar, Accumulator, and the Converter that is the mandatory boundary between grid and machine
-  (`#46`). Terra's generation row is Electro's, not GregTech's — GregTech's power layer was removed
-  entire (`#37`).
+- **Create: Power Grid 0.6.1** — The electrical grid: point-to-point catenary wire, a generation
+  multiblock on Create kinetics (rotor, winding, housing, commutator), a real-PV Solar Panel, the
+  Battery the pack borrows as Factorio's accumulator, and the two one-way bridge blocks that are the
+  boundary between grid and machine — Device Connector grid→FE, FE Inverter FE→grid (`#46`, swapped
+  in by `#148`). It solves a nodal circuit with Ohm's law, so voltage sag and blown fuses are real
+  rather than configured. Terra's generation row is the grid mod's, not GregTech's — GregTech's power
+  layer was removed entire (`#37`). It has **no pole supply area**; distribution inside an area is
+  the pack's own supply-area pole (ADR-0036, `#147`). Pinned; see ADR-0017 for why the pin is harder
+  than the declared range says.
 - **GregTech CEu Modern (GT:M) 7.0.2** — Two things, and only two. **Extraction**: chunk-aligned ore
   veins, bedrock fluid and ore extraction, and the Drilling Rig ladder. **A chassis**: the machine
   and recipe-type registries the pack registers its own machines on, and the material system that

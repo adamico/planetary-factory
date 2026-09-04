@@ -50,11 +50,11 @@ crafting surface named too. Late is not an argument for shipping something nobod
 | Extraction (fluid) | **GregTech** — Fluid Drilling Rig, **rung 2** (was rung 4; moved with the oil chapter, ADR-0025) | — |
 | Mining automation | **GregTech** — LP Steam Miner (rung 0) → Basic Ore Drilling Rig → Advanced, one rig per rung, each granted by a science tier | as above |
 | ~~Ore processing~~ | **Row deleted by ADR-0032** — ore smelts 1:1 and no block in the pack multiplies it, so there is no capability between extraction and smelting to own. This row read "**Create** at rung 0 (Crushing Wheels, Millstone); **Mekanism** from rung 1 (enrichment → 5x)" | Mekanism's Purification, Injection, Washer and Crystallizer **recipe-removed**; Create's and Mekanism's ore recipes removed; GT's ore-processing line was already removed (`#37`) |
-| Power generation (steam, solar) | **Electro** — *amended by #101, then by #104; this row read "**Create** generates first (Steam Engine, rung 0); **Mekanism** generates at scale as FE"*. Create's Steam Engine is the prime mover and emits SU, not electricity; the **Alternator** is what makes power. Solar is Electro's outright. **#104 struck the Mekanism clause as a mistake of fact**: the pack installs base Mekanism, which registers **no generator block at all** — every generator and the Industrial Turbine live in MekanismGenerators, the jar ADR-0033 refused *for this row*. Terra's chain is four steps, not three: **GT boiler → Create Steam Engine (SU) → Electro Alternator (W) → grid** | GT's power layer removed entire. **No Mekanism generator is recipe-removed, because none exists** — the default below removes a *losing block*, and Mekanism supplies none here |
+| Power generation (steam, solar) | **Create: Power Grid** — *amended by #101, then by #104, then by #148; this row read "**Create** generates first (Steam Engine, rung 0); **Mekanism** generates at scale as FE"*. Create's Steam Engine is the prime mover and emits SU, not electricity; the **Alternator** is what makes power. Solar is the grid mod's outright. **#104 struck the Mekanism clause as a mistake of fact**: the pack installs base Mekanism, which registers **no generator block at all** — every generator and the Industrial Turbine live in MekanismGenerators, the jar ADR-0033 refused *for this row*. Terra's chain is four steps, not three: **GT boiler → Create Steam Engine (SU) → Power Grid generation multiblock (W) → grid**. *#148: the third step was Electro's Alternator, one block; Power Grid's counterpart is a Create-kinetic multiblock — rotor, winding, housing, commutator — in exactly the same place in the chain* | GT's power layer removed entire. **No Mekanism generator is recipe-removed, because none exists** — the default below removes a *losing block*, and Mekanism supplies none here |
 | Power generation (superheated steam) | **The pack** (ADR-0033) — a registered Nuclear Reactor and Steam Turbine on a GT chassis. Named for the fluid, not for fission: Terra's reactor and Ignus's acid neutralisation are the same row | **MekanismGenerators not adopted** — it brings six other generators onto the row above; GT's own Steam Turbines stay removed with the rest of its power layer (`#37`) |
-| Power transmission (between areas) | **Create: Electro Energetics** — poles, wire, catenary | GT cables removed with the power layer |
+| Power transmission (between areas) | **Create: Power Grid** — point-to-point catenary wire, tiered by material — *amended by #148; this row read "**Create: Electro Energetics** — poles, wire, catenary". The capability did not change hands, the mod did* | GT cables removed with the power layer |
 | Power distribution (inside an area) | **The pack** — a supply-area pole (ADR-0036) — *amended by ADR-0035; this row read "**Mekanism** (Universal Cables)"* | — |
-| Energy storage | **Electro** (Accumulator), grid-side, full stop — *amended by ADR-0035; this row read "grid-side; **Mekanism** (Energy Cube, Induction Matrix) FE-side". Nothing stores FE, because nothing distributes it* | GT quantum batteries removed with the power layer |
+| Energy storage | **Create: Power Grid** (the Battery, borrowed as Factorio's Accumulator — #148), grid-side, full stop — *amended by ADR-0035; this row read "grid-side; **Mekanism** (Energy Cube, Induction Matrix) FE-side". Nothing stores FE, because nothing distributes it* | GT quantum batteries removed with the power layer |
 | Item logistics | **Create** (belts, chutes, trains) | Mekanism Logistical Transporters recipe-removed *(removed with the mod instead, ADR-0035)*; GT item pipes and covers removed with the power layer |
 | Fluid logistics | **Create** (fluid pipes, pumps) — *amended by #101; this row read "Mekanism (Mechanical Pipes)" and kept Create's pipes as a hand-placed exception* | Mekanism Mechanical Pipes **recipe-removed** *(removed with the mod instead, ADR-0035)* |
 | Bulk storage (item) | **Create** (Item Vault) | Mekanism Bins and QIO **cut** *(removed with the mod instead, ADR-0035)*; GT quantum chests removed |
@@ -123,18 +123,26 @@ the player holding three kinds of copper dust; unifying recipe types is what wou
 grid recipe satisfy a GT machine step and collapse the ladder — the cross-mod shortcut GDD §5 flags
 for audit.
 
-## Transmission is Electro's, and the Converter is the boundary
+## Transmission is the grid mod's, and the bridge is the boundary
 
 The transmission row was written in pencil until Create: Electro Energetics was adopted as the pack's
 **fourth mod** (`#46`). *Amended by ADR-0035: it was adopted layering above Mekanism's cables, which
 have since left with the mod. The boundary survives the mod that motivated it — the pack's own
-supply-area pole (ADR-0036) distributes inside the area, and the Converter is still where the grid
-ends.*
+supply-area pole (ADR-0036) distributes inside the area, and the bridge is still where the grid
+ends.* *Amended again by `#148`: the mod is now **Create: Power Grid**. The row's argument is
+untouched — a grid that ends at a boundary block — but two of its nouns changed. **There is no
+Converter**: Power Grid's V↔FE crossing is **two one-way blocks**, a Device Connector taking grid→FE
+(`canReceive() = false`) and an FE Inverter taking FE→grid (`canExtract() = false`). And **there is no
+pole supply area** — transmission is point-to-point catenary, 12–64 m by wire material — which is
+survivable only because ADR-0036 made the supply area the pack's own block.*
 
-- **Poles transmit** between areas; **cables distribute** inside them.
-- The **Converter is the mandatory boundary**. The grid never touches a machine directly. This is a
-  teachable beat — the grid ends where the machines begin — and it makes the converter's 100 kW
-  rating a real per-area budget rather than a number nobody meets.
+- **Poles transmit** between areas; **cables distribute** inside them. *(#148: Power Grid prices
+  span on the wire rather than the pole, and ADR-0036 replaced the cables with the pack's pole.)*
+- The **bridge is the mandatory boundary**. The grid never touches a machine directly. This is a
+  teachable beat — the grid ends where the machines begin. *Amended by `#148`: this read "the
+  Converter is the mandatory boundary" and cited its 100 kW rating as a per-area budget. Power Grid
+  has no Converter and no such rating; the budget is now an emergent one, set by the wire's `Imax`
+  and the sag along it, which is #150's row to make legible.*
 - **Energy storage no longer splits on that boundary** — *amended by ADR-0035; this bullet read that
   the Accumulator stores grid-side and Mekanism's Energy Cube and Induction Matrix FE-side.* Storage
   is the Accumulator's, grid-side only. FE is an endpoint format some third-party blocks speak, not a
@@ -244,22 +252,52 @@ NBT-holding container collapses them to one.
   mining upgrade, so weakening any rig weakens the rung that grants it.
 - **This table is Terra's.** A later body may hand a capability to a different mod; that is a fresh
   decision, recorded there.
-- **Create is pinned, and harder than its declared range says.** Electro requires Create
-  `[6.0.7, 6.1.0)` as a `type="required"` dependency — out of range is a load-time hard fail — and its
-  mixin config is `"required": true` with `defaultRequire = 1`, mixing into Create's `Carriage`,
-  `CarriageContraption`, `Train`, `SubLevelAssemblyHelper`, `FluidPropagator` and `SchematicPrinter`.
-  A Create **6.0.x patch** that refactors those internals satisfies the range and still aborts
-  startup. The pin binds Create too: the pack cannot take a Create 6.1 for Create's own sake without
-  dropping the grid. **Pinned as of this ADR: Create 6.0.10, Electro Energetics 1.1.1** — `mods` is
-  gitignored, so this prose is the record. Accepted on the pack's standing diligence: **do not update
-  mods unless necessary.**
-- **If the grid ever breaks, it degrades rather than collapses.** The Converter is bidirectional FE at
-  both ends, so removing Electro falls back to Mekanism cables everywhere with **no machine
-  redesigned**. The blast radius is the aesthetic, not the spine — which is why a pin this tight was
-  acceptable in the first place.
-- **The block-level cut list is not decided here.** Electro registers 108 blocks and 44 items, and no
-  block is cut until every block has been tested in game. "Adopt whole, cut as necessary" holds; the
-  cutting waits for hands-on play.
+- **Create is pinned, and harder than its declared range says.** *Re-recorded by `#148` against
+  Create: Power Grid 0.6.1, which replaced Electro Energetics. The trap is the same one, in the same
+  shape, with different numbers — which is the point: it was accepted as a **side effect of the swap,
+  never a goal**, and a mod that did not carry it would not have been preferred for that reason.*
+
+  Power Grid declares Create `[6.0.9,6.1.0)` as `type = "required"` — out of range is a load-time hard
+  fail — and `powergrid.mixins.json` is `"required": true` with `injectors.defaultRequire = 1`, so
+  **every injector must find its target or startup aborts**. It mixes into Create's `AirCurrent`,
+  `ArmBlockEntity`, `BeltDeployer`, `ChuteBlockEntity`, `FanProcessing`, `FluidPropagator`,
+  `KineticBlockEntity`, `RecipeApplier` and `SoundEntryBuilder`, plus Minecraft's `BlockStateBase`,
+  `ChunkMap`, `Entity` and `Player`, and it ships a `META-INF/accesstransformer.cfg` besides. A Create
+  **6.0.x patch** that refactors any of those satisfies the declared range and still aborts startup.
+
+  Two things changed with the mod and are worth naming. The floor rose — `6.0.9`, not `6.0.7` — so the
+  range is *narrower* than Electro's. And the mixin surface moved off Create's **train** internals
+  (`Carriage`, `CarriageContraption`, `Train`) onto its **kinetics and fan-processing** internals,
+  which is where a mod generating power from Create rotation naturally lands. That surface is more
+  load-bearing for this pack than the train one was: `#101`'s four-step chain runs through
+  `KineticBlockEntity`.
+
+  The pin binds Create too: the pack cannot take a Create 6.1 for Create's own sake without dropping
+  the grid. **Pinned as of `#148`: Create 6.0.10, Create: Power Grid 0.6.1** — installed Create is
+  inside the declared range, and `mods/` is gitignored, so this prose plus `mods/power-grid.pw.toml`
+  is the record. Power Grid additionally requires Architectury `[13.0.8,)`, which is open-ended and
+  binds nothing. Accepted on the pack's standing diligence: **do not update mods unless necessary.**
+- **~~If the grid ever breaks, it degrades rather than collapses.~~** *Struck by `#148`, and it had
+  already been half-struck by ADR-0035.* This read: the Converter is bidirectional FE at both ends, so
+  removing Electro falls back to Mekanism cables everywhere with **no machine redesigned** — the blast
+  radius is the aesthetic, not the spine, which is why a pin this tight was acceptable in the first
+  place. **Both halves are now false.** Mekanism left the pack (ADR-0035), so there is no fallback to
+  fall back to; and Power Grid's crossing is two *one-way* blocks, not one bidirectional Converter.
+
+  What replaced the escape hatch is better than it was. **The machine side no longer depends on the
+  grid mod at all**: ADR-0036's supply-area pole is the pack's own block exposing a vanilla
+  NeoForge `IEnergyStorage`, and `#147` confirmed in-world that it draws through a Device Connector
+  without touching a line of mod code. Losing the grid mod costs the pack its transmission layer and
+  its generation multiblock — real, and a ticket's worth of work — but **still redesigns no machine**,
+  because the boundary the machines see is vanilla FE and the pack owns the block presenting it. The
+  pin stayed acceptable for a different reason than the one first written down.
+- **The block-level cut list is not decided here.** *`#148` re-points this at a different mod and
+  leaves the rule untouched.* Power Grid registers roughly 80 blocks and 55 items where Electro
+  registered 108 and 44, and no block is cut until every block has been tested in game. "Adopt whole,
+  cut as necessary" holds; the cutting waits for hands-on play. **A separate and more urgent
+  question is which of them are *craftable*** — ADR-0034's default-deny sweep removes every stock
+  recipe no decision names, and no survivor entry names Power Grid, so today the mod's own blocks have
+  no recipes at all. That is `#144`'s, not this row's.
 
 ## Amended by #101: Create owns fluid logistics
 

@@ -43,7 +43,7 @@ POLE_TIER = MOD / "energy/PoleTier.java"
 # The namespaces an item-map target may live in: this pack, the game, and the three mods whose
 # capabilities ADR-0017 puts on Terra. Mekanism is deliberately absent -- ADR-0035 takes it out
 # of the pack, so a row pointing at it would be a row written against a mod that is leaving.
-NAMESPACES = {"minecraft", "planetaryfactory", "gtceu", "create", "electroenergetics",
+NAMESPACES = {"minecraft", "planetaryfactory", "gtceu", "create", "powergrid",
               # GregTech's multiblock builder lands in `kubejs:`, not `gtceu:` -- the tiered
               # builder and the multiblock builder disagree about the namespace, which is why
               # the Oil Refinery's id differs from the Chemical Plant's (#107, machines.js).

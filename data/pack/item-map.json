@@ -31,9 +31,9 @@
   "items": {
     "accumulator": {
       "kind": "item",
-      "target": "electroenergetics:accumulator",
+      "target": "powergrid:battery",
       "source": "borrowed",
-      "note": "Electro's own accumulator, named identically. #148 may move this row with the mod."
+      "note": "Moved with the mod by #148. Electro's accumulator was named identically; Power Grid's is the Battery -- a placed block that stores electricity, which is what Factorio's accumulator is. `portable_battery` is worn, `capacitor` is a circuit component and `potato_battery` is a joke, so `battery` is the only candidate that is a grid buffer."
     },
     "advanced-circuit": {
       "kind": "item",
@@ -203,9 +203,9 @@
     },
     "copper-cable": {
       "kind": "item",
-      "target": "electroenergetics:copper_wire",
+      "target": "powergrid:wire",
       "source": "borrowed",
-      "note": "ADR-0031 names this row: cable carries no progression, so it borrows."
+      "note": "ADR-0031 names this row: cable carries no progression, so it borrows. Moved with the mod by #148. Power Grid ships five wires -- `wire`, `copper_cord`, `insulated_copper_wire`, `iron_wire`, `golden_wire` -- and this row takes the plainest, because a row that carries no progression must not pick a rung on someone else's ladder. `wire` is Power Grid's own Copper Wire."
     },
     "copper-ore": {
       "kind": "tag",

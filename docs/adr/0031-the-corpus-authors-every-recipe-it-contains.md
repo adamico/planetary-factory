@@ -56,11 +56,14 @@ win over the extracted data.
   circuit lines holds with it. What does not hold is their ingredient lists being the author's:
   they are the corpus's. Neither ticket knows this;
   [`#132`](https://github.com/adamico/planetary-factory/issues/132) is the ticket for that gap.
-- **`copper-cable` maps onto `electroenergetics:copper_wire`** rather than becoming a fourth
+- **`copper-cable` maps onto `powergrid:wire`** rather than becoming a fourth
   first-party item. The item map's rule, stated in its header: borrow an existing item unless the
   row sits on a rung boundary or a mod's competing line would give a parallel escape — then author
   it and recipe-remove the competitor. Circuits author because they carry progression; cable
-  borrows because it carries none.
+  borrows because it carries none. *Amended by `#148`: the target was `electroenergetics:copper_wire`
+  until the grid mod was swapped. Power Grid ships five wires, and a row carrying no progression takes
+  the plainest — picking a rung on the mod's own ladder is exactly what "borrows because it carries
+  none" forbids.*
 - **The overrides file needs a `reason` field**, and `#87`'s static check should assert every entry
   has one. Without it the register is a list of names and the rule is decorative.
 - **`data/pack/item-map.json`'s remaining rows get cheaper.** With the corpus authoring and the
