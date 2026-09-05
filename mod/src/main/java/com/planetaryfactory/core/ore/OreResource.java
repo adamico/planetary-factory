@@ -13,12 +13,18 @@ package com.planetaryfactory.core.ore;
  * Minecraft's mined rock is cobblestone" -- so the {@code stone-brick} chain is untouched by its
  * arrival.
  *
+ * <p><b>Which mod's item, is whichever one exists.</b> GregTech registers no raw ore for a
+ * material vanilla already covers, so {@code gtceu:raw_iron} and {@code gtceu:raw_copper} are not
+ * items and never were. Naming them here cost every iron and copper draw its payout in silence,
+ * because an unregistered id resolves to air rather than throwing. Iron and copper pay vanilla's
+ * raw ore; uranium, which vanilla has no raw item for, pays GregTech's.
+ *
  * <p>The amounts are not here. They are Factorio's, they are extracted, and {@link OreCorpus} is
  * where they enter the mod.
  */
 public enum OreResource {
-    IRON("iron", "gtceu:raw_iron"),
-    COPPER("copper", "gtceu:raw_copper"),
+    IRON("iron", "minecraft:raw_iron"),
+    COPPER("copper", "minecraft:raw_copper"),
     COAL("coal", "minecraft:coal"),
     URANIUM("uranium", "gtceu:raw_uranium"),
     /** The fifth resource. A visually distinct ore, so a patch never reads as marked-up ground. */

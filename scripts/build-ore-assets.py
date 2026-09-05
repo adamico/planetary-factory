@@ -46,8 +46,8 @@ NAMESPACE = "planetaryfactory"
 # is the mod's own copy of the same decision; `tests/factorio/test_ore_assets.py` asserts the two
 # agree rather than trusting that they do.
 ORES = {
-    "iron": {"drop": "gtceu:raw_iron", "name": "Iron Ore Patch"},
-    "copper": {"drop": "gtceu:raw_copper", "name": "Copper Ore Patch"},
+    "iron": {"drop": "minecraft:raw_iron", "name": "Iron Ore Patch"},
+    "copper": {"drop": "minecraft:raw_copper", "name": "Copper Ore Patch"},
     "coal": {"drop": "minecraft:coal", "name": "Coal Patch"},
     "uranium": {"drop": "gtceu:raw_uranium", "name": "Uranium Ore Patch"},
     "stone": {"drop": "minecraft:cobblestone", "name": "Stone Patch"},

@@ -1,5 +1,6 @@
 package com.planetaryfactory.core.ore;
 
+import com.mojang.logging.LogUtils;
 import com.planetaryfactory.core.PFAttachments;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -13,6 +14,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.neoforged.neoforge.event.level.BlockEvent;
+import org.slf4j.Logger;
 
 /**
  * The draw: one break gesture takes one unit, and the block stands until the count reaches zero.
@@ -33,6 +35,8 @@ import net.neoforged.neoforge.event.level.BlockEvent;
  * out half of what it should.
  */
 public final class OreMining {
+
+    private static final Logger LOGGER = LogUtils.getLogger();
 
     private OreMining() {
     }
@@ -62,11 +66,18 @@ public final class OreMining {
             return;
         }
         Player player = event.getPlayer();
-        if (player != null && player.getAbilities().instabuild) {
+        boolean creative = player != null && player.getAbilities().instabuild;
+        boolean correctTool = player == null || player.hasCorrectToolForDrops(state);
+        // Diagnostic: which of the three branches a gesture took. One line per ore break and
+        // nothing at all otherwise, because a patch that pays nothing is indistinguishable from a
+        // patch nobody hit, and the difference is not visible from outside this method.
+        LOGGER.info("ore break: {} at {}, creative={}, correctTool={}",
+                ore.resource().key(), event.getPos(), creative, correctTool);
+        if (creative) {
             return;
         }
         event.setCanceled(true);
-        if (player != null && !player.hasCorrectToolForDrops(state)) {
+        if (!correctTool) {
             return;
         }
 
@@ -76,6 +87,8 @@ public final class OreMining {
         OreDelta.Draw draw = delta.draw(pos.asLong(), initial);
         level.getChunk(pos).setUnsaved(true);
 
+        LOGGER.info("ore draw: {} at {}, initial={}, paid={}, remaining={}, exhausted={}",
+                ore.resource().key(), pos, initial, draw.paid(), draw.remaining(), draw.exhausted());
         if (draw.paid() > 0) {
             drop(level, pos, ore.resource());
         }
@@ -126,6 +139,11 @@ public final class OreMining {
         ResourceLocation id = ResourceLocation.parse(resource.drop());
         ItemStack stack = new ItemStack(BuiltInRegistries.ITEM.get(id));
         if (stack.isEmpty()) {
+            // An id nothing registered resolves to air rather than throwing, so this branch is how
+            // `gtceu:raw_iron` -- an item GregTech never registers, because vanilla covers iron --
+            // ate every iron draw without a word. The unit is already spent by here; say so.
+            LOGGER.error("{} pays out {}, which no mod registers: the draw is lost",
+                    resource.key(), resource.drop());
             return;
         }
         level.addFreshEntity(new ItemEntity(

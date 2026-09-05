@@ -18,8 +18,8 @@ import net.minecraft.world.level.material.MapColor;
  * stone type it registers, to get the behaviour for five.
  *
  * <p>It is still a GregTech ore in every way the rest of the pack can observe: it carries
- * {@code c:ores}, which is the tag GregTech's own Miner scans for, and it pays out GregTech's raw
- * ore item.
+ * {@code c:ores}, which is the tag GregTech's own Miner scans for, and it pays out the same raw ore
+ * item GregTech's own block of that material would ({@link OreResource}).
  *
  * <p><b>The block holds no amount.</b> The amount is derived from the position and the difference
  * is a chunk attachment ({@link OreDelta}), because a starting field is around 1150 blocks and a
