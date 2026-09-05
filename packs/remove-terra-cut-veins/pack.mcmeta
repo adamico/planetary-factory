@@ -4,7 +4,156 @@
     "description": "PlanetaryFactory: cuts Terra's ore to iron, copper, coal and uranium"
   },
   "filter": {
-    "block": []
+    "block": [
+      {
+        "namespace": "gtceu",
+        "path": "^gtceu/ore_vein/apatite\\.json"
+      },
+      {
+        "namespace": "gtceu",
+        "path": "^gtceu/ore_vein/banded_iron\\.json"
+      },
+      {
+        "namespace": "gtceu",
+        "path": "^gtceu/ore_vein/beryllium\\.json"
+      },
+      {
+        "namespace": "gtceu",
+        "path": "^gtceu/ore_vein/cassiterite\\.json"
+      },
+      {
+        "namespace": "gtceu",
+        "path": "^gtceu/ore_vein/certus_quartz\\.json"
+      },
+      {
+        "namespace": "gtceu",
+        "path": "^gtceu/ore_vein/copper_tin\\.json"
+      },
+      {
+        "namespace": "gtceu",
+        "path": "^gtceu/ore_vein/diamond\\.json"
+      },
+      {
+        "namespace": "gtceu",
+        "path": "^gtceu/ore_vein/end_bauxite\\.json"
+      },
+      {
+        "namespace": "gtceu",
+        "path": "^gtceu/ore_vein/end_magnetite\\.json"
+      },
+      {
+        "namespace": "gtceu",
+        "path": "^gtceu/ore_vein/galena\\.json"
+      },
+      {
+        "namespace": "gtceu",
+        "path": "^gtceu/ore_vein/garnet\\.json"
+      },
+      {
+        "namespace": "gtceu",
+        "path": "^gtceu/ore_vein/garnet_tin\\.json"
+      },
+      {
+        "namespace": "gtceu",
+        "path": "^gtceu/ore_vein/lapis\\.json"
+      },
+      {
+        "namespace": "gtceu",
+        "path": "^gtceu/ore_vein/lubricant\\.json"
+      },
+      {
+        "namespace": "gtceu",
+        "path": "^gtceu/ore_vein/magnetite\\.json"
+      },
+      {
+        "namespace": "gtceu",
+        "path": "^gtceu/ore_vein/manganese\\.json"
+      },
+      {
+        "namespace": "gtceu",
+        "path": "^gtceu/ore_vein/mica\\.json"
+      },
+      {
+        "namespace": "gtceu",
+        "path": "^gtceu/ore_vein/mineral_sand\\.json"
+      },
+      {
+        "namespace": "gtceu",
+        "path": "^gtceu/ore_vein/molybdenum\\.json"
+      },
+      {
+        "namespace": "gtceu",
+        "path": "^gtceu/ore_vein/monazite\\.json"
+      },
+      {
+        "namespace": "gtceu",
+        "path": "^gtceu/ore_vein/naquadah\\.json"
+      },
+      {
+        "namespace": "gtceu",
+        "path": "^gtceu/ore_vein/nether_manganese\\.json"
+      },
+      {
+        "namespace": "gtceu",
+        "path": "^gtceu/ore_vein/nether_quartz\\.json"
+      },
+      {
+        "namespace": "gtceu",
+        "path": "^gtceu/ore_vein/nether_redstone\\.json"
+      },
+      {
+        "namespace": "gtceu",
+        "path": "^gtceu/ore_vein/nickel\\.json"
+      },
+      {
+        "namespace": "gtceu",
+        "path": "^gtceu/ore_vein/oilsands\\.json"
+      },
+      {
+        "namespace": "gtceu",
+        "path": "^gtceu/ore_vein/olivine\\.json"
+      },
+      {
+        "namespace": "gtceu",
+        "path": "^gtceu/ore_vein/pitchblende\\.json"
+      },
+      {
+        "namespace": "gtceu",
+        "path": "^gtceu/ore_vein/redstone\\.json"
+      },
+      {
+        "namespace": "gtceu",
+        "path": "^gtceu/ore_vein/saltpeter\\.json"
+      },
+      {
+        "namespace": "gtceu",
+        "path": "^gtceu/ore_vein/salts\\.json"
+      },
+      {
+        "namespace": "gtceu",
+        "path": "^gtceu/ore_vein/sapphire\\.json"
+      },
+      {
+        "namespace": "gtceu",
+        "path": "^gtceu/ore_vein/scheelite\\.json"
+      },
+      {
+        "namespace": "gtceu",
+        "path": "^gtceu/ore_vein/sheldonite\\.json"
+      },
+      {
+        "namespace": "gtceu",
+        "path": "^gtceu/ore_vein/sulfur\\.json"
+      },
+      {
+        "namespace": "gtceu",
+        "path": "^gtceu/ore_vein/tetrahedrite\\.json"
+      },
+      {
+        "namespace": "gtceu",
+        "path": "^gtceu/ore_vein/topaz\\.json"
+      }
+    ]
   },
   "_comment": [
     "ADR-0021 restricts Terra to Nauvis's resources. The kubejs/data overrides for",

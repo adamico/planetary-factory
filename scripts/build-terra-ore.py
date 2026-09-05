@@ -19,6 +19,7 @@ layer on Terra and a flattened world has no cliff face or cave wall left to expo
 import json
 import os
 import re
+import zipfile
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
 VEINS = os.path.join(ROOT, "kubejs", "data", "gtceu", "gtceu", "ore_vein")
@@ -117,22 +118,46 @@ def reband(vein, band):
     return vein
 
 
+def gtceu_jar():
+    return next(
+        os.path.join(ROOT, "mods", f)
+        for f in os.listdir(os.path.join(ROOT, "mods"))
+        if re.match(r"gtceu-.*\.jar$", f)
+    )
+
+
+def mod_veins(jar):
+    """Every vein GregTech ships -- the authority on what there is to cut.
+
+    Deliberately **not the contents of `VEINS`**. That directory is this script's own output and
+    the script deletes the cut overrides out of it, so deriving the cut list from it works exactly
+    once and then reads back an empty set -- silently emptying the filter pack and letting every
+    vein ADR-0021 cut return to Terra. The jar cannot go stale that way: it is the thing being cut.
+
+    The whole jar is in scope, not just the veins declaring `minecraft:overworld`. Blocking a vein
+    file removes it from every dimension, which would matter if the pack had a Nether or an End to
+    strip it from. It has neither, so a vein that only generates there generates nowhere, and the
+    narrower reading would only be bookkeeping about dimensions nobody can visit.
+    """
+    prefix = "data/gtceu/gtceu/ore_vein/"
+    with zipfile.ZipFile(jar) as z:
+        return {
+            name[len(prefix):-5]
+            for name in z.namelist()
+            if name.startswith(prefix) and name.endswith(".json")
+        }
+
+
 def main():
-    existing = {f[:-5] for f in os.listdir(VEINS) if f.endswith(".json")}
+    jar = gtceu_jar()
     # `uranium` and `stone` are pack veins written below rather than mod overrides, so neither is
     # a cut: removing them would delete the file this script is in the middle of writing.
-    cut = sorted(existing - set(KEEP) - {"uranium", "stone"})
+    cut = sorted(mod_veins(jar) - set(KEEP) - {"uranium", "stone"})
 
     for name, band in KEEP.items():
         save(name, retarget(reband(load(name), band), name))
 
     # Terra's uranium, from the End vein's generator.
-    import zipfile
-    jar = next(
-        os.path.join(ROOT, "mods", f)
-        for f in os.listdir(os.path.join(ROOT, "mods"))
-        if re.match(r"gtceu-.*\.jar$", f)
-    )
     with zipfile.ZipFile(jar) as z:
         src = json.loads(z.read("data/gtceu/gtceu/ore_vein/%s.json" % URANIUM_SOURCE))
     save("uranium", retarget(reband(src, URANIUM), "uranium"))
@@ -148,7 +173,11 @@ def main():
     # Terra in dirt: rock lying on soil means rock underneath.
     stone = retarget(reband(load("coal"), STONE), "stone")
     stone["indicators"] = [{
-        "block": "minecraft:cobblestone",
+        # A bare string here is read as a GregTech *material* -- which is what `gtceu:coal` is in
+        # the vein we copied from -- and there is no cobblestone material, so the vein failed to
+        # parse and took registry loading down with it at world creation. The object form is the
+        # other side of the codec's `Either`: a block state, which is what we actually want.
+        "block": {"Name": "minecraft:cobblestone"},
         "density": 0.2,
         "placement": "surface",
         "radius": 5,
@@ -157,8 +186,10 @@ def main():
     save("stone", stone)
 
     for name in cut:
-        os.remove(os.path.join(VEINS, name + ".json"))
-        print("removed override kubejs/data/gtceu/gtceu/ore_vein/%s.json" % name)
+        override = os.path.join(VEINS, name + ".json")
+        if os.path.exists(override):
+            os.remove(override)
+            print("removed override kubejs/data/gtceu/gtceu/ore_vein/%s.json" % name)
 
     os.makedirs(FILTER_PACK, exist_ok=True)
     with open(os.path.join(FILTER_PACK, "pack.mcmeta"), "w") as fh:

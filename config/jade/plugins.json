@@ -112,6 +112,7 @@
     "grave": true
   },
   "planetaryfactory": {
+    "ore_amount": true,
     "supply_area_pole": true
   },
   "balm": {
