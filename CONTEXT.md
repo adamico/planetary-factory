@@ -165,6 +165,32 @@ _Avoid_: shipment, trip, transit
 The deferred transition of a fully automated Platform from a physically built factory to a background throughput calculation. A contingency held in reserve against measured TPS cost, not a system currently being built.
 _Avoid_: abstraction, going virtual
 
+### Terra's ore
+
+**Ore patch**:
+The only shape ore takes on Terra: a filled disc of a single ore block, one block deep, lying flush with the terrain surface. There are no buried veins — the whole planet deals the same shape, and a patch is one resource rather than a mix, so a patch answers "what is this a patch of" with one word (ADR-0045).
+_Avoid_: vein, deposit, ore blob, ore body, ore field
+
+**Starting field**:
+One of the patches the starting area deals at spawn, whose total is Factorio's stated starting amount divided over the blocks that actually landed. Distinguished from an **outfield patch** because Factorio states its total and the world has to count its blocks; everything else derives both.
+_Avoid_: starting patch, spawn patch, tutorial patch
+
+**Outfield patch**:
+Every ore patch beyond the starting area. Placed by ordinary worldgen at Factorio's own spacing, excluded from the first 150 blocks around the origin, land-only, and reached by rail rather than by belt — a patch is roughly forty chunks from its neighbours of the same resource (ADR-0045).
+_Avoid_: regular patch, wild patch, remote patch
+
+**Amplitude**:
+How much one block of a patch holds. It rises with distance from the world origin up to a cap, after which further quantity widens the patch instead.
+_Avoid_: richness, density, per-tile amount
+
+**Radius**:
+How wide a patch is. Fixed until the **amplitude** cap is reached and growing with distance beyond it, which is why a far patch is bigger as well as richer. Amplitude and radius split a patch's quantity between them; they never multiply it.
+_Avoid_: size, footprint, patch size
+
+**Radar**:
+The building that reveals map at range. It detects nothing — ore is visible where it lies, so finding a patch is exploration rather than prospecting (ADR-0045).
+_Avoid_: prospector, scanner, ore detector
+
 ### Making things
 
 **Engineer's Pick**:
@@ -176,7 +202,7 @@ Terra's rung 0 drill and the pack's own block: it burns solid fuel, occupies one
 _Avoid_: burner drill, steam miner, LP Steam Miner, mining rig
 
 **Basic Miner**:
-Terra's rung 1 drill, `gtceu:lv_miner`, and the ladder's second and last rung — it arrives with the electricity that runs it and is what makes the veins near bedrock worth reaching. GregTech owns the electric ladder; rung 0's drill is the pack's (ADR-0040).
+Terra's rung 1 drill, `gtceu:lv_miner`, and the ladder's second and last rung — it arrives with the electricity that runs it and is what makes the **outfield patches** worth reaching. GregTech owns the electric ladder; rung 0's drill is the pack's (ADR-0040).
 _Avoid_: Basic Ore Drilling Rig, electric drill, LV miner
 
 **Operation**:
@@ -317,7 +343,7 @@ _Avoid_: pending raid, queued attack
 ### Orbit
 
 **Ore Finder Satellite**:
-The orbital scanner that reveals ore veins, superseding surface vein indicators as a mid-game upgrade rather than replacing them.
+The orbital scanner, whose job is open: ADR-0045 put every patch on the surface and retired the vein indicators it was designed to supersede, so what it reveals that walking does not has not been decided.
 _Avoid_: scanner, prospector
 
 **Dyson Swarm**:

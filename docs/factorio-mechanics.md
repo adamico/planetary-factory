@@ -108,12 +108,15 @@ text and commits to no jar; **`pack` is admissible as a candidate only with a na
 - **verdict**: `shipped`
 - **where**: Terra, Ignus, Sapros
 - **via**: `gregtech`
-- **owner**: ADR-0007, ADR-0019, ADR-0020, ADR-0021, ADR-0041
+- **owner**: ADR-0007, ADR-0019, ADR-0020, ADR-0021, ADR-0041, ADR-0045
 
-GregTech ore veins in chunk-aligned disc patches, asserted by `scripts/worldgen-check.py` against
-`tests/worldgen/expected.json`. Since ADR-0041 the veins target the pack's **own** ore blocks rather
-than GregTech's, because a block that carries an amount has to be a block this repo registers; the
-vein shape, the layers and the check are unchanged.
+Terra deals one ore shape: a filled disc of a single ore block, one deep, flush with the terrain
+surface, at Factorio's own spacing, asserted by `scripts/worldgen-check.py` against
+`tests/worldgen/expected.json`. **ADR-0045 deletes Terra's buried veins entirely** — they were
+ADR-0019's leftover default rather than a decision, and ADR-0043's surface-working rig made keeping
+them a demand for the digging gesture ADR-0019 removed the caves for. Ignus and Sapros are unaffected.
+*This entry described GregTech ore veins in chunk-aligned disc patches, retargeted onto the pack's own
+ore blocks by ADR-0041 with the vein shape unchanged.*
 
 Sub-rules:
 
@@ -126,8 +129,11 @@ Sub-rules:
   "a stone patch in a world made of stone reads as a joke". ADR-0041 reverses it: the mechanism
   ADR-0021 discharged stone's bulk-material function onto was never built, and quarries exist on
   Earth because what makes one is concentration, not the rock being absent elsewhere.*
-- **Ore is prospected, not stumbled on** — `adapted`. ADR-0019; a Factorio player reads a patch off
-  the map, a player here reads surface indicators and later an Ore Finder satellite.
+- **Ore is visible where it lies** — `planned`, ADR-0045. Every patch is on the surface, so finding
+  one is exploration and the Radar reveals map rather than detecting ore — Factorio's own Radar.
+  *This row read "ore is prospected, not stumbled on", `adapted` under ADR-0019: surface indicators
+  first, an Ore Finder satellite later. ADR-0045 discharges that prerequisite rather than meeting it,
+  and the indicators become dead.*
 - **Infinite late-game resource (oil-style yield decay)** — `adapted`. #86: GregTech's bedrock
   fluid deposit decays to a floor rather than to zero, and Terra's crude deposit is one. `adapted`
   rather than `shipped` because the form is wrong in two ways — the deposit is a per-chunk roll
@@ -140,13 +146,26 @@ Sub-rules:
   than a patch size. The numbers are extracted, not chosen:
   `starting_amount = 20000 * base_density * (frequency_multiplier + 1) * size_multiplier`, and the
   per-block amount is that total over the blocks in the patch.
+- **Patch spacing is Factorio's spots per km²** — `planned`, ADR-0045. `base_spots_per_km2` is
+  extracted, not chosen: 2.5 for coal, copper, iron and stone and 1.25 for uranium, which is ~40 and
+  ~56 chunks of mean spacing. An outfield patch is a train ride, not a belt run.
+- **Regular patches are suppressed near spawn** — `adapted`, ADR-0045. Factorio's
+  `starting_resource_placement_radius` (150) ships as a flat exclusion; the 300-block fade-in beyond
+  it does not, because a structure set cannot express a ramp and 150 already keeps a rich patch off
+  the tutorial.
+- **Patch size rises with distance** — `planned`, ADR-0045. Quantity raises a spot's amplitude until
+  `regular_blob_amplitude_at`'s cap and widens its radius past it, which is why a far patch is bigger
+  as well as richer. The two split the quantity rather than multiplying it.
 - **Richness rises with distance from spawn** — `shipped` at the design level, ADR-0041. Factorio's
-  own term, `max((1000 + distance) / 2600, 1)`, ported metre-for-metre: flat inside 1600 blocks of
-  spawn, linear beyond. This is why leaving the starting area early buys nothing.
+  own term, `max((1000 + distance) / 2600, 1)`, ported metre-for-metre: flat inside 1600 blocks,
+  linear beyond. This is why leaving the starting area early buys nothing. *ADR-0045 measures it from
+  the world origin rather than from spawn — worldgen cannot see spawn, and one mechanic may not have
+  two datums — and caps it, because past the amplitude crossover the uncapped term pays Factorio's
+  radius growth out as richness.*
 - **An ore tile shows its remaining amount** — `adapted`, ADR-0041. Factorio's eight sprite stages
   are kept as a material-independent ratio set (`stage_counts`), computed from the block's own
-  amount; the exact number is a Jade line rather than a tooltip. `adapted` because the starting
-  fields are jigsaw blocks carrying no vein metadata, so they get stages and Jade but no map layer.
+  amount; the exact number is a Jade line rather than a tooltip. `adapted` because no patch carries
+  vein metadata, so they get stages and Jade but no map layer.
 
 ### Manual mining
 
@@ -204,8 +223,9 @@ Sub-rules:
 - **owner**: ADR-0043
 - **ticket**: #105
 - **notice**: Terra's two rigs are pack-authored and GregTech owns no drill here. A rig works the
-  **layer directly beneath it** — Factorio's tiles, in a game that has a third axis — so a buried
-  vein is reached by digging down and placing the rig on it, not by a drill that scans downward.
+  **layer directly beneath it** — Factorio's tiles, in a game that has a third axis — so a rig is
+  placed on a patch rather than scanning downward for one. *This entry read that a buried vein is
+  reached by digging down; ADR-0045 deletes the buried veins, and the digging with them.*
 
 Sub-rules:
 
