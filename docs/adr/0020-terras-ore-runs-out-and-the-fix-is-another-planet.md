@@ -184,9 +184,12 @@ safe. Raise it and it stops being a consolation and starts being a reason to sta
 
 - **A per-patch yield counter, or ore blocks that thin out as they are mined.** Rejected under the
   two-readings argument: a counter competes with the hole in the ground, and the player believes the
-  hole. *#176 revisits the first half: an amount carried by the block itself is not a competing
-  reading, because the block breaks when the amount is spent. The second half — blocks that thin out
-  visually — stays rejected, and #176 rejects it again for the same reason.*
+  hole. *Both halves are now reversed by ADR-0041.* An amount carried by the block itself is not a
+  competing reading, because the block breaks when the amount is spent. **And blocks that thin out
+  visually are admitted too**, against what this bullet predicted: Factorio ships eight sprite
+  stages per ore tile (`stage_counts`, a material-independent ratio set), and a stage computed
+  *from* the amount cannot compete with it. The objection was to a second reading, not to a coarse
+  rendering of the only one.
 - **Different curves for the starting patches and the outfield.** Rejected. Under physical removal
   there is no second curve to assign — the difference is size and access, and authoring two rules
   would be a second mechanism returning through the back door.

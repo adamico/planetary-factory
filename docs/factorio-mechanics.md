@@ -125,15 +125,29 @@ Sub-rules:
   Drilling Rig rather than by a pumpjack sat on a visible well. **Oil is the only resource that
   gets this**, which is the point: bedrock *ore* deposits would be infinite ore patches, so Terra
   carries none (ADR-0020 as amended, ADR-0021 as amended).
-- **Resource richness varies per patch** — `unargued`, no verdict. Nobody has thought about it.
+- **Resource richness varies per patch** — `shipped` at the design level, ADR-0041. An ore block
+  carries an **amount** and mining draws one unit at a time, so richness is a real quantity rather
+  than a patch size. The numbers are extracted, not chosen:
+  `starting_amount = 20000 * base_density * (frequency_multiplier + 1) * size_multiplier`, and the
+  per-block amount is that total over the blocks in the patch.
+- **Richness rises with distance from spawn** — `shipped` at the design level, ADR-0041. Factorio's
+  own term, `max((1000 + distance) / 2600, 1)`, ported metre-for-metre: flat inside 1600 blocks of
+  spawn, linear beyond. This is why leaving the starting area early buys nothing.
+- **An ore tile shows its remaining amount** — `adapted`, ADR-0041. Factorio's eight sprite stages
+  are kept as a material-independent ratio set (`stage_counts`), computed from the block's own
+  amount; the exact number is a Jade line rather than a tooltip. `adapted` because the starting
+  fields are jigsaw blocks carrying no vein metadata, so they get stages and Jade but no map layer.
 
 ### Manual mining
 
 - **verdict**: `adapted`
-- **notice**: mining is a Minecraft block break, so it is per-block rather than a hold-to-mine timer
-  against a patch total. It is **not** tool-tiered: one tool in two tiers, the Engineer's Pick,
+- **notice**: ~~mining is a Minecraft block break, so it is per-block rather than a hold-to-mine
+  timer against a patch total.~~ **Corrected by ADR-0041**: an ore block carries an amount and one
+  break gesture draws one unit from it, leaving the block standing until the amount is spent — so
+  mining *is* per-ore, and "seconds per ore" is now literal. The player is not expected to do much
+  of it: the burner drill is in the pocket at spawn (ADR-0040). It is **not** tool-tiered: one tool in two tiers, the Engineer's Pick,
   mines every block class, and a flat seconds-per-item stands in for vanilla's hardness spread —
-  1.0s for Terra's four resources and stone, halved to 0.5s by `steel-axe`. Factorio's two mining
+  1.0s for Terra's five resources, halved to 0.5s by `steel-axe`. Factorio's two mining
   speeds are kept and so is the ratio between the tiers, but the mining time is **the pack's own,
   half of Factorio's**: 2.0s shipped first and failed ADR-0039's human-on-delivery check, because
   Factorio's number assumes an engineer who hand-mines thirty ore, not ADR-0019's 1150-block

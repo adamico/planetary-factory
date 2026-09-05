@@ -139,8 +139,15 @@ only the Steel Furnace, at rung 2. That gap is closed here: **steel is a rung 1 
 Furnace stays at rung 2**, so the metal arrives a rung before the block made of it. ADR-0018 is
 amended accordingly.
 
-Rung 1 is also where the boost belongs on its own merits: it is the chapter where the Steam Miner is
-carrying the player and hand-mining feels worst.
+> **Amended by ADR-0041.** This sentence named the LP Steam Miner, which ADR-0040 removed from the
+> pack, and justified the Pick by ore speed, which ADR-0041 removed as a justification: the burner
+> drill is in the player's pocket at spawn, so ore stops passing through hands after the opening
+> minutes. **The placement stands; the reason changes.** Rung 1 is where 50 steel plates first
+> exist, which is what the `CheckItemPresence` trigger actually keys on — and the Pick is earned by
+> what it still does, which is trees, dirt, stone and dismantling machines, not by ore.
+
+~~Rung 1 is also where the boost belongs on its own merits: it is the chapter where the Steam Miner is
+carrying the player and hand-mining feels worst.~~
 
 ## The wrench's four verbs
 

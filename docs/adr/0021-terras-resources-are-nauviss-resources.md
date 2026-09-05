@@ -10,8 +10,12 @@ running from iron down to olivine, Mekanism's six worldgen toggles, Create's two
 That is GregTech's spread, Mekanism's spread, Create's spread and Minecraft's spread stacked in one
 world, and a Factorio-literate player reads none of it as meaningful.
 
-**Terra's resources are Nauvis's resources: iron, copper, coal, uranium, oil, and stone as the
-ground itself.** Nothing else is mined on Terra, and the cut materials do not reappear elsewhere as
+> **Amended by ADR-0041 — stone is a patch, not the ground.** The clause "stone as the ground
+> itself" is struck, and the mined set is **five**: iron, copper, coal, uranium and stone. See the
+> struck bullet below for why the original reasoning failed.
+
+**Terra's resources are Nauvis's resources: iron, copper, coal, uranium, oil, and ~~stone as the
+ground itself~~ stone as a patch like the rest.** Nothing else is mined on Terra, and the cut materials do not reappear elsewhere as
 imports — every other body already has its own Factorio identity to keep.
 
 ## The axis is fidelity, and the cost was known when it was taken
@@ -67,7 +71,7 @@ So the cut is applied to all four:
 
 ## Decided
 
-- **The set is iron, copper, coal, uranium.** Cut: zinc, tin, lead, nickel, silver, osmium, gold,
+- **The set is iron, copper, coal, uranium~~.~~, and stone (ADR-0041).** Cut: zinc, tin, lead, nickel, silver, osmium, gold,
   redstone, fluorite, salt, lapis, diamond, emerald, and GregTech's decorative veins — apatite,
   salts, mica, olivine, garnet, sapphire, manganese, mineral sand, lubricant, oilsands, galena,
   magnetite, cassiterite, copper_tin, garnet_tin.
@@ -86,11 +90,20 @@ So the cut is applied to all four:
   argument reaches them, and ADR-0020's tail section is amended to say so. Terra's bedrock carries
   oil and no ore. GregTech's own six overworld fluid deposits are narrowed to nowhere:
   four of them are refined fractions, and shipping those would void the Oil Refinery of ADR-0025.
-- **Stone is ambient terrain, never a patch.** This is the one place fidelity deliberately loses. A
-  stone patch in a world made of stone reads as a joke; Factorio's stone patch exists because
-  Nauvis's surface is *not* stone. The function — a bulk feedstock you must build production for —
-  is already served by ADR-0019's flat ground and by a cobble generator being something the player
-  builds. Take the function, drop the form.
+- ~~**Stone is ambient terrain, never a patch.**~~ **Reversed by ADR-0041.** The bullet read: "This
+  is the one place fidelity deliberately loses. A stone patch in a world made of stone reads as a
+  joke; Factorio's stone patch exists because Nauvis's surface is *not* stone. The function — a bulk
+  feedstock you must build production for — is already served by ADR-0019's flat ground and by a
+  cobble generator being something the player builds. Take the function, drop the form."
+
+  It fails twice. **The substitute does not exist**: Terra's noise settings carry
+  `aquifers_enabled: false` and place no lava, so a cobble generator is unbuildable — this bullet
+  discharged stone's function onto a mechanism that is not there. **And the joke argument is wrong
+  on its own terms**: stone quarries exist on Earth, a planet made of stone, because what makes a
+  quarry is concentration and accessibility rather than the rock being absent elsewhere. On Terra a
+  dirt cap covers the stone column and no machine in the pack automates digging terrain, so free
+  stone is neither convenient nor automatable and never competes with a metered patch. A stone ore
+  block is also not a stone block — it is a distinct ore, dropping `minecraft:cobblestone`.
 - **Uranium keeps Factorio's sulfuric-acid gate.** The ore is minable from hour one and yields
   nothing until sulfuric acid exists. It is built as an authored `mekanism:dissolution` recipe on
   the existing Chemical Dissolution Chamber, with uranium's non-acid processing paths removed —
