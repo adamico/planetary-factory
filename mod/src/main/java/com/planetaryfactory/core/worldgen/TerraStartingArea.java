@@ -3,9 +3,9 @@ package com.planetaryfactory.core.worldgen;
 import com.mojang.logging.LogUtils;
 import com.planetaryfactory.core.PlanetaryFactoryCore;
 import com.planetaryfactory.core.ore.OreBlock;
+import com.planetaryfactory.core.ore.OreCensus;
 import com.planetaryfactory.core.ore.OreFields;
 import com.planetaryfactory.core.ore.OreResource;
-import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -205,20 +205,54 @@ public final class TerraStartingArea {
         OreFields fields = level.getDataStorage().computeIfAbsent(OreFields.FACTORY, OreFields.NAME);
         for (StructurePiece piece : pieces) {
             BoundingBox box = piece.getBoundingBox();
-            Map<OreResource, Integer> counted = new EnumMap<>(OreResource.class);
-            for (BlockPos pos : BlockPos.betweenClosed(
-                    new BlockPos(box.minX(), box.minY(), box.minZ()),
-                    new BlockPos(box.maxX(), box.maxY(), box.maxZ()))) {
-                if (level.getBlockState(pos).getBlock() instanceof OreBlock ore) {
-                    counted.merge(ore.resource(), 1, Integer::sum);
-                }
+            OreCensus census = census(level, box);
+            if (census.isEmpty()) {
+                // The hub is a piece and holds no ore, so this is not always wrong -- but a field
+                // piece that counts nothing is the silence that shipped every block at zero.
+                LOGGER.info("Terra's piece at {} holds no ore blocks", box);
+                continue;
             }
-            for (Map.Entry<OreResource, Integer> entry : counted.entrySet()) {
-                OreFields.Field placed = fields.record(entry.getKey(), box, entry.getValue());
-                LOGGER.info("Terra's {} field: {} blocks, {} units each",
-                        placed.resource(), entry.getValue(), placed.amountPerBlock());
+            for (Map.Entry<OreResource, OreCensus.Extent> entry : census.extents().entrySet()) {
+                OreCensus.Extent extent = entry.getValue();
+                OreFields.Field placed = fields.record(entry.getKey(), boxOf(extent), extent.blocks());
+                LOGGER.info("Terra's {} field: {} blocks over {}, {} units each",
+                        placed.resource(), extent.blocks(), placed.box(), placed.amountPerBlock());
             }
         }
+    }
+
+    /**
+     * Read the ore blocks a piece actually placed.
+     *
+     * <p>Column by column rather than over the piece's box, because the box is one block tall: the
+     * fields are flat templates put down through a gravity processor, so the piece reports the y it
+     * was anchored at while its blocks sit on the terrain. Each column is scanned through
+     * {@link OreCensus}'s window around its own surface height, which is a handful of reads per
+     * column and finds the block wherever the ground put it.
+     */
+    private static OreCensus census(ServerLevel level, BoundingBox box) {
+        OreCensus census = new OreCensus();
+        BlockPos.MutableBlockPos cursor = new BlockPos.MutableBlockPos();
+        for (int x = box.minX(); x <= box.maxX(); x++) {
+            for (int z = box.minZ(); z <= box.maxZ(); z++) {
+                int surface = level.getHeight(Heightmap.Types.WORLD_SURFACE, x, z);
+                int top = Math.min(OreCensus.scanTop(surface), level.getMaxBuildHeight() - 1);
+                int bottom = Math.max(OreCensus.scanBottom(surface), level.getMinBuildHeight());
+                for (int y = top; y >= bottom; y--) {
+                    if (level.getBlockState(cursor.set(x, y, z)).getBlock() instanceof OreBlock ore) {
+                        census.add(ore.resource(), x, y, z);
+                    }
+                }
+            }
+        }
+        return census;
+    }
+
+    /** The census's own inclusive extent, as the box the field is recorded and looked up by. */
+    private static BoundingBox boxOf(OreCensus.Extent extent) {
+        return new BoundingBox(
+                extent.minX(), extent.minY(), extent.minZ(),
+                extent.maxX(), extent.maxY(), extent.maxZ());
     }
 
     /**
