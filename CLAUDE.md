@@ -84,6 +84,17 @@ an overlapping jigsaw child silently, so this failure ships as "two patches inst
 some seeds and nothing in a log. Run it after any edit to `scripts/build-terra-start.py`; it reads
 the generated `.nbt` files, so it also catches forgetting to re-run the generator.
 
+### Vein indicator check
+
+`tests/worldgen/test_vein_indicators.py` asserts every authored vein's surface indicator can
+resolve. The field is an `Either<BlockState, Material>` and both sides fail only at world creation,
+as `Failed to load registries` on the screen the player is sat in front of: a bare string is read
+as a *material*, so `minecraft:cobblestone` there is an unknown registry key; and a material that
+exists but has no surface rock — `gtceu:stone` is one — parses and then throws "No surface rock
+registered" a layer later. Neither is visible from our own files, so the check reads the GTCEu jar:
+the materials GregTech's own veins indicate with are the ones that demonstrably have a rock. Run it
+after editing `scripts/build-terra-ore.py`. Both failure modes shipped once each before it existed.
+
 ### Ore amount checks
 
 An ore block carries an amount and a break draws one unit (ADR-0041). That is four checks, none of

@@ -173,14 +173,20 @@ def main():
     # on.
     stone = retarget(reband(load("coal"), STONE), "stone")
     stone["indicators"] = [{
-        # `gtceu:stone`, the material -- the same side of the codec's Either as the other four
-        # veins use (`gtceu:coal`, `gtceu:copper`, `gtceu:goethite`, `gtceu:pitchblende`), so
-        # stone gets GregTech's own surface-rock scatter rather than a different mechanism.
+        # The block side of the indicator's Either, and the only honest option left.
         #
-        # The block side of that Either works and is wrong here: it places literal full blocks,
-        # so a cobblestone indicator reads as somebody's leftover building debris rather than as
-        # a prospecting hint, and hands out free cobblestone besides.
-        "block": "gtceu:stone",
+        # The material side is what all four other veins use, and it is closed to stone twice
+        # over. `gtceu:stone` is a real material but GregTech registers no surface rock for it --
+        # "No surface rock registered for material stone", thrown while loading registries, which
+        # reaches a player as a world that will not create. And every one of the 36 materials that
+        # does have a rock is an *ore* material, so borrowing one would put a hint naming the
+        # wrong resource on top of a stone patch.
+        #
+        # So: loose cobblestone, which is legible precisely because ADR-0019 caps Terra in dirt --
+        # rock lying on soil means rock underneath. It is a full block rather than GregTech's
+        # scatter, which is a cosmetic inconsistency this accepts in exchange for a patch a player
+        # can actually find.
+        "block": {"Name": "minecraft:cobblestone"},
         "density": 0.2,
         "placement": "surface",
         "radius": 5,
