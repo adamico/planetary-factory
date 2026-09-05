@@ -65,10 +65,25 @@ The order of attempts on that tile:
 
 **Create's `DirectBeltInputBehaviour` is deliberately not called, and the mod takes no Create
 dependency.** A bare horizontal belt does answer `Capabilities.ItemHandler.BLOCK`, so rule 1 will
-feed one — including against its flow, which `canInsertFromSide` exists to reject — and a Create
-funnel, which answers no item handler, is reachable only by rule 2. Both are accepted for now
-because the prior question is open: whether this pack should ship Create's belts at all, or
-Factorio's own. That is #178, and this ADR is not the place to answer it.
+feed one, and a Create funnel, which answers no item handler, is reachable only by rule 2. Both are
+accepted for now because the prior question is open: whether this pack should ship Create's belts at
+all, or Factorio's own. That is #178, and this ADR is not the place to answer it.
+
+*Corrected by ADR-0044, on two counts. **The paragraph above read that rule 1 feeds a belt "including
+against its flow, which `canInsertFromSide` exists to reject". That is wrong.** `canInsertFromSide` is
+on the `DirectBeltInputBehaviour` path — the path the rig does not take — so it never bore on this.
+On the capability path, `BeltBlockEntity.registerCapabilities` hands back a side-ignoring provider and
+`ItemHandlerBeltSegment.insertItem` gates only on `canInsertAt(offset)`, which is hard-wired to
+`Direction.UP`; the item then lands on the queried segment and **travels in the belt's normal
+direction**. Nothing rides backwards, and inserting onto a belt's last tile and having the item leave
+the end is what Factorio does too. What is genuinely worse than stated is that a **stopped** belt accepts,
+since that path never consults `getSpeed()`. **The real defect is the second clause, and it is
+confirmed**: no funnel class appears among the jar's capability registrations, and
+`content/logistics/funnel/` references `Capabilities` nowhere — so ADR-0040's named answer to a drill
+that does not push is unreachable, along with chute, depot, brass tunnel, saw, millstone, basin and
+item drain. That, not the insertion direction, is why the `DirectBeltInputBehaviour` call is worth
+making. **#178 is now answered** — ADR-0044 keeps Create's belts — so the call is no longer waiting on
+anything.*
 
 ## Both rigs draw their overlay on the ore
 

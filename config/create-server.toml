@@ -68,7 +68,7 @@
 	#Maximum length in blocks of mechanical belts.
 	# Default: 20
 	# Range: > 5
-	maxBeltLength = 20
+	maxBeltLength = 64
 	#.
 	#Maximum length in blocks of chain conveyor connections.
 	# Default: 32

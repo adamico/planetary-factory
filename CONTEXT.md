@@ -1,6 +1,6 @@
 # PlanetaryFactory
 
-A Minecraft 1.21.1 / NeoForge modpack that reproduces the progression, logistics puzzles and
+A Minecraft 1.21.1 / NeoForge modpack that reproduces the progression, production-chain routing and
 interplanetary scope of Factorio's Space Age expansion.
 
 **Factorio is the subject; the mods are the implementation.** What the pack reproduces, adapts or
@@ -134,6 +134,12 @@ _Avoid_: unlock, planet flag, safe flag
 
 
 ### Moving things
+
+**Logistics puzzle**:
+The production-chain routing problem — what feeds what, at what ratio, over what distance. Explicitly
+not the belt-lane micro-puzzle: lane balancing, sushi belts and weaving undergrounds through a fixed
+footprint are 2D problems this pack does not have, and ADR-0044 records why.
+_Avoid_: belt puzzle, the logistics game
 
 **Launch Terminal**:
 The structure cargo and fuel are loaded into for a journey subject to a travel timer.

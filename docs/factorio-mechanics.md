@@ -216,11 +216,13 @@ Sub-rules:
   A rig ejects into an item handler on its faced tile, else drops one item on the ground there and
   waits for it to be taken, else stalls. *This entry read "Drills output onto a belt directly —
   `unargued`, no verdict".*
-- **Output onto a moving belt with no intermediate block** — `planned`, deferred to #178. A bare
-  Create belt does answer an item handler, so it is fed — but through a path that ignores the
-  belt's direction, and Create's funnel is reachable only by the ground drop. The faithful call is
-  `DirectBeltInputBehaviour` and it is one line of build config away; it is held back only because
-  the prior question is whether this pack ships Create's belts or Factorio's own.
+- **Output onto a moving belt with no intermediate block** — `planned`. **#178 is answered
+  (ADR-0044: Create keeps the belts), so this is no longer blocked on it.** What remains is that a
+  rig cannot reach Create's funnel, chute, depot, brass tunnel or any other `DirectBeltInputBehaviour`
+  implementer, because `FunnelBlockEntity` registers no capability at all — the funnel is ADR-0040's
+  named answer to a drill that does not push, and it is reachable only by the ground drop. *This
+  entry read that the item-handler path "ignores the belt's direction", which the bytecode refuted:
+  the item lands on the queried segment and travels normally. See ADR-0043's correction.*
 - **A drill shows which tiles it is working** — `adapted`. The rig tints the top face of every ore
   block in its area, when looked at and when held for placement. Factorio shows this on a flat map;
   here it is a render on a surface the player walks on.
@@ -352,27 +354,45 @@ ADR-0029 gives the Assembler speed 1 with durations of `energy_required x 20` un
 
 - **verdict**: `adapted`
 - **notice**: there is one belt and you buy its speed with RPM, so the belt ladder is a
-  power-and-gearing problem rather than three tiers and two research nodes — and with no underground
-  belts, no lanes and tunnels in place of splitters, none of the routing patterns a Factorio player
-  has memorised transfer.
+  power-and-gearing problem rather than three tiers and two research nodes — and the lane-and-tunnel
+  patterns a Factorio player has memorised do not transfer, because most of them are answers to
+  being flat. Routing in Y replaces them (ADR-0044).
 - **where**: all bodies
 - **via**: `create`
-- **owner**: ADR-0017, #93
+- **owner**: ADR-0044, ADR-0017, #93
 
 Sub-rules:
 
 - **Three belt tiers** — `adapted`. There is one belt, and its throughput is the RPM you drive it
   at, so belt speed is a power-and-gearing decision made per run rather than three craftable tiers
   bought from the tech tree. Faster belts are therefore never a research unlock here.
-- **Underground belts** — `excluded`. Create has no belt that runs under an obstacle, and the
-  routing puzzle underground belts create — weaving two lanes past each other in a fixed footprint —
-  has no substitute here.
+- **Throughput as a ratio budget** — `planned`. Factorio's belt has a known items/s *and* a bounded
+  researched stack multiplier, which is why a ratio is computable; Create's is `RPM/24` entries per
+  second with an items-per-entry that is whatever the upstream inserter handed over, unbounded to 64
+  and surfaced nowhere. ADR-0044 defers the target to play — the question is whether a single belt
+  ever bottlenecks a line before the machines do — and names the dials: the `getSpeed() / 480f`
+  divisor in `BeltBlockEntity.getBeltMovementSpeed()` first, `maxRotationSpeed` second. Not
+  `blocked`: the implementation is known, the number is not.
+- **Underground belts** — `excluded`. Not for want of a Create block: undergrounds solve a *weaving*
+  problem — two lanes past each other in a fixed footprint — that exists only in two dimensions.
+  Minecraft has a Y axis and Create has sloped belt runs, so a belt that must cross another goes
+  over it. Argued from the medium, not from a mod's shortfall (ADR-0044).
 - **Splitters, with filtering and priority** — `adapted`. Create's tunnels are the splitter: a
-  tunnel splits a belt's output across the belts beside it and filters what goes where. It is
-  placed on the belt rather than spliced into it, so the balancer built out of splitter pairs — the
-  shape a Factorio player reaches for first — is not buildable, and there is no output priority.
-- **Two lanes per belt** — `excluded`. `by-consequence`: Create belts have no lane model, and the
-  whole lane-balancing idiom goes with it.
+  tunnel splits a belt's output across the belts beside it and filters what goes where, one filter
+  slot per output. Brass Tunnel's seven `SelectionMode` values include `FORCED_SPLIT` and
+  `FORCED_ROUND_ROBIN`, which refuse to distribute unless every target can take its share — that is
+  a balancer — and `PREFER_NEAREST`, which is positional priority. *This entry read "the balancer
+  built out of splitter pairs … is not buildable, and there is no output priority", which was wrong
+  on the facts.* What is genuinely absent is the **constructed pattern**: a balancer assembled from
+  splitter pairs, rather than the outcome one block delivers. ADR-0044 takes the outcome as what the
+  pack promises.
+- **Two lanes per belt** — `excluded`. Lane balancing is a compression trick for a conveyor one tile
+  wide on a plane — what you do when the only free axis runs along the belt. It goes with the
+  undergrounds and for the same reason (ADR-0044). *This entry read `by-consequence` of Create
+  having no lane model; the ledger now owns a reason of its own.*
+- **Belt as buffer** — `excluded`. A 64-block belt at one item per block holds 64 items where a
+  64-tile yellow belt holds 512. Using belts as storage is a real Factorio idiom and ADR-0044 drops
+  it knowingly rather than by oversight.
 
 Together these empty out Factorio's belt research. `logistics-2`, `logistics-3` and
 `turbo-transport-belt` survive in `data/factorio/technology.json`, and between them they buy exactly
@@ -391,7 +411,12 @@ prune, which is #25's call and not this ledger's.
 
 The notice above is written against funnels and chutes. **#102 asks whether Create's Mechanical Arm
 is the inserter instead** — an Arm is a swing arm, which is a much closer fit — and will rewrite this
-row's losses to whatever actually survives.
+row's losses to whatever actually survives. #178 scoped the inserter family alongside the belts and
+**ADR-0044 explicitly does not decide it**, handing it back to #102 unblocked: the conveyance is
+settled, the swing arm is a separate mechanic with its own fidelity argument. For that argument, the
+Arm reaches 5 blocks against an inserter's 1 (2 long-handed), moves up to a full stack per cycle at
+roughly 2–2.5 transfers/s at maximum RPM, and does not implement `DirectBeltInputBehaviour` — it uses
+the separate `ArmInteractionPointType` registry.
 
 ### Logistic robots
 
