@@ -282,11 +282,15 @@ hash = "73345c2e0fcad604296129df0e3e764643968e96d177f949eefd2e8e0b4bc780"
 
 [[files]]
 file = "config/ftbquests/quests/chapter_groups.snbt"
-hash = "efa63b81a301b1a1ec638c33d085f8e0120f2f14f970e210c6ab5201a7d32b9d"
+hash = "e57d8311aec9f524911ed1313cabf138bb7fa5a2d3ba985a00a2a267ff35ef78"
 
 [[files]]
-file = "config/ftbquests/quests/chapters/basics.snbt"
-hash = "efa389a1c2eb9ece0a4841070775dc13b8e91c1155d08822e60e9eb8f74ba0f4"
+file = "config/ftbquests/quests/chapters/introduction.snbt"
+hash = "be67bb4355ee04c1a1e4b01a1ac0c77bc4621affeb9cc1c67e4e83a0bfbbf526"
+
+[[files]]
+file = "config/ftbquests/quests/chapters/raw.snbt"
+hash = "5d7079b9ecd4500c0715122b3bc915d8210f2d9ad973b714465a529d6b598e4b"
 
 [[files]]
 file = "config/ftbquests/quests/data.snbt"
@@ -294,7 +298,7 @@ hash = "da77e416b557850f5cb1ab68d71de78f9fbc3cf3845e50cdb4dba3a8164f6e7f"
 
 [[files]]
 file = "config/ftbquests/quests/lang/en_us.snbt"
-hash = "71432ee6bd2e30c8f6214f37bbd38c42cc91a8b29c3511af91ff2a53d28a1635"
+hash = "def939566c33cbd8082608ee2cc0f584b7b6a1b58e662bb06cc9eb9b379ab902"
 
 [[files]]
 file = "config/ftbteams-server.snbt"
@@ -663,6 +667,10 @@ hash = "20eed604bd09d3053e8c8177ed300de39264fa4cc15f38f44e9d7e6988b61628"
 [[files]]
 file = "kubejs/assets/kubejs/models/item/oil_refinery.json"
 hash = "6547dbec84dd0b3eb138c41c8c21f006261e46156b97092908b2f011caccb205"
+
+[[files]]
+file = "kubejs/assets/minecraft/lang/en_us.json"
+hash = "99c1824a813d7f1d3d18ed2b60387e99fd183daafb515c7835cb764e5116c585"
 
 [[files]]
 file = "kubejs/assets/planetaryfactory/blockstates/coal_ore.json"
@@ -1190,7 +1198,7 @@ hash = "e00a67922942660d77c213379b5128a46c5abc894178b0be04006d325ff5f6b3"
 
 [[files]]
 file = "kubejs/config/probe-settings.json"
-hash = "578b60b7734f08a72ae6b715d37cba3781d3e999b672194a2d8215409a023ff3"
+hash = "6ab0b4b87fcf9b3c96219fb726089056173b5dc1637b47828bf0279d2a07576b"
 
 [[files]]
 file = "kubejs/config/web_server.json"

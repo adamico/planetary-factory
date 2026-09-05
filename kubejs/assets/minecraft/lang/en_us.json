@@ -1,0 +1,4 @@
+{
+  "_comment": "Factorio's stone is the MINED rock, and Minecraft's mined rock is cobblestone -- ADR-0026's item map already routes Factorio's `stone` to this item, and ADR-0041 made it what a stone patch pays out. This is the name catching up with both: a patch the HUD calls a Stone Patch should not hand the player something called Cobblestone. Only the block's own name is changed; stairs, slabs and walls keep vanilla's names, because Factorio has no such things and nothing in the pack renames them.",
+  "block.minecraft.cobblestone": "Stone"
+}
