@@ -66,9 +66,7 @@
     },
     "indicators": [
         {
-            "block": {
-                "Name": "minecraft:cobblestone"
-            },
+            "block": "gtceu:stone",
             "density": 0.2,
             "placement": "surface",
             "radius": 5,

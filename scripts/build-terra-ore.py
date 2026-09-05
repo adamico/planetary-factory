@@ -163,21 +163,24 @@ def main():
     save("uranium", retarget(reband(src, URANIUM), "uranium"))
 
     # Stone's own vein, built from coal's generator: the same shallow layer shape, dealing the
-    # stone ore block. Nothing in GregTech ships a stone vein to start from, because stone is not
-    # one of its materials -- which is the shape of ADR-0041's amendment to ADR-0021.
+    # stone ore block. GregTech ships no stone *vein* to start from -- it has a `gtceu:stone`
+    # material but nothing that deals it out of the ground, because stone is scenery to GregTech.
+    # Treating it as a resource is the shape of ADR-0041's amendment to ADR-0021.
     #
     # It gets its own surface indicator rather than inheriting coal's: `gtceu:coal` scattered over
     # a stone vein would be a prospecting hint that names the wrong resource, and *no* indicator
     # would quietly exempt stone from ADR-0019's rule that ore is prospected rather than stumbled
-    # on. Loose cobblestone is the honest hint, and it is legible precisely because ADR-0019 caps
-    # Terra in dirt: rock lying on soil means rock underneath.
+    # on.
     stone = retarget(reband(load("coal"), STONE), "stone")
     stone["indicators"] = [{
-        # A bare string here is read as a GregTech *material* -- which is what `gtceu:coal` is in
-        # the vein we copied from -- and there is no cobblestone material, so the vein failed to
-        # parse and took registry loading down with it at world creation. The object form is the
-        # other side of the codec's `Either`: a block state, which is what we actually want.
-        "block": {"Name": "minecraft:cobblestone"},
+        # `gtceu:stone`, the material -- the same side of the codec's Either as the other four
+        # veins use (`gtceu:coal`, `gtceu:copper`, `gtceu:goethite`, `gtceu:pitchblende`), so
+        # stone gets GregTech's own surface-rock scatter rather than a different mechanism.
+        #
+        # The block side of that Either works and is wrong here: it places literal full blocks,
+        # so a cobblestone indicator reads as somebody's leftover building debris rather than as
+        # a prospecting hint, and hands out free cobblestone besides.
+        "block": "gtceu:stone",
         "density": 0.2,
         "placement": "surface",
         "radius": 5,
