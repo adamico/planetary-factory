@@ -2,7 +2,12 @@ package com.planetaryfactory.core.worldgen;
 
 import com.mojang.logging.LogUtils;
 import com.planetaryfactory.core.PlanetaryFactoryCore;
+import com.planetaryfactory.core.ore.OreBlock;
+import com.planetaryfactory.core.ore.OreFields;
+import com.planetaryfactory.core.ore.OreResource;
+import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -179,8 +184,41 @@ public final class TerraStartingArea {
                         BoundingBox.infinite(), spawn, false);
             }
         }
+        recordFields(level, pieces);
         LOGGER.info("Terra's starting area placed at {}, {}, {}: {} pieces",
                 spawn.getX(), spawn.getY(), spawn.getZ(), pieces.size());
+    }
+
+    /**
+     * Count each field's ore blocks, so a block's amount can be the patch total divided by them.
+     *
+     * <p>ADR-0041 keeps Factorio's patch total as the invariant and derives the per-block amount
+     * from it. Only the placed world knows the divisor: the hub deals one of three size variants
+     * per resource, and vanilla drops an overlapping child silently, so counting what is actually
+     * there is the only reading that cannot be wrong.
+     *
+     * <p>Counted once, here, and written down as one record per field. That is four records, not a
+     * counter per ore block -- and it is the *initial* amount's derivation, fixed at placement,
+     * rather than the parallel remaining-count ADR-0020 refused.
+     */
+    private static void recordFields(ServerLevel level, List<StructurePiece> pieces) {
+        OreFields fields = level.getDataStorage().computeIfAbsent(OreFields.FACTORY, OreFields.NAME);
+        for (StructurePiece piece : pieces) {
+            BoundingBox box = piece.getBoundingBox();
+            Map<OreResource, Integer> counted = new EnumMap<>(OreResource.class);
+            for (BlockPos pos : BlockPos.betweenClosed(
+                    new BlockPos(box.minX(), box.minY(), box.minZ()),
+                    new BlockPos(box.maxX(), box.maxY(), box.maxZ()))) {
+                if (level.getBlockState(pos).getBlock() instanceof OreBlock ore) {
+                    counted.merge(ore.resource(), 1, Integer::sum);
+                }
+            }
+            for (Map.Entry<OreResource, Integer> entry : counted.entrySet()) {
+                OreFields.Field placed = fields.record(entry.getKey(), box, entry.getValue());
+                LOGGER.info("Terra's {} field: {} blocks, {} units each",
+                        placed.resource(), entry.getValue(), placed.amountPerBlock());
+            }
+        }
     }
 
     /**

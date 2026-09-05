@@ -1,0 +1,11 @@
+{
+  "__comment": "Rung 0's Iron Pick is the tool tier the opening ships with.",
+  "replace": false,
+  "values": [
+    "planetaryfactory:coal_ore",
+    "planetaryfactory:copper_ore",
+    "planetaryfactory:iron_ore",
+    "planetaryfactory:stone_ore",
+    "planetaryfactory:uranium_ore"
+  ]
+}

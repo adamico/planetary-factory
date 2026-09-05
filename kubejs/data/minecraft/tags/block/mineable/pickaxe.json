@@ -1,0 +1,11 @@
+{
+  "__comment": "The Engineer's Pick is a pickaxe (ADR-0039).",
+  "replace": false,
+  "values": [
+    "planetaryfactory:coal_ore",
+    "planetaryfactory:copper_ore",
+    "planetaryfactory:iron_ore",
+    "planetaryfactory:stone_ore",
+    "planetaryfactory:uranium_ore"
+  ]
+}

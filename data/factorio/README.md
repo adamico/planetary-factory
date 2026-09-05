@@ -35,14 +35,16 @@ JSON
 scripts/factorio-tech-extract.py
 scripts/factorio-recipe-extract.py
 scripts/factorio-machine-extract.py
+scripts/factorio-resource-extract.py
 python3 tests/factorio/test_tech_extract.py
 python3 tests/factorio/test_recipe_extract.py
 python3 tests/factorio/test_machine_extract.py
+python3 tests/factorio/test_resource_extract.py
 ```
 
-All three extractors read the same dump, so a single `--dump-data` run feeds them. Order
+All four extractors read the same dump, so a single `--dump-data` run feeds them. Order
 matters: the recipe extractor reads `technology.json`, and the machine extractor reads
-`recipe.json` for its scope.
+`recipe.json` for its scope. The resource extractor reads only the dump.
 
 The dump lands in `~/Library/Application Support/factorio/script-output/data-raw-dump.json`. The
 extractor finds it and the Steam install by default; both are overridable with `--dump` and
@@ -124,3 +126,22 @@ when picking the `gtceu:`/`create:` item that stands in for the technology.
 decision to make while looking at the tree, not one a script makes silently. The one exception is
 `recycling`, whose 313 generated reverse-craft recipes collapse to a single `unlock-recipe-family`
 effect recording the rule that produced them.
+
+- **`resource.json`** — how much ore the ground holds (ADR-0041). Read from the dump's own
+  `resource_autoplace_all_patches` rather than from map generation, because Factorio's
+  amounts are closed-form in the prototypes.
+
+  `starting_amount_formula` is the function's own expression, carried across as a string
+  and evaluated against `controls` — frequency and size at a default map's 1 — so a
+  starting total is derived at extraction and re-derived by the check, never typed. One
+  object per resource: `base_density`, `has_starting_area_placement`, `starting_amount`,
+  `stage_counts` and `stage_ratios`, and `distance_law` with the `max((1000 + distance) /
+  2600, 1)` term parsed into its `flat_within` radius of 1600 tiles.
+
+  **`stage_ratios` is each resource's own.** Uranium's `stage_counts` is the shared list
+  scaled by about 2/3 and then rounded — its last rung is 50 where the scaling gives 53.3 —
+  so the fraction sets agree to a tolerance the check states rather than exactly.
+
+  `constants` and `outfield_law` carry `regular_density_at` and its three radii whole, for
+  a later body siting outfield veins. **Scope is the six resources that function places**;
+  `skipped` names the other planets' six, which have no starting patch to read.

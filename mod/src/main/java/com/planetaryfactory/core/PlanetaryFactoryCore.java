@@ -4,6 +4,7 @@ import com.planetaryfactory.core.assembler.AssemblerTicker;
 import com.planetaryfactory.core.assembler.client.AssemblerClient;
 import com.planetaryfactory.core.crafting.client.InventoryGridBlank;
 import com.planetaryfactory.core.network.PFNetwork;
+import com.planetaryfactory.core.ore.OreMining;
 import com.planetaryfactory.core.worldgen.PFWorldgen;
 import com.planetaryfactory.core.worldgen.TerraStartingArea;
 import net.neoforged.api.distmarker.Dist;
@@ -46,6 +47,8 @@ public final class PlanetaryFactoryCore {
         // Game bus, not the mod bus: this one fires per running server, not per mod load.
         NeoForge.EVENT_BUS.addListener(TerraStartingArea::onServerStarted);
         // The Personal Assembler's queue runs whether or not its panel is open (ADR-0038).
+        // One break gesture draws one unit, and the block stands until it is spent (ADR-0041).
+        NeoForge.EVENT_BUS.addListener(OreMining::onBreak);
         NeoForge.EVENT_BUS.addListener(AssemblerTicker::onPlayerTick);
         NeoForge.EVENT_BUS.addListener(AssemblerTicker::onLogin);
         NeoForge.EVENT_BUS.addListener(AssemblerTicker::onDatapackSync);

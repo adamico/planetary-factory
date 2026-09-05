@@ -37,6 +37,32 @@ KEEP = {
     "copper":  {"min_y": 20, "max_y": 48, "weight": 140},
 }
 
+# The block each vein deals, which since ADR-0041 is the pack's rather than GregTech's. A vein
+# layer's `targets` is `Either<List<TargetBlockState>, Material>` in GregTech's own codec, so a
+# block state is expressible and a material is not the only option -- which is what lets an
+# outfield vein carry an amount exactly as a starting field does. The ore blocks still drop
+# GregTech's raw ore, so the vein is a vein in every way the rest of the pack can observe.
+PACK_ORE = {
+    "coal": "planetaryfactory:coal_ore",
+    "iron": "planetaryfactory:iron_ore",
+    "copper": "planetaryfactory:copper_ore",
+    "uranium": "planetaryfactory:uranium_ore",
+    "stone": "planetaryfactory:stone_ore",
+}
+
+# Stone's outfield vein (ADR-0041). ADR-0021 ruled stone ambient terrain; that is reversed, and a
+# metered patch that stops being metered once the starting field is gone is exactly the
+# inconsistency the reversal exists to avoid. Shallow and common: it is the bulk feedstock, and
+# nothing before it competes for the band.
+STONE = {"min_y": 30, "max_y": 58, "weight": 150}
+
+# What a vein replaces. Vanilla's own stone-ore predicate, which is what every GregTech stone-layer
+# vein already resolves a material against.
+STONE_REPLACEABLES = {
+    "predicate_type": "minecraft:tag_match",
+    "tag": "minecraft:stone_ore_replaceables",
+}
+
 # GregTech ships no overworld uranium vein -- its uranium is `pitchblende`, an End vein that
 # packs/remove-nether-end-worldgen already blocks. Rather than unblock an End vein and drag its
 # dimension filter around, Terra gets its own, built from pitchblende's generator.
@@ -54,6 +80,20 @@ def save(name, obj):
         json.dump(obj, fh, indent=4, sort_keys=True)
         fh.write("\n")
     print("wrote kubejs/data/gtceu/gtceu/ore_vein/%s.json" % name)
+
+
+def retarget(vein, name):
+    """Point every layer of a vein at the pack's ore block instead of a GregTech material.
+
+    The surface indicator is left alone: it is the rock scattered on top as a prospecting hint,
+    not the ore, and GregTech's own is what a player has learned to recognise.
+    """
+    block = PACK_ORE[name]
+    generator = vein.get("generator") or {}
+    for pattern in generator.get("layer_patterns") or []:
+        for layer in pattern:
+            layer["targets"] = [[{"target": STONE_REPLACEABLES, "state": {"Name": block}}]]
+    return vein
 
 
 def reband(vein, band):
@@ -79,10 +119,12 @@ def reband(vein, band):
 
 def main():
     existing = {f[:-5] for f in os.listdir(VEINS) if f.endswith(".json")}
-    cut = sorted(existing - set(KEEP))
+    # `uranium` and `stone` are pack veins written below rather than mod overrides, so neither is
+    # a cut: removing them would delete the file this script is in the middle of writing.
+    cut = sorted(existing - set(KEEP) - {"uranium", "stone"})
 
     for name, band in KEEP.items():
-        save(name, reband(load(name), band))
+        save(name, retarget(reband(load(name), band), name))
 
     # Terra's uranium, from the End vein's generator.
     import zipfile
@@ -93,7 +135,26 @@ def main():
     )
     with zipfile.ZipFile(jar) as z:
         src = json.loads(z.read("data/gtceu/gtceu/ore_vein/%s.json" % URANIUM_SOURCE))
-    save("uranium", reband(src, URANIUM))
+    save("uranium", retarget(reband(src, URANIUM), "uranium"))
+
+    # Stone's own vein, built from coal's generator: the same shallow layer shape, dealing the
+    # stone ore block. Nothing in GregTech ships a stone vein to start from, because stone is not
+    # one of its materials -- which is the shape of ADR-0041's amendment to ADR-0021.
+    #
+    # It gets its own surface indicator rather than inheriting coal's: `gtceu:coal` scattered over
+    # a stone vein would be a prospecting hint that names the wrong resource, and *no* indicator
+    # would quietly exempt stone from ADR-0019's rule that ore is prospected rather than stumbled
+    # on. Loose cobblestone is the honest hint, and it is legible precisely because ADR-0019 caps
+    # Terra in dirt: rock lying on soil means rock underneath.
+    stone = retarget(reband(load("coal"), STONE), "stone")
+    stone["indicators"] = [{
+        "block": "minecraft:cobblestone",
+        "density": 0.2,
+        "placement": "surface",
+        "radius": 5,
+        "type": "gtceu:surface",
+    }]
+    save("stone", stone)
 
     for name in cut:
         os.remove(os.path.join(VEINS, name + ".json"))

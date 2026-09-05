@@ -1,0 +1,28 @@
+{
+  "variants": {
+    "stage=0": {
+      "model": "planetaryfactory:block/ore/coal_stage0"
+    },
+    "stage=1": {
+      "model": "planetaryfactory:block/ore/coal_stage1"
+    },
+    "stage=2": {
+      "model": "planetaryfactory:block/ore/coal_stage2"
+    },
+    "stage=3": {
+      "model": "planetaryfactory:block/ore/coal_stage3"
+    },
+    "stage=4": {
+      "model": "planetaryfactory:block/ore/coal_stage4"
+    },
+    "stage=5": {
+      "model": "planetaryfactory:block/ore/coal_stage5"
+    },
+    "stage=6": {
+      "model": "planetaryfactory:block/ore/coal_stage6"
+    },
+    "stage=7": {
+      "model": "planetaryfactory:block/ore/coal_stage7"
+    }
+  }
+}

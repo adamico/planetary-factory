@@ -1,0 +1,11 @@
+{
+  "__comment": "GregTech's Miner scans this tag; a block outside it is invisible to rung 1's drill.",
+  "replace": false,
+  "values": [
+    "planetaryfactory:coal_ore",
+    "planetaryfactory:copper_ore",
+    "planetaryfactory:iron_ore",
+    "planetaryfactory:stone_ore",
+    "planetaryfactory:uranium_ore"
+  ]
+}

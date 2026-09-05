@@ -3,7 +3,7 @@
 
 Vanilla drops a jigsaw child whose bounding box overlaps one already placed, and it does so
 without logging anything -- a rejected child is an ordinary outcome, not an error. So a hub
-whose fields overlap does not fail loudly; it quietly deals two patches instead of three, and
+whose fields overlap does not fail loudly; it quietly deals three patches instead of four, and
 only on some draws. That is what shipped once already: the fields' boxes missed each other by
 a single block on the seed the harness happened to use, and collided on the next world.
 
@@ -27,7 +27,9 @@ ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)
 STRUCTURES = os.path.join(ROOT, "kubejs", "data", "planetaryfactory", "structure")
 
 STEP = {"east": (1, 0), "west": (-1, 0), "north": (0, -1), "south": (0, 1)}
-RESOURCES = ["iron", "copper", "coal"]
+# Four fields since ADR-0041: stone is the fourth, and a fourth connector is exactly the kind of
+# addition that pushes two boxes into each other on some draws and not others.
+RESOURCES = ["iron", "copper", "coal", "stone"]
 SIZES = ["small", "medium", "large"]
 
 

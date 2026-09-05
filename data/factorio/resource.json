@@ -1,0 +1,273 @@
+{
+  "starting_amount_formula": "20000 * base_density * (frequency_multiplier + 1) * size_multiplier",
+  "controls": {
+    "frequency_multiplier": 1.0,
+    "size_multiplier": 1.0,
+    "richness": 1.0
+  },
+  "constants": {
+    "starting_resource_placement_radius": 150.0,
+    "regular_patch_fade_in_distance": 300.0,
+    "double_density_distance": 1300.0,
+    "starting_patches_split": 0.5
+  },
+  "outfield_law": {
+    "regular_blob_amplitude_at": {
+      "parameters": [
+        "distance"
+      ],
+      "expression": "regular_blob_amplitude_multiplier * min(regular_spot_height_typical_at(regular_blob_amplitude_maximum_distance),regular_spot_height_typical_at(distance))"
+    },
+    "regular_density_at": {
+      "parameters": [
+        "distance"
+      ],
+      "expression": "base_density * frequency_multiplier * size_multiplier * if(has_starting_area_placement == -1, 1, clamp((distance - starting_resource_placement_radius) / regular_patch_fade_in_distance, 0, 1)) * (1 + clamp(size_effective_distance_at(distance) / double_density_distance, 0, 1))"
+    },
+    "regular_spot_height_typical_at": {
+      "parameters": [
+        "distance"
+      ],
+      "expression": "((random_spot_size_minimum + random_spot_size_maximum) / 2 * regular_spot_quantity_base_at(distance)) ^ (1/3) / (pi/3 * regular_rq_factor ^ 2)"
+    },
+    "regular_spot_quantity_base_at": {
+      "parameters": [
+        "distance"
+      ],
+      "expression": "1000000 / base_spots_per_km2 / frequency_multiplier * regular_density_at(distance)"
+    },
+    "size_effective_distance_at": {
+      "parameters": [
+        "distance"
+      ],
+      "expression": "if(has_starting_area_placement == -1, distance, distance - regular_patch_fade_in_distance)"
+    }
+  },
+  "hand_mining": {
+    "character_mining_speed": 0.5,
+    "steel_axe_modifier": 1,
+    "character_mining_speed_researched": 1.0
+  },
+  "resources": [
+    {
+      "name": "coal",
+      "category": "basic-solid",
+      "infinite": false,
+      "minimum": null,
+      "base_density": 8.0,
+      "base_spots_per_km2": 2.5,
+      "has_starting_area_placement": true,
+      "starting_amount": 320000.0,
+      "mining_time": 1,
+      "required_fluid": null,
+      "stage_counts": [
+        15000,
+        9500,
+        5500,
+        2900,
+        1300,
+        400,
+        150,
+        80
+      ],
+      "stage_ratios": [
+        1.0,
+        0.6333333333333333,
+        0.36666666666666664,
+        0.19333333333333333,
+        0.08666666666666667,
+        0.02666666666666667,
+        0.01,
+        0.005333333333333333
+      ],
+      "distance_law": {
+        "term": "max((1000+distance)/2600,1)",
+        "offset": 1000,
+        "divisor": 2600,
+        "flat_within": 1600
+      }
+    },
+    {
+      "name": "copper-ore",
+      "category": "basic-solid",
+      "infinite": false,
+      "minimum": null,
+      "base_density": 8.0,
+      "base_spots_per_km2": 2.5,
+      "has_starting_area_placement": true,
+      "starting_amount": 320000.0,
+      "mining_time": 1,
+      "required_fluid": null,
+      "stage_counts": [
+        15000,
+        9500,
+        5500,
+        2900,
+        1300,
+        400,
+        150,
+        80
+      ],
+      "stage_ratios": [
+        1.0,
+        0.6333333333333333,
+        0.36666666666666664,
+        0.19333333333333333,
+        0.08666666666666667,
+        0.02666666666666667,
+        0.01,
+        0.005333333333333333
+      ],
+      "distance_law": {
+        "term": "max((1000+distance)/2600,1)",
+        "offset": 1000,
+        "divisor": 2600,
+        "flat_within": 1600
+      }
+    },
+    {
+      "name": "crude-oil",
+      "category": "basic-fluid",
+      "infinite": true,
+      "minimum": 60000,
+      "base_density": 8.2,
+      "base_spots_per_km2": 1.8,
+      "has_starting_area_placement": false,
+      "starting_amount": null,
+      "mining_time": 1,
+      "required_fluid": null,
+      "stage_counts": [
+        0
+      ],
+      "stage_ratios": [],
+      "distance_law": {
+        "term": "max((1000+distance)/2600,1)",
+        "offset": 1000,
+        "divisor": 2600,
+        "flat_within": 1600
+      }
+    },
+    {
+      "name": "iron-ore",
+      "category": "basic-solid",
+      "infinite": false,
+      "minimum": null,
+      "base_density": 10.0,
+      "base_spots_per_km2": 2.5,
+      "has_starting_area_placement": true,
+      "starting_amount": 400000.0,
+      "mining_time": 1,
+      "required_fluid": null,
+      "stage_counts": [
+        15000,
+        9500,
+        5500,
+        2900,
+        1300,
+        400,
+        150,
+        80
+      ],
+      "stage_ratios": [
+        1.0,
+        0.6333333333333333,
+        0.36666666666666664,
+        0.19333333333333333,
+        0.08666666666666667,
+        0.02666666666666667,
+        0.01,
+        0.005333333333333333
+      ],
+      "distance_law": {
+        "term": "max((1000+distance)/2600,1)",
+        "offset": 1000,
+        "divisor": 2600,
+        "flat_within": 1600
+      }
+    },
+    {
+      "name": "stone",
+      "category": "basic-solid",
+      "infinite": false,
+      "minimum": null,
+      "base_density": 4.0,
+      "base_spots_per_km2": 2.5,
+      "has_starting_area_placement": true,
+      "starting_amount": 160000.0,
+      "mining_time": 1,
+      "required_fluid": null,
+      "stage_counts": [
+        15000,
+        9500,
+        5500,
+        2900,
+        1300,
+        400,
+        150,
+        80
+      ],
+      "stage_ratios": [
+        1.0,
+        0.6333333333333333,
+        0.36666666666666664,
+        0.19333333333333333,
+        0.08666666666666667,
+        0.02666666666666667,
+        0.01,
+        0.005333333333333333
+      ],
+      "distance_law": {
+        "term": "max((1000+distance)/2600,1)",
+        "offset": 1000,
+        "divisor": 2600,
+        "flat_within": 1600
+      }
+    },
+    {
+      "name": "uranium-ore",
+      "category": "basic-solid",
+      "infinite": false,
+      "minimum": null,
+      "base_density": 0.9,
+      "base_spots_per_km2": 1.25,
+      "has_starting_area_placement": false,
+      "starting_amount": null,
+      "mining_time": 2,
+      "required_fluid": "sulfuric-acid",
+      "stage_counts": [
+        10000,
+        6330,
+        3670,
+        1930,
+        870,
+        270,
+        100,
+        50
+      ],
+      "stage_ratios": [
+        1.0,
+        0.633,
+        0.367,
+        0.193,
+        0.087,
+        0.027,
+        0.01,
+        0.005
+      ],
+      "distance_law": {
+        "term": "max((1000+distance)/2600,1)",
+        "offset": 1000,
+        "divisor": 2600,
+        "flat_within": 1600
+      }
+    }
+  ],
+  "skipped": [
+    "calcite",
+    "fluorine-vent",
+    "lithium-brine",
+    "scrap",
+    "sulfuric-acid-geyser",
+    "tungsten-ore"
+  ]
+}

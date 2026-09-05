@@ -84,6 +84,19 @@ an overlapping jigsaw child silently, so this failure ships as "two patches inst
 some seeds and nothing in a log. Run it after any edit to `scripts/build-terra-start.py`; it reads
 the generated `.nbt` files, so it also catches forgetting to re-run the generator.
 
+### Ore amount checks
+
+An ore block carries an amount and a break draws one unit (ADR-0041). That is four checks, none of
+which launches the game: `tests/factorio/test_resource_extract.py` re-derives every starting total
+from Factorio's own committed formula rather than trusting the number;
+`mod/src/test/java/com/planetaryfactory/core/ore/` asserts a block pays out exactly what it holds
+and that an exhausted position retires its delta, since a delta left behind is inherited by the next
+block placed there; `tests/pack/test_ore_assets.py` walks all forty blockstate/model/texture hops
+and asserts every ore block is in `c:ores`, which is the tag GregTech's miner scans;
+and `MiningSpeedTest` asserts a field costs its *amount* times the tier's seconds rather than its
+block count. Run them after editing anything under `core/ore/`, the two ore generators or the
+extractor. See `docs/testing/ore-amount-check.md`.
+
 ### ADR back-links
 
 An ADR that contradicts a closed ticket's stated answer declares it as `supersedes: [55, 62]` in

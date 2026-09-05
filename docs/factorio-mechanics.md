@@ -108,14 +108,24 @@ text and commits to no jar; **`pack` is admissible as a candidate only with a na
 - **verdict**: `shipped`
 - **where**: Terra, Ignus, Sapros
 - **via**: `gregtech`
-- **owner**: ADR-0007, ADR-0019, ADR-0020, ADR-0021
+- **owner**: ADR-0007, ADR-0019, ADR-0020, ADR-0021, ADR-0041
 
 GregTech ore veins in chunk-aligned disc patches, asserted by `scripts/worldgen-check.py` against
-`tests/worldgen/expected.json`.
+`tests/worldgen/expected.json`. Since ADR-0041 the veins target the pack's **own** ore blocks rather
+than GregTech's, because a block that carries an amount has to be a block this repo registers; the
+vein shape, the layers and the check are unchanged.
 
 Sub-rules:
 
 - **Patches are finite and run out** — `shipped`. ADR-0020: the fix for exhaustion is another planet.
+  Since ADR-0041 this is finite in the literal sense as well as the generated one: the patch holds a
+  number of units and mining spends them, rather than being finite only because the disc has edges.
+- **Stone is a resource patch, not scenery** — `shipped`, ADR-0041. Factorio mines stone out of a
+  patch like anything else, and Terra now deals a fourth starting field for it, with its own vein
+  beyond. *ADR-0021 ruled stone "ambient terrain, never a patch", on the grounds that
+  "a stone patch in a world made of stone reads as a joke". ADR-0041 reverses it: the mechanism
+  ADR-0021 discharged stone's bulk-material function onto was never built, and quarries exist on
+  Earth because what makes one is concentration, not the rock being absent elsewhere.*
 - **Ore is prospected, not stumbled on** — `adapted`. ADR-0019; a Factorio player reads a patch off
   the map, a player here reads surface indicators and later an Ore Finder satellite.
 - **Infinite late-game resource (oil-style yield decay)** — `adapted`. #86: GregTech's bedrock

@@ -8,7 +8,18 @@ world with no reachable ore at all: this is the opening that fixes that.
 
 Three decisions this script encodes, each argued in `docs/adr/0019-*.md` and in issue #84:
 
-**The patches are ordinary ore blocks, not a GregTech vein.** ADR-0020 already settled that
+**The patches are pack-authored ore blocks, not GregTech's and not a GregTech vein.** ADR-0041
+makes an ore block carry an amount, and GregTech models its material ore blocks at runtime --
+so the blocks here are `planetaryfactory:<resource>_ore`, which carry the amount and the eight
+sprite stages. They still drop GregTech's raw ore and still carry `c:ores`, which is the tag
+GregTech's own Miner scans, so the miner ladder sees these patches exactly as before.
+
+**The patch total is Factorio's and the per-block amount is a quotient.** This script writes no
+amount into the templates. It writes the ore blocks; the mod counts what was actually placed at
+stamp time and divides Factorio's own starting total by it (ADR-0041), because the size variant
+is drawn at world generation and only the placed field knows its own block count.
+
+**The patches are ordinary blocks, not a GregTech vein.** ADR-0020 already settled that
 depletion *is* physical block removal -- there is no depleted flag on a GT vein to set, and
 a GT Miner scans for ore blocks rather than consulting the vein registry, so the miner ladder
 sees these patches exactly as it sees a prospected one. A vein also cannot be spawn-anchored:
@@ -71,19 +82,29 @@ SEED = 20260829
 # `gtceu:<material>_ore`.
 PATCHES = {
     "iron": {
-        "block": "gtceu:iron_ore",
+        "block": "planetaryfactory:iron_ore",
         "radii": [10, 12, 14],
         "facing": "east",
     },
     "copper": {
-        "block": "gtceu:copper_ore",
+        "block": "planetaryfactory:copper_ore",
         "radii": [9, 10, 12],
         "facing": "north",
     },
     "coal": {
-        "block": "gtceu:coal_ore",
+        "block": "planetaryfactory:coal_ore",
         "radii": [9, 11, 13],
         "facing": "west",
+    },
+    # The fourth field (ADR-0041). ADR-0021 ruled stone ambient terrain and "never a patch", and
+    # that is reversed: it discharged stone's function onto a cobble generator, and Terra's noise
+    # settings carry `aquifers_enabled: false` and place no lava, so a cobble generator is
+    # unbuildable here. The smallest field of the four, which is Factorio's own ordering --
+    # stone's starting patch is 160,000 against iron's 400,000.
+    "stone": {
+        "block": "planetaryfactory:stone_ore",
+        "radii": [8, 9, 11],
+        "facing": "south",
     },
 }
 
@@ -245,11 +266,11 @@ def along_face(resource, dx, dz):
 
 
 def build_hub(rng, index, offsets):
-    """One hub variant: three connectors, one per resource, at scattered positions.
+    """One hub variant: one connector per resource, at scattered positions.
 
     The hub places no block of its own. Its whole job is to hold the three connectors far
-    enough apart, and at different enough offsets, that the three fields do not land on a
-    fixed triangle every world.
+    enough apart, and at different enough offsets, that the four fields do not land on a
+    fixed figure every world.
 
     Every connector sits on the hub's own outer face, pointing out of it, and that is not a
     style choice. Vanilla marks the parent's *entire* bounding box occupied the moment a
@@ -416,11 +437,13 @@ def main():
             build_patch(rng, resource, size, radius, distance)
 
     # Three hubs, each spreading the connectors differently, so the fields do not sit on the
-    # same triangle in every world.
+    # same figure in every world. Four connectors since ADR-0041 -- one per face, which is what
+    # a fourth field costs: the hub has four of them and the fifth resource, uranium, has no
+    # starting patch in Factorio and so needs none here.
     hub_offsets = [
-        {"iron": (0, 0), "copper": (-6, 4), "coal": (2, -7)},
-        {"iron": (3, -5), "copper": (0, 0), "coal": (-8, 2)},
-        {"iron": (-4, 6), "copper": (7, 1), "coal": (0, 0)},
+        {"iron": (0, 0), "copper": (-6, 4), "coal": (2, -7), "stone": (5, 3)},
+        {"iron": (3, -5), "copper": (0, 0), "coal": (-8, 2), "stone": (-3, 6)},
+        {"iron": (-4, 6), "copper": (7, 1), "coal": (0, 0), "stone": (2, -4)},
     ]
     for index, offsets in enumerate(hub_offsets):
         build_hub(rng, index, offsets)

@@ -17,7 +17,17 @@
                     "max_size": 4,
                     "min_size": 2,
                     "targets": [
-                        "gtceu:coal"
+                        [
+                            {
+                                "state": {
+                                    "Name": "planetaryfactory:coal_ore"
+                                },
+                                "target": {
+                                    "predicate_type": "minecraft:tag_match",
+                                    "tag": "minecraft:stone_ore_replaceables"
+                                }
+                            }
+                        ]
                     ],
                     "weight": 3
                 },
@@ -25,7 +35,17 @@
                     "max_size": 4,
                     "min_size": 2,
                     "targets": [
-                        "gtceu:coal"
+                        [
+                            {
+                                "state": {
+                                    "Name": "planetaryfactory:coal_ore"
+                                },
+                                "target": {
+                                    "predicate_type": "minecraft:tag_match",
+                                    "tag": "minecraft:stone_ore_replaceables"
+                                }
+                            }
+                        ]
                     ],
                     "weight": 3
                 }

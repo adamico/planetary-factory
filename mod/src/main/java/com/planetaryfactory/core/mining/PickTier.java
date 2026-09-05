@@ -3,7 +3,10 @@ package com.planetaryfactory.core.mining;
 /**
  * The two rungs of the Engineer's Pick, and Factorio's two mining speeds (ADR-0039).
  *
- * <p>Factorio's character mines at {@code 0.5}, and {@code steel-axe} adds {@code 1} to it. Those
+ * <p>Factorio's character mines at {@code 0.5}, and {@code steel-axe} carries a
+ * {@code character-mining-speed} modifier of {@code 1}. That modifier is a <em>fraction</em> --
+ * Factorio applies it as {@code base * (1 + modifier)} -- so it is +100% and leaves the character
+ * at {@code 1.0}, not at {@code 1.5}. Those
  * two speeds are Factorio's and are kept; a resource's seconds-per-item is
  * {@code mining_time / mining_speed}, so the ratio between the tiers is Factorio's too.
  *
@@ -16,10 +19,13 @@ package com.planetaryfactory.core.mining;
  * amendment halves the time and keeps everything else: still flat across the four resources, still
  * halved by {@code steel-axe}, still checkable as one number rather than vanilla's hardness spread.
  *
- * <p>The speeds are <em>transcribed from the wiki, not extracted</em>: {@code data/factorio/} holds
- * no resource dump, so unlike the technology tree they cannot be checked against the repo. ADR-0039
- * labels that weakness and names the extractor as the follow-on; a reader who finds these numbers
- * wrong should suspect the transcription first.
+ * <p>The speeds were <em>transcribed from the wiki</em> when ADR-0039 shipped, because
+ * {@code data/factorio/} held no resource dump. ADR-0041's extractor is the follow-on that ADR
+ * named, and the corpus holds one now: {@code data/factorio/resource.json} carries the character's
+ * own {@code mining_speed}, {@code steel-axe}'s modifier and each resource's {@code mining_time},
+ * and {@code tests/factorio/test_resource_extract.py} asserts the three numbers in this file
+ * against them. The extraction is what caught the sentence above: the modifier is a fraction, and
+ * the prose had been calling it an addend against a value that was right anyway.
  */
 public enum PickTier {
     /** Factorio's bare character: {@code mining_speed 0.5}, so one second an ore. */

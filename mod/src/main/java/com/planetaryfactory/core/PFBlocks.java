@@ -1,6 +1,8 @@
 package com.planetaryfactory.core;
 
 import com.planetaryfactory.core.energy.PoleTier;
+import com.planetaryfactory.core.ore.OreBlock;
+import com.planetaryfactory.core.ore.OreResource;
 import com.planetaryfactory.core.energy.SupplyAreaPoleBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SaplingBlock;
@@ -38,6 +40,22 @@ public final class PFBlocks {
             sapling("jellystem_sapling", PFTrees.JELLYSTEM);
 
     /**
+     * One block per {@link OreResource}: Terra's five ore blocks (ADR-0041).
+     *
+     * <p>Pack-authored rather than GregTech's because they carry an amount and a sprite stage, and
+     * GregTech models its ore blocks at runtime -- the ADR has the cost comparison. They still drop
+     * GregTech's raw ore, so nothing downstream of the item can tell.
+     */
+    private static final Map<OreResource, DeferredHolder<Block, OreBlock>> ORES =
+            new EnumMap<>(OreResource.class);
+
+    static {
+        for (OreResource resource : OreResource.values()) {
+            ORES.put(resource, BLOCKS.register(resource.blockName(), () -> new OreBlock(resource)));
+        }
+    }
+
+    /**
      * One block per {@link PoleTier}, in declaration order, so the four ids are derived from the
      * tier rather than typed out twice.
      */
@@ -51,6 +69,10 @@ public final class PFBlocks {
     }
 
     private PFBlocks() {
+    }
+
+    public static DeferredHolder<Block, OreBlock> ore(OreResource resource) {
+        return ORES.get(resource);
     }
 
     public static DeferredHolder<Block, SupplyAreaPoleBlock> pole(PoleTier tier) {

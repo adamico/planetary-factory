@@ -1,5 +1,7 @@
 package com.planetaryfactory.core.mining;
 
+import com.planetaryfactory.core.ore.OreDelta;
+import com.planetaryfactory.core.ore.OreField;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -79,5 +81,50 @@ class MiningSpeedTest {
     @Test
     void theSteelPickIsStrictlyFaster() {
         assertTrue(PickTier.STEEL.miningSpeed() > PickTier.IRON.miningSpeed());
+    }
+
+    /**
+     * ADR-0041's arithmetic claim, and the one the amendment turns from figurative into literal.
+     *
+     * <p>Before an ore block carried an amount, "one second per ore" meant one second per
+     * <em>block</em>, and how long a field took depended on how many blocks the generator happened
+     * to lay down. It now depends on the field's total instead: every unit is one break gesture
+     * through {@link OreDelta#draw}, so the seconds a patch costs are its amount times the tier's
+     * seconds -- whatever quotient {@link OreField} arrived at, and whether the block gives up its
+     * last unit on the first gesture or the five-hundredth.
+     */
+    @Test
+    void secondsPerOreHoldAcrossAMultiUnitBlock() {
+        OreField field = new OreField("iron", 40_000L, 100);
+        int perBlock = field.amountPerBlock();
+        assertEquals(400, perBlock);
+
+        OreDelta delta = new OreDelta();
+        int paid = 0;
+        for (int gesture = 0; gesture < perBlock * 2; gesture++) {
+            OreDelta.Draw draw = delta.draw(1L, perBlock);
+            paid += draw.paid();
+            if (draw.exhausted()) {
+                break;
+            }
+        }
+        // One gesture, one unit: the block pays out exactly what it holds and no gesture is free.
+        assertEquals(perBlock, paid);
+
+        float seconds = paid * PickTier.IRON.secondsPerResource();
+        assertEquals(perBlock * 1.0f, seconds, TOLERANCE);
+        // And the whole field costs its total, not its block count -- the split is arithmetic that
+        // cancels, which is exactly what "the amount is the resource" has to mean.
+        assertEquals(field.total() * PickTier.IRON.secondsPerResource(),
+                     seconds * field.blocks(), TOLERANCE);
+    }
+
+    @Test
+    void theSteelPickHalvesTheFieldAsWellAsTheBlock() {
+        // The tier ratio is a property of a gesture, so it survives multiplication by any amount.
+        OreField field = new OreField("copper", 320_000L, 1150);
+        float iron = field.total() * PickTier.IRON.secondsPerResource();
+        float steel = field.total() * PickTier.STEEL.secondsPerResource();
+        assertEquals(2.0f, iron / steel, TOLERANCE);
     }
 }

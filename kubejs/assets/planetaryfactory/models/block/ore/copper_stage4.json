@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "planetaryfactory:block/ore/copper_stage4"
+  }
+}

@@ -254,6 +254,10 @@
         "gtceu:uranium": {
           "layer": "stone",
           "weight": 40
+        },
+        "gtceu:stone": {
+          "layer": "stone",
+          "weight": 150
         }
       },
       "structures": {
