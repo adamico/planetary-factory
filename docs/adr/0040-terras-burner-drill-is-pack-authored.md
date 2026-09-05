@@ -1,9 +1,15 @@
 ---
-status: accepted
+status: provisional
 supersedes: []
 ---
 
 # Terra's burner drill is pack-authored, and extraction stops being GregTech's end to end
+
+> **Partly superseded by ADR-0043, and `provisional` under ADR-0042.** Two rows below are no longer
+> the pack's answer: rung 1 is a pack-authored electric rig rather than `gtceu:lv_miner`, and the
+> `excluded` verdict on drills outputting directly is reversed — a drill ejects onto the tile it
+> faces. The burner drill's own argument stands. This document also asserts that the mod already
+> registers a furnace ladder; it does not.
 
 ADR-0017 gave GregTech extraction and said so without qualification: "The extraction ladder is
 GregTech's end to end — LP Steam Miner at rung 0, Basic Ore Drilling Rig, Advanced Ore Drilling

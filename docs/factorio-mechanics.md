@@ -198,16 +198,32 @@ Sub-rules:
 
 ### Mining drills
 
-- **verdict**: `planned`
+- **verdict**: `adapted`
 - **where**: all bodies
-- **via**: `gregtech`
-- **owner**: ADR-0017
+- **via**: `planetaryfactory_core`
+- **owner**: ADR-0043
 - **ticket**: #105
+- **notice**: Terra's two rigs are pack-authored and GregTech owns no drill here. A rig works the
+  **layer directly beneath it** — Factorio's tiles, in a game that has a third axis — so a buried
+  vein is reached by digging down and placing the rig on it, not by a drill that scans downward.
 
 Sub-rules:
 
-- **Burner tier before electric** — `unargued`, no verdict.
-- **Drills output onto a belt directly** — `unargued`, no verdict.
+- **Burner tier before electric** — `adapted`. The tier exists and is Factorio's own block rather
+  than GregTech's steam stand-in. ADR-0040.
+- **Drills output onto the tile they face** — `adapted`. ADR-0043 reverses ADR-0040's `excluded`,
+  which was argued entirely about belts and had deleted the drill-into-furnace pair as collateral.
+  A rig ejects into an item handler on its faced tile, else drops one item on the ground there and
+  waits for it to be taken, else stalls. *This entry read "Drills output onto a belt directly —
+  `unargued`, no verdict".*
+- **Output onto a moving belt with no intermediate block** — `planned`, deferred to #178. A bare
+  Create belt does answer an item handler, so it is fed — but through a path that ignores the
+  belt's direction, and Create's funnel is reachable only by the ground drop. The faithful call is
+  `DirectBeltInputBehaviour` and it is one line of build config away; it is held back only because
+  the prior question is whether this pack ships Create's belts or Factorio's own.
+- **A drill shows which tiles it is working** — `adapted`. The rig tints the top face of every ore
+  block in its area, when looked at and when held for placement. Factorio shows this on a flat map;
+  here it is a render on a surface the player walks on.
 - **A body-locked large drill** (Vulcanus's Big Mining Drill) — `planned`, see [Planet-locked buildings](#planet-locked-buildings).
 
 ### Fluid handling
