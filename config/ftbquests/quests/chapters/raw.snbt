@@ -1,0 +1,72 @@
+{
+	default_hide_dependency_lines: false
+	default_quest_shape: ""
+	filename: "raw"
+	group: ""
+	id: "5E9A64AAEDBD8087"
+	images: [ ]
+	order_index: 1
+	quest_links: [ ]
+	quests: [
+		{
+			id: "1E530CB0B72EA044"
+			tasks: [{
+				id: "66EE158DC0EC47CA"
+				item: { count: 1, id: "gtceu:lv_assembling_machine" }
+				type: "item"
+			}]
+			x: -2.5d
+			y: -3.5d
+		}
+		{
+			id: "06BC46EF77A41D48"
+			tasks: [{
+				id: "7B08DA055A187AFB"
+				item: { count: 1, id: "minecraft:furnace" }
+				type: "item"
+			}]
+			x: -6.5d
+			y: -3.5d
+		}
+		{
+			id: "2FB9ECA9AE05CEC7"
+			tasks: [{
+				id: "73E523EB9CA0AFC0"
+				item: { count: 1, id: "create:belt_connector" }
+				type: "item"
+			}]
+			x: -4.5d
+			y: -3.5d
+		}
+		{
+			id: "5723E0CCF400014F"
+			tasks: [{
+				id: "0F3871CD7FC21061"
+				item: { count: 1, id: "researchd:research_lab" }
+				type: "item"
+			}]
+			x: -6.5d
+			y: -1.5d
+		}
+		{
+			id: "253DB07CA14BA1CD"
+			tasks: [{
+				id: "5F8DC7DC646145BF"
+				item: { count: 1, id: "planetaryfactory:electronic_circuit" }
+				type: "item"
+			}]
+			x: -4.5d
+			y: -1.5d
+		}
+		{
+			id: "5C0B151D1BD73CE4"
+			tasks: [{
+				id: "5CB409DE32D3EDF7"
+				item: { count: 1, id: "create:steam_engine" }
+				type: "item"
+			}]
+			x: -6.5d
+			y: 0.5d
+		}
+	]
+}
