@@ -432,8 +432,10 @@
       "note": "GregTech's rod prefix on Iron -- Factorio's iron stick. As `iron-gear-wheel`."
     },
     "lab": {
-      "status": "undecided",
-      "note": "Researchd's Lab, and #103 has it running on nothing. Which block the item is is not settled.",
+      "kind": "item",
+      "target": "researchd:research_lab",
+      "source": "borrowed",
+      "note": "Researchd's Lab, and #103 has it running running free without energy consumption. We will use this item but we need to either fork the mod to add energy capability or wait for an upstream update.",
       "ticket": 103
     },
     "landfill": {

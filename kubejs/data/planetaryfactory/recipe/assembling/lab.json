@@ -1,0 +1,47 @@
+{
+  "type": "gtceu:assembling",
+  "inputs": {
+    "item": [
+      {
+        "content": {
+          "ingredient": {
+            "item": "planetaryfactory:electronic_circuit"
+          },
+          "count": 10
+        }
+      },
+      {
+        "content": {
+          "ingredient": {
+            "item": "gtceu:iron_gear"
+          },
+          "count": 10
+        }
+      },
+      {
+        "content": {
+          "ingredient": {
+            "item": "create:belt_connector"
+          },
+          "count": 4
+        }
+      }
+    ]
+  },
+  "outputs": {
+    "item": [
+      {
+        "content": {
+          "ingredient": {
+            "item": "researchd:research_lab"
+          },
+          "count": 1
+        }
+      }
+    ]
+  },
+  "duration": 40,
+  "data": {
+    "factorio_category": "crafting"
+  }
+}
