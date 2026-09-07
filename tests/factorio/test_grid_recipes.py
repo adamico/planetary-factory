@@ -89,6 +89,9 @@ KNOWN_BLOCKED = {
     "gtceu:steel_plate": "5 plates to 1, which no vanilla smelting recipe can express -- it "
                          "waits on the pack furnace's own count-bearing recipe type "
                          "(`category-map.json`, `smelting`). Predates #172.",
+    "minecraft:stone_bricks": "2 stone to 1, same as `gtceu:steel_plate` -- no vanilla smelting "
+                              "shape, so it rides the count-bearing `planetaryfactory:smelting` "
+                              "type and waits on #155 (ADR-0046). Predates #172.",
 }
 
 failures = []

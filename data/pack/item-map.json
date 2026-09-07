@@ -787,7 +787,7 @@
       "kind": "item",
       "target": "gtceu:steel_plate",
       "source": "borrowed",
-      "note": "The only surviving alloy on Terra -- iron plus coal, #72."
+      "note": "The only surviving alloy on Terra -- iron plus coal, #72. Its `smelting` recipe is 5 plates to 1, which no vanilla shape can express -- a reported skip until the count-bearing `planetaryfactory:smelting` type lands with #155. The item itself is GregTech's and registered; only the recipe waits."
     },
     "stone": {
       "kind": "item",
@@ -797,9 +797,9 @@
     },
     "stone-brick": {
       "kind": "item",
-      "target": "minecraft:stone",
+      "target": "minecraft:stone_bricks",
       "source": "borrowed",
-      "note": "Factorio smelts 2 stone into 1 stone brick, its building block; Minecraft smelts cobblestone into stone, which is the same move. So the RECIPE is vanilla smelting at 1:1 and needs no ingredient count -- amending the earlier `minecraft:stone_bricks` reading, which did."
+      "note": "Factorio's stone brick is a building material -- walls, floors, the furnaces themselves -- and Minecraft's building block of that name is `minecraft:stone_bricks`. The recipe is the corpus verbatim: 2 stone to 1, category `smelting`, which no vanilla furnace shape can express, so it rides the count-bearing `planetaryfactory:smelting` type with `steel-plate` and is a reported skip until #155. ADR-0046 reversed the earlier reading (`minecraft:stone` on a 1:1 vanilla shape), which only ever worked by putting the item on the smelted block."
     },
     "stone-furnace": {
       "kind": "item",

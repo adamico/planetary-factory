@@ -49,16 +49,15 @@ the ticket); an `undecided` item-map row (the row names what decides it); an ove
 One more, found while building: **`smelting` has no vanilla shape above 1:1.** Vanilla's
 `SmeltingRecipe` holds a bare `Ingredient` with no count field, while its result is an `ItemStack`
 that has one — so 1:n emits and m:n cannot be written at all. Factorio's `steel-plate` is 5 iron
-plates and `stone-brick` is 2 stone. Both were reported here until #87 resolved them differently,
-and the split is worth reading as a pair:
+plates and `stone-brick` is 2 stone. #87 first resolved them as a pair split — `steel-plate` earned
+a count-bearing type, `stone-brick` took a vanilla 1:1 shape — and ADR-0046 collapsed the split:
 
-- **`stone-brick` takes Minecraft's shape.** 1 cobblestone to 1 stone is the same move at a
-  different ratio, so `stone` is `minecraft:cobblestone` (the mined rock) and `stone-brick` is
-  `minecraft:stone`. A knowing fidelity loss, recorded in `recipe-overrides.json` — which is what
-  that file is for.
-- **`steel-plate` is worth paying for.** It is the only surviving alloy on Terra (#72), so it gets
-  a count-bearing `planetaryfactory:smelting` recipe type on the pack's three furnaces (#155),
-  read alongside vanilla smelting. Until that lands it stays a reported skip.
+- **Both ride a count-bearing `planetaryfactory:smelting` recipe type** on the pack's three furnaces
+  (#155), read alongside vanilla smelting. `steel-plate` is the only surviving alloy on Terra (#72)
+  and was always going to earn that type; once it exists, `stone-brick` at its exact 2:1 ratio is a
+  second recipe on it at no extra cost, which is cheaper than the fidelity loss the 1:1 shape bought.
+- **Until #155 lands, both stay reported skips** — the converter reports them as "no vanilla shape"
+  rather than emitting anything.
 
 A Factorio name with **no item-map row at all** is none of those. It is a hard failure (#72): a
 name nobody has looked at must never be quietly skipped.

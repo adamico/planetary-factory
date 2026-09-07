@@ -119,7 +119,7 @@ two-readings failure does not arise.
 **A stone ore block is not a stone block.** It is a visually distinct ore, so a patch never reads as
 marked-up ground. It drops `minecraft:cobblestone`, which `data/pack/item-map.json` already records
 as Factorio's stone ("Factorio's stone is the MINED rock, and Minecraft's mined rock is
-cobblestone"), so the `stone-brick` chain — smelt cobble to stone at 1:1 — is untouched.
+cobblestone").
 
 So **Terra's alphabet is five: iron, copper, coal, uranium and stone**, and its starting area deals
 **four fields**, stone the smallest at 160,000. Stone also gets an authored outfield vein: a metered

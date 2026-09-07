@@ -5,7 +5,7 @@
       {
         "content": {
           "ingredient": {
-            "item": "minecraft:stone"
+            "item": "minecraft:stone_bricks"
           },
           "count": 5
         }

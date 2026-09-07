@@ -302,8 +302,8 @@ Sub-rules:
 - **A furnace recipe may consume more than one item** — `adapted`, #155. Vanilla's `SmeltingRecipe`
   holds an `Ingredient` with no count, so Factorio's `steel-plate` (5 plates to 1) has no vanilla
   shape at all; the pack's three furnaces read a count-bearing `planetaryfactory:smelting` type
-  alongside the vanilla one. `stone-brick` deliberately does NOT use it — it takes Minecraft's
-  1 cobblestone to 1 stone shape, a recorded departure in `recipe-overrides.json`.
+  alongside the vanilla one. `stone-brick` (2 stone to 1) rides that same type — ADR-0046 collapsed
+  #87's earlier split, which had `stone-brick` take a vanilla 1:1 shape instead.
 - **No ore multiplication** — `planned`, settled by ADR-0032: cut pack-wide, Mekanism's ladder and
   Create's rung-0 Crushing Wheels alike. Yield gain by research or module is `blocked`, not
   `excluded` — the lab cannot express levelled research (ADR-0022 prunes 106 such technologies) and
