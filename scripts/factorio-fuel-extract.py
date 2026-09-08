@@ -23,12 +23,18 @@ Three things this script decides, because they are properties of the data:
   - **Fluids are out.** `thruster-fuel` and `thruster-oxidizer` carry a `fuel_value` and no
     `fuel_category`: they are burned by a spaceship thruster, which is neither a burner
     energy source nor in scope. A fluid is not something a furnace slot holds.
-  - **`burnt_result` travels with the fuel.** It is Factorio's own spent-fuel mechanic --
-    `uranium-fuel-cell` leaves a depleted one -- and it is a property of the fuel item, not
-    of the machine. ADR-0047 drops the pack's *vanilla* remainder branch
-    (`getCraftingRemainingItem`, which is the lava-bucket rule and reaches no fuel here);
-    that is a different mechanic with the same silhouette, and #135 is where this column
-    gets read.
+  - **The default category is Factorio's, not a null.** An item prototype with a
+    `fuel_value` and no `fuel_category` is `chemical` to the engine, so it is `chemical`
+    here -- the same default `machine.json`'s burner block applies to `fuel_categories`. A
+    null would read as "nobody extracted this" and would fail the check on a prototype
+    Factorio considers perfectly ordinary fuel. No committed row hits the default today.
+
+Factorio's own spent-fuel mechanic (`burnt_result` -- `uranium-fuel-cell` leaves a depleted
+one) is deliberately **not** extracted. It is a real mechanic with no row in the ledger, and
+it is #135's: ADR-0047 drops the pack's *vanilla* remainder branch (`getCraftingRemainingItem`,
+the lava-bucket rule, which reaches no fuel here), and that is a different mechanic with the
+same silhouette. Extracting a column for a ticket this one lists as out of scope is how a
+corpus grows fields nobody reads.
 
 What this script does not do is decide anything. ADR-0047 holds the rule.
 
@@ -51,6 +57,9 @@ DEFAULT_DUMP = (
 )
 
 UNITS = {"k": 1e3, "M": 1e6, "G": 1e9, "T": 1e12}
+
+# Factorio's own default: an item with a `fuel_value` and no `fuel_category` is chemical.
+DEFAULT_CATEGORY = "chemical"
 
 # Fluids carry a `fuel_value` and are burned by a thruster rather than by a burner energy
 # source. Not a furnace's business, and not an item.
@@ -83,8 +92,7 @@ def extract_fuels(dump, corpus_names):
                     "type": kind,
                     "fuel_value": joules(prototype["fuel_value"]),
                     "fuel_value_raw": prototype["fuel_value"],
-                    "fuel_category": prototype.get("fuel_category"),
-                    "burnt_result": prototype.get("burnt_result"),
+                    "fuel_category": prototype.get("fuel_category", DEFAULT_CATEGORY),
                     "in_corpus": name in corpus_names,
                 }
             )
@@ -155,12 +163,11 @@ def main():
 
     print(f"{len(fuels)} fuels, {len(categories)} categories")
     print(f"wrote      {args.out.relative_to(REPO)}\n")
-    print(f"{'fuel':22} {'type':10} {'category':10} {'MJ':>10}  corpus  burnt result")
+    print(f"{'fuel':22} {'type':10} {'category':10} {'MJ':>10}  corpus")
     for fuel in fuels:
         print(
-            f"{fuel['name']:22} {fuel['type']:10} {fuel['fuel_category'] or '-':10} "
-            f"{fuel['fuel_value'] / 1e6:10.3f}  {'yes' if fuel['in_corpus'] else ' - ':^6}  "
-            f"{fuel['burnt_result'] or ''}"
+            f"{fuel['name']:22} {fuel['type']:10} {fuel['fuel_category']:10} "
+            f"{fuel['fuel_value'] / 1e6:10.3f}  {'yes' if fuel['in_corpus'] else ' - ':^6}"
         )
     print("\ncategories and the burners that accept them:")
     for name, who in categories.items():

@@ -140,8 +140,13 @@ effect recording the rule that produced them.
 
   `fuels`, one object per fuel-bearing item prototype: `name`, `type` (`item` or `capsule`),
   `fuel_value` in joules, `fuel_value_raw` (Factorio's own `4MJ`/`1.21GJ` string, kept so the
-  check can re-derive the number rather than trust it), `fuel_category`, `burnt_result` and
-  `in_corpus`.
+  check can re-derive the number rather than trust it), `fuel_category` — defaulted to
+  `chemical` the way the engine defaults it, since a null would read as "nobody extracted
+  this" — and `in_corpus`.
+
+  **`burnt_result` is deliberately not extracted.** Factorio's spent-fuel mechanic is real,
+  has no ledger row, and belongs to #135; ADR-0047's dropping of the pack's vanilla
+  `getCraftingRemainingItem` branch is a different mechanic with the same silhouette.
 
   **Scope is every fuel-bearing item, unfiltered** — deliberately *not* `machine.json`'s
   "its own item recipe is in the corpus" rule, which would drop `coal` and `wood`, since

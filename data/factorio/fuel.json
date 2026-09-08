@@ -6,7 +6,6 @@
       "fuel_value": 6000000.0,
       "fuel_value_raw": "6MJ",
       "fuel_category": "food",
-      "burnt_result": null,
       "in_corpus": false
     },
     {
@@ -15,7 +14,6 @@
       "fuel_value": 1000000.0,
       "fuel_value_raw": "1MJ",
       "fuel_category": "chemical",
-      "burnt_result": null,
       "in_corpus": false
     },
     {
@@ -24,7 +22,6 @@
       "fuel_value": 10000000.0,
       "fuel_value_raw": "10MJ",
       "fuel_category": "chemical",
-      "burnt_result": null,
       "in_corpus": false
     },
     {
@@ -33,7 +30,6 @@
       "fuel_value": 2000000.0,
       "fuel_value_raw": "2MJ",
       "fuel_category": "chemical",
-      "burnt_result": null,
       "in_corpus": false
     },
     {
@@ -42,7 +38,6 @@
       "fuel_value": 1000000.0,
       "fuel_value_raw": "1MJ",
       "fuel_category": "chemical",
-      "burnt_result": null,
       "in_corpus": false
     },
     {
@@ -51,7 +46,6 @@
       "fuel_value": 6000000.0,
       "fuel_value_raw": "6MJ",
       "fuel_category": "chemical",
-      "burnt_result": null,
       "in_corpus": false
     },
     {
@@ -60,7 +54,6 @@
       "fuel_value": 2000000.0,
       "fuel_value_raw": "2MJ",
       "fuel_category": "chemical",
-      "burnt_result": null,
       "in_corpus": true
     },
     {
@@ -69,7 +62,6 @@
       "fuel_value": 4000000.0,
       "fuel_value_raw": "4MJ",
       "fuel_category": "chemical",
-      "burnt_result": null,
       "in_corpus": true
     },
     {
@@ -78,7 +70,6 @@
       "fuel_value": 40000000000.0,
       "fuel_value_raw": "40GJ",
       "fuel_category": "fusion",
-      "burnt_result": null,
       "in_corpus": false
     },
     {
@@ -87,7 +78,6 @@
       "fuel_value": 4000000.0,
       "fuel_value_raw": "4MJ",
       "fuel_category": "chemical",
-      "burnt_result": null,
       "in_corpus": false
     },
     {
@@ -96,7 +86,6 @@
       "fuel_value": 1210000000.0,
       "fuel_value_raw": "1.21GJ",
       "fuel_category": "chemical",
-      "burnt_result": null,
       "in_corpus": false
     },
     {
@@ -105,7 +94,6 @@
       "fuel_value": 2000000.0,
       "fuel_value_raw": "2MJ",
       "fuel_category": "nutrients",
-      "burnt_result": null,
       "in_corpus": false
     },
     {
@@ -114,7 +102,6 @@
       "fuel_value": 5000000.0,
       "fuel_value_raw": "5MJ",
       "fuel_category": "chemical",
-      "burnt_result": null,
       "in_corpus": false
     },
     {
@@ -123,7 +110,6 @@
       "fuel_value": 100000000.0,
       "fuel_value_raw": "100MJ",
       "fuel_category": "chemical",
-      "burnt_result": null,
       "in_corpus": true
     },
     {
@@ -132,7 +118,6 @@
       "fuel_value": 12000000.0,
       "fuel_value_raw": "12MJ",
       "fuel_category": "chemical",
-      "burnt_result": null,
       "in_corpus": true
     },
     {
@@ -141,7 +126,6 @@
       "fuel_value": 250000.0,
       "fuel_value_raw": "250kJ",
       "fuel_category": "chemical",
-      "burnt_result": null,
       "in_corpus": false
     },
     {
@@ -150,7 +134,6 @@
       "fuel_value": 100000.0,
       "fuel_value_raw": "100kJ",
       "fuel_category": "chemical",
-      "burnt_result": null,
       "in_corpus": false
     },
     {
@@ -159,7 +142,6 @@
       "fuel_value": 8000000000.0,
       "fuel_value_raw": "8GJ",
       "fuel_category": "nuclear",
-      "burnt_result": "depleted-uranium-fuel-cell",
       "in_corpus": true
     },
     {
@@ -168,7 +150,6 @@
       "fuel_value": 2000000.0,
       "fuel_value_raw": "2MJ",
       "fuel_category": "chemical",
-      "burnt_result": null,
       "in_corpus": true
     },
     {
@@ -177,7 +158,6 @@
       "fuel_value": 4000000.0,
       "fuel_value_raw": "4MJ",
       "fuel_category": "chemical",
-      "burnt_result": null,
       "in_corpus": false
     }
   ],
