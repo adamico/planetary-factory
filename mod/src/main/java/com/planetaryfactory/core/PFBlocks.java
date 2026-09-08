@@ -3,6 +3,8 @@ package com.planetaryfactory.core;
 import com.planetaryfactory.core.energy.PoleTier;
 import com.planetaryfactory.core.ore.OreBlock;
 import com.planetaryfactory.core.ore.OreResource;
+import com.planetaryfactory.core.smelting.FurnaceBlock;
+import com.planetaryfactory.core.smelting.FurnaceTier;
 import com.planetaryfactory.core.energy.SupplyAreaPoleBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SaplingBlock;
@@ -56,6 +58,13 @@ public final class PFBlocks {
     }
 
     /**
+     * Factorio's three furnace tiers (#155), keyed the same way the poles are: the id comes from
+     * the tier rather than being typed out twice.
+     */
+    private static final Map<FurnaceTier, DeferredHolder<Block, FurnaceBlock>> FURNACES =
+            new EnumMap<>(FurnaceTier.class);
+
+    /**
      * One block per {@link PoleTier}, in declaration order, so the four ids are derived from the
      * tier rather than typed out twice.
      */
@@ -65,6 +74,12 @@ public final class PFBlocks {
     static {
         for (PoleTier tier : PoleTier.values()) {
             POLES.put(tier, BLOCKS.register(tier.blockName(), () -> new SupplyAreaPoleBlock(tier)));
+        }
+    }
+
+    static {
+        for (FurnaceTier tier : FurnaceTier.values()) {
+            FURNACES.put(tier, BLOCKS.register(tier.blockName(), () -> new FurnaceBlock(tier)));
         }
     }
 
@@ -82,6 +97,15 @@ public final class PFBlocks {
     /** The four pole blocks, for the block entity type that serves all of them. */
     public static Set<Block> poleBlocks() {
         return POLES.values().stream().map(DeferredHolder::get).collect(Collectors.toUnmodifiableSet());
+    }
+
+    public static DeferredHolder<Block, FurnaceBlock> furnace(FurnaceTier tier) {
+        return FURNACES.get(tier);
+    }
+
+    /** The three furnace blocks, for the block entity type that serves all of them. */
+    public static Set<Block> furnaceBlocks() {
+        return FURNACES.values().stream().map(DeferredHolder::get).collect(Collectors.toUnmodifiableSet());
     }
 
     static void register(IEventBus modBus) {

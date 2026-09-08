@@ -254,9 +254,10 @@
       "note": "As `engine-unit`."
     },
     "electric-furnace": {
-      "status": "undecided",
-      "note": "#155 registers the Electric Furnace as the third block of the mod-authored furnace ladder, taking EU. #149 specified it on a GT chassis and is closed as superseded: a GT machine reads `SmeltingRecipe` through `GTRecipeType.proxyRecipes` and would be blind to the count-bearing `planetaryfactory:smelting` type.",
-      "ticket": 155
+      "kind": "item",
+      "target": "planetaryfactory:electric_furnace",
+      "source": "authored",
+      "note": "The ladder's top rung (#155): `crafting_speed` 2, no fuel slot, 13 EU/t through GTCEu's `IEnergyContainer`, fed by ADR-0036's supply-area pole and by nothing else -- `acceptEnergyFromNetwork` returns 0, so a GT cable run cannot reach it. #149 specified it on a GT chassis and is closed as superseded: a GT machine reads `SmeltingRecipe` through `GTRecipeType.proxyRecipes` and would be blind to the count-bearing `planetaryfactory:smelting` type. Idle draw is not modelled (ADR-0029 excludes it)."
     },
     "electric-mining-drill": {
       "status": "undecided",
@@ -780,14 +781,13 @@
       "kind": "item",
       "target": "planetaryfactory:steel_furnace",
       "source": "authored",
-      "note": "The furnace ladder is `planetaryfactory_core`'s: three blocks reading BOTH vanilla `minecraft:smelting` and a pack `planetaryfactory:smelting` type that allows an ingredient count, because vanilla's furnace consumes exactly one item and Factorio's steel is 5 plates. Speed and fuel only, gating nothing (#91). Fuel-burning, faster. Blast furnace texture. Registered by #155, which builds the ladder and its recipe type.",
-      "blocked_by": 155
+      "note": "The furnace ladder is `planetaryfactory_core`'s: three blocks reading the pack's own count-bearing `planetaryfactory:smelting` and nothing else (#155). Vanilla's furnace consumes exactly one item and Factorio's steel is 5 plates, so the count is the reason the type exists; the vanilla type is not read alongside it, because ADR-0034's sweep leaves it with no live recipe. Speed and fuel only, gating nothing (#91). Fuel-burning, `crafting_speed` 2. Blast furnace texture."
     },
     "steel-plate": {
       "kind": "item",
       "target": "gtceu:steel_plate",
       "source": "borrowed",
-      "note": "The only surviving alloy on Terra -- iron plus coal, #72. Its `smelting` recipe is 5 plates to 1, which no vanilla shape can express -- a reported skip until the count-bearing `planetaryfactory:smelting` type lands with #155. The item itself is GregTech's and registered; only the recipe waits."
+      "note": "The only surviving alloy on Terra -- iron plus coal, #72. Its `smelting` recipe is 5 plates to 1, which no vanilla shape can express; it rides the count-bearing `planetaryfactory:smelting` type, which #155 landed."
     },
     "stone": {
       "kind": "item",
@@ -799,14 +799,13 @@
       "kind": "item",
       "target": "minecraft:stone_bricks",
       "source": "borrowed",
-      "note": "Factorio's stone brick is a building material -- walls, floors, the furnaces themselves -- and Minecraft's building block of that name is `minecraft:stone_bricks`. The recipe is the corpus verbatim: 2 stone to 1, category `smelting`, which no vanilla furnace shape can express, so it rides the count-bearing `planetaryfactory:smelting` type with `steel-plate` and is a reported skip until #155. ADR-0046 reversed the earlier reading (`minecraft:stone` on a 1:1 vanilla shape), which only ever worked by putting the item on the smelted block."
+      "note": "Factorio's stone brick is a building material -- walls, floors, the furnaces themselves -- and Minecraft's building block of that name is `minecraft:stone_bricks`. The recipe is the corpus verbatim: 2 stone to 1, category `smelting`, which no vanilla furnace shape can express, so it rides the count-bearing `planetaryfactory:smelting` type with `steel-plate`, which #155 landed. ADR-0046 reversed the earlier reading (`minecraft:stone` on a 1:1 vanilla shape), which only ever worked by putting the item on the smelted block."
     },
     "stone-furnace": {
       "kind": "item",
       "target": "planetaryfactory:stone_furnace",
       "source": "authored",
-      "note": "The furnace ladder is `planetaryfactory_core`'s: three blocks reading BOTH vanilla `minecraft:smelting` and a pack `planetaryfactory:smelting` type that allows an ingredient count, because vanilla's furnace consumes exactly one item and Factorio's steel is 5 plates. Speed and fuel only, gating nothing (#91). Rung 0, fuel-burning. Vanilla's furnace recipe goes with the stock sweep. Registered by #155, which builds the ladder and its recipe type.",
-      "blocked_by": 155
+      "note": "The furnace ladder is `planetaryfactory_core`'s: three blocks reading the pack's own count-bearing `planetaryfactory:smelting` and nothing else (#155). Vanilla's furnace consumes exactly one item and Factorio's steel is 5 plates, so the count is the reason the type exists; the vanilla type is not read alongside it, because ADR-0034's sweep leaves it with no live recipe. Speed and fuel only, gating nothing (#91). Rung 0, fuel-burning, `crafting_speed` 1. Vanilla's furnace recipe goes with the stock sweep."
     },
     "stone-wall": {
       "status": "undecided",

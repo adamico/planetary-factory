@@ -40,6 +40,8 @@ ROOT = Path(__file__).resolve().parent.parent.parent
 CORPUS = ROOT / "data/powergrid/recipe.json"
 SUBSTITUTIONS = ROOT / "data/pack/grid-substitutions.json"
 EMITTED = ROOT / "kubejs/data/planetaryfactory/recipe"
+# The pack's furnace type (#155): a count-bearing smelt, and the only smelting type emitted.
+PACK_SMELTING = "planetaryfactory:smelting"
 CATEGORY_MAP = ROOT / "data/pack/category-map.json"
 CONVERTER = ROOT / "scripts/powergrid-recipe-convert.py"
 
@@ -123,7 +125,7 @@ def emitted_recipes():
 
 def outputs_of(recipe):
     """The item names a recipe produces. Fluids are out of scope: nothing in grid/ takes one."""
-    if recipe["type"] == "minecraft:smelting":
+    if recipe["type"] == PACK_SMELTING:
         return [recipe["result"]["id"]]
     names = [ingredient_name(e["content"]["ingredient"])
              for e in recipe.get("outputs", {}).get("item", [])]
@@ -131,8 +133,8 @@ def outputs_of(recipe):
 
 
 def inputs_of(recipe):
-    if recipe["type"] == "minecraft:smelting":
-        return [(ingredient_name(recipe["ingredient"]), 1)]
+    if recipe["type"] == PACK_SMELTING:
+        return [(ingredient_name(recipe["ingredient"]), recipe.get("count", 1))]
     pairs = [(ingredient_name(e["content"]["ingredient"]), e["content"]["count"])
              for e in recipe.get("inputs", {}).get("item", [])]
     return [pair for pair in pairs if pair[0] is not None]

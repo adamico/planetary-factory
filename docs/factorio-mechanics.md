@@ -299,11 +299,18 @@ Sub-rules:
 
 - **Ore smelts one-to-one straight to plate, with no intermediate step** — `planned`. Recorded in
   `subgroup-owner.json`; the pack does not get to add a hop.
-- **A furnace recipe may consume more than one item** — `adapted`, #155. Vanilla's `SmeltingRecipe`
+- **A furnace recipe may consume more than one item** — `shipped`, #155. Vanilla's `SmeltingRecipe`
   holds an `Ingredient` with no count, so Factorio's `steel-plate` (5 plates to 1) has no vanilla
   shape at all; the pack's three furnaces read a count-bearing `planetaryfactory:smelting` type
-  alongside the vanilla one. `stone-brick` (2 stone to 1) rides that same type — ADR-0046 collapsed
-  #87's earlier split, which had `stone-brick` take a vanilla 1:1 shape instead.
+  and **only** that one. `stone-brick` (2 stone to 1) rides the same type — ADR-0046 collapsed
+  #87's earlier split, which had `stone-brick` take a vanilla 1:1 shape instead. The vanilla type
+  is not read alongside it: under ADR-0034's sweep it carries no live recipe, which also makes
+  Minecraft's food cooking gone rather than merely uncraftable (#183).
+- **A machine with a blocked output stops** — `shipped`, #155. A furnace whose output slot cannot
+  take the result does not start the smelt, burns no fuel and draws no EU; nothing is voided,
+  overflowed or dropped. Factorio has no machine that ejects to the ground, and under ADR-0041
+  Terra's ore is finite, so backing up is the only answer that does not destroy a resource the
+  world cannot re-make.
 - **No ore multiplication** — `planned`, settled by ADR-0032: cut pack-wide, Mekanism's ladder and
   Create's rung-0 Crushing Wheels alike. Yield gain by research or module is `blocked`, not
   `excluded` — the lab cannot express levelled research (ADR-0022 prunes 106 such technologies) and

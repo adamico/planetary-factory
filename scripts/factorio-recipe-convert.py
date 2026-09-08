@@ -68,17 +68,21 @@ def is_ours(path):
 # recipe type itself, and the ticket that registers one that does not exist yet, are read from the
 # map rather than kept in a table of this script's own.
 #
-# `pack:smelting` is the pack's three furnace tiers (#91, #149) -- `planetaryfactory_core` blocks
-# reading vanilla `minecraft:smelting`, which needs no registration. A recipe vanilla's furnace
-# cannot express still skips below: the pack's own furnace type is the furnace ticket's, not this
-# script's.
+# `pack:smelting` is the pack's three furnace tiers (#155) -- `planetaryfactory_core` blocks
+# reading `planetaryfactory:smelting`, the mod's own type, and reading nothing else. The type
+# carries a count on the ingredient, which is what lets the m:n smelts be expressed at all; every
+# category-`smelting` recipe in the corpus emits onto it.
 MACHINE_OF_PROCESS = {"pack:smelting": "smelting"}
 
-# Vanilla's furnace consumes exactly one item -- `SmeltingRecipe` holds a bare `Ingredient` with
-# no count, while its result carries one -- so a `smelting` recipe asking for more has no vanilla
-# shape. `stone-brick` is overridden to the vanilla 1:1 shape (cobblestone to stone); `steel-plate`
-# is 5 plates to 1 and waits on the pack furnace's own recipe type. Reported, never emitted as 1:1.
-VANILLA_SMELTING = "minecraft:smelting"
+# The pack's own furnace type (#155). Vanilla's `SmeltingRecipe` holds a bare `Ingredient` with no
+# count while its result carries one, so `steel-plate` (5 plates to 1) and `stone-brick` (2 stone
+# to 1, ADR-0046) have no vanilla shape at all; both used to be reported as skips here. This type
+# carries the count, so nothing about a smelt is dropped on the way out.
+#
+# The vanilla type is not read alongside it. ADR-0034's sweep removes every vanilla smelting
+# recipe, so a dual read would have no live consumer -- and a recipe on it would carry vanilla's
+# cook time and get no tier scaling.
+PACK_SMELTING = "planetaryfactory:smelting"
 
 # Factorio's `crafting` / `advanced-crafting` / `crafting-with-fluid` all collapse to one
 # machine, and the Personal Assembler needs the distinction back: it is a filtered view of the
@@ -138,16 +142,20 @@ def capability_of(row):
 
 
 def convert_smelting(recipe, items, override):
-    """One vanilla furnace recipe. #91 puts the plates on three furnace tiers, all vanilla."""
+    """One pack furnace recipe (#155), on all three tiers.
+
+    `count` is Factorio's ingredient amount, carried rather than dropped -- it is the whole reason
+    the pack registers a type of its own. `cookingtime` is `energy_required * 20` with no speed
+    divisor in it: ADR-0029 puts `crafting_speed` on the machine, and the block divides.
+    """
     ingredient = items[recipe["ingredients"][0]["name"]]
     result = items[recipe["results"][0]["name"]]
     return {
-        "type": VANILLA_SMELTING,
+        "type": PACK_SMELTING,
         "ingredient": {"tag": ingredient["target"]} if ingredient["kind"] == "tag"
         else {"item": ingredient["target"]},
+        "count": recipe["ingredients"][0]["amount"],
         "result": {"id": result["target"], "count": recipe["results"][0]["amount"]},
-        # Factorio has no smelting XP and the pack is not going to invent one.
-        "experience": 0.0,
         "cookingtime": override.get("duration", round(recipe["energy_required"] * 20)),
     }
 
@@ -284,12 +292,7 @@ def main():
             skipped.append((name, "override", override["reason"]))
             continue
 
-        if recipe_type == VANILLA_SMELTING:
-            oversized = [e for e in recipe["ingredients"] if e["amount"] != 1]
-            if oversized:
-                skipped.append((name, "no vanilla shape",
-                                f"a furnace consumes one item, not {oversized[0]['amount']}"))
-                continue
+        if recipe_type == PACK_SMELTING:
             emitted[name.replace("-", "_")] = convert_smelting(recipe, items, override)
         else:
             emitted[emitted_path(recipe_type, name)] = convert(recipe, recipe_type, items,

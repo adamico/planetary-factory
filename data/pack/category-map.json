@@ -44,8 +44,8 @@
       "note": "ADR-0025's Oil Refinery, one tier, multiblock (#107, machines.js). Registered at (0, 0, 2, 3): the corpus holds basic and advanced oil processing and no liquefaction recipe, so the item slots ADR-0025 gave it would be unfillable. Adding coal liquefaction is #12's, and widens this to (2, 0, 2, 3)."
     },
     "smelting": {
-      "recipe_type": "minecraft:smelting",
-      "note": "Plates and stone brick, vanilla `minecraft:smelting` on #91's three furnace tiers -- `planetaryfactory_core` blocks (Stone, Steel, Electric), which is why `subgroup-owner.json` now reads `pack:smelting`. ADR-0032 deleted ADR-0017's Ore processing row -- ore is 1:1, so smelting rides nothing and is the whole of ore-to-plate. The TYPE is vanilla and needs no registration. `steel-plate` is 5 plates to 1, which no vanilla smelting recipe can express: it waits on the pack furnace's own count-bearing recipe type."
+      "recipe_type": "planetaryfactory:smelting",
+      "note": "Plates and stone brick, on the pack's own `planetaryfactory:smelting` (#155) and on nothing else. The three furnace tiers are `planetaryfactory_core` blocks (Stone, Steel, Electric), which is why `subgroup-owner.json` reads `pack:smelting`. ADR-0032 deleted ADR-0017's Ore processing row -- ore is 1:1, so smelting rides nothing and is the whole of ore-to-plate. The type carries a count on the ingredient, which is what lets `steel-plate` (5 plates to 1) and `stone-brick` (2 stone to 1, ADR-0046) be expressed at all; vanilla `minecraft:smelting` can express neither, and is not read alongside it because ADR-0034's sweep leaves it with no live recipe."
     },
     "centrifuge": {
       "recipe_type": null,

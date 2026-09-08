@@ -74,9 +74,17 @@ qualify:
 | `assembling` (MV) | `assembling-machine-2` | 150 | 0.75 | 11 |
 | `assembling` (LV) | `assembling-machine-1` | 75 | 0.5 | 5 |
 
+> **Amended by #155.** `smelting` now receives a number. The three furnace tiers are
+> `planetaryfactory_core` blocks (Mekanism left in ADR-0035), and the Electric Furnace draws
+> **13 EU/t** -- its own 180 kW through this ADR's constant, `180_000 x 32/420_000`, truncated the
+> way the table above truncates. **The constant and `P_max` are unchanged**: 180 kW is well under
+> the Oil Refinery's 420 kW, so nothing regenerates and no other machine's number moves. What does
+> not transfer is the *mechanism* -- `ModifierFunction` needs a GT machine, and the pack furnace
+> applies the constant itself. Its 6 kW idle draw stays `excluded` under the section below.
+
 Everything else in `machine.json` receives nothing, and for reasons already recorded elsewhere:
-`smelting` routes to Create/Mekanism per ADR-0017 and has no `EUt` field at all; the Rocket Silo is
-GCyR's; the Research Lab has no energy handler; `crushing` and `centrifuging` are `!`-routed.
+the Rocket Silo is GCyR's; the Research Lab has no energy handler; `crushing` and `centrifuging`
+are `!`-routed.
 
 **The two files disagree by design and the converter reconciles them.** `machine.json`'s scope rule is
 *"keep a machine whose own item recipe is in the corpus"*, which is a Factorio scope — it is why the

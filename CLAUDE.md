@@ -51,6 +51,25 @@ model to texture. The two builders land in different namespaces, so the lang ass
 cosmetic. Run it after editing that script, the category map or the machine lang files. Whether a
 machine's GUI and pattern behave is a world load, not a static check.
 
+### Furnace ladder check
+
+`tests/pack/test_furnace_assets.py` asserts the three furnace tiers `FurnaceTier.java` registers
+have their pack-side files: a blockstate covering both `facing` and `lit`, a model per state, an
+item model, a lang key and a loot table. Two of its assertions are the ladder's own rather than
+generic plumbing — the Electric tier's textures are asserted to exist *inside the GTCEu jar*, and
+its model is asserted **not** to declare `"loader": "gtceu:machine"`, which GregTech's model
+provider does not serve for a `planetaryfactory:` block. `tests/pack/test_smelting_type.py` holds
+the recipe type itself: that the pack's recipe class is **not** assignable to vanilla's
+`SmeltingRecipe` -- GT's `proxyRecipes` converts that class specifically and would drop the count,
+turning `5 iron_plate -> 1 steel_plate` into a 1:1 with no error and no log line -- that the count
+survives both codecs, and that nothing in the mod reads recipes off vanilla's smelting type. It is
+a source-text check because the assertion needs to name a Minecraft class the unit-test classpath
+deliberately does not have. The arithmetic and the rules are
+Minecraft-free unit tests under `mod/src/test/java/com/planetaryfactory/core/smelting/`: the
+per-tier duration, the 13 EU/t draw and its buffer, the unsided routing by item, and the stall —
+a blocked output starts no smelt, burns no fuel and voids nothing (ADR-0041). Whether the three
+blocks smelt in a running game is a world load, and its GameTests land with #156.
+
 ### Assembler queue and resolver check
 
 `mod/src/test/java/com/planetaryfactory/core/assembler/` asserts the Personal Assembler's queue:

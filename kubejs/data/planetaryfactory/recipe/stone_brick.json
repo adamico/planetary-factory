@@ -1,11 +1,11 @@
 {
   "type": "planetaryfactory:smelting",
   "ingredient": {
-    "tag": "c:raw_materials/copper"
+    "item": "minecraft:cobblestone"
   },
-  "count": 1,
+  "count": 2,
   "result": {
-    "id": "gtceu:copper_plate",
+    "id": "minecraft:stone_bricks",
     "count": 1
   },
   "cookingtime": 64

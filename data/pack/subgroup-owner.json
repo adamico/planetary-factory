@@ -320,7 +320,7 @@
     },
     "production/smelting-machine": {
       "owner": "pack",
-      "reason": "#91, as amended by ADR-0035 and #87: the three furnace tiers are `planetaryfactory_core` blocks -- Stone and Steel fuel-burning, Electric on FE (#149) -- reading vanilla `minecraft:smelting` alongside a pack recipe type that allows an ingredient count. Their build machine is `pack:assembling`, like every other machine.",
+      "reason": "#91, as amended by ADR-0035 and settled by #155: the three furnace tiers are `planetaryfactory_core` blocks -- Stone and Steel fuel-burning, Electric on **EU** at 13 EU/t from a supply-area pole -- reading the pack's own count-bearing `planetaryfactory:smelting` and nothing else. Their build machine is `pack:assembling`, like every other machine.",
       "process": "pack:assembling",
       "note": "The ladder is speed-and-fuel only and gates nothing (#91). Mekanism's Energized Smelter left with the mod (ADR-0035); #42's slot conflict dissolved with it. The pack type exists because vanilla's furnace consumes exactly one item and Factorio's steel is 5 plates -- see `intermediate-products/raw-material`.",
       "count": 3,
