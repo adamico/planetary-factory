@@ -6,7 +6,7 @@ import java.util.Locale;
  * ADR-0043's two-rung drill ladder, as identity only -- #192 is the shared footprint idiom both
  * rigs stand on, and carries neither mining speed nor fuel (those are #193/#194).
  *
- * <p>{@link #factorioName()} is the corpus key {@link RigFootprints} reads {@code tile_width} and
+ * <p>{@link #factorioName()} is the corpus key {@link RigCorpus} reads {@code tile_width} and
  * {@code tile_height} against, so the 2x2 and 3x3 ground sizes are never typed here.
  * {@link #blocksTall()} is the exception, and says why on itself: Factorio is played on a plane and
  * states no third figure.

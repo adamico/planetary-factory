@@ -7,6 +7,7 @@ import com.planetaryfactory.core.network.PFNetwork;
 import com.planetaryfactory.core.recipes.PFRecipes;
 import com.planetaryfactory.core.smelting.PFFuel;
 import com.planetaryfactory.core.smelting.client.FuelTooltip;
+import com.planetaryfactory.core.mining.rig.client.RigClient;
 import com.planetaryfactory.core.smelting.client.FurnaceClient;
 import com.planetaryfactory.core.ore.OreMining;
 import com.planetaryfactory.core.worldgen.PFWorldgen;
@@ -65,6 +66,7 @@ public final class PlanetaryFactoryCore {
         if (FMLEnvironment.dist == Dist.CLIENT) {
             AssemblerClient.register(modBus);
             FurnaceClient.register(modBus);
+            RigClient.register(modBus);
             // What an item is worth as fuel, on its own tooltip: the fuel table is default-deny,
             // so vanilla's intuitions about what burns are wrong in both directions.
             FuelTooltip.register();

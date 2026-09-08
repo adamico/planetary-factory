@@ -5,7 +5,9 @@ import com.planetaryfactory.core.energy.PoleColumn;
 import com.planetaryfactory.core.energy.PoleTier;
 import com.planetaryfactory.core.energy.SupplyAreaPoleBlockEntity;
 import com.planetaryfactory.core.mining.rig.RigBlockEntity;
+import com.planetaryfactory.core.mining.rig.RigItemHandler;
 import com.planetaryfactory.core.mining.rig.RigPartBlockEntity;
+import com.planetaryfactory.core.mining.rig.RigTier;
 import com.planetaryfactory.core.smelting.FurnaceBlockEntity;
 import com.planetaryfactory.core.smelting.FurnaceItemHandler;
 import com.planetaryfactory.core.smelting.FurnaceTier;
@@ -73,6 +75,7 @@ public final class PFBlockEntities {
     static void registerCapabilities(RegisterCapabilitiesEvent event) {
         registerPoleCapabilities(event);
         registerFurnaceCapabilities(event);
+        registerRigCapabilities(event);
     }
 
     /**
@@ -139,6 +142,42 @@ public final class PFBlockEntities {
                             blockEntity instanceof FurnaceBlockEntity furnace
                                     ? furnace.energySide() : null,
                     block);
+        }
+    }
+
+    /**
+     * The rig's item face (#193): fuel in, ore out, on every side and on the null side.
+     *
+     * <p>Unsided for the reason the furnace's is -- Factorio decides in-or-out by the inserter's
+     * direction rather than by the machine's face, and a nominated-face inventory answers a Create
+     * funnel on any other face with silence and no diagnosis.
+     *
+     * <p><b>Registered on the part blocks as well as the anchors.</b> Three quarters of a 2x2 is
+     * part, so a hopper under the corner a player happened to build against would otherwise find
+     * nothing, and which corner holds the anchor is not visible. The part forwards to its anchor's
+     * block entity, the same as its break and its right-click do.
+     *
+     * <p>No energy face here. The electric rig is a supply-area pole customer under ADR-0036 and
+     * gets one with #194; the burner rig never does.
+     */
+    private static void registerRigCapabilities(RegisterCapabilitiesEvent event) {
+        for (RigTier tier : RigTier.values()) {
+            event.registerBlock(
+                    Capabilities.ItemHandler.BLOCK,
+                    (level, pos, state, blockEntity, side) ->
+                            blockEntity instanceof RigBlockEntity rig ? new RigItemHandler(rig) : null,
+                    PFBlocks.rig(tier).get());
+            event.registerBlock(
+                    Capabilities.ItemHandler.BLOCK,
+                    (level, pos, state, blockEntity, side) -> {
+                        if (!(blockEntity instanceof RigPartBlockEntity part)
+                                || part.anchorPos() == null
+                                || !(level.getBlockEntity(part.anchorPos()) instanceof RigBlockEntity rig)) {
+                            return null;
+                        }
+                        return new RigItemHandler(rig);
+                    },
+                    PFBlocks.rigPart(tier).get());
         }
     }
 }

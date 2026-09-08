@@ -65,6 +65,7 @@ public final class OreCorpus {
                         entry.get("starting_amount").isJsonNull()
                                 ? 0L
                                 : (long) entry.get("starting_amount").getAsDouble(),
+                        entry.get("mining_time").getAsDouble(),
                         List.copyOf(ratios)));
             }
             JsonObject distance = root.getAsJsonObject("distance_law");
@@ -106,14 +107,19 @@ public final class OreCorpus {
     }
 
     /**
-     * One resource: its patch total and the ladder its stages are rendered against.
+     * One resource: its patch total, what an operation on it costs, and the ladder its stages are
+     * rendered against.
      *
      * @param name the pack's block name -- {@code iron}, {@code stone}
      * @param factorioName the corpus key, which is Factorio's own (ADR-0028)
      * @param startingAmount Factorio's starting patch total, or {@code 0} where it deals none
+     * @param miningTime seconds one unit costs a drill of speed 1 -- Factorio's own
+     *         {@code minable.mining_time}, and the reason a rig's rate cannot live on the rig
+     *         (#193): uranium's 2 costs the same drill twice what iron's 1 does
      * @param stageRatios fractions of a block's own initial amount, richest first
      */
-    public record Resource(String name, String factorioName, long startingAmount, List<Double> stageRatios) {
+    public record Resource(String name, String factorioName, long startingAmount, double miningTime,
+            List<Double> stageRatios) {
     }
 
     /**

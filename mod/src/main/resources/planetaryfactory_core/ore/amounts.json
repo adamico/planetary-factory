@@ -10,6 +10,7 @@
     "coal": {
       "factorio_name": "coal",
       "starting_amount": 320000.0,
+      "mining_time": 1,
       "stage_ratios": [
         1.0,
         0.6333333333333333,
@@ -24,6 +25,7 @@
     "copper": {
       "factorio_name": "copper-ore",
       "starting_amount": 320000.0,
+      "mining_time": 1,
       "stage_ratios": [
         1.0,
         0.6333333333333333,
@@ -38,6 +40,7 @@
     "iron": {
       "factorio_name": "iron-ore",
       "starting_amount": 400000.0,
+      "mining_time": 1,
       "stage_ratios": [
         1.0,
         0.6333333333333333,
@@ -52,6 +55,7 @@
     "stone": {
       "factorio_name": "stone",
       "starting_amount": 160000.0,
+      "mining_time": 1,
       "stage_ratios": [
         1.0,
         0.6333333333333333,
@@ -66,6 +70,7 @@
     "uranium": {
       "factorio_name": "uranium-ore",
       "starting_amount": null,
+      "mining_time": 2,
       "stage_ratios": [
         1.0,
         0.633,

@@ -43,9 +43,9 @@ public final class RigBreaker {
         }
         IN_PROGRESS.set(true);
         try {
-            RigFootprints.Size size = RigFootprints.get().sizeOf(tier);
+            RigCorpus.Row row = RigCorpus.get().rowOf(tier);
             List<RigGeometry.Offset> offsets = RigGeometry.footprint(
-                    size.width(), size.height(), tier.blocksTall(), RigDirections.toRigFacing(facing));
+                    row.width(), row.height(), tier.blocksTall(), RigDirections.toRigFacing(facing));
             for (RigGeometry.Offset offset : offsets) {
                 BlockPos pos = anchorPos.offset(offset.dx(), offset.dy(), offset.dz());
                 if (pos.equals(skip)) {

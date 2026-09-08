@@ -63,5 +63,8 @@
   "block.planetaryfactory.burner_mining_drill": "Burner Mining Drill",
   "block.planetaryfactory.burner_mining_drill_part": "Burner Mining Drill (part)",
   "block.planetaryfactory.electric_mining_drill": "Electric Mining Drill",
-  "block.planetaryfactory.electric_mining_drill_part": "Electric Mining Drill (part)"
+  "block.planetaryfactory.electric_mining_drill_part": "Electric Mining Drill (part)",
+  "tooltip.planetaryfactory.rig.fuel": "%s / %s J",
+  "tooltip.planetaryfactory.rig.fuel.seconds": "%ss of mining at %s J/t",
+  "tooltip.planetaryfactory.rig.fuel.out": "No fuel burning"
 }

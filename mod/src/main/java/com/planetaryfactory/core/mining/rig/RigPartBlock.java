@@ -4,6 +4,8 @@ import javax.annotation.Nullable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
@@ -19,6 +21,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.phys.BlockHitResult;
 
 /**
  * One block of a rig's footprint that is not the anchor (#192).
@@ -87,6 +90,27 @@ public class RigPartBlock extends BaseEntityBlock {
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state,
             BlockEntityType<T> type) {
         return null;
+    }
+
+    /**
+     * Right-clicking any part opens the rig, the same as clicking the anchor (#193).
+     *
+     * <p>Three quarters of a 2x2 is part rather than anchor, and nine tenths of a 3x3. A rig that
+     * opened only from one of its corners would read as broken, and nothing tells the player which
+     * corner the anchor is -- the same reason a break from any part tears the whole rig down.
+     */
+    @Override
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos,
+            Player player, BlockHitResult hit) {
+        if (level.isClientSide()) {
+            return InteractionResult.SUCCESS;
+        }
+        if (level.getBlockEntity(pos) instanceof RigPartBlockEntity part
+                && part.anchorPos() != null
+                && level.getBlockEntity(part.anchorPos()) instanceof RigBlockEntity rig) {
+            player.openMenu(rig, buf -> buf.writeEnum(rig.tier()));
+        }
+        return InteractionResult.CONSUME;
     }
 
     /**

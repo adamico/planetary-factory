@@ -3,6 +3,7 @@ package com.planetaryfactory.core;
 import com.planetaryfactory.core.assembler.AssemblerPanelMenu;
 import com.planetaryfactory.core.assembler.CraftingPlanMenu;
 import com.planetaryfactory.core.assembler.SelectAmountMenu;
+import com.planetaryfactory.core.mining.rig.RigMenu;
 import com.planetaryfactory.core.smelting.FurnaceMenu;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.inventory.MenuType;
@@ -43,6 +44,14 @@ public final class PFMenus {
      */
     public static final Supplier<MenuType<FurnaceMenu>> FURNACE =
             MENUS.register("furnace", () -> IMenuTypeExtension.create(FurnaceMenu::new));
+
+    /**
+     * One menu for both mining rigs (#193, #194), for the reason the furnace's is one: they differ
+     * in whether there is a fuel slot, and the tier travels in the opening packet so the client can
+     * tell without a block entity to ask.
+     */
+    public static final Supplier<MenuType<RigMenu>> RIG =
+            MENUS.register("rig", () -> IMenuTypeExtension.create(RigMenu::new));
 
     private PFMenus() {
     }

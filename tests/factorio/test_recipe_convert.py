@@ -43,6 +43,7 @@ PF_BLOCKS = MOD / "PFBlocks.java"
 PF_ITEMS = MOD / "PFItems.java"
 POLE_TIER = MOD / "energy/PoleTier.java"
 FURNACE_TIER = MOD / "smelting/FurnaceTier.java"
+RIG_TIER = ROOT / "mod/src/main/java/com/planetaryfactory/core/mining/rig/RigTier.java"
 
 # The pack's own smelting type (#155). Its ingredient carries a count, which vanilla's cannot,
 # and it is the only type the three furnace tiers read.
@@ -73,9 +74,13 @@ def mod_registered_blocks():
     Reading only the startup scripts would now report four registered blocks as unregistered, and
     the natural "fix" for that is to weaken the check, which is the one thing it must not do.
 
-    The poles and the furnaces derive their ids from their tier enums, so they are read the same
-    way rather than typed out: a fifth pole tier or a fourth furnace is then registered here
-    without this file being edited.
+    The poles, the furnaces and the mining rigs derive their ids from their tier enums, so they are
+    read the same way rather than typed out: a fifth pole tier, a fourth furnace or a third rung of
+    the drill ladder is then registered here without this file being edited.
+
+    The rig parts are deliberately absent. A part has no `BlockItem` -- it is placed only by the
+    anchor's own item and never held -- so a row naming one would be a row naming something a
+    player cannot have.
     """
     blocks = set(re.findall(r'BLOCKS\.register\("([a-z0-9_]+)"',
                             (PF_BLOCKS).read_text(encoding="utf-8")))
@@ -85,6 +90,9 @@ def mod_registered_blocks():
     furnaces = re.findall(r"^\s{4}([A-Z][A-Z_]*)\([^)]*\)[,;]",
                           FURNACE_TIER.read_text(encoding="utf-8"), re.MULTILINE)
     blocks |= {f"{tier.lower()}_furnace" for tier in furnaces}
+    rigs = re.findall(r"^\s{4}([A-Z][A-Z_]*)\([^)]*\)[,;]",
+                      RIG_TIER.read_text(encoding="utf-8"), re.MULTILINE)
+    blocks |= {f"{tier.lower()}_mining_drill" for tier in rigs}
     return {f"planetaryfactory:{name}" for name in blocks}
 
 

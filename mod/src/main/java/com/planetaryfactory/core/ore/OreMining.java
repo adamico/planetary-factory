@@ -82,6 +82,37 @@ public final class OreMining {
         }
 
         BlockPos pos = event.getPos();
+        OreDelta.Draw draw = draw(level, ore, pos);
+        if (draw.paid() > 0) {
+            drop(level, pos, ore.resource());
+        }
+    }
+
+    /**
+     * Take one unit out of an ore block and leave the position showing what is left.
+     *
+     * <p><b>This is the whole extraction mechanism, and there is deliberately one of it.</b>
+     * ADR-0041 says hands and machines draw from the same number, and a second path that removed a
+     * block outright is exactly what disqualified {@code gtceu:lv_miner} from being Terra's drill:
+     * it calls {@code setBlock(pos, cobblestone)} and takes its drops from the block's loot table,
+     * so it deletes an ore block whole whatever amount it held. So {@link #onBreak} and the mining
+     * rig (#193) both come through here, and neither carries its own copy of the sequence.
+     *
+     * <p>What the caller decides is only where the unit <em>goes</em> -- a hand gets an
+     * {@code ItemEntity} on the ground, a rig banks it in its own buffer and pushes it onto the
+     * tile it faces -- which is why this method pays nothing out itself and hands back the draw.
+     *
+     * <p>Exhaustion retires the position's delta, because the replacement makes
+     * {@link OreBlock#onRemove} fire. An entry that outlived its block would be inherited by the
+     * next block placed there, which would arrive part-mined with nothing to show for it.
+     *
+     * <p>The sharing is structural rather than asserted: this class needs a {@code ServerLevel} and
+     * so cannot be reached from the mod's Minecraft-free test source set. What <em>is</em> asserted
+     * is the number both callers draw from -- {@code OreAmountTest} covers
+     * {@link OreDelta#draw(long, int)} directly, including that a hand and a drill take from it
+     * identically.
+     */
+    public static OreDelta.Draw draw(ServerLevel level, OreBlock ore, BlockPos pos) {
         int initial = initialAmount(level, ore, pos);
         OreDelta delta = deltaOf(level, pos);
         OreDelta.Draw draw = delta.draw(pos.asLong(), initial);
@@ -89,9 +120,6 @@ public final class OreMining {
 
         LOGGER.info("ore draw: {} at {}, initial={}, paid={}, remaining={}, exhausted={}",
                 ore.resource().key(), pos, initial, draw.paid(), draw.remaining(), draw.exhausted());
-        if (draw.paid() > 0) {
-            drop(level, pos, ore.resource());
-        }
         if (draw.exhausted()) {
             // The hole argument is served by the stages and by the patch visibly shrinking; a
             // crater in a field a drill has to stand on is not.
@@ -99,6 +127,7 @@ public final class OreMining {
         } else {
             level.setBlockAndUpdate(pos, ore.stateFor(draw.remaining(), initial));
         }
+        return draw;
     }
 
     /** What is left in the block at {@code pos}, for the HUD and for anything else that asks. */

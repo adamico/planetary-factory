@@ -110,8 +110,8 @@
     },
     "boiler": {
       "status": "undecided",
-      "note": "#37 removed GregTech's power layer and ADR-0036 puts the grid on a pack-authored pole, so the GT boiler's only remaining justification is the steam mining drill -- which makes this the drill ladder's row, not the generation chain's.",
-      "ticket": 105
+      "note": "#37 removed GregTech's power layer and ADR-0036 puts the grid on a pack-authored pole, so the GT boiler's remaining justification is the steam chain rather than the drill ladder. It was the steam mining drill that put this row here, and ADR-0040 deleted that drill; ADR-0043 then gave both rungs to `planetaryfactory_core`, so nothing in the drill ladder wants a boiler at all. ADR-0048 makes Terra's steam two pack-owned fluids on a pack-authored chain, which is where the decision belongs.",
+      "ticket": 189
     },
     "bulk-inserter": {
       "status": "undecided",
@@ -124,9 +124,10 @@
       "ticket": 102
     },
     "burner-mining-drill": {
-      "status": "undecided",
-      "note": "Terra's drill ladder, one rig per rung.",
-      "ticket": 105
+      "kind": "item",
+      "target": "planetaryfactory:burner_mining_drill",
+      "source": "authored",
+      "note": "Rung 0's rig, and `planetaryfactory_core`'s (ADR-0043, #193). GregTech owns no solid extraction on Terra: `gtceu:lv_miner` deletes an ore block whole whatever amount it held and takes its drops from the loot table, which Terra's ore blocks do not have, so it would destroy a field and pay out nothing. The rig draws one unit per operation through `OreMining` instead (ADR-0041). 2x2 over the 2x2 beneath it, burning solid fuel at 150 kW under ADR-0047, and every one of those numbers is a `data/factorio/machine.json` row. Its own recipe is Factorio's, category `crafting`, so the Personal Assembler plans it at rung 0."
     },
     "car": {
       "status": "undecided",

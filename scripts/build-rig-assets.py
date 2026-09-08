@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Emit the two mining rigs' footprint data and pack-side assets (#192).
+"""Emit the two mining rigs' corpus row and pack-side assets (#192, #193).
 
 ADR-0043's ladder is two rigs, and #192 is the shared idiom both stand on: an anchor block plus
 parts that forward to it, placed as one square that extends away from the player. This script
@@ -7,15 +7,18 @@ supplies the one thing that idiom needs and this ticket must not type by hand --
 size -- plus the ordinary blockstate/model/lang/loot-table plumbing every `planetaryfactory:`
 block needs under ADR-0015's split (mechanism in the mod, assets in the pack).
 
-**The footprint is read, not chosen.** `data/factorio/machine.json`'s `drills` rows carry
-`tile_width`/`tile_height` for every mining-drill prototype (#188); this script keeps only the two
-solid-ore drills (`resource_categories` containing `basic-solid`) and writes them to
-`mod/src/main/resources/planetaryfactory_core/mining/footprint.json`, which the mod reads at
+**Every number is read, not chosen.** `data/factorio/machine.json`'s `drills` rows carry the
+whole prototype (#188, widened by #193); this script keeps only the two solid-ore drills
+(`resource_categories` containing `basic-solid`) and copies the fields the mod reads to
+`mod/src/main/resources/planetaryfactory_core/mining/drills.json`, which the mod reads at
 class-init the same way `OreCorpus` reads `ore/amounts.json`. The pumpjack is a fluid drill
-(`basic-fluid`) and #192's scope is the two solid rigs only.
+(`basic-fluid`) and neither ticket's scope.
 
-Nothing here decides operations-per-second, fuel or the overlay -- #192 is an inert footprint with
-a facing, and those numbers belong to #193/#194.
+**It copies; it does not derive.** `vector_to_place_result` and `resource_searching_radius` are
+passed through as Factorio states them -- centre-relative, in tiles -- rather than turned into a
+block offset here. Turning them into one is arithmetic against a footprint and a facing, and it
+belongs in `RigOutputTile` and `RigArea`, where the mod's Minecraft-free test source set can
+assert it. A derivation buried in a generator is a derivation nothing checks.
 
 Usage:
 
@@ -29,16 +32,16 @@ import sys
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
 MACHINE_CORPUS = os.path.join(ROOT, "data", "factorio", "machine.json")
-FOOTPRINT_RESOURCE = os.path.join(
-    ROOT, "mod", "src", "main", "resources", "planetaryfactory_core", "mining", "footprint.json"
+DRILL_RESOURCE = os.path.join(
+    ROOT, "mod", "src", "main", "resources", "planetaryfactory_core", "mining", "drills.json"
 )
 ASSETS = os.path.join(ROOT, "kubejs", "assets", "planetaryfactory")
 DATA = os.path.join(ROOT, "kubejs", "data", "planetaryfactory")
 
 NAMESPACE = "planetaryfactory"
 
-# The two rigs. `factorio_name` is the corpus key the footprint is read from; everything else here
-# is display/texture choices, not numbers ADR-0022 governs.
+# The two rigs. `factorio_name` is the corpus key the row is read from; everything else here is
+# display/texture choices, not numbers ADR-0022 governs.
 RIGS = {
     "burner_mining_drill": {
         "factorio_name": "burner-mining-drill",
@@ -54,8 +57,29 @@ RIGS = {
 
 FACINGS = {"north": 0, "east": 90, "south": 180, "west": 270}
 
+# The rig screen's own strings (#193). Not per-rig, so they sit beside the block names rather than
+# being derived from RIGS -- the same three the furnace screen carries, because the gauge answers
+# the same question: what is banked, and what a tick of work costs.
+SCREEN_LANG = {
+    "tooltip.planetaryfactory.rig.fuel": "%s / %s J",
+    "tooltip.planetaryfactory.rig.fuel.seconds": "%ss of mining at %s J/t",
+    "tooltip.planetaryfactory.rig.fuel.out": "No fuel burning",
+}
 
-def footprints_from_corpus():
+# Every field the mod reads off a row. A corpus regeneration that drops one is a hard failure
+# here rather than a null reaching Java, where it would surface as a rig that mines at no rate.
+REQUIRED_FIELDS = (
+    "tile_width",
+    "tile_height",
+    "mining_speed",
+    "energy_usage",
+    "energy_type",
+    "vector_to_place_result",
+    "resource_searching_radius",
+)
+
+
+def drills_from_corpus():
     with open(MACHINE_CORPUS, encoding="utf-8") as handle:
         machine = json.load(handle)
     drills = {
@@ -63,16 +87,29 @@ def footprints_from_corpus():
         for row in machine["drills"]
         if "basic-solid" in (row.get("resource_categories") or [])
     }
-    footprints = {}
+    rows = {}
     for block_name, rig in RIGS.items():
         row = drills.get(rig["factorio_name"])
         if row is None:
             sys.exit(f"{rig['factorio_name']} is not a basic-solid drill in {MACHINE_CORPUS}")
-        footprints[rig["factorio_name"]] = {
+        for field in REQUIRED_FIELDS:
+            if row.get(field) is None:
+                sys.exit(
+                    f"{rig['factorio_name']} has no {field} in {MACHINE_CORPUS} "
+                    "-- re-run scripts/factorio-machine-extract.py"
+                )
+        burner = row.get("burner") or {}
+        rows[rig["factorio_name"]] = {
             "tile_width": row["tile_width"],
             "tile_height": row["tile_height"],
+            "mining_speed": row["mining_speed"],
+            "energy_usage": row["energy_usage"],
+            "energy_type": row["energy_type"],
+            "fuel_categories": burner.get("fuel_categories"),
+            "vector_to_place_result": row["vector_to_place_result"],
+            "resource_searching_radius": row["resource_searching_radius"],
         }
-    return footprints
+    return rows
 
 
 def blockstate(model_name):
@@ -114,12 +151,12 @@ def write(path, data):
         handle.write("\n")
 
 
-def planned_files(footprints):
+def planned_files(drills):
     """Every file this script owns, as {path: data}. The single source `--check` and the writer
     both walk."""
-    files = {FOOTPRINT_RESOURCE: {"drills": footprints}}
+    files = {DRILL_RESOURCE: {"drills": drills}}
 
-    lang = {}
+    lang = dict(SCREEN_LANG)
     for block_name, rig in RIGS.items():
         model_name = f"{NAMESPACE}:block/{block_name}"
         files[os.path.join(ASSETS, "blockstates", f"{block_name}.json")] = blockstate(model_name)
@@ -147,8 +184,7 @@ def lang_path():
 
 
 def check():
-    footprints = footprints_from_corpus()
-    files, lang = planned_files(footprints)
+    files, lang = planned_files(drills_from_corpus())
     problems = []
     for path, expected in files.items():
         if not os.path.isfile(path):
@@ -173,8 +209,7 @@ def check():
 
 
 def build():
-    footprints = footprints_from_corpus()
-    files, lang = planned_files(footprints)
+    files, lang = planned_files(drills_from_corpus())
     for path, data in files.items():
         write(path, data)
 

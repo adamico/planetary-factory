@@ -262,9 +262,14 @@ def extract(dump):
 def mod_slice(out):
     """The part of the corpus the mod loads, keyed by the pack's own block names.
 
-    Deliberately thin: a total, a ratio set and the distance law. Everything else in the corpus
-    is read by scripts, and a number that reaches Java is a number that has to survive a
-    recompile to be corrected.
+    Deliberately thin: a total, a ratio set, a mining time and the distance law. Everything else
+    in the corpus is read by scripts, and a number that reaches Java is a number that has to
+    survive a recompile to be corrected.
+
+    `mining_time` is here because a rig's operation rate is `mining_speed / mining_time` -- the
+    drill's figure over the resource's -- and ADR-0043 gives the rig an explicit
+    operations-per-second rather than a welded constant. Uranium's 2 against everything else's 1
+    is the whole reason it cannot live on the drill.
     """
     by_name = {entry["name"]: entry for entry in out["resources"]}
     law = next(
@@ -278,6 +283,7 @@ def mod_slice(out):
         resources[block] = {
             "factorio_name": factorio,
             "starting_amount": entry["starting_amount"],
+            "mining_time": entry["mining_time"],
             "stage_ratios": entry["stage_ratios"],
         }
     return {

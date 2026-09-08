@@ -50,9 +50,9 @@ public class RigBlockItem extends BlockItem {
         BlockPos anchorPos = context.getClickedPos();
         Direction facing = context.getHorizontalDirection();
         RigFacing rigFacing = RigDirections.toRigFacing(facing);
-        RigFootprints.Size size = RigFootprints.get().sizeOf(tier);
+        RigCorpus.Row row = RigCorpus.get().rowOf(tier);
         List<RigGeometry.Offset> offsets = RigGeometry.footprint(
-                size.width(), size.height(), tier.blocksTall(), rigFacing);
+                row.width(), row.height(), tier.blocksTall(), rigFacing);
 
         boolean fits = RigGeometry.fits(offsets, offset -> {
             BlockPos pos = anchorPos.offset(offset.dx(), offset.dy(), offset.dz());

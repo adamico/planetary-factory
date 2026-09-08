@@ -6,6 +6,9 @@ import com.planetaryfactory.core.PFBlockEntities;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.Containers;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
@@ -20,6 +23,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.phys.BlockHitResult;
 
 /**
  * The rig's anchor (#192): the one block of the footprint that holds the block entity, carries
@@ -89,18 +93,50 @@ public class RigBlock extends BaseEntityBlock {
     @Nullable
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state,
             BlockEntityType<T> type) {
-        // Nothing ticks yet -- #192 places an inert footprint. #193/#194 add a ticker here the way
-        // the furnace's serverTick was added once there was fuel to burn.
-        return null;
+        if (level.isClientSide()) {
+            return null;
+        }
+        return createTickerHelper(type, PFBlockEntities.RIG.get(),
+                (tickLevel, pos, tickState, entity) -> entity.serverTick());
+    }
+
+    /**
+     * Plain right-click opens the rig, because it has a fuel slot (ADR-0043).
+     *
+     * <p>The tier travels with the opening packet: the client has no block entity to ask, and the
+     * tier is what decides whether the screen carries a fuel slot at all.
+     */
+    @Override
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos,
+            Player player, BlockHitResult hit) {
+        if (level.isClientSide()) {
+            return InteractionResult.SUCCESS;
+        }
+        if (level.getBlockEntity(pos) instanceof RigBlockEntity rig) {
+            player.openMenu(rig, buf -> buf.writeEnum(rig.tier()));
+        }
+        return InteractionResult.CONSUME;
     }
 
     /**
      * Breaking the anchor -- directly, by a player -- drops the item through the ordinary loot
-     * table, so all this has to do is silently clear the parts around it (#192, bed-and-door).
+     * table, so this clears the parts around it (#192, bed-and-door) and pays back what it held.
+     *
+     * <p>The payback is not optional. A rig holds coal and, when its output is blocked, ore it has
+     * already drawn out of the ground -- and under ADR-0041 that ore is a finite resource with the
+     * ground's own count already decremented for it. Voiding it on a break would make breaking a
+     * stalled rig destroy the very thing the stall existed to preserve. Nothing in this pack is a
+     * resource sink.
+     *
+     * <p>This runs on the anchor whichever block the player actually hit: breaking a part calls
+     * {@link RigBreaker#teardown}, which removes the anchor, which arrives here.
      */
     @Override
     protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean moved) {
         if (!state.is(newState.getBlock())) {
+            if (level.getBlockEntity(pos) instanceof RigBlockEntity rig) {
+                Containers.dropContents(level, pos, rig);
+            }
             RigBreaker.teardown(level, pos, tier, state.getValue(FACING), pos);
         }
         super.onRemove(state, level, pos, newState, moved);
