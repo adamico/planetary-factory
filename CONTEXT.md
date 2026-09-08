@@ -249,6 +249,15 @@ _Avoid_: hidden recipe, greyed-out recipe, locked overlay
 A machine carrying no Researchd placed-by attachment, so it belongs to no team and no **Research lock** applies to it — it runs every recipe. Ordinary placement always stamps an owner; this is what `/setblock`, `/clone` and worldgen leave behind. Failing open is deliberate, and the pack logs the first such bypass at each position rather than refusing it (issue #74).
 _Avoid_: ownerless machine, orphan machine, teamless machine
 
+**Fuel buffer**:
+The joules a burner furnace holds. Lighting a fuel item consumes it whole and adds its `fuel_value` to the buffer; a tick of work subtracts the machine's own `energy_usage / 20`, which is 4,500 J on both burner tiers. Nothing is measured in burn ticks and there is no conversion constant — burn time is a quotient, as it is in Factorio, and a buffer that still holds joules keeps them while the furnace is idle. It is the same quantity the Electric tier's buffer holds and is shown with the same gauge; only the way it is refilled differs (ADR-0047).
+_Avoid_: burn time, fuel ticks, lit ticks, burn value
+
+**Fuel category**:
+Factorio's classification of a fuel item, carried in the pack's fuel table and filtered on: a furnace burns `chemical` and nothing else. An item with no row in the table is not fuel, which is ADR-0034's default-deny applied to burning. The filter is what stops a `nuclear` item becoming furnace fuel merely by having a `fuel_value`.
+_Avoid_: fuel type, burnable, fuel class
+
+
 ### The oil chapter
 
 **Oil Refinery**:

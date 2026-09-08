@@ -311,6 +311,19 @@ Sub-rules:
   overflowed or dropped. Factorio has no machine that ejects to the ground, and under ADR-0041
   Terra's ore is finite, so backing up is the only answer that does not destroy a resource the
   world cannot re-make.
+- **Fuel is rated in joules per item, and a burner drains its own `energy_usage`** — `planned`,
+  ADR-0047 (#185). Lighting an item banks its `fuel_value`; a working tick spends `energy_usage / 20`,
+  which is 4,500 J on both burner furnace tiers. There is no burn-time number anywhere in Factorio and
+  there is none here: burn time is a quotient, and an idle burner keeps the joules it has not spent.
+  #155 shipped the tiers reading Forge's vanilla burn table instead, which is the defect ADR-0047
+  closes — both burners drawing the same 90 kW is the actual reason the Steel tier gets twice the
+  items from one coal.
+- **Fuel categories** — `planned`, ADR-0047 (#185). A furnace burns `chemical` and nothing else, as
+  Factorio's do. Every fuel reachable today is `chemical` — coal, wood, solid fuel, rocket fuel and
+  `nuclear-fuel`, which despite its name is an ordinary chemical fuel — so the filter currently
+  excludes nothing. It is carried anyway: `uranium-fuel-cell` is the `nuclear` one, it has a
+  `fuel_value`, and #135 will land it. An item with no row in the fuel table is not fuel, which is
+  ADR-0034's default-deny applied to burning.
 - **No ore multiplication** — `planned`, settled by ADR-0032: cut pack-wide, Mekanism's ladder and
   Create's rung-0 Crushing Wheels alike. Yield gain by research or module is `blocked`, not
   `excluded` — the lab cannot express levelled research (ADR-0022 prunes 106 such technologies) and
