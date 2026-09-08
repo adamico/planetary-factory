@@ -91,6 +91,17 @@ public class RigBlockEntity extends BlockEntity implements Container, MenuProvid
     /** The duration of the operation in progress, so the client's gauge has something to scale to. */
     private int duration;
 
+    /**
+     * Whether the last tick found anything left to mine beneath the rig (#199).
+     *
+     * <p>A rig standing on an exhausted 2x2 is not broken, and from outside it reads exactly like
+     * one whose output is blocked: both are still, both are fuelled, both hold a full buffer. The
+     * tick already computes this and then throws it away, so it is remembered here rather than
+     * recomputed by whatever asks -- the search walks the whole area and is the tick's own work,
+     * not a getter's.
+     */
+    private boolean hasOre;
+
     private final ContainerData data = new ContainerData() {
         @Override
         public int get(int index) {
@@ -159,7 +170,7 @@ public class RigBlockEntity extends BlockEntity implements Container, MenuProvid
         }
 
         Target target = nextTarget(server);
-        boolean hasOre = target != null;
+        hasOre = target != null;
         boolean canWork = hasOre && buffer.canAccept(target.dropId());
         if (!canWork) {
             // Progress is held while there is still ore and the output is merely full; started
@@ -314,6 +325,21 @@ public class RigBlockEntity extends BlockEntity implements Container, MenuProvid
     /** What the rig is holding, for the overlay and for anything else that asks (#195). */
     public int bufferedCount() {
         return buffer.count();
+    }
+
+    /** The id of what is banked, or {@code null} when the buffer is empty (#199). */
+    @Nullable
+    public String bufferedItemId() {
+        return buffer.itemId();
+    }
+
+    /**
+     * Whether the rig's area still holds anything to mine, as of its last tick (#199). A rig that
+     * has never ticked answers {@code false}, which is the safe direction: it is stated on the HUD
+     * only alongside a still rig, and one tick later it is the truth.
+     */
+    public boolean hasOre() {
+        return hasOre;
     }
 
     private record Target(BlockPos pos, OreBlock ore, String dropId, double miningTime) {

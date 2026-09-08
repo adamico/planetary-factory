@@ -66,5 +66,10 @@
   "block.planetaryfactory.electric_mining_drill_part": "Electric Mining Drill (part)",
   "tooltip.planetaryfactory.rig.fuel": "%s / %s J",
   "tooltip.planetaryfactory.rig.fuel.seconds": "%ss of mining at %s J/t",
-  "tooltip.planetaryfactory.rig.fuel.out": "No fuel burning"
+  "tooltip.planetaryfactory.rig.fuel.out": "No fuel burning",
+  "tooltip.planetaryfactory.rig.jade.progress": "%s%%",
+  "tooltip.planetaryfactory.rig.jade.idle": "idle",
+  "tooltip.planetaryfactory.rig.jade.empty": "\u2014",
+  "tooltip.planetaryfactory.rig.jade.fuel": "Fuel: %s / %s J",
+  "tooltip.planetaryfactory.rig.jade.no_ore": "Nothing left to mine"
 }

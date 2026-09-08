@@ -131,6 +131,32 @@ def check_fuel_reaches_a_burner(rows, failures):
             )
 
 
+JADE_PLUGIN = ROOT / "mod/src/main/java/com/planetaryfactory/core/compat/RigJadePlugin.java"
+
+# `Component.translatable("tooltip.planetaryfactory.rig.jade.no_ore"` -- every key the HUD plugin
+# asks for, read out of the plugin rather than typed here, so a line added to the tooltip without
+# its string fails this check instead of shipping a raw key onto the crosshair.
+JADE_KEY_RE = re.compile(r'translatable\(\s*"(tooltip\.planetaryfactory\.rig\.jade\.[a-z_.]+)"')
+
+
+def check_jade_lang(lang, failures):
+    """Every string the Jade plugin translates (#199).
+
+    A Jade provider is not reachable from the mod's Minecraft-free test source set, so nothing on
+    that side can see these keys at all; and a missing one does not fail, it renders its own key on
+    the HUD of the machine whose whole point is being readable from outside.
+    """
+    keys = set(JADE_KEY_RE.findall(JADE_PLUGIN.read_text(encoding="utf-8")))
+    if not keys:
+        failures.append(
+            f"no jade lang keys parsed out of {JADE_PLUGIN.relative_to(ROOT)} -- has the plugin "
+            "moved, or stopped translating its lines?"
+        )
+    for key in sorted(keys):
+        if not lang.get(key):
+            failures.append(f"{key} has no lang entry -- the rig's HUD would show its raw key")
+
+
 def check_screen_lang(lang, failures):
     """The rig screen's own strings. A missing one ships a raw translation key on the hover."""
     for key in ("tooltip.planetaryfactory.rig.fuel",
@@ -255,6 +281,7 @@ def main():
     check_item_map(tiers, item_map, failures)
     check_fuel_reaches_a_burner(rows, failures)
     check_screen_lang(lang, failures)
+    check_jade_lang(lang, failures)
 
     for index, failure in enumerate(failures, 1):
         print(f"FAIL {index}: {failure}")
