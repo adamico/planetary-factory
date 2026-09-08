@@ -114,6 +114,11 @@ mod/build/
 build/
 *.log
 
+# Eclipse JDT's own output, which is what VSCodium's Java extensions compile into when they import
+# the Gradle project -- `bin/main` and `bin/test` beside Gradle's `mod/build/classes`. Duplicate
+# class files, never a source of truth, and regenerated on the next import.
+mod/bin/
+
 .probe
 kubejs/config/probe-settings.json
 
