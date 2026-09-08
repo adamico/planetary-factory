@@ -5,6 +5,7 @@ import com.planetaryfactory.core.mining.rig.RigBlock;
 import com.planetaryfactory.core.mining.rig.RigBlockEntity;
 import com.planetaryfactory.core.mining.rig.RigPartBlock;
 import com.planetaryfactory.core.mining.rig.RigPartBlockEntity;
+import com.planetaryfactory.core.mining.rig.RigSlots;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -62,6 +63,7 @@ public class RigJadePlugin implements IWailaPlugin {
     private static final String FUEL = "RigFuel";
     private static final String FUEL_CAPACITY = "RigFuelCapacity";
     private static final String HAS_ORE = "RigHasOre";
+    private static final String FUEL_ITEM = "RigFuelItem";
 
     /**
      * The rig behind whatever the crosshair is on: itself if it is the anchor, and otherwise the
@@ -100,6 +102,13 @@ public class RigJadePlugin implements IWailaPlugin {
             if (rig.burnsFuel()) {
                 tag.putInt(FUEL, rig.data().get(RigBlockEntity.DATA_FUEL));
                 tag.putInt(FUEL_CAPACITY, rig.data().get(RigBlockEntity.DATA_FUEL_CAPACITY));
+                // What is left in the slot, not just what is already burning. A buffer with joules
+                // in it and an empty slot is a rig that is about to stop, and the joules alone do
+                // not say so; the slot is also the one the hopper feeding it fills.
+                ItemStack held = rig.getItem(RigSlots.FUEL);
+                if (!held.isEmpty()) {
+                    tag.put(FUEL_ITEM, held.save(accessor.getLevel().registryAccess()));
+                }
             }
         }
 
@@ -130,8 +139,13 @@ public class RigJadePlugin implements IWailaPlugin {
                 tooltip.add(Component.translatable("tooltip.planetaryfactory.rig.jade.no_ore"));
             }
             if (data.contains(FUEL_CAPACITY)) {
-                tooltip.add(Component.translatable("tooltip.planetaryfactory.rig.jade.fuel",
-                        data.getInt(FUEL), data.getInt(FUEL_CAPACITY)));
+                // The stack first, then the buffer: what will burn next, then how much is left of
+                // what is burning now. An empty slot is the dash rather than a gap, for the same
+                // reason the banked line uses one.
+                tooltip.add(fuel(elements, accessor, data));
+                tooltip.append(elements.text(
+                        Component.translatable("tooltip.planetaryfactory.rig.jade.fuel",
+                                data.getInt(FUEL), data.getInt(FUEL_CAPACITY))));
             }
         }
 
@@ -157,6 +171,18 @@ public class RigJadePlugin implements IWailaPlugin {
         return banked.isEmpty()
                 ? elements.text(Component.translatable("tooltip.planetaryfactory.rig.jade.empty"))
                 : elements.item(banked);
+    }
+
+    /** What is in the fuel slot, drawn as its icon and count -- the dash when the slot is empty. */
+    private static snownee.jade.api.ui.IElement fuel(
+            IElementHelper elements, BlockAccessor accessor, CompoundTag data) {
+        ItemStack held = data.contains(FUEL_ITEM)
+                ? ItemStack.parse(accessor.getLevel().registryAccess(), data.getCompound(FUEL_ITEM))
+                        .orElse(ItemStack.EMPTY)
+                : ItemStack.EMPTY;
+        return held.isEmpty()
+                ? elements.text(Component.translatable("tooltip.planetaryfactory.rig.jade.empty"))
+                : elements.item(held);
     }
 
     private static Component progress(CompoundTag data) {
