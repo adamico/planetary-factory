@@ -1,0 +1,207 @@
+{
+  "fuels": [
+    {
+      "name": "bioflux",
+      "type": "capsule",
+      "fuel_value": 6000000.0,
+      "fuel_value_raw": "6MJ",
+      "fuel_category": "food",
+      "burnt_result": null,
+      "in_corpus": false
+    },
+    {
+      "name": "jelly",
+      "type": "capsule",
+      "fuel_value": 1000000.0,
+      "fuel_value_raw": "1MJ",
+      "fuel_category": "chemical",
+      "burnt_result": null,
+      "in_corpus": false
+    },
+    {
+      "name": "jellynut",
+      "type": "capsule",
+      "fuel_value": 10000000.0,
+      "fuel_value_raw": "10MJ",
+      "fuel_category": "chemical",
+      "burnt_result": null,
+      "in_corpus": false
+    },
+    {
+      "name": "yumako",
+      "type": "capsule",
+      "fuel_value": 2000000.0,
+      "fuel_value_raw": "2MJ",
+      "fuel_category": "chemical",
+      "burnt_result": null,
+      "in_corpus": false
+    },
+    {
+      "name": "yumako-mash",
+      "type": "capsule",
+      "fuel_value": 1000000.0,
+      "fuel_value_raw": "1MJ",
+      "fuel_category": "chemical",
+      "burnt_result": null,
+      "in_corpus": false
+    },
+    {
+      "name": "biter-egg",
+      "type": "item",
+      "fuel_value": 6000000.0,
+      "fuel_value_raw": "6MJ",
+      "fuel_category": "chemical",
+      "burnt_result": null,
+      "in_corpus": false
+    },
+    {
+      "name": "carbon",
+      "type": "item",
+      "fuel_value": 2000000.0,
+      "fuel_value_raw": "2MJ",
+      "fuel_category": "chemical",
+      "burnt_result": null,
+      "in_corpus": true
+    },
+    {
+      "name": "coal",
+      "type": "item",
+      "fuel_value": 4000000.0,
+      "fuel_value_raw": "4MJ",
+      "fuel_category": "chemical",
+      "burnt_result": null,
+      "in_corpus": true
+    },
+    {
+      "name": "fusion-power-cell",
+      "type": "item",
+      "fuel_value": 40000000000.0,
+      "fuel_value_raw": "40GJ",
+      "fuel_category": "fusion",
+      "burnt_result": null,
+      "in_corpus": false
+    },
+    {
+      "name": "jellynut-seed",
+      "type": "item",
+      "fuel_value": 4000000.0,
+      "fuel_value_raw": "4MJ",
+      "fuel_category": "chemical",
+      "burnt_result": null,
+      "in_corpus": false
+    },
+    {
+      "name": "nuclear-fuel",
+      "type": "item",
+      "fuel_value": 1210000000.0,
+      "fuel_value_raw": "1.21GJ",
+      "fuel_category": "chemical",
+      "burnt_result": null,
+      "in_corpus": false
+    },
+    {
+      "name": "nutrients",
+      "type": "item",
+      "fuel_value": 2000000.0,
+      "fuel_value_raw": "2MJ",
+      "fuel_category": "nutrients",
+      "burnt_result": null,
+      "in_corpus": false
+    },
+    {
+      "name": "pentapod-egg",
+      "type": "item",
+      "fuel_value": 5000000.0,
+      "fuel_value_raw": "5MJ",
+      "fuel_category": "chemical",
+      "burnt_result": null,
+      "in_corpus": false
+    },
+    {
+      "name": "rocket-fuel",
+      "type": "item",
+      "fuel_value": 100000000.0,
+      "fuel_value_raw": "100MJ",
+      "fuel_category": "chemical",
+      "burnt_result": null,
+      "in_corpus": true
+    },
+    {
+      "name": "solid-fuel",
+      "type": "item",
+      "fuel_value": 12000000.0,
+      "fuel_value_raw": "12MJ",
+      "fuel_category": "chemical",
+      "burnt_result": null,
+      "in_corpus": true
+    },
+    {
+      "name": "spoilage",
+      "type": "item",
+      "fuel_value": 250000.0,
+      "fuel_value_raw": "250kJ",
+      "fuel_category": "chemical",
+      "burnt_result": null,
+      "in_corpus": false
+    },
+    {
+      "name": "tree-seed",
+      "type": "item",
+      "fuel_value": 100000.0,
+      "fuel_value_raw": "100kJ",
+      "fuel_category": "chemical",
+      "burnt_result": null,
+      "in_corpus": false
+    },
+    {
+      "name": "uranium-fuel-cell",
+      "type": "item",
+      "fuel_value": 8000000000.0,
+      "fuel_value_raw": "8GJ",
+      "fuel_category": "nuclear",
+      "burnt_result": "depleted-uranium-fuel-cell",
+      "in_corpus": true
+    },
+    {
+      "name": "wood",
+      "type": "item",
+      "fuel_value": 2000000.0,
+      "fuel_value_raw": "2MJ",
+      "fuel_category": "chemical",
+      "burnt_result": null,
+      "in_corpus": true
+    },
+    {
+      "name": "yumako-seed",
+      "type": "item",
+      "fuel_value": 4000000.0,
+      "fuel_value_raw": "4MJ",
+      "fuel_category": "chemical",
+      "burnt_result": null,
+      "in_corpus": false
+    }
+  ],
+  "categories": {
+    "chemical": [
+      "boiler/boiler",
+      "car/car",
+      "car/tank",
+      "furnace/steel-furnace",
+      "furnace/stone-furnace",
+      "inserter/burner-inserter",
+      "locomotive/locomotive",
+      "mining-drill/burner-mining-drill",
+      "reactor/heating-tower"
+    ],
+    "food": [
+      "assembling-machine/captive-biter-spawner"
+    ],
+    "fusion": [],
+    "nuclear": [
+      "reactor/nuclear-reactor"
+    ],
+    "nutrients": [
+      "assembling-machine/biochamber"
+    ]
+  }
+}

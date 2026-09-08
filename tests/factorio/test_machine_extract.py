@@ -19,6 +19,9 @@ game -- is whether the *committed* output still says what the decisions say it s
   - drain is derived, not copied: an electric machine's drain is exactly `energy_usage/30`
     unless the prototype set one, and a burner machine has none. `#126` excludes drain from
     the conversion; the ledger quotes this figure, so it must not drift silently.
+  - a burner machine carries its `burner` block and an electric one does not, because
+    ADR-0047 spends a fuel's joules against `energy_usage` and `effectivity` and admits it
+    on `fuel_categories`. A null block on a burner is two of those three terms missing.
   - the fluid anchors are present, because `#126`'s 1 unit = 1 mB is derived from them
 
 Usage: tests/factorio/test_machine_extract.py
@@ -92,6 +95,21 @@ def main():
                 )
         elif source != "explicit":
             failures.append(f"{machine['name']} has drain_source {source!r}")
+
+    for machine in machines:
+        burner = machine.get("burner")
+        if machine["energy_type"] == "burner":
+            if not burner:
+                failures.append(
+                    f"{machine['name']} is a burner with no burner block -- ADR-0047's "
+                    "fuel arithmetic has no effectivity and no category filter"
+                )
+            elif not burner.get("fuel_categories") or burner.get("effectivity") is None:
+                failures.append(f"{machine['name']}'s burner block is incomplete: {burner}")
+        elif burner is not None:
+            failures.append(
+                f"{machine['name']} is {machine['energy_type']} and still carries a burner block"
+            )
 
     anchors = {c["name"]: c for c in data["containers"]}
     for name in ("storage-tank", "pipe"):

@@ -36,15 +36,18 @@ scripts/factorio-tech-extract.py
 scripts/factorio-recipe-extract.py
 scripts/factorio-machine-extract.py
 scripts/factorio-resource-extract.py
+scripts/factorio-fuel-extract.py
 python3 tests/factorio/test_tech_extract.py
 python3 tests/factorio/test_recipe_extract.py
 python3 tests/factorio/test_machine_extract.py
 python3 tests/factorio/test_resource_extract.py
+python3 tests/factorio/test_fuel_extract.py
 ```
 
-All four extractors read the same dump, so a single `--dump-data` run feeds them. Order
+All five extractors read the same dump, so a single `--dump-data` run feeds them. Order
 matters: the recipe extractor reads `technology.json`, and the machine extractor reads
-`recipe.json` for its scope. The resource extractor reads only the dump.
+`recipe.json` for its scope. The resource extractor reads only the dump, and the fuel
+extractor reads `recipe.json` for a flag rather than for a scope -- see below.
 
 The dump lands in `~/Library/Application Support/factorio/script-output/data-raw-dump.json`. The
 extractor finds it and the Steam install by default; both are overridable with `--dump` and
@@ -98,6 +101,12 @@ is stale.
   captive biter spawner are the seven that do not. Widening `RUNG_PACKS` in the recipe
   extractor widens this file with it.
 
+  **`burner` is the block ADR-0047 reads**: `fuel_categories` and `effectivity` on a burner
+  machine, `null` on an electric one. Both burner furnaces come out at `["chemical"]` and
+  `effectivity: 1`, which — with their identical 90 kW — is why the Steel tier gets twice the
+  items from one coal. `#155` asserted that ratio in a javadoc and computed it from nothing;
+  ADR-0047 computes it from these.
+
   **`drain` is derived.** Not one crafting machine in the game sets `drain` — the ten
   prototypes that do are inserters, pumps, turrets and lightning rods — so the figure is
   the engine's default of `energy_usage / 30` on an electric source, and nothing at all on
@@ -126,6 +135,32 @@ when picking the `gtceu:`/`create:` item that stands in for the technology.
 decision to make while looking at the tree, not one a script makes silently. The one exception is
 `recycling`, whose 313 generated reverse-craft recipes collapse to a single `unlock-recipe-family`
 effect recording the rule that produced them.
+
+- **`fuel.json`** — what a fuel item is worth, and to which burners (ADR-0047). Two sections.
+
+  `fuels`, one object per fuel-bearing item prototype: `name`, `type` (`item` or `capsule`),
+  `fuel_value` in joules, `fuel_value_raw` (Factorio's own `4MJ`/`1.21GJ` string, kept so the
+  check can re-derive the number rather than trust it), `fuel_category`, `burnt_result` and
+  `in_corpus`.
+
+  **Scope is every fuel-bearing item, unfiltered** — deliberately *not* `machine.json`'s
+  "its own item recipe is in the corpus" rule, which would drop `coal` and `wood`, since
+  Factorio's two most important fuels are mined and harvested rather than crafted. Pack
+  reachability is `data/pack/item-map.json`'s question, and the join that reads this file
+  records its own skips; filtering here would make an unreachable fuel indistinguishable
+  from an unmapped one. `in_corpus` records that distinction without acting on it.
+
+  **Fluids are excluded.** `thruster-fuel` and `thruster-oxidizer` carry a `fuel_value` and
+  no category: a thruster is not a burner energy source, and a fluid is not what a furnace
+  slot holds.
+
+  `categories`, every fuel category and every entity whose burner accepts it — the authority
+  ADR-0047's category filter is checked against, and the reason the filter exists at all: a
+  furnace takes `chemical` and nothing else, so `uranium-fuel-cell` is not furnace fuel
+  merely by having a `fuel_value`.
+
+  The denominator lives in `machine.json`, not here: ADR-0047 spends a fuel item's joules at
+  the machine's own `energy_usage`, scaled by its burner `effectivity`.
 
 - **`resource.json`** — how much ore the ground holds (ADR-0041). Read from the dump's own
   `resource_autoplace_all_patches` rather than from map generation, because Factorio's

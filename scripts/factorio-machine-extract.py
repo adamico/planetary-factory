@@ -24,6 +24,12 @@ the pack:
     `#126` excludes drain from the conversion deliberately; the number is extracted so the
     ledger row saying so can quote it rather than assert it. It is derived, and says so:
     `drain_source` is `default` or `explicit`.
+  - **The burner's own terms.** ADR-0047 spends a fuel item's `fuel_value` against the
+    machine's `energy_usage` and `effectivity`, and admits it only if the burner's
+    `fuel_categories` accept it. Two of those three were already here; `burner` carries the
+    other two, and is `null` on an electric machine. Both burner furnaces come out at
+    `effectivity: 1` and `["chemical"]`, which is why the Steel tier gets twice the items
+    from one coal at the same 90 kW -- extracted, so the ladder can stop asserting it.
   - **Who declares a category.** `data/pack/category-map.json` routes a recipe category to a
     pack machine, and its right-hand side was hand-written. `categories` here is the
     authority it is checked against: every recipe category, and every entity declaring it.
@@ -93,6 +99,22 @@ def footprint(prototype):
     return math.ceil(right - left), math.ceil(bottom - top)
 
 
+def burner(prototype):
+    """The two terms ADR-0047's fuel arithmetic needs, or None on a machine that has none.
+
+    `effectivity` scales the joules a fuel item banks; `fuel_categories` is what the machine
+    will accept at all, and defaults to `chemical` the way the engine defaults it.
+    """
+    source = prototype.get("energy_source") or {}
+    if source.get("type") != "burner":
+        return None
+    return {
+        "fuel_categories": source.get("fuel_categories") or ["chemical"],
+        "effectivity": source.get("effectivity", 1),
+        "fuel_inventory_size": source.get("fuel_inventory_size", 1),
+    }
+
+
 def energy(prototype):
     """Working draw, idle drain, and where the drain figure came from."""
     source = prototype.get("energy_source") or {}
@@ -131,6 +153,7 @@ def extract_machines(dump, scope):
                     "energy_type": energy_type,
                     "drain": drain,
                     "drain_source": drain_source,
+                    "burner": burner(prototype),
                     "module_slots": prototype.get("module_slots", 0),
                     "crafting_categories": prototype.get("crafting_categories")
                     or prototype.get("inputs"),
