@@ -47,6 +47,11 @@ public class FurnaceScreen extends AbstractContainerScreen<FurnaceMenu> {
      * than as a fuel item burning down, which is the distinction the tier is: a burner's flame
      * empties and has to be refilled by hand, while a buffer is a level a pole holds up.
      */
+    /** The flame, which vanilla's background puts above the fuel slot. */
+    private static final int FLAME_X = 56;
+    private static final int FLAME_Y = 36;
+    private static final int FLAME_SIZE = 14;
+
     private static final int BAR_X = 106;
     private static final int BAR_Y = 16;
     private static final int BAR_WIDTH = 62;
@@ -67,8 +72,8 @@ public class FurnaceScreen extends AbstractContainerScreen<FurnaceMenu> {
         if (menu.tier().burnsFuel()) {
             int flame = Math.round(menu.fuelLeft() * 13F);
             if (flame > 0) {
-                graphics.blitSprite(LIT_PROGRESS, 14, 14, 0, 14 - flame,
-                        left + 56, top + 36 + 14 - flame, 14, flame);
+                graphics.blitSprite(LIT_PROGRESS, FLAME_SIZE, FLAME_SIZE, 0, FLAME_SIZE - flame,
+                        left + FLAME_X, top + FLAME_Y + FLAME_SIZE - flame, FLAME_SIZE, flame);
             }
         } else {
             // The background is vanilla's, so it draws a fuel slot the Electric tier's menu never
@@ -99,14 +104,41 @@ public class FurnaceScreen extends AbstractContainerScreen<FurnaceMenu> {
         renderBackground(graphics, mouseX, mouseY, partialTick);
         super.render(graphics, mouseX, mouseY, partialTick);
         renderTooltip(graphics, mouseX, mouseY);
-        if (!menu.tier().burnsFuel() && overEnergyBar(mouseX, mouseY)) {
+        if (!menu.tier().burnsFuel() && over(mouseX, mouseY, BAR_X, BAR_Y, BAR_WIDTH, BAR_HEIGHT)) {
             graphics.renderComponentTooltip(font, energyTooltip(), mouseX, mouseY);
+        }
+        if (menu.tier().burnsFuel()
+                && over(mouseX, mouseY, FLAME_X, FLAME_Y, FLAME_SIZE, FLAME_SIZE)) {
+            graphics.renderComponentTooltip(font, fuelTooltip(), mouseX, mouseY);
         }
     }
 
-    private boolean overEnergyBar(int mouseX, int mouseY) {
-        return mouseX >= leftPos + BAR_X && mouseX < leftPos + BAR_X + BAR_WIDTH
-                && mouseY >= topPos + BAR_Y && mouseY < topPos + BAR_Y + BAR_HEIGHT;
+    private boolean over(int mouseX, int mouseY, int x, int y, int width, int height) {
+        return mouseX >= leftPos + x && mouseX < leftPos + x + width
+                && mouseY >= topPos + y && mouseY < topPos + y + height;
+    }
+
+    /**
+     * What is left of the lit fuel item, the way the EU bar reads its buffer -- the two tiers ask
+     * the same question of the same place on the screen.
+     *
+     * <p>Ticks and not only seconds: fuel is spent one tick per tick of operation at the same rate
+     * on both burners, so the tick count is directly how many more ticks of smelting this item
+     * pays for, and the Steel tier getting twice the items out of it is visible as the same number
+     * against a halved duration. The number itself is still Minecraft's burn value rather than
+     * Factorio's fuel value (#185); this displays it honestly, it does not fix it.
+     */
+    private List<Component> fuelTooltip() {
+        int ticks = menu.fuelTicks();
+        if (ticks <= 0) {
+            return List.of(Component.translatable("tooltip.planetaryfactory.furnace.fuel.out")
+                    .withStyle(net.minecraft.ChatFormatting.GRAY));
+        }
+        return List.of(
+                Component.translatable("tooltip.planetaryfactory.furnace.fuel", ticks),
+                Component.translatable("tooltip.planetaryfactory.furnace.fuel.seconds",
+                                String.format("%.1f", ticks / 20F))
+                        .withStyle(net.minecraft.ChatFormatting.GRAY));
     }
 
     /**

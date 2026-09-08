@@ -84,6 +84,16 @@ public class FurnaceMenu extends AbstractContainerMenu {
         return capacity <= 0 ? 0F : Math.min(1F, data.get(FurnaceBlockEntity.DATA_ENERGY) / (float) capacity);
     }
 
+    /** Ticks of burn left on the lit fuel item. Always 0 on the Electric tier. */
+    public int fuelTicks() {
+        return data.get(FurnaceBlockEntity.DATA_LIT);
+    }
+
+    /** What the lit item was worth when it caught, which is what makes the remainder a fraction. */
+    public int fuelDuration() {
+        return data.get(FurnaceBlockEntity.DATA_LIT_DURATION);
+    }
+
     /** The EU in the buffer. Always 0 on the burner tiers. */
     public int energyStored() {
         return data.get(FurnaceBlockEntity.DATA_ENERGY);
