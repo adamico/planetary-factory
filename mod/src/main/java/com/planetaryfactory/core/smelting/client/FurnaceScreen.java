@@ -30,6 +30,9 @@ public class FurnaceScreen extends AbstractContainerScreen<FurnaceMenu> {
     private static final int ENERGY_FULL = 0xFFFFD84D;
     private static final int ENERGY_EMPTY = 0xFF3A3A3A;
 
+    /** A one-pixel frame, so the bar reads as a gauge on the panel rather than as a painted patch. */
+    private static final int ENERGY_BORDER = 0xFF373737;
+
     /** Vanilla's container panel grey, which is what the fuel slot is painted out with. */
     private static final int PANEL = 0xFFC6C6C6;
 
@@ -37,11 +40,17 @@ public class FurnaceScreen extends AbstractContainerScreen<FurnaceMenu> {
         super(menu, playerInventory, title);
     }
 
-    /** The EU bar, in screen-relative coordinates, so the draw and the hover cannot drift apart. */
-    private static final int BAR_X = 57;
-    private static final int BAR_Y = 37;
-    private static final int BAR_WIDTH = 12;
-    private static final int BAR_HEIGHT = 14;
+    /**
+     * The EU bar, in screen-relative coordinates, so the draw and the hover cannot drift apart.
+     *
+     * <p>Top right, filling left to right. It reads as a supply the machine is drawing from rather
+     * than as a fuel item burning down, which is the distinction the tier is: a burner's flame
+     * empties and has to be refilled by hand, while a buffer is a level a pole holds up.
+     */
+    private static final int BAR_X = 106;
+    private static final int BAR_Y = 16;
+    private static final int BAR_WIDTH = 62;
+    private static final int BAR_HEIGHT = 8;
 
     @Override
     protected void init() {
@@ -68,13 +77,14 @@ public class FurnaceScreen extends AbstractContainerScreen<FurnaceMenu> {
             // what makes "this tier has no fuel slot" visible instead of merely true.
             graphics.fill(left + 55, top + 52, left + 73, top + 70, PANEL);
 
-            // The energy bar stands where the flame would be, so the two tiers read the same way.
-            int height = Math.round(menu.energyLevel() * BAR_HEIGHT);
-            int bottom = top + BAR_Y + BAR_HEIGHT;
-            graphics.fill(left + BAR_X, top + BAR_Y, left + BAR_X + BAR_WIDTH, bottom, ENERGY_EMPTY);
-            if (height > 0) {
-                graphics.fill(left + BAR_X, bottom - height, left + BAR_X + BAR_WIDTH, bottom,
-                        ENERGY_FULL);
+            int filled = Math.round(menu.energyLevel() * BAR_WIDTH);
+            int barLeft = left + BAR_X;
+            int barTop = top + BAR_Y;
+            graphics.fill(barLeft - 1, barTop - 1, barLeft + BAR_WIDTH + 1, barTop + BAR_HEIGHT + 1,
+                    ENERGY_BORDER);
+            graphics.fill(barLeft, barTop, barLeft + BAR_WIDTH, barTop + BAR_HEIGHT, ENERGY_EMPTY);
+            if (filled > 0) {
+                graphics.fill(barLeft, barTop, barLeft + filled, barTop + BAR_HEIGHT, ENERGY_FULL);
             }
         }
 
