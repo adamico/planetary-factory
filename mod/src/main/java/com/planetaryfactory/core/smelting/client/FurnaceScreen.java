@@ -29,6 +29,9 @@ public class FurnaceScreen extends AbstractContainerScreen<FurnaceMenu> {
     private static final int ENERGY_FULL = 0xFFFFD84D;
     private static final int ENERGY_EMPTY = 0xFF3A3A3A;
 
+    /** Vanilla's container panel grey, which is what the fuel slot is painted out with. */
+    private static final int PANEL = 0xFFC6C6C6;
+
     public FurnaceScreen(FurnaceMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
     }
@@ -52,6 +55,12 @@ public class FurnaceScreen extends AbstractContainerScreen<FurnaceMenu> {
                         left + 56, top + 36 + 14 - flame, 14, flame);
             }
         } else {
+            // The background is vanilla's, so it draws a fuel slot the Electric tier's menu never
+            // adds -- a recess a player can click, drop onto and get nothing back from, which
+            // reads as a slot that is broken rather than one that is absent. Painting it out is
+            // what makes "this tier has no fuel slot" visible instead of merely true.
+            graphics.fill(left + 55, top + 52, left + 73, top + 70, PANEL);
+
             // The energy bar stands where the flame would be, so the two tiers read the same way.
             int height = Math.round(menu.energyLevel() * 14F);
             graphics.fill(left + 57, top + 37, left + 69, top + 51, ENERGY_EMPTY);

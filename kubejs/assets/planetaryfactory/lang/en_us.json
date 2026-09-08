@@ -32,11 +32,15 @@
   "tooltip.planetaryfactory.barrel.empty": "Empty",
   "tooltip.planetaryfactory.barrel.amount": "%s / %s mB",
   "tooltip.planetaryfactory.pole.area": "Supplies a %sx%s area, %s blocks up and down",
-  "tooltip.planetaryfactory.pole.wireless": "Powers machines directly \u2014 no wires needed",
+  "tooltip.planetaryfactory.pole.wireless": "Powers machines directly — no wires needed",
   "tooltip.planetaryfactory.pole.column": "Measured at the base; extend with another %s (up to %s tall)",
   "tooltip.planetaryfactory.pole.jade.machines": "Machines in area: %s",
   "tooltip.planetaryfactory.pole.jade.supply": "This pole: %s / %s EU/t",
   "tooltip.planetaryfactory.pole.jade.idle": "Nothing drawing power",
+  "tooltip.planetaryfactory.furnace.jade.progress": "%s%%",
+  "tooltip.planetaryfactory.furnace.jade.idle": "idle",
+  "tooltip.planetaryfactory.furnace.jade.empty": "—",
+  "tooltip.planetaryfactory.furnace.jade.energy": "Buffer: %s / %s EU",
   "item.planetaryfactory.engineers_iron_pick": "Engineer's Iron Pick",
   "item.planetaryfactory.engineers_steel_pick": "Engineer's Steel Pick",
   "tooltip.planetaryfactory.engineers_pick.speed": "%ss per ore, coal or stone",
@@ -46,5 +50,7 @@
   "block.planetaryfactory.coal_ore": "Coal Patch",
   "block.planetaryfactory.uranium_ore": "Uranium Ore Patch",
   "block.planetaryfactory.stone_ore": "Stone Patch",
-  "tooltip.planetaryfactory.ore.jade.amount": "Ore left: %s of %s"
+  "tooltip.planetaryfactory.ore.jade.amount": "Ore left: %s of %s",
+  "emi.category.planetaryfactory.smelting": "Smelting",
+  "emi.planetaryfactory.smelting.seconds": "%ss"
 }
