@@ -41,6 +41,8 @@
   "tooltip.planetaryfactory.furnace.jade.idle": "idle",
   "tooltip.planetaryfactory.furnace.jade.empty": "—",
   "tooltip.planetaryfactory.furnace.jade.energy": "Buffer: %s / %s EU",
+  "tooltip.planetaryfactory.furnace.energy": "%s / %s EU",
+  "tooltip.planetaryfactory.furnace.usage": "Draws %s EU/t while smelting",
   "item.planetaryfactory.engineers_iron_pick": "Engineer's Iron Pick",
   "item.planetaryfactory.engineers_steel_pick": "Engineer's Steel Pick",
   "tooltip.planetaryfactory.engineers_pick.speed": "%ss per ore, coal or stone",

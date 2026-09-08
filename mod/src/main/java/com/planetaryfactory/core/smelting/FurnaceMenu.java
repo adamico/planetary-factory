@@ -84,6 +84,21 @@ public class FurnaceMenu extends AbstractContainerMenu {
         return capacity <= 0 ? 0F : Math.min(1F, data.get(FurnaceBlockEntity.DATA_ENERGY) / (float) capacity);
     }
 
+    /** The EU in the buffer. Always 0 on the burner tiers. */
+    public int energyStored() {
+        return data.get(FurnaceBlockEntity.DATA_ENERGY);
+    }
+
+    /** What the buffer holds when full. Always 0 on the burner tiers. */
+    public int energyCapacity() {
+        return data.get(FurnaceBlockEntity.DATA_ENERGY_CAPACITY);
+    }
+
+    /** What one tick of smelting costs, which is the number that turns a buffer into a duration. */
+    public long euPerTick() {
+        return tier.euPerTick();
+    }
+
     /** The number of furnace slots this tier actually shows, which the shift-click split needs. */
     private int furnaceSlotCount() {
         return tier.burnsFuel() ? 3 : 2;
