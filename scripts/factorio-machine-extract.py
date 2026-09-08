@@ -30,6 +30,12 @@ the pack:
     other two, and is `null` on an electric machine. Both burner furnaces come out at
     `effectivity: 1` and `["chemical"]`, which is why the Steel tier gets twice the items
     from one coal at the same 90 kW -- extracted, so the ladder can stop asserting it.
+  - **What a drill reaches, and where it puts it.** `resource_searching_radius` is the
+    half-extent of the tiles a drill works and `vector_to_place_result` is the tile it hands
+    the result to. Both are ADR-0043's, and both were figures the pack would otherwise type:
+    the burner rig's 2x2 area, the electric rig's 5x5 on a 3x3 footprint, and which of the
+    three tiles in front of it a 3x3 outputs onto. ADR-0041's rule is that a number is
+    extracted; these are two more of them.
   - **Who declares a category.** `data/pack/category-map.json` routes a recipe category to a
     pack machine, and its right-hand side was hand-written. `categories` here is the
     authority it is checked against: every recipe category, and every entity declaring it.
@@ -119,6 +125,25 @@ def footprint(prototype):
         return None, None
     (left, top), (right, bottom) = box
     return math.ceil(right - left), math.ceil(bottom - top)
+
+
+def place_vector(prototype):
+    """Where an entity hands its result: the tile its arrow points at, in tiles from centre.
+
+    Auto-output is a property of the prototype and not a rule about machines. Only a handful
+    of entities carry this field at all -- the mining drills and the recycler -- while a
+    furnace or an assembler has none and is emptied by an inserter. ADR-0043 gives the rig
+    an eject, and this is the figure that says onto which tile, rather than the pack picking
+    one. Factorio's `Vector` is written either way round, so both are read.
+    """
+    vector = prototype.get("vector_to_place_result")
+    if isinstance(vector, dict):
+        x, y = vector.get("x"), vector.get("y")
+    elif isinstance(vector, (list, tuple)) and len(vector) == 2:
+        x, y = vector
+    else:
+        return None
+    return None if x is None or y is None else [float(x), float(y)]
 
 
 def fluid_box(box):
@@ -264,6 +289,8 @@ def extract_drills(dump, scope):
                 "burner": burner(prototype),
                 "module_slots": prototype.get("module_slots", 0),
                 "fluid_boxes": fluid_boxes(prototype, "input_fluid_box", "output_fluid_box"),
+                "vector_to_place_result": place_vector(prototype),
+                "resource_searching_radius": prototype.get("resource_searching_radius"),
                 "tile_width": width,
                 "tile_height": height,
             }

@@ -205,6 +205,26 @@ def main():
         ):
             if not drill.get(field):
                 failures.append(f"{name} has no {field}")
+
+        # The two figures ADR-0043's eject and mining area would otherwise be typed from.
+        # A regeneration that drops either leaves the rig reading a null and falling back to
+        # a number somebody chose, which is the failure ADR-0041 exists to make visible.
+        radius = drill.get("resource_searching_radius")
+        if not isinstance(radius, (int, float)):
+            failures.append(
+                f"{name} has no resource_searching_radius -- the mining area would be typed"
+            )
+        vector = drill.get("vector_to_place_result")
+        if not (
+            isinstance(vector, list)
+            and len(vector) == 2
+            and all(isinstance(part, (int, float)) for part in vector)
+        ):
+            failures.append(
+                f"{name}'s vector_to_place_result is not an [x, y]: {vector!r} "
+                "-- the output tile would be typed"
+            )
+
         burner = drill.get("burner")
         if drill["energy_type"] == "burner" and not (
             burner and burner.get("fuel_categories") and burner.get("effectivity") is not None
