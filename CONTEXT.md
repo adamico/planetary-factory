@@ -191,6 +191,25 @@ _Avoid_: size, footprint, patch size
 The building that reveals map at range. It detects nothing — ore is visible where it lies, so finding a patch is exploration rather than prospecting (ADR-0045).
 _Avoid_: prospector, scanner, ore detector
 
+### Powering things
+
+**Steam**:
+The pack's own low-temperature fluid, made by the **Boiler** from water and solid fuel and consumed by the **Steam Engine**. Real, pipeable and buffered, as in Factorio, and `planetaryfactory:` rather than any mod's (ADR-0048).
+_Avoid_: low-pressure steam, LP steam, GT steam
+
+**Superheated Steam**:
+The pack's own high-temperature fluid, emitted directly by the reactor with no heat layer (ADR-0033) and accepted only by the **Steam Turbine**. The **Steam Engine** will not take it.
+_Avoid_: high-pressure steam, hot steam, 500-degree steam
+
+**Boiler**:
+Terra's rung 0 pack-authored machine that burns solid fuel to turn water into **Steam**. One tier; joules in a buffer drained at its own rate (ADR-0047). It replaces the mod boiler the ledger used to name.
+_Avoid_: LP Solid Boiler, heater, steam generator
+
+**Steam Engine**:
+The pack-authored machine that consumes **Steam** and emits Create rotation. It is the pack's rung 0 prime mover and it generates no electricity: rotation becomes volts one rung later, at Create: Power Grid's generator assembly (ADR-0048).
+_Avoid_: Create's Steam Engine, generator, alternator, turbine
+
+
 ### Making things
 
 **Engineer's Pick**:
