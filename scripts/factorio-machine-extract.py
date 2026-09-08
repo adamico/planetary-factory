@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Extract Factorio's crafting-machine and fluid-container prototypes.
+"""Extract Factorio's crafting-machine, drill, power and fluid-container prototypes.
 
 `#126` settled the *shape* of the recipe conversion rule -- four channels, nothing scaled,
 `crafting_speed` living on the machine rather than in the recipe -- but every number behind
@@ -69,15 +69,34 @@ CRAFTING_TYPES = ("assembling-machine", "furnace", "rocket-silo", "lab")
 # their volume and footprint only.
 CONTAINER_TYPES = ("storage-tank", "pipe")
 
+# The three prototype types #188 adds. None of them crafts: a mining drill spends
+# `mining_speed` against a resource's own hardness, a boiler spends joules on raising water
+# to a temperature, and a generator spends hot fluid on power. They carry no
+# `crafting_speed` and no `crafting_categories`, which is why they are extracted beside the
+# crafting machines rather than into them -- a null `crafting_speed` in `machines` would be
+# indistinguishable from a number nobody extracted, and `test_machine_extract.py` fails on
+# exactly that.
+DRILL_TYPE = "mining-drill"
+BOILER_TYPE = "boiler"
+GENERATOR_TYPE = "generator"
+
 # Factorio's default electric drain, from the engine rather than from any prototype: an
 # electric energy source with no `drain` set draws 1/30 of its `energy_usage` while idle.
 DEFAULT_DRAIN_FRACTION = 30
 
+# Factorio's tick, for the generator's derived power figure.
+TICKS_PER_SECOND = 60
+
 UNITS = {"": 1, "k": 1e3, "M": 1e6, "G": 1e9, "T": 1e12}
 
 
-def watts(value):
-    """Factorio energy strings -- `375kW`, `2.5MJ` -- as a number in W (or J)."""
+def si(value):
+    """Factorio's SI strings -- `375kW`, `2.5MJ`, `0.2kJ` -- as a bare number.
+
+    The unit letter is dropped and only the prefix is read, so this is as correct on a
+    heat capacity in J/degree as it is on a power in W. `watts` is the name the crafting
+    machines already read it under.
+    """
     if value is None:
         return None
     text = str(value).strip().rstrip("Ww").rstrip("Jj")
@@ -85,6 +104,9 @@ def watts(value):
     if scale is None:
         return float(text)
     return float(text[:-1] if text[-1:] in UNITS and text[-1:] else text) * scale
+
+
+watts = si
 
 
 def footprint(prototype):
@@ -97,6 +119,35 @@ def footprint(prototype):
         return None, None
     (left, top), (right, bottom) = box
     return math.ceil(right - left), math.ceil(bottom - top)
+
+
+def fluid_box(box):
+    """The parts of a fluid box a consumer reads: how much it holds and what it admits.
+
+    The temperature bounds are the steam engine's whole contract -- it consumes steam at or
+    above `minimum_temperature` and pays out up to `maximum_temperature` -- and they live on
+    the box rather than on the entity.
+    """
+    return {
+        "production_type": box.get("production_type"),
+        "volume": box.get("volume"),
+        "filter": box.get("filter"),
+        "minimum_temperature": box.get("minimum_temperature"),
+        "maximum_temperature": box.get("maximum_temperature"),
+    }
+
+
+def fluid_boxes(prototype, *keys):
+    """Named single boxes and the `fluid_boxes` list, flattened in declaration order."""
+    boxes = []
+    for key in keys:
+        box = prototype.get(key)
+        if isinstance(box, dict):
+            boxes.append(dict(fluid_box(box), name=key))
+    for box in prototype.get("fluid_boxes") or []:
+        if isinstance(box, dict):
+            boxes.append(dict(fluid_box(box), name=None))
+    return boxes
 
 
 def burner(prototype):
@@ -191,6 +242,123 @@ def extract_containers(dump, scope):
     return containers
 
 
+def extract_drills(dump, scope):
+    """Mining drills. `mining_speed` is Factorio's own, against a resource's hardness."""
+    drills = []
+    kind = DRILL_TYPE
+    for name, prototype in sorted((dump.get(kind) or {}).items()):
+        if name not in scope:
+            continue
+        usage, drain, drain_source, energy_type = energy(prototype)
+        width, height = footprint(prototype)
+        drills.append(
+            {
+                "name": name,
+                "type": kind,
+                "mining_speed": prototype.get("mining_speed"),
+                "resource_categories": prototype.get("resource_categories"),
+                "energy_usage": usage,
+                "energy_type": energy_type,
+                "drain": drain,
+                "drain_source": drain_source,
+                "burner": burner(prototype),
+                "module_slots": prototype.get("module_slots", 0),
+                "fluid_boxes": fluid_boxes(prototype, "input_fluid_box", "output_fluid_box"),
+                "tile_width": width,
+                "tile_height": height,
+            }
+        )
+    return drills
+
+
+def extract_boilers(dump, scope):
+    """Boilers. What the buffer is, is what the prototype says it is -- ADR-0048 reads it."""
+    boilers = []
+    kind = BOILER_TYPE
+    for name, prototype in sorted((dump.get(kind) or {}).items()):
+        if name not in scope:
+            continue
+        # A boiler spends `energy_consumption`, not `energy_usage`; `energy()` is here
+        # for the drain and the source type only.
+        _, drain, drain_source, energy_type = energy(prototype)
+        width, height = footprint(prototype)
+        boilers.append(
+            {
+                "name": name,
+                "type": kind,
+                "energy_consumption": watts(prototype.get("energy_consumption")),
+                "target_temperature": prototype.get("target_temperature"),
+                # #188 asks for it by name. A boiler declares none of its own; the
+                # figure is its energy source's, and 1 when the source has none.
+                "effectivity": (prototype.get("energy_source") or {}).get(
+                    "effectivity", 1
+                ),
+                "mode": prototype.get("mode", "heat-water-inside"),
+                "energy_type": energy_type,
+                "drain": drain,
+                "drain_source": drain_source,
+                "burner": burner(prototype),
+                "fluid_boxes": fluid_boxes(prototype, "fluid_box", "output_fluid_box"),
+                "tile_width": width,
+                "tile_height": height,
+            }
+        )
+    return boilers
+
+
+def extract_generators(dump, scope):
+    """Generators, and the one number of theirs Factorio does not state.
+
+    `max_power_output` is optional and the steam engine omits it, so the figure is the
+    engine's own product: a tick's fluid, times the degrees above the fluid's default
+    temperature, times its heat capacity, times `effectivity`, times 60 ticks. It is
+    derived and says so, the same way `drain` does.
+    """
+    generators = []
+    kind = GENERATOR_TYPE
+    for name, prototype in sorted((dump.get(kind) or {}).items()):
+        if name not in scope:
+            continue
+        width, height = footprint(prototype)
+        boxes = fluid_boxes(prototype, "fluid_box")
+        power = si(prototype.get("max_power_output"))
+        source = "explicit"
+        consumed = boxes[0] if boxes else {}
+        fluid = (dump.get("fluid") or {}).get(consumed.get("filter"))
+        if power is None:
+            if fluid is None:
+                sys.exit(
+                    f"{name} states no max_power_output and its consumption box "
+                    f"filters on {consumed.get('filter')!r}, which is no fluid -- "
+                    "the figure cannot be derived and must not be guessed"
+                )
+            power = (
+                prototype["fluid_usage_per_tick"]
+                * (prototype["maximum_temperature"] - fluid["default_temperature"])
+                * si(fluid["heat_capacity"])
+                * prototype.get("effectivity", 1)
+                * TICKS_PER_SECOND
+            )
+            source = "derived"
+        generators.append(
+            {
+                "name": name,
+                "type": kind,
+                "energy_source": (prototype.get("energy_source") or {}).get("type"),
+                "effectivity": prototype.get("effectivity", 1),
+                "fluid_usage_per_tick": prototype.get("fluid_usage_per_tick"),
+                "maximum_temperature": prototype.get("maximum_temperature"),
+                "max_power_output": power,
+                "max_power_output_source": source,
+                "burns_fluid": prototype.get("burns_fluid", False),
+                "fluid_boxes": boxes,
+                "tile_width": width,
+                "tile_height": height,
+            }
+        )
+    return generators
+
+
 def extract_categories(dump):
     """Every recipe category, and every entity that declares it.
 
@@ -236,11 +404,17 @@ def main():
 
     machines, skipped = extract_machines(dump, scope)
     containers = extract_containers(dump, scope)
+    drills = extract_drills(dump, scope)
+    boilers = extract_boilers(dump, scope)
+    generators = extract_generators(dump, scope)
     categories = extract_categories(dump)
 
     out = {
         "machines": machines,
         "containers": containers,
+        "drills": drills,
+        "boilers": boilers,
+        "generators": generators,
         "categories": categories,
     }
     args.out.parent.mkdir(parents=True, exist_ok=True)
@@ -263,6 +437,31 @@ def main():
         print(
             f"  {container['name']:14} {container['volume']:>6} units over "
             f"{container['tile_width']}x{container['tile_height']} tiles"
+        )
+    print("\nmining drills:")
+    for drill in drills:
+        print(
+            f"  {drill['name']:22} speed {drill['mining_speed']:<5} "
+            f"{(drill['energy_usage'] or 0) / 1000:7.1f} kW  "
+            f"{drill['tile_width']}x{drill['tile_height']}"
+        )
+    print("\nboilers:")
+    for boiler in boilers:
+        print(
+            f"  {boiler['name']:22} {(boiler['energy_consumption'] or 0) / 1e6:5.2f} MW "
+            f"-> {boiler['target_temperature']}C  "
+            + ", ".join(
+                f"{b['name'] or b['production_type']} {b['volume']}" for b in boiler["fluid_boxes"]
+            )
+        )
+    print("\ngenerators:")
+    for generator in generators:
+        print(
+            f"  {generator['name']:22} {(generator['max_power_output'] or 0) / 1000:7.1f} kW "
+            f"({generator['max_power_output_source']}) on "
+            + ", ".join(
+                f"{b['filter']} >={b['minimum_temperature']}C" for b in generator["fluid_boxes"]
+            )
         )
     print("\ncategories with no crafting entity: "
           + ", ".join(n for n, who in categories.items() if not who))

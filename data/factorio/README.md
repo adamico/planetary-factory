@@ -92,8 +92,9 @@ is stale.
   extractor reports `setMaxIOSize` per machine off this data, which is where ADR-0026's
   numbers come from.
 
-- **`machine.json`** — the machines the conversion rule reads, and the fluid anchors it
-  derives from. Three sections:
+- **`machine.json`** — the machines the conversion rule reads, the drill and power
+  prototypes ADR-0043 and ADR-0048 are authored against, and the fluid anchors the unit
+  derivation comes from. Six sections:
 
   `machines`, one object per crafting machine: `name`, `type` (`assembling-machine`,
   `furnace`, `rocket-silo`, `lab`), `crafting_speed`, `energy_usage` (W), `energy_type`,
@@ -119,6 +120,32 @@ is stale.
   the engine's default of `energy_usage / 30` on an electric source, and nothing at all on
   a burner one. `drain_source` records which. #126 excludes drain from the conversion
   deliberately; this is the number that exclusion is quoted against.
+
+  `drills`, `boilers` and `generators` — #188's widening. None of the three crafts, so none
+  carries a `crafting_speed` or a `crafting_category`, and they are listed apart from
+  `machines` rather than inside it: a null crafting speed in `machines` is indistinguishable
+  from a number nobody extracted. They share the scope rule and the `energy_type`/`drain`/
+  `burner` treatment with the crafting machines.
+
+  A drill adds `mining_speed`, `resource_categories`, `module_slots` and its footprint — the
+  burner drill is 2×2 at 0.25 speed and 150 kW off `["chemical"]`, the electric one 3×3 at
+  0.5 speed and 90 kW. A boiler adds `energy_consumption` (W), `target_temperature`, `mode`
+  `effectivity`
+  and both fluid boxes with their volumes: 1.8 MW to 165 °C, 200 units in and 200 out, which
+  is what ADR-0048's buffer is — the prototype decides it, not us. A boiler declares no
+  `effectivity` of its own, so the figure is its energy source's, and 1 where the source
+  states none. A generator adds
+  `energy_source`, `effectivity`, `fluid_usage_per_tick`, `maximum_temperature` and its
+  consumption box's temperature bounds, which are the whole contract: steam at 100 °C or
+  above, up to 165.
+
+  **`max_power_output` is derived.** The steam engine omits it, so the figure is the engine's
+  own product — a tick's fluid × the degrees above the fluid's default temperature × its heat
+  capacity × `effectivity` × 60 — and `max_power_output_source` records `derived` against
+  `explicit`; there is no third value, because a generator whose consumption box names no
+  fluid fails the extraction rather than shipping a null. It comes out at 900 kW, which is the number the wiki states and the pack's own
+  Steam Engine is authored against even though Factorio's entity pays out electricity and the
+  pack's pays out rotation.
 
   `containers`, the fluid anchors for the 1 unit = 1 mB derivation: a storage tank holds
   25 000 units over 3×3 tiles, a pipe 100 over 1×1.

@@ -305,6 +305,203 @@
       "tile_height": 1
     }
   ],
+  "drills": [
+    {
+      "name": "burner-mining-drill",
+      "type": "mining-drill",
+      "mining_speed": 0.25,
+      "resource_categories": [
+        "basic-solid"
+      ],
+      "energy_usage": 150000.0,
+      "energy_type": "burner",
+      "drain": null,
+      "drain_source": "none",
+      "burner": {
+        "fuel_categories": [
+          "chemical"
+        ],
+        "effectivity": 1,
+        "fuel_inventory_size": 1
+      },
+      "module_slots": 0,
+      "fluid_boxes": [],
+      "tile_width": 2,
+      "tile_height": 2
+    },
+    {
+      "name": "electric-mining-drill",
+      "type": "mining-drill",
+      "mining_speed": 0.5,
+      "resource_categories": [
+        "basic-solid"
+      ],
+      "energy_usage": 90000.0,
+      "energy_type": "electric",
+      "drain": 3000.0,
+      "drain_source": "default",
+      "burner": null,
+      "module_slots": 3,
+      "fluid_boxes": [
+        {
+          "production_type": null,
+          "volume": 200,
+          "filter": null,
+          "minimum_temperature": null,
+          "maximum_temperature": null,
+          "name": "input_fluid_box"
+        }
+      ],
+      "tile_width": 3,
+      "tile_height": 3
+    },
+    {
+      "name": "pumpjack",
+      "type": "mining-drill",
+      "mining_speed": 1,
+      "resource_categories": [
+        "basic-fluid"
+      ],
+      "energy_usage": 90000.0,
+      "energy_type": "electric",
+      "drain": 3000.0,
+      "drain_source": "default",
+      "burner": null,
+      "module_slots": 2,
+      "fluid_boxes": [
+        {
+          "production_type": null,
+          "volume": 1000,
+          "filter": null,
+          "minimum_temperature": null,
+          "maximum_temperature": null,
+          "name": "output_fluid_box"
+        }
+      ],
+      "tile_width": 3,
+      "tile_height": 3
+    }
+  ],
+  "boilers": [
+    {
+      "name": "boiler",
+      "type": "boiler",
+      "energy_consumption": 1800000.0,
+      "target_temperature": 165,
+      "effectivity": 1,
+      "mode": "output-to-separate-pipe",
+      "energy_type": "burner",
+      "drain": null,
+      "drain_source": "none",
+      "burner": {
+        "fuel_categories": [
+          "chemical"
+        ],
+        "effectivity": 1,
+        "fuel_inventory_size": 1
+      },
+      "fluid_boxes": [
+        {
+          "production_type": "input",
+          "volume": 200,
+          "filter": "water",
+          "minimum_temperature": null,
+          "maximum_temperature": null,
+          "name": "fluid_box"
+        },
+        {
+          "production_type": "output",
+          "volume": 200,
+          "filter": "steam",
+          "minimum_temperature": null,
+          "maximum_temperature": null,
+          "name": "output_fluid_box"
+        }
+      ],
+      "tile_width": 3,
+      "tile_height": 2
+    },
+    {
+      "name": "heat-exchanger",
+      "type": "boiler",
+      "energy_consumption": 10000000.0,
+      "target_temperature": 500,
+      "effectivity": 1,
+      "mode": "output-to-separate-pipe",
+      "energy_type": "heat",
+      "drain": null,
+      "drain_source": "none",
+      "burner": null,
+      "fluid_boxes": [
+        {
+          "production_type": "input",
+          "volume": 200,
+          "filter": "water",
+          "minimum_temperature": null,
+          "maximum_temperature": null,
+          "name": "fluid_box"
+        },
+        {
+          "production_type": "output",
+          "volume": 200,
+          "filter": "steam",
+          "minimum_temperature": null,
+          "maximum_temperature": null,
+          "name": "output_fluid_box"
+        }
+      ],
+      "tile_width": 3,
+      "tile_height": 2
+    }
+  ],
+  "generators": [
+    {
+      "name": "steam-engine",
+      "type": "generator",
+      "energy_source": "electric",
+      "effectivity": 1,
+      "fluid_usage_per_tick": 0.5,
+      "maximum_temperature": 165,
+      "max_power_output": 900000.0,
+      "max_power_output_source": "derived",
+      "burns_fluid": false,
+      "fluid_boxes": [
+        {
+          "production_type": "input",
+          "volume": 200,
+          "filter": "steam",
+          "minimum_temperature": 100,
+          "maximum_temperature": null,
+          "name": "fluid_box"
+        }
+      ],
+      "tile_width": 3,
+      "tile_height": 5
+    },
+    {
+      "name": "steam-turbine",
+      "type": "generator",
+      "energy_source": "electric",
+      "effectivity": 1,
+      "fluid_usage_per_tick": 1,
+      "maximum_temperature": 500,
+      "max_power_output": 5820000.0,
+      "max_power_output_source": "derived",
+      "burns_fluid": false,
+      "fluid_boxes": [
+        {
+          "production_type": "input",
+          "volume": 200,
+          "filter": "steam",
+          "minimum_temperature": 100,
+          "maximum_temperature": null,
+          "name": "fluid_box"
+        }
+      ],
+      "tile_width": 3,
+      "tile_height": 5
+    }
+  ],
   "categories": {
     "advanced-crafting": [
       "assembling-machine/assembling-machine-1",
