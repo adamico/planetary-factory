@@ -1,6 +1,9 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "minecraft:block/orientable",
   "textures": {
-    "all": "minecraft:block/coal_block"
+    "front": "minecraft:block/blast_furnace_front",
+    "side": "minecraft:block/blast_furnace_side",
+    "top": "minecraft:block/blast_furnace_top",
+    "particle": "minecraft:block/blast_furnace_side"
   }
 }

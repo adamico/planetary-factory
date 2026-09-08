@@ -206,17 +206,37 @@ def main():
             variants = json.loads(blockstate.read_text()).get("variants") or {}
             if not variants:
                 failures.append(f"{name}'s blockstate declares no variants")
+            seen_rotations = set()
             for variant, definition in variants.items():
-                model = (definition if isinstance(definition, dict) else definition[0])["model"]
+                entry = definition if isinstance(definition, dict) else definition[0]
+                model = entry["model"]
+                seen_rotations.add(entry.get("y", 0))
                 model_path = ASSETS / f"models/{model.split(':', 1)[-1]}.json"
                 if not resolves(model_path):
                     failures.append(f"{name}[{variant}] names model {model}, which is missing")
                     continue
-                for slot, reference in (json.loads(model_path.read_text()).get("textures") or {}).items():
+                # THE FACING HAS TO BE VISIBLE ON THE BLOCK. ADR-0043 gives a rig one output tile
+                # and makes placement a decision the player gets right or wrong; a `cube_all` model
+                # renders every side the same, so a mis-faced rig looks exactly like a correct one
+                # until it fails to fill anything. Nothing else in the pack can catch that -- the
+                # blockstate rotates a model that does not care, and every other hop still resolves.
+                declared = json.loads(model_path.read_text())
+                if not (declared.get("textures") or {}).get("front"):
+                    failures.append(
+                        f"{name}'s model {model} declares no `front` texture -- its facing would "
+                        "be invisible, and a mis-faced rig would look identical to a correct one"
+                    )
+                for slot, reference in (declared.get("textures") or {}).items():
                     texture = texture_path(reference)
                     if texture is not None and not resolves(texture):
                         failures.append(f"{model}'s {slot} texture {reference} is missing")
 
+            if seen_rotations != {0, 90, 180, 270}:
+                failures.append(
+                    f"{name}'s blockstate turns the model through {sorted(seen_rotations)} rather "
+                    "than all four quarters -- the front face would point the wrong way on "
+                    "at least one facing"
+                )
             if f"block.planetaryfactory.{name}" not in lang:
                 failures.append(f"{name} has no lang key -- it would ship its raw translation key")
             if not resolves(DATA / f"loot_table/blocks/{name}.json"):

@@ -46,12 +46,18 @@ RIGS = {
     "burner_mining_drill": {
         "factorio_name": "burner-mining-drill",
         "name": "Burner Mining Drill",
-        "texture": "minecraft:block/coal_block",
+        # A burner: the blast furnace's face reads as something that is fed and lit.
+        "front": "minecraft:block/blast_furnace_front",
+        "side": "minecraft:block/blast_furnace_side",
+        "top": "minecraft:block/blast_furnace_top",
     },
     "electric_mining_drill": {
         "factorio_name": "electric-mining-drill",
         "name": "Electric Mining Drill",
-        "texture": "minecraft:block/iron_block",
+        # No fire on this one (ADR-0036's pole customer), so a plain machine face instead.
+        "front": "minecraft:block/observer_front",
+        "side": "minecraft:block/observer_side",
+        "top": "minecraft:block/observer_top",
     },
 }
 
@@ -121,8 +127,32 @@ def blockstate(model_name):
     }
 
 
-def cube_model(texture):
-    return {"parent": "minecraft:block/cube_all", "textures": {"all": texture}}
+def oriented_model(rig):
+    """A model with a distinct front face, so the rig's facing is visible on the block.
+
+    **The facing is the mechanic** -- ADR-0043 gives a rig one output tile and makes placement a
+    decision the player gets right or wrong -- and a `cube_all` placeholder made it invisible: every
+    block of the footprint looked the same on every side, so a mis-faced rig was indistinguishable
+    from a correct one until it failed to fill anything.
+
+    `minecraft:block/orientable` puts `front` on the north face, and the blockstate already rotates
+    the model by facing, so the front texture lands on the side the rig ejects towards. Applied to
+    the parts as well as the anchor: the footprint reads as one machine with one face, and the
+    interior faces are occluded anyway. Which block is the anchor stays invisible, which is correct
+    -- every part opens it and breaking any part breaks the rig.
+
+    Still placeholder art, in that it is vanilla's rather than the pack's; what is no longer
+    placeholder is that it has an orientation at all.
+    """
+    return {
+        "parent": "minecraft:block/orientable",
+        "textures": {
+            "front": rig["front"],
+            "side": rig["side"],
+            "top": rig["top"],
+            "particle": rig["side"],
+        },
+    }
 
 
 def item_model(model_name):
@@ -160,7 +190,7 @@ def planned_files(drills):
     for block_name, rig in RIGS.items():
         model_name = f"{NAMESPACE}:block/{block_name}"
         files[os.path.join(ASSETS, "blockstates", f"{block_name}.json")] = blockstate(model_name)
-        files[os.path.join(ASSETS, "models", "block", f"{block_name}.json")] = cube_model(rig["texture"])
+        files[os.path.join(ASSETS, "models", "block", f"{block_name}.json")] = oriented_model(rig)
         files[os.path.join(ASSETS, "models", "item", f"{block_name}.json")] = item_model(model_name)
         files[os.path.join(DATA, "loot_table", "blocks", f"{block_name}.json")] = self_drop_loot_table(
             f"{NAMESPACE}:{block_name}"
@@ -170,7 +200,7 @@ def planned_files(drills):
         part_name = f"{block_name}_part"
         part_model_name = f"{NAMESPACE}:block/{part_name}"
         files[os.path.join(ASSETS, "blockstates", f"{part_name}.json")] = blockstate(part_model_name)
-        files[os.path.join(ASSETS, "models", "block", f"{part_name}.json")] = cube_model(rig["texture"])
+        files[os.path.join(ASSETS, "models", "block", f"{part_name}.json")] = oriented_model(rig)
         # No item model: a part is never held. It is placed by the rig's own item and nothing
         # else, so it has no `BlockItem` and no entry in a creative tab.
         files[os.path.join(DATA, "loot_table", "blocks", f"{part_name}.json")] = EMPTY_LOOT_TABLE

@@ -1,6 +1,9 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "minecraft:block/orientable",
   "textures": {
-    "all": "minecraft:block/iron_block"
+    "front": "minecraft:block/observer_front",
+    "side": "minecraft:block/observer_side",
+    "top": "minecraft:block/observer_top",
+    "particle": "minecraft:block/observer_side"
   }
 }
