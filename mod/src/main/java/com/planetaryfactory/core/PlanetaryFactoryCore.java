@@ -5,6 +5,7 @@ import com.planetaryfactory.core.assembler.client.AssemblerClient;
 import com.planetaryfactory.core.crafting.client.InventoryGridBlank;
 import com.planetaryfactory.core.network.PFNetwork;
 import com.planetaryfactory.core.recipes.PFRecipes;
+import com.planetaryfactory.core.smelting.PFFuel;
 import com.planetaryfactory.core.smelting.client.FurnaceClient;
 import com.planetaryfactory.core.ore.OreMining;
 import com.planetaryfactory.core.worldgen.PFWorldgen;
@@ -49,6 +50,9 @@ public final class PlanetaryFactoryCore {
         modBus.addListener(PFNetwork::register);
         // Game bus, not the mod bus: this one fires per running server, not per mod load.
         NeoForge.EVENT_BUS.addListener(TerraStartingArea::onServerStarted);
+        // What burns is datapack JSON generated from Factorio's own fuel values (ADR-0047), so
+        // it reloads with the rest rather than being a table compiled into this jar.
+        NeoForge.EVENT_BUS.addListener(PFFuel::register);
         // The Personal Assembler's queue runs whether or not its panel is open (ADR-0038).
         // One break gesture draws one unit, and the block stands until it is spent (ADR-0041).
         NeoForge.EVENT_BUS.addListener(OreMining::onBreak);

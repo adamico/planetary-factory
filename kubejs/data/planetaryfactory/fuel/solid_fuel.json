@@ -1,0 +1,6 @@
+{
+  "factorio_name": "solid-fuel",
+  "item": "planetaryfactory:solid_fuel",
+  "fuel_value": 12000000,
+  "fuel_category": "chemical"
+}

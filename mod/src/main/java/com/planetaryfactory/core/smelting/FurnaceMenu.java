@@ -72,34 +72,25 @@ public class FurnaceMenu extends AbstractContainerMenu {
         return duration <= 0 ? 0F : Math.min(1F, data.get(FurnaceBlockEntity.DATA_PROGRESS) / (float) duration);
     }
 
-    /** How much of the alight fuel item is left, 0..1. Always 0 on the Electric tier. */
-    public float fuelLeft() {
-        int litDuration = data.get(FurnaceBlockEntity.DATA_LIT_DURATION);
-        return litDuration <= 0 ? 0F : Math.min(1F, data.get(FurnaceBlockEntity.DATA_LIT) / (float) litDuration);
-    }
-
-    /** How full the EU buffer is, 0..1. Always 0 on the burner tiers. */
+    /**
+     * How full the buffer is, 0..1 -- joules on the burners, EU on the Electric tier.
+     *
+     * <p>One question for all three tiers since ADR-0047: they hold the same kind of thing and
+     * the screen draws it with the same gauge. What the gauge fills to differs -- a burner's is
+     * the last item it lit, the Electric tier's is the buffer ADR-0036's pole tops up -- and that
+     * is the refill economy, not the quantity.
+     */
     public float energyLevel() {
         int capacity = data.get(FurnaceBlockEntity.DATA_ENERGY_CAPACITY);
         return capacity <= 0 ? 0F : Math.min(1F, data.get(FurnaceBlockEntity.DATA_ENERGY) / (float) capacity);
     }
 
-    /** Ticks of burn left on the lit fuel item. Always 0 on the Electric tier. */
-    public int fuelTicks() {
-        return data.get(FurnaceBlockEntity.DATA_LIT);
-    }
-
-    /** What the lit item was worth when it caught, which is what makes the remainder a fraction. */
-    public int fuelDuration() {
-        return data.get(FurnaceBlockEntity.DATA_LIT_DURATION);
-    }
-
-    /** The EU in the buffer. Always 0 on the burner tiers. */
+    /** What is in the buffer: joules on the burners, EU on the Electric tier. */
     public int energyStored() {
         return data.get(FurnaceBlockEntity.DATA_ENERGY);
     }
 
-    /** What the buffer holds when full. Always 0 on the burner tiers. */
+    /** What the gauge fills to: the last fuel item's joules, or the Electric tier's capacity. */
     public int energyCapacity() {
         return data.get(FurnaceBlockEntity.DATA_ENERGY_CAPACITY);
     }
@@ -107,6 +98,11 @@ public class FurnaceMenu extends AbstractContainerMenu {
     /** What one tick of smelting costs, which is the number that turns a buffer into a duration. */
     public long euPerTick() {
         return tier.euPerTick();
+    }
+
+    /** The same number for a burner: 4,500 J, both tiers, from the machine's own 90 kW. */
+    public long joulesPerTick() {
+        return tier.joulesPerTick();
     }
 
     /** The number of furnace slots this tier actually shows, which the shift-click split needs. */

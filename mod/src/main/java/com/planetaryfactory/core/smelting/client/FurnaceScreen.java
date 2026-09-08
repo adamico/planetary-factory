@@ -10,8 +10,13 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
 /**
- * The furnace screen (#155), tier-aware: a flame under the fuel slot on the burner tiers, and an
- * EU bar in the same place on the Electric one.
+ * The furnace screen (#155): one horizontal gauge, top right, on all three tiers.
+ *
+ * <p>The flame the burners used to draw is gone with ADR-0047. A burner holds a buffer in joules
+ * exactly as the Electric tier holds one in EU, so it gets the same widget; two widgets for one
+ * quantity would say the two tiers hold interchangeable stuff. What differs is the refill
+ * economy -- a burner's gauge is filled by hand, one item at a time -- and that is legible from
+ * the fuel slot beside it rather than from a second kind of picture.
  *
  * <p>It draws on vanilla's own furnace background. The pack's furnaces are Factorio's, but the
  * screen a player reads is a furnace screen either way, and reusing the sprite sheet keeps the
@@ -21,12 +26,10 @@ public class FurnaceScreen extends AbstractContainerScreen<FurnaceMenu> {
 
     private static final ResourceLocation BACKGROUND =
             ResourceLocation.withDefaultNamespace("textures/gui/container/furnace.png");
-    private static final ResourceLocation LIT_PROGRESS =
-            ResourceLocation.withDefaultNamespace("container/furnace/lit_progress");
     private static final ResourceLocation BURN_PROGRESS =
             ResourceLocation.withDefaultNamespace("container/furnace/burn_progress");
 
-    /** The EU bar's colours: GregTech's own energy yellow over an empty slate. */
+    /** The gauge's colours: GregTech's own energy yellow over an empty slate. */
     private static final int ENERGY_FULL = 0xFFFFD84D;
     private static final int ENERGY_EMPTY = 0xFF3A3A3A;
 
@@ -41,17 +44,9 @@ public class FurnaceScreen extends AbstractContainerScreen<FurnaceMenu> {
     }
 
     /**
-     * The EU bar, in screen-relative coordinates, so the draw and the hover cannot drift apart.
-     *
-     * <p>Top right, filling left to right. It reads as a supply the machine is drawing from rather
-     * than as a fuel item burning down, which is the distinction the tier is: a burner's flame
-     * empties and has to be refilled by hand, while a buffer is a level a pole holds up.
+     * The gauge, in screen-relative coordinates, so the draw and the hover cannot drift apart.
+     * Top right, filling left to right, on every tier.
      */
-    /** The flame, which vanilla's background puts above the fuel slot. */
-    private static final int FLAME_X = 56;
-    private static final int FLAME_Y = 36;
-    private static final int FLAME_SIZE = 14;
-
     private static final int BAR_X = 106;
     private static final int BAR_Y = 16;
     private static final int BAR_WIDTH = 62;
@@ -69,28 +64,22 @@ public class FurnaceScreen extends AbstractContainerScreen<FurnaceMenu> {
         int top = topPos;
         graphics.blit(BACKGROUND, left, top, 0, 0, imageWidth, imageHeight);
 
-        if (menu.tier().burnsFuel()) {
-            int flame = Math.round(menu.fuelLeft() * 13F);
-            if (flame > 0) {
-                graphics.blitSprite(LIT_PROGRESS, FLAME_SIZE, FLAME_SIZE, 0, FLAME_SIZE - flame,
-                        left + FLAME_X, top + FLAME_Y + FLAME_SIZE - flame, FLAME_SIZE, flame);
-            }
-        } else {
+        if (!menu.tier().burnsFuel()) {
             // The background is vanilla's, so it draws a fuel slot the Electric tier's menu never
             // adds -- a recess a player can click, drop onto and get nothing back from, which
             // reads as a slot that is broken rather than one that is absent. Painting it out is
             // what makes "this tier has no fuel slot" visible instead of merely true.
             graphics.fill(left + 55, top + 52, left + 73, top + 70, PANEL);
+        }
 
-            int filled = Math.round(menu.energyLevel() * BAR_WIDTH);
-            int barLeft = left + BAR_X;
-            int barTop = top + BAR_Y;
-            graphics.fill(barLeft - 1, barTop - 1, barLeft + BAR_WIDTH + 1, barTop + BAR_HEIGHT + 1,
-                    ENERGY_BORDER);
-            graphics.fill(barLeft, barTop, barLeft + BAR_WIDTH, barTop + BAR_HEIGHT, ENERGY_EMPTY);
-            if (filled > 0) {
-                graphics.fill(barLeft, barTop, barLeft + filled, barTop + BAR_HEIGHT, ENERGY_FULL);
-            }
+        int filled = Math.round(menu.energyLevel() * BAR_WIDTH);
+        int barLeft = left + BAR_X;
+        int barTop = top + BAR_Y;
+        graphics.fill(barLeft - 1, barTop - 1, barLeft + BAR_WIDTH + 1, barTop + BAR_HEIGHT + 1,
+                ENERGY_BORDER);
+        graphics.fill(barLeft, barTop, barLeft + BAR_WIDTH, barTop + BAR_HEIGHT, ENERGY_EMPTY);
+        if (filled > 0) {
+            graphics.fill(barLeft, barTop, barLeft + filled, barTop + BAR_HEIGHT, ENERGY_FULL);
         }
 
         int arrow = Math.round(menu.smeltProgress() * 24F);
@@ -104,12 +93,9 @@ public class FurnaceScreen extends AbstractContainerScreen<FurnaceMenu> {
         renderBackground(graphics, mouseX, mouseY, partialTick);
         super.render(graphics, mouseX, mouseY, partialTick);
         renderTooltip(graphics, mouseX, mouseY);
-        if (!menu.tier().burnsFuel() && over(mouseX, mouseY, BAR_X, BAR_Y, BAR_WIDTH, BAR_HEIGHT)) {
-            graphics.renderComponentTooltip(font, energyTooltip(), mouseX, mouseY);
-        }
-        if (menu.tier().burnsFuel()
-                && over(mouseX, mouseY, FLAME_X, FLAME_Y, FLAME_SIZE, FLAME_SIZE)) {
-            graphics.renderComponentTooltip(font, fuelTooltip(), mouseX, mouseY);
+        if (over(mouseX, mouseY, BAR_X, BAR_Y, BAR_WIDTH, BAR_HEIGHT)) {
+            graphics.renderComponentTooltip(font,
+                    menu.tier().burnsFuel() ? fuelTooltip() : energyTooltip(), mouseX, mouseY);
         }
     }
 
@@ -119,25 +105,25 @@ public class FurnaceScreen extends AbstractContainerScreen<FurnaceMenu> {
     }
 
     /**
-     * What is left of the lit fuel item, the way the EU bar reads its buffer -- the two tiers ask
-     * the same question of the same place on the screen.
+     * What is in the fuel buffer, in the same shape the Electric tier's hover uses: what is held,
+     * and what it costs to run.
      *
-     * <p>Ticks and not only seconds: fuel is spent one tick per tick of operation at the same rate
-     * on both burners, so the tick count is directly how many more ticks of smelting this item
-     * pays for, and the Steel tier getting twice the items out of it is visible as the same number
-     * against a halved duration. The number itself is still Minecraft's burn value rather than
-     * Factorio's fuel value (#185); this displays it honestly, it does not fix it.
+     * <p>The seconds are the half that makes joules legible, and they are the tier's own: 4,500 J
+     * a tick on both burners, against a craft the Steel tier finishes in half the time. That is
+     * ADR-0047's ratio, on the screen, as two numbers a player can divide.
      */
     private List<Component> fuelTooltip() {
-        int ticks = menu.fuelTicks();
-        if (ticks <= 0) {
+        int joules = menu.energyStored();
+        if (joules <= 0) {
             return List.of(Component.translatable("tooltip.planetaryfactory.furnace.fuel.out")
                     .withStyle(net.minecraft.ChatFormatting.GRAY));
         }
+        long perTick = menu.joulesPerTick();
         return List.of(
-                Component.translatable("tooltip.planetaryfactory.furnace.fuel", ticks),
+                Component.translatable("tooltip.planetaryfactory.furnace.fuel", joules,
+                        menu.energyCapacity()),
                 Component.translatable("tooltip.planetaryfactory.furnace.fuel.seconds",
-                                String.format("%.1f", ticks / 20F))
+                                String.format("%.1f", joules / (perTick * 20F)), perTick)
                         .withStyle(net.minecraft.ChatFormatting.GRAY));
     }
 

@@ -46,20 +46,19 @@ public class FurnaceBlockEntity extends BlockEntity implements Container, MenuPr
 
     public static final int DATA_PROGRESS = 0;
     public static final int DATA_DURATION = 1;
-    public static final int DATA_LIT = 2;
-    public static final int DATA_LIT_DURATION = 3;
-    public static final int DATA_ENERGY = 4;
-    public static final int DATA_ENERGY_CAPACITY = 5;
-    public static final int DATA_COUNT = 6;
+    // Both burner tiers and the Electric one report through DATA_ENERGY: since ADR-0047 they
+    // hold the same kind of thing -- a buffer, in joules or in EU -- and the screen draws it with
+    // the same gauge. Two widgets for one quantity would say a burner and an Electric furnace
+    // hold interchangeable stuff, which is a worse lie than the flame it replaces.
+    public static final int DATA_ENERGY = 2;
+    public static final int DATA_ENERGY_CAPACITY = 3;
+    public static final int DATA_COUNT = 4;
 
     private final NonNullList<ItemStack> items = NonNullList.withSize(FurnaceSlots.SIZE, ItemStack.EMPTY);
     private final FurnaceCycle cycle = new FurnaceCycle();
     private final FurnaceEnergyBuffer energy;
+    private final FuelBuffer fuel = new FuelBuffer();
     private final FurnaceTier tier;
-
-    /** Burn ticks left on the fuel item currently alight, and what it started at. */
-    private int litTicks;
-    private int litDuration;
 
     /** The duration of the smelt in progress, so the client's arrow has something to scale to. */
     private int duration;
@@ -70,10 +69,12 @@ public class FurnaceBlockEntity extends BlockEntity implements Container, MenuPr
             return switch (index) {
                 case DATA_PROGRESS -> cycle.progress();
                 case DATA_DURATION -> duration;
-                case DATA_LIT -> litTicks;
-                case DATA_LIT_DURATION -> litDuration;
-                case DATA_ENERGY -> (int) energy.getEnergyStored();
-                case DATA_ENERGY_CAPACITY -> (int) energy.getEnergyCapacity();
+                case DATA_ENERGY -> clampToInt(tier.burnsFuel()
+                        ? fuel.storedJoules()
+                        : energy.getEnergyStored());
+                case DATA_ENERGY_CAPACITY -> clampToInt(tier.burnsFuel()
+                        ? fuel.gaugeCapacity()
+                        : energy.getEnergyCapacity());
                 default -> 0;
             };
         }
@@ -83,9 +84,18 @@ public class FurnaceBlockEntity extends BlockEntity implements Container, MenuPr
             switch (index) {
                 case DATA_PROGRESS -> cycle.setProgress(value);
                 case DATA_DURATION -> duration = value;
-                case DATA_LIT -> litTicks = value;
-                case DATA_LIT_DURATION -> litDuration = value;
-                case DATA_ENERGY -> energy.setStoredEu(value);
+                case DATA_ENERGY -> {
+                    if (tier.burnsFuel()) {
+                        fuel.load(value, fuel.lastLitJoules());
+                    } else {
+                        energy.setStoredEu(value);
+                    }
+                }
+                case DATA_ENERGY_CAPACITY -> {
+                    if (tier.burnsFuel()) {
+                        fuel.load(fuel.storedJoules(), value);
+                    }
+                }
                 default -> {
                 }
             }
@@ -96,6 +106,17 @@ public class FurnaceBlockEntity extends BlockEntity implements Container, MenuPr
             return DATA_COUNT;
         }
     };
+
+    /**
+     * Vanilla's {@link ContainerData} is a channel of ints and the buffer is joules in a long.
+     * Nothing in the table today reaches 2 GJ -- rocket fuel, the largest, is 100 MJ -- but
+     * {@code nuclear-fuel} is 1.21 GJ and #135 is the ticket that lands it. Saturating is the only
+     * failure a gauge can survive: a wrapped int draws a full bar as an empty one, and a hover
+     * that reads negative is the sort of thing nobody traces back to a cast.
+     */
+    private static int clampToInt(long value) {
+        return (int) Math.min(Integer.MAX_VALUE, Math.max(0L, value));
+    }
 
     public FurnaceBlockEntity(BlockPos pos, BlockState state) {
         super(PFBlockEntities.FURNACE.get(), pos, state);
@@ -131,14 +152,14 @@ public class FurnaceBlockEntity extends BlockEntity implements Container, MenuPr
             // Held when the recipe is still there and the output is merely full; started over when
             // the input has gone, since progress on a smelt nobody asked for is a free head start.
             //
-            // NOTHING BURNS DOWN HERE. A furnace waiting on a full output consumes no fuel and no
-            // EU -- the lit coal is already spent, but the ticks left on it are, and a stall that
-            // quietly ate them would make backpressure cost the player the fuel it was meant to
-            // save. That is the same rule the output side keeps under ADR-0041.
+            // NOTHING BURNS DOWN HERE. A furnace waiting on a full output spends no joules and
+            // no EU -- the lit coal is already spent, but what it banked is not, and a stall that
+            // quietly drained the buffer would make backpressure cost the player the fuel it was
+            // meant to save. That is the same rule the output side keeps under ADR-0041.
             if (cycle.idle(found.isPresent())) {
                 setChanged();
             }
-            setLit(litTicks > 0);
+            setLit(isLit());
             return;
         }
 
@@ -149,44 +170,47 @@ public class FurnaceBlockEntity extends BlockEntity implements Container, MenuPr
         if (cycle.tick(powered, duration)) {
             complete(smelt);
         }
-        // Whether this tick was paid for, not whether the next one can be: reading litTicks here
-        // would go dark on the tick the last burn tick of a coal is spent, mid-smelt.
+        // Whether this tick was paid for, not whether the next one can be: reading the buffer
+        // here would go dark on the tick the last of a coal is spent, mid-smelt.
         setLit(powered);
         setChanged();
     }
 
     /**
-     * Pays for one tick: a burn tick on the two burner tiers, 13 EU on the Electric one.
+     * Pays for one tick: 4,500 J from the fuel buffer on the two burner tiers, 13 EU on the
+     * Electric one.
      *
-     * <p>Fuel is consumed per tick of operation at one rate for both burners, which is what makes
-     * the Steel tier's doubled speed yield twice the items from one coal -- Factorio's ratio, with
-     * no per-tier fuel rule to keep in step.
+     * <p>Both burners draw the same 90 kW, which is Factorio's own arrangement and the reason the
+     * Steel tier's doubled speed yields exactly twice the items from one coal (ADR-0047). The
+     * buffer is asked first and an item is lit only when it cannot cover the tick, so an item is
+     * never consumed to top up a buffer that was already going to pay.
      */
     private boolean pay() {
         if (!tier.burnsFuel()) {
             return energy.drawTick(tier.euPerTick());
         }
-        if (litTicks <= 0 && !light()) {
-            return false;
+        long perTick = tier.joulesPerTick();
+        if (fuel.drawTick(perTick)) {
+            return true;
         }
-        litTicks--;
-        return true;
+        return light() && fuel.drawTick(perTick);
     }
 
+    /**
+     * Consumes one fuel item whole and banks its joules.
+     *
+     * <p>Vanilla's leaves-a-bucket rule is gone with the vanilla table: under a default-deny table
+     * no bucket is fuel, and keeping the branch would say a fuel-with-remainder was a case someone
+     * had considered.
+     */
     private boolean light() {
-        ItemStack fuel = items.get(FurnaceSlots.FUEL);
-        int burnTime = fuel.isEmpty() ? 0
-                : fuel.getBurnTime(net.minecraft.world.item.crafting.RecipeType.SMELTING);
-        if (burnTime <= 0) {
+        ItemStack stack = items.get(FurnaceSlots.FUEL);
+        long joules = PFFuel.joules(stack);
+        if (joules <= 0L) {
             return false;
         }
-        litDuration = burnTime;
-        litTicks = burnTime;
-        ItemStack remainder = fuel.getCraftingRemainingItem();
-        fuel.shrink(1);
-        if (fuel.isEmpty() && !remainder.isEmpty()) {
-            items.set(FurnaceSlots.FUEL, remainder);
-        }
+        fuel.light(joules);
+        stack.shrink(1);
         return true;
     }
 
@@ -243,8 +267,22 @@ public class FurnaceBlockEntity extends BlockEntity implements Container, MenuPr
                 .anyMatch(holder -> holder.value().isIngredient(stack));
     }
 
+    /**
+     * Whether the generated fuel table names this stack (ADR-0047). Default-deny: an item with no
+     * row is not fuel, and {@link FurnaceSlots#insertionSlot} therefore will not route it to the
+     * fuel slot at all.
+     */
     public boolean isFuel(ItemStack stack) {
-        return stack.getBurnTime(net.minecraft.world.item.crafting.RecipeType.SMELTING) > 0;
+        return PFFuel.joules(stack) > 0L;
+    }
+
+    /**
+     * Whether the block's front is alight while it is not working: a burner with joules still in
+     * its buffer. The Electric tier is never lit this way -- a stocked buffer is not a fire, and
+     * ADR-0036's pole keeps it topped up, so a lit front there would never go out.
+     */
+    private boolean isLit() {
+        return tier.burnsFuel() && fuel.isLit();
     }
 
     // -- the energy face ------------------------------------------------------------------------
@@ -375,8 +413,7 @@ public class FurnaceBlockEntity extends BlockEntity implements Container, MenuPr
         ContainerHelper.loadAllItems(tag, items, registries);
         cycle.setProgress(tag.getInt("Progress"));
         duration = tag.getInt("Duration");
-        litTicks = tag.getInt("LitTicks");
-        litDuration = tag.getInt("LitDuration");
+        fuel.load(tag.getLong("FuelJoules"), tag.getLong("FuelLitJoules"));
         energy.setStoredEu(tag.getLong("Energy"));
     }
 
@@ -386,8 +423,8 @@ public class FurnaceBlockEntity extends BlockEntity implements Container, MenuPr
         ContainerHelper.saveAllItems(tag, items, registries);
         tag.putInt("Progress", cycle.progress());
         tag.putInt("Duration", duration);
-        tag.putInt("LitTicks", litTicks);
-        tag.putInt("LitDuration", litDuration);
+        tag.putLong("FuelJoules", fuel.storedJoules());
+        tag.putLong("FuelLitJoules", fuel.lastLitJoules());
         tag.putLong("Energy", energy.getEnergyStored());
     }
 }

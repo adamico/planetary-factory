@@ -1,0 +1,6 @@
+{
+  "factorio_name": "rocket-fuel",
+  "item": "planetaryfactory:rocket_fuel",
+  "fuel_value": 100000000,
+  "fuel_category": "chemical"
+}

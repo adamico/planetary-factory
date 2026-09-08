@@ -42,7 +42,14 @@ python3 tests/factorio/test_recipe_extract.py
 python3 tests/factorio/test_machine_extract.py
 python3 tests/factorio/test_resource_extract.py
 python3 tests/factorio/test_fuel_extract.py
+
+scripts/factorio-fuel-convert.py
+python3 tests/factorio/test_fuel_convert.py
 ```
+
+The last pair is downstream of the extraction rather than part of it: `fuel.json` is joined
+onto `data/pack/item-map.json` into the table the mod loads (ADR-0047), so a re-extraction
+that moves a fuel has to be followed by a re-conversion or the game keeps the old table.
 
 All five extractors read the same dump, so a single `--dump-data` run feeds them. Order
 matters: the recipe extractor reads `technology.json`, and the machine extractor reads

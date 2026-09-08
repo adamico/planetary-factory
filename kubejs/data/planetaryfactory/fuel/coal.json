@@ -1,0 +1,6 @@
+{
+  "factorio_name": "coal",
+  "item": "minecraft:coal",
+  "fuel_value": 4000000,
+  "fuel_category": "chemical"
+}

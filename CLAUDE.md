@@ -70,6 +70,21 @@ per-tier duration, the 13 EU/t draw and its buffer, the unsided routing by item,
 a blocked output starts no smelt, burns no fuel and voids nothing (ADR-0041). Whether the three
 blocks smelt in a running game is a world load, and its GameTests land with #156.
 
+### Fuel table check
+
+What a burner furnace burns is generated datapack JSON, not Forge's burn table (ADR-0047).
+`scripts/factorio-fuel-convert.py` joins `data/factorio/fuel.json` onto `data/pack/item-map.json`
+into `kubejs/data/planetaryfactory/fuel/`, and nothing is decided in the script: a fuel with no
+item-map row, an `undecided` one or a fluid is a *recorded skip*, printed with its reason.
+`tests/factorio/test_fuel_convert.py` asserts every decided fuel has a row and nothing else does,
+that `uranium-fuel-cell` fails on category as well as on its row, that coal's row still buys 888
+whole ticks at the Stone Furnace's own 4,500 J/t, that `wood` arrives as the tag `minecraft:logs`,
+and that the mod's listener reads the folder the converter writes. The arithmetic and the
+default-deny rule are `FuelBufferTest` and `FuelTableTest` under
+`./gradlew :planetaryfactory_core:test`. Run all three after re-extracting the corpus, editing the
+item map or touching `core/smelting/`. Whether a furnace burns a log in a running game is a world
+load. See `docs/testing/fuel-table-check.md`.
+
 ### Assembler queue and resolver check
 
 `mod/src/test/java/com/planetaryfactory/core/assembler/` asserts the Personal Assembler's queue:

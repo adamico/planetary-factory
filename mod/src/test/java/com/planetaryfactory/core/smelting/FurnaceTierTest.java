@@ -51,17 +51,16 @@ class FurnaceTierTest {
     }
 
     /**
-     * Factorio's fuel ratio falls out of the speeds rather than out of a per-tier fuel rule: both
-     * burners consume one burn tick per tick of operation, so the Steel tier's doubled speed is
-     * exactly what gets twice as many items out of one coal.
+     * Both burners draw the same 90 kW -- 4,500 J a tick -- from {@code machine.json}, which is
+     * what makes the Steel tier's doubled speed yield twice the items from one coal (ADR-0047).
+     * A per-tier fuel rule here would be a second scalar to keep in step; there is none.
+     * {@link FuelBufferTest} counts the crafts.
      */
     @Test
-    void steelGetsTwiceTheItemsFromOneFuelItem() {
-        int coal = 1600; // Minecraft's own burn time, and the rate is Minecraft's too
-        int itemsOnStone = coal / FurnaceTier.STONE.durationTicks(320);
-        int itemsOnSteel = coal / FurnaceTier.STEEL.durationTicks(320);
-        assertEquals(5, itemsOnStone);
-        assertEquals(10, itemsOnSteel);
+    void bothBurnersDrawTheSameJoulesPerTick() {
+        assertEquals(4_500L, FurnaceTier.STONE.joulesPerTick());
+        assertEquals(4_500L, FurnaceTier.STEEL.joulesPerTick());
+        assertEquals(0L, FurnaceTier.ELECTRIC.joulesPerTick());
     }
 
     @Test

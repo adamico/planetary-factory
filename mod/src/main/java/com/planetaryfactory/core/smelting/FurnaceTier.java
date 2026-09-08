@@ -20,11 +20,13 @@ import java.util.Locale;
  * 180 kW * 32/420_000, truncated the way that ADR's table truncates. Idle draw is not modelled;
  * ADR-0029 records the 6 kW as {@code excluded}.
  *
- * <p><b>Fuel has no tier rule at all.</b> Both burners consume one burn tick per tick of
- * operation, using Minecraft's own burn values, so the Steel tier's doubled speed is the entire
- * reason it gets twice the items out of one coal. That is Factorio's efficiency story, arrived at
- * without a second scalar to tune. Factorio's absolute rate is not taken: the corpus carries no
- * {@code fuel_value}, and Minecraft's burn times are a thing the player already knows.
+ * <p><b>Fuel has no tier rule either, because both burners draw the same 90 kW.</b> ADR-0047:
+ * a burner holds a buffer in joules, lighting an item banks its whole {@code fuel_value}, and a
+ * tick of work spends {@code energy_usage / 20} -- 4,500 J on Stone and on Steel alike. Nothing is
+ * stored in ticks, so there is no MJ-to-ticks constant and no rounding rule to defend: coal's 4 MJ
+ * is 888 whole ticks of Stone-tier work and the buffer simply runs out. The Steel tier getting
+ * twice the items from one coal is then arithmetic -- the same 4,500 J against a halved craft --
+ * rather than a coincidence of Minecraft's tick accounting, which is what #155 shipped.
  *
  * <p>Pure: no Minecraft types, so the mod's Minecraft-free test source set can hold it to account.
  */
@@ -35,6 +37,18 @@ public enum FurnaceTier {
 
     /** The Electric Furnace's {@code energy_usage} in watts, from {@code machine.json}. */
     private static final long ELECTRIC_WATTS = 180_000L;
+
+    /**
+     * Both burner furnaces' {@code energy_usage} in watts, from {@code machine.json}.
+     *
+     * <p>One constant for two tiers because it is one number in Factorio. A per-tier field here
+     * would invite a second scalar to tune and would quietly break the yield ratio ADR-0047 makes
+     * arithmetic.
+     */
+    private static final long BURNER_WATTS = 90_000L;
+
+    /** Minecraft's tick rate, which is Factorio's too -- the divisor turning watts into joules. */
+    private static final long TICKS_PER_SECOND = 20L;
 
     /** ADR-0029's scale: LV's 32 EU/t anchored on the Oil Refinery's 420 kW. */
     private static final long EU_PER_TICK_NUMERATOR = 32L;
@@ -66,6 +80,17 @@ public enum FurnaceTier {
      */
     public int durationTicks(int recipeTicks) {
         return Math.max(1, (int) Math.ceil(recipeTicks / craftingSpeed));
+    }
+
+    /**
+     * Joules drawn from the fuel buffer per tick of operation, and zero on the Electric tier.
+     *
+     * <p>Derived the way {@link #euPerTick()} is -- from the machine's own {@code energy_usage}
+     * rather than from a committed conversion constant, so a Factorio change that moved the draw
+     * fails a check instead of drifting (ADR-0047).
+     */
+    public long joulesPerTick() {
+        return burnsFuel ? BURNER_WATTS / TICKS_PER_SECOND : 0L;
     }
 
     /** EU drawn per tick of operation, and zero on the two burner tiers. */
