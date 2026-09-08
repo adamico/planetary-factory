@@ -25,6 +25,13 @@ the position's `OreDelta` entry is left behind for the next block placed there t
 queues anything in `c:ores` in a 17×17 column to bedrock at 160 ticks a block, against Factorio's
 5×5 at 0.5 items/s.
 
+*Corrected by #193 on the delta, which is now stale: `OreBlock.onRemove` retires the position's
+entry on **any** removal, `setBlock(pos, cobblestone)` included, so nothing is left behind to be
+inherited. What survives is worse than the sentence it replaces. Terra's ore blocks carry an empty
+loot table — the amount pays out through `OreMining` and not through loot — so GregTech's miner
+takes a full-amount block, replaces it with cobblestone and **pays out nothing at all**. The
+paragraph's conclusion is untouched; only its mechanism was wrong.*
+
 Making it fit means overriding its replacement block, its drop source, its per-operation
 semantics, its footprint, its speed and its output — maintaining GregTech's miner as a fork until
 it stops being GregTech's miner — and still hand-writing the renderer and the auto-output supplier,
@@ -55,13 +62,34 @@ The order of attempts on that tile:
 
 1. **An item handler** — `Capabilities.ItemHandler.BLOCK`. This covers the pack's furnace, a chest,
    a vanilla hopper, and every Create block that answers the capability.
-2. **Otherwise, one item on the ground.** The rig drops a single `ItemEntity` on the faced tile and
-   drops no second one while that item is still there. This is Factorio's own behaviour and its
-   one-item-per-tile rule, and it is also what keeps the logistics path open without a Create
-   dependency: anything that picks items up off the ground is fed by it.
-3. **Otherwise it stalls**, holding output in a small internal buffer and burning no fuel. A
+2. **Otherwise it stalls**, holding output in a small internal buffer and burning no fuel. A
    mis-faced drill stops rather than voiding ore — under an amount model, overflow that vanishes
    destroys a finite resource — and rather than looking like it works.
+
+*Amended by #193, and there used to be a rule between these two: "otherwise, one item on the
+ground", defended as "Factorio's own behaviour and its one-item-per-tile rule". **Both halves of
+that defence fail.** The one-item-per-tile rule is real but governs items already lying on the
+ground; no Factorio machine ejects to the ground when its output is blocked, and a blocked drill
+fills its output and halts. Rule 2's other stated ground — keeping a logistics path open with no
+Create dependency — went with ADR-0044 keeping Create's belts. So **rules 1 and 3 were the whole
+mechanic**, and what looked like a fallback in a chain is backpressure: it is also what ADR-0041
+needs, since a stall preserves a finite resource where a spill destroys it. #182 raised this and is
+where the argument is written out; #105 owned the call and #193 made it. **A broken rig pays back
+what the stall banked**, for the same reason — that ore's count is already decremented in the
+ground.*
+
+*One further correction, from the same ticket. **The paragraph above generalises a property into a
+rule.** "A drill ejects onto the tile it faces" is right about a drill and wrong as a statement
+about machines: auto-output is declared per prototype in `vector_to_place_result`, which only the
+mining drills and the recycler carry, while a furnace or an assembler has none and is emptied by an
+inserter. The pack already agreed without saying so — its furnace's item handler permits extraction
+and pushes nothing. The field is now extracted (#193), which also settles **which** tile: a 2x2 has
+two tiles in front of it and the burner drill's `[-0.35, -1.3]` names the left one, an ambiguity
+"the tile it faces" could not resolve. `resource_searching_radius` came with it, and is what makes
+the mining areas below extracted rather than typed.*
+
+*The buffer's size is the pack's, not Factorio's: one stack. This ADR asked for "a small internal
+buffer" and did not size it, and there is no corpus figure to read.*
 
 **Create's `DirectBeltInputBehaviour` is deliberately not called, and the mod takes no Create
 dependency.** A bare horizontal belt does answer `Capabilities.ItemHandler.BLOCK`, so rule 1 will

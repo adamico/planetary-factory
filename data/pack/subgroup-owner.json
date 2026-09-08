@@ -151,11 +151,11 @@
       "count": 9
     },
     "production/extraction-machine": {
-      "owner": "gregtech",
+      "owner": "pack",
       "process": "pack:assembling",
-      "adr_row": "Extraction (ore) and Extraction (fluid) -- GregTech",
-      "cross_owner": "The one shelf GregTech still owns, and it does not craft its own machines: GT's stock Assembler and its whole corpus are removed (ADR-0026), so a Drilling Rig is built in the pack's Assembling Machine. Owner and machine differ here by design.",
-      "note": "`offshore-pump` and `pumpjack` are the fluid rig; the two mining drills are the ore ladder.",
+      "adr_row": "Mining automation -- the pack (ADR-0043); Extraction (fluid) -- GregTech",
+      "cross_owner": "Split by ADR-0043, and the shelf is now two owners rather than one. The two mining drills are the PACK's: GregTech owns no solid extraction on Terra, because `gtceu:lv_miner` deletes an ore block whole whatever amount it held and takes its drops from a loot table Terra's ore blocks deliberately leave empty (ADR-0041). `offshore-pump` and `pumpjack` are still GregTech's fluid rig, untouched. Both halves are still built in the pack's Assembling Machine, since GT's stock Assembler and its whole corpus are removed (ADR-0026) -- so owner and machine differ here for two different reasons at once.",
+      "note": "`offshore-pump` and `pumpjack` are the fluid rig and GregTech's. The two mining drills are the ore ladder and `planetaryfactory_core`'s (#192, #193, #194). Their own recipes are category `crafting`, so the rule in `_comment` gives them a hand surface as well -- the Personal Assembler plans the burner rig at rung 0, which it has to, since the rig is in the starting pocket and a player who loses it has no other route back.",
       "count": 4
     },
     "production/production-machine": {

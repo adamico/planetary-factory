@@ -46,16 +46,20 @@ The wreck is `#100` and `#134`: indestructible, habitable, one cargo hold, and y
 | 1 | Wake up inside the wreck. The book is in your inventory; its tooltip points at the panel. | — |
 | 2 | Open the panel. The Personal Assembler is already there. Craft one thing, badly, slowly. | Personal Assembler |
 | 3 | Leave. Three ore fields are visible from the door. | — |
-| 4 | Place the Furnace and the Steam Miner from your pocket. First plates. | hand |
+| 4 | Place the Stone Furnace and the Burner Mining Drill from your pocket, the drill facing the furnace. First plates. | hand |
 | 5 | Chart the outfield with the prospector; read the map. | prospector |
-| 6 | Miner → belt → Furnace → chest. Something runs while you watch. | machine-fed |
+| 6 | Drill → belt → Furnace → chest. Something runs while you watch. | machine-fed |
 
 Beat 6 is the twenty-minute mark and the first machine-fed beat in the pack.
 
 **What you start with.** Factorio's own split — tools in your pockets, materials from the ship
 (`#100`), and Factorio is famously stingy about both.
 
-- **Pocket**: the prospector (ADR-0019), one Furnace, one LP Steam Miner, the **Engineer's Iron Pick** (ADR-0039).
+- **Pocket**: the prospector (ADR-0019), one Stone Furnace, one **Burner Mining Drill**, the
+  **Engineer's Iron Pick** (ADR-0039). *This read "one Furnace, one LP Steam Miner"; ADR-0040
+  deleted that miner and ADR-0043's burner rig took its place (`#193`).* A rig covers four tiles
+  and beats hands even at 0.25 items/s, which is what earns it a slot in a pocket Factorio is
+  famously stingy about.
 - **Hold**: iron plate, copper plate, coal. Single digits, matching freeplay's eight-plate debris
   chest.
 - **No weapon.** Factorio hands you a pistol; here the wreck is the answer to night one (`#134`),
@@ -80,16 +84,22 @@ but the cost is that discovery is the opening's only job.
 
 *No science pack. Burner and kinetic, and not one watt anywhere.*
 
-**Granted**: LP Solid Boiler, LP Steam Miner, the vanilla Furnace as Stone Furnace (`#91`), Create's
-Steam Engine as prime mover, mechanical belts.
+**Granted**: the **Burner Mining Drill**, the pack's own **Stone Furnace** (`#155`), Create's Steam
+Engine as prime mover, mechanical belts. The boiler is ADR-0048's, not GregTech's (`#189`).
+
+*This list read "LP Solid Boiler, LP Steam Miner, the vanilla Furnace as Stone Furnace (`#91`)".
+ADR-0040 deleted the LP Steam Miner and ADR-0043 made both rungs of the drill ladder the pack's;
+ADR-0047 and `#155` made the furnace ladder the pack's rather than a re-skinned vanilla block; and
+ADR-0048 made Terra's steam two pack-owned fluids on a pack-authored chain. The rewrite lands with
+`#193`, which is the ticket that made the first of those true in the game.*
 
 **What rung 1 needs it for**: `automation` packs are Personal-Assembler-only forever (`#42`), so
 rung 0's job is to make the plates that feed them faster than your hands can.
 
 | Beat | Fed by |
 | --- | --- |
-| Boiler and Steam Miner as a pair — the miner is your ore supply from here on. | hand |
-| Belt the miner's output to the furnace bank. | machine |
+| Place the Burner Mining Drill from your pocket over the starting iron, facing a furnace — the drill is your ore supply from here on, and it feeds what it points at. | hand |
+| Feed it coal, and belt what it does not hand straight over to the furnace bank. | machine |
 | Green circuits by hand. They are Assembling Machine I's own key, which is why they are not a rung (`#55`). | Personal Assembler |
 | Steam Engine: steam becomes rotation. It powers machines, not a grid. | machine |
 | Hand-feed the Lab its first `automation` packs. | hand |

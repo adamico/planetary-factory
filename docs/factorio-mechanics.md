@@ -48,7 +48,7 @@ text and commits to no jar; **`pack` is admissible as a candidate only with a na
 | --- | --- | --- |
 | [Resource patches and finite ore](#resource-patches-and-finite-ore) | `shipped` | Terra, Ignus, Sapros |
 | [Manual mining](#manual-mining) | `adapted` | all bodies |
-| [Mining drills](#mining-drills) | `planned` | all bodies |
+| [Mining drills](#mining-drills) | `adapted` | all bodies |
 | [Fluid handling](#fluid-handling) | `planned` | all bodies |
 | [Oil processing](#oil-processing) | `planned` | Terra, Ignus, Gelida |
 | [Smelting](#smelting) | `planned` | all bodies |
@@ -224,25 +224,35 @@ Sub-rules:
 - **ticket**: #105
 - **notice**: Terra's two rigs are pack-authored and GregTech owns no drill here. A rig works the
   **layer directly beneath it** — Factorio's tiles, in a game that has a third axis — so a rig is
-  placed on a patch rather than scanning downward for one. *This entry read that a buried vein is
-  reached by digging down; ADR-0045 deletes the buried veins, and the digging with them.*
+  placed on a patch rather than scanning downward for one. Its rate is the drill's `mining_speed`
+  over the **resource's** `mining_time`, so uranium costs the same rig twice what iron does; its
+  area falls out of `resource_searching_radius` and its output tile out of
+  `vector_to_place_result`. *This entry read that a buried vein is reached by digging down;
+  ADR-0045 deletes the buried veins, and the digging with them.*
 
 Sub-rules:
 
 - **Burner tier before electric** — `adapted`. The tier exists and is Factorio's own block rather
   than GregTech's steam stand-in. ADR-0040.
-- **Drills output onto the tile they face** — `adapted`. ADR-0043 reverses ADR-0040's `excluded`,
-  which was argued entirely about belts and had deleted the drill-into-furnace pair as collateral.
-  A rig ejects into an item handler on its faced tile, else drops one item on the ground there and
-  waits for it to be taken, else stalls. *This entry read "Drills output onto a belt directly —
-  `unargued`, no verdict".*
-- **Output onto a moving belt with no intermediate block** — `planned`. **#178 is answered
-  (ADR-0044: Create keeps the belts), so this is no longer blocked on it.** What remains is that a
-  rig cannot reach Create's funnel, chute, depot, brass tunnel or any other `DirectBeltInputBehaviour`
-  implementer, because `FunnelBlockEntity` registers no capability at all — the funnel is ADR-0040's
-  named answer to a drill that does not push, and it is reachable only by the ground drop. *This
-  entry read that the item-handler path "ignores the belt's direction", which the bytecode refuted:
-  the item lands on the queried segment and travels normally. See ADR-0043's correction.*
+- **Drills output onto the tile they face** — `shipped` (#193). ADR-0043 reverses ADR-0040's
+  `excluded`, which was argued entirely about belts and had deleted the drill-into-furnace pair as
+  collateral. A rig pushes into an item handler on its faced tile and **otherwise stalls**, holding
+  what it mined and burning nothing. *This entry read that it "else drops one item on the ground
+  there and waits for it to be taken"; #182 showed the one-item-per-tile rule governs items already
+  on the ground and that no Factorio machine spills when blocked, and #193 deleted the rule. This
+  entry also read "Drills output onto a belt directly — `unargued`, no verdict".*
+  **Auto-output is a prototype property and not a machine rule** — `vector_to_place_result` is
+  carried by the mining drills and the recycler and by nothing else, which is why the pack's furnace
+  is emptied rather than pushing.
+- **Output onto a moving belt with no intermediate block** — `shipped`. A bare Create belt answers
+  `Capabilities.ItemHandler.BLOCK`, so a rig faced at one puts ore on it with nothing in between,
+  which is what a Factorio drill does. *This entry read `planned`, blocked on a rig not being able
+  to reach Create's funnel. #182 closed that as `wontfix` on its premise: the funnel's inbound
+  surface exists for Create's own transport handing over, and the right arrangement for a machine
+  with a buffer is the funnel sitting **on** it in extract mode, pulling through the machine's own
+  item handler — which needs no `DirectBeltInputBehaviour` call and no Create dependency. The
+  entry also read that the item-handler path "ignores the belt's direction", which the bytecode
+  refuted: the item lands on the queried segment and travels normally.*
 - **A drill shows which tiles it is working** — `adapted`. The rig tints the top face of every ore
   block in its area, when looked at and when held for placement. Factorio shows this on a flat map;
   here it is a render on a surface the player walks on.
