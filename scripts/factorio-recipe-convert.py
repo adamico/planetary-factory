@@ -49,6 +49,11 @@ OUT_DIR = ROOT / "kubejs/data/planetaryfactory/recipe"
 # own before writing, so without this exclusion whichever ran last would delete the other's
 # output, and `--check` would report the survivors as unexpected files.
 #
+# `create/` is the third, written by `scripts/create-recipe-convert.py`, which re-authors the
+# Create kinetic components the pack wants onto the same Assembling Machine for the same reason:
+# Create ships them on the vanilla grid and the Mechanical Crafter, and this pack executes
+# neither. That converter is closure-driven rather than whole-corpus -- see its docstring.
+#
 # `pack/` is the second, and it is not generated at all: ADR-0039's two Engineer's Pick recipes are
 # hand-written, because Factorio has no mining-tool prototype and so the corpus can never author
 # them. ADR-0031's exception is stated there and does not generalise -- see ADR-0039 and
@@ -56,12 +61,18 @@ OUT_DIR = ROOT / "kubejs/data/planetaryfactory/recipe"
 # next to those recipes: KubeJS validates every file name under `kubejs/` and rejects an
 # uppercase letter with an error that stops a world loading, so a README beside them is not
 # an option -- the documentation for that subtree lives here and in `docs/`.
-FOREIGN_SUBTREES = ("grid", "pack")
+# Each is a path RELATIVE TO OUT_DIR, and each sits under `assembling/` rather than beside it --
+# see `emitted_path` below. Every one of these subtrees holds `gtceu:assembling` recipes, so a file
+# directly under `grid/`, `create/` or `pack/` would be re-registered by GregTech under
+# `assembling/<name>` and appear twice. Nesting them inside `assembling/` closes that round trip,
+# which is why these are two-part paths and not directory names.
+FOREIGN_SUBTREES = ("assembling/grid", "assembling/pack", "assembling/create")
 
 
 def is_ours(path):
     """True for a generated file this converter owns, false for another script's."""
-    return path.relative_to(OUT_DIR).parts[0] not in FOREIGN_SUBTREES
+    relative = path.relative_to(OUT_DIR).as_posix()
+    return not any(relative.startswith(subtree + "/") for subtree in FOREIGN_SUBTREES)
 
 # `subgroup-owner.json` names a process as `<owner>:<machine>`; `category-map.json` names the same
 # machines and holds their recipe types. The two vocabularies meet here and nowhere else -- the
@@ -319,10 +330,15 @@ def main():
             return 1
     else:
         if OUT_DIR.exists():
-            for path in sorted(OUT_DIR.iterdir()):
-                if path.is_dir() and path.name in FOREIGN_SUBTREES:
-                    continue
-                shutil.rmtree(path) if path.is_dir() else path.unlink()
+            # File by file rather than by directory: a foreign subtree now sits INSIDE a directory
+            # this converter owns (`assembling/`), so removing that directory wholesale would take
+            # another converter's output with it. `is_ours` is the only thing that decides.
+            for path in sorted(OUT_DIR.rglob("*.json")):
+                if is_ours(path):
+                    path.unlink()
+            for path in sorted(OUT_DIR.rglob("*"), reverse=True):
+                if path.is_dir() and not any(path.iterdir()):
+                    path.rmdir()
         OUT_DIR.mkdir(parents=True, exist_ok=True)
         for stem, body in emitted.items():
             path = OUT_DIR / f"{stem}.json"

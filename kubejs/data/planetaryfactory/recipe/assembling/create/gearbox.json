@@ -5,17 +5,17 @@
       {
         "content": {
           "ingredient": {
-            "tag": "c:plates/iron"
+            "item": "gtceu:iron_plate"
           },
-          "count": 4
+          "count": 1
         }
       },
       {
         "content": {
           "ingredient": {
-            "item": "gtceu:iron_gear"
+            "item": "create:cogwheel"
           },
-          "count": 1
+          "count": 4
         }
       }
     ]
@@ -25,14 +25,14 @@
       {
         "content": {
           "ingredient": {
-            "item": "powergrid:hv_switch"
+            "item": "create:gearbox"
           },
           "count": 1
         }
       }
     ]
   },
-  "duration": 20,
+  "duration": 200,
   "data": {
     "factorio_category": "crafting"
   }

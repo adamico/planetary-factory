@@ -5,14 +5,6 @@
       {
         "content": {
           "ingredient": {
-            "tag": "c:copper_coils"
-          },
-          "count": 4
-        }
-      },
-      {
-        "content": {
-          "ingredient": {
             "tag": "minecraft:coals"
           },
           "count": 1
@@ -21,7 +13,7 @@
       {
         "content": {
           "ingredient": {
-            "item": "gtceu:iron_rod"
+            "item": "create:shaft"
           },
           "count": 1
         }
@@ -37,9 +29,9 @@
       {
         "content": {
           "ingredient": {
-            "tag": "c:plates/iron"
+            "item": "powergrid:resistive_coil"
           },
-          "count": 1
+          "count": 5
         }
       }
     ]
@@ -49,7 +41,7 @@
       {
         "content": {
           "ingredient": {
-            "item": "powergrid:variac"
+            "item": "powergrid:rheostat"
           },
           "count": 1
         }

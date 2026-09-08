@@ -51,11 +51,14 @@ ResearchdEvents.registerResearchPacks(event => {
 //     supplying one, which is why it is written down: a reader diffing this file against
 //     `data/factorio/technology.json` would otherwise read it as a bug.
 //
-// The unlock id is `pack/`, not `assembling/`: the recipe is hand-authored (ADR-0031's exception)
-// and lives in the one subtree the converter does not own. `tests/factorio/test_research_unlocks.py`
-// asserts this id is a recipe the pack emits, which is the coupling that makes the divergence safe.
+// The unlock id is `assembling/pack/`: the recipe is hand-authored (ADR-0031's exception) and lives
+// in the one subtree no converter owns -- nested INSIDE `assembling/` because GregTech re-registers
+// every loaded GTRecipe under its own type path (#87), so a flat `pack/` would put a second id in
+// the recipe manager and this gate would name the wrong one of the two.
+// `tests/factorio/test_research_unlocks.py` asserts this id is a recipe the pack emits, which is
+// the coupling that makes the divergence safe.
 fromFactorio('steel-axe', {
   icon: 'planetaryfactory:engineers_steel_pick',
   has: ['gtceu:steel_plate', 50],
-  unlocks: ['planetaryfactory:pack/engineers_steel_pick']
+  unlocks: ['planetaryfactory:assembling/pack/engineers_steel_pick']
 });

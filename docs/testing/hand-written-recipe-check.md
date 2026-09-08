@@ -9,7 +9,7 @@ Engineer's Pick feels to swing.
 Every other recipe under `kubejs/data/planetaryfactory/recipe/` is generated and is checked against
 the thing that generated it — the Factorio corpus via
 [`recipe-conversion-check.md`](recipe-conversion-check.md), Power Grid's via
-[`grid-recipe-check.md`](grid-recipe-check.md). `recipe/pack/` is neither. It is ADR-0031's single
+[`grid-recipe-check.md`](grid-recipe-check.md). `recipe/assembling/pack/` is neither. It is ADR-0031's single
 stated exception, taken by ADR-0039: the corpus authors every recipe it contains, Factorio has no
 mining-tool prototype, and so the two Engineer's Pick recipes cannot be extracted, converted or
 regenerated. They are written by hand, and without this file nothing checks them at all.
@@ -26,7 +26,7 @@ cannot hold.
 
 **Nothing may document that subtree in place.** KubeJS validates every file name under `kubejs/`
 and rejects an uppercase letter outright — `Invalid file name: Uppercase 'R' in
-kubejs/data/planetaryfactory/recipe/pack/README.md`, logged as an ERROR that stops a world from
+kubejs/data/planetaryfactory/recipe/assembling/pack/README.md`, logged as an ERROR that stops a world from
 loading. A README beside the recipes is not an option, which is why this page carries what would
 otherwise sit next to them.
 

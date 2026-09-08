@@ -74,7 +74,15 @@ SUBSTITUTIONS = ROOT / "data/pack/grid-substitutions.json"
 # by namespace is deliberate: the recipe id follows the path, and `mod: 'planetaryfactory'` in the
 # survivor allowlist is what keeps these recipes through the sweep. A second namespace would need
 # a second survivor entry and would put this line outside ADR-0034's rule.
-OUT_DIR = ROOT / "kubejs/data/planetaryfactory/recipe/grid"
+# NESTED UNDER `assembling/`, and that is not cosmetic (#87, `factorio-recipe-convert.py`'s
+# `emitted_path`). GregTech re-registers every GTRecipe the datapack loaded: `RecipeManagerLateMixin`
+# strips everything before the first `/` of the id's path and `GTRecipeBuilder.save` puts the recipe
+# type's own path back on the front. A file at `recipe/grid/copper_coil.json` therefore loads as
+# `planetaryfactory:grid/copper_coil` and is re-registered as `planetaryfactory:assembling/copper_coil`,
+# leaving BOTH ids in the recipe manager with identical inputs and outputs -- two EMI entries for one
+# recipe. The round trip closes only for a file already under a directory named after its recipe type,
+# so `grid` sits INSIDE `assembling`.
+OUT_DIR = ROOT / "kubejs/data/planetaryfactory/recipe/assembling/grid"
 
 # Which Factorio category a source surface becomes. Both route to `assembling` in
 # `category-map.json`; the difference is the Personal Assembler, which plans `crafting` only.

@@ -5,7 +5,15 @@
       {
         "content": {
           "ingredient": {
-            "tag": "c:plates/copper"
+            "item": "create:cogwheel"
+          },
+          "count": 6
+        }
+      },
+      {
+        "content": {
+          "ingredient": {
+            "item": "powergrid:modular_display"
           },
           "count": 1
         }
@@ -13,23 +21,7 @@
       {
         "content": {
           "ingredient": {
-            "tag": "minecraft:coals"
-          },
-          "count": 2
-        }
-      },
-      {
-        "content": {
-          "ingredient": {
-            "tag": "c:plates/iron"
-          },
-          "count": 3
-        }
-      },
-      {
-        "content": {
-          "ingredient": {
-            "item": "gtceu:iron_rod"
+            "tag": "c:plates/copper"
           },
           "count": 1
         }
@@ -49,15 +41,15 @@
       {
         "content": {
           "ingredient": {
-            "item": "powergrid:generator_commutator"
+            "item": "powergrid:energy_meter"
           },
           "count": 1
         }
       }
     ]
   },
-  "duration": 40,
+  "duration": 20,
   "data": {
-    "factorio_category": "advanced-crafting"
+    "factorio_category": "crafting"
   }
 }

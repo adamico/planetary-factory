@@ -13,15 +13,15 @@
       {
         "content": {
           "ingredient": {
-            "tag": "c:plates/iron"
+            "tag": "minecraft:coals"
           },
-          "count": 6
+          "count": 1
         }
       },
       {
         "content": {
           "ingredient": {
-            "item": "gtceu:iron_rod"
+            "item": "create:shaft"
           },
           "count": 1
         }
@@ -33,6 +33,14 @@
           },
           "count": 1
         }
+      },
+      {
+        "content": {
+          "ingredient": {
+            "tag": "c:plates/iron"
+          },
+          "count": 1
+        }
       }
     ]
   },
@@ -41,15 +49,15 @@
       {
         "content": {
           "ingredient": {
-            "item": "powergrid:electric_motor"
+            "item": "powergrid:variac"
           },
           "count": 1
         }
       }
     ]
   },
-  "duration": 40,
+  "duration": 20,
   "data": {
-    "factorio_category": "advanced-crafting"
+    "factorio_category": "crafting"
   }
 }

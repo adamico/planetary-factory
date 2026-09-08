@@ -36,7 +36,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent.parent
 EMITTED = ROOT / "kubejs/data/planetaryfactory/recipe"
 # Subtrees of EMITTED written by a different converter, with a different input table.
-FOREIGN_SUBTREES = ("grid", "pack")
+# `create/` is `scripts/create-recipe-convert.py`'s, whose names come from Create's own registry
+# rather than from `item-map.json` -- a kinetic component has no Factorio prototype to map from,
+# so requiring a row here would be requiring one that cannot exist.
+FOREIGN_SUBTREES = ("assembling/grid", "assembling/pack", "assembling/create")
 STARTUP = ROOT / "kubejs/startup_scripts"
 MOD = ROOT / "mod/src/main/java/com/planetaryfactory/core"
 PF_BLOCKS = MOD / "PFBlocks.java"
@@ -240,7 +243,8 @@ def check_emitted(items, recipe_types, failures):
     # by construction. `tests/factorio/test_grid_recipes.py` is what holds that subtree to its own
     # table; scanning it here would report every one of its items as an unmapped name.
     for path in sorted(EMITTED.rglob("*.json")):
-        if path.relative_to(EMITTED).parts[0] in FOREIGN_SUBTREES:
+        if any(path.relative_to(EMITTED).as_posix().startswith(s + "/")
+               for s in FOREIGN_SUBTREES):
             continue
         recipe = json.loads(path.read_text())
         if recipe.get("type") == PACK_SMELTING:
@@ -299,7 +303,8 @@ def main():
         return 1
     decided = sum(1 for row in items.values() if "target" in row)
     ours = sum(1 for p in EMITTED.rglob("*.json")
-               if p.relative_to(EMITTED).parts[0] not in FOREIGN_SUBTREES)
+               if not any(p.relative_to(EMITTED).as_posix().startswith(s + "/")
+                              for s in FOREIGN_SUBTREES))
     print(f"ok   {len(items)} item-map rows ({decided} decided), "
           f"{ours} recipes emitted and current")
     return 0

@@ -1,0 +1,31 @@
+{
+  "type": "gtceu:assembling",
+  "inputs": {
+    "item": [
+      {
+        "content": {
+          "ingredient": {
+            "item": "gtceu:iron_plate"
+          },
+          "count": 2
+        }
+      }
+    ]
+  },
+  "outputs": {
+    "item": [
+      {
+        "content": {
+          "ingredient": {
+            "item": "create:shaft"
+          },
+          "count": 8
+        }
+      }
+    ]
+  },
+  "duration": 200,
+  "data": {
+    "factorio_category": "crafting"
+  }
+}

@@ -5,23 +5,7 @@
       {
         "content": {
           "ingredient": {
-            "tag": "c:plates/copper"
-          },
-          "count": 3
-        }
-      },
-      {
-        "content": {
-          "ingredient": {
-            "item": "gtceu:iron_gear"
-          },
-          "count": 2
-        }
-      },
-      {
-        "content": {
-          "ingredient": {
-            "item": "planetaryfactory:advanced_circuit"
+            "tag": "c:plates/iron"
           },
           "count": 1
         }
@@ -29,7 +13,7 @@
       {
         "content": {
           "ingredient": {
-            "item": "gtceu:iron_rod"
+            "item": "create:shaft"
           },
           "count": 1
         }
@@ -37,9 +21,17 @@
       {
         "content": {
           "ingredient": {
-            "item": "powergrid:pins"
+            "item": "planetaryfactory:plastic_bar"
           },
-          "count": 4
+          "count": 1
+        }
+      },
+      {
+        "content": {
+          "ingredient": {
+            "item": "powergrid:voltage_gauge"
+          },
+          "count": 1
         }
       }
     ]
@@ -49,15 +41,15 @@
       {
         "content": {
           "ingredient": {
-            "item": "powergrid:punch_card_reader"
+            "item": "powergrid:plotter"
           },
           "count": 1
         }
       }
     ]
   },
-  "duration": 40,
+  "duration": 20,
   "data": {
-    "factorio_category": "advanced-crafting"
+    "factorio_category": "crafting"
   }
 }

@@ -195,13 +195,72 @@ table is a hard failure: under a default-deny sweep a vanilla item is not obtain
 it is vanilla, and half of Power Grid's ingredients are zinc-bearing against an alphabet ADR-0021
 closed. The check also asserts one hand recipe per item and no cycles over the **union** the
 Personal Assembler loads, which `test_hand_resolver.py` cannot see — it reads only the Factorio
-corpus. Note that this converter and `factorio-recipe-convert.py` share an output directory and
-each leaves the other's subtree alone; run both checks after touching either. Whether the sweep
-kept the recipes in a running game is a world load. See `docs/testing/grid-recipe-check.md`.
+corpus. Note that this converter, `factorio-recipe-convert.py` and `create-recipe-convert.py` share
+an output directory and each leaves the others' subtrees alone; run all three checks after touching
+any. Whether the sweep kept the recipes in a running game is a world load. See
+`docs/testing/grid-recipe-check.md`.
+
+### Create kinetic recipe check
+
+`tests/factorio/test_create_recipes.py` covers Create's own kinetic line — shaft, cogwheels,
+gearboxes, water wheels, chute, funnel and tunnel — re-authored onto the pack's Assembling Machine
+because ADR-0034's sweep removes Create's own and all 653 of its grid recipes sit on the vanilla
+grid or the Mechanical Crafter, neither of which this pack executes. Two scripts, both committed:
+`create-recipe-extract.py` dumps the corpus from the pinned jar into `data/create/recipe.json`, and
+`create-recipe-convert.py` emits `recipe/assembling/create/` from it plus
+`data/pack/create-substitutions.json`.
+
+The one structural difference from the grid line: this converter is **closure-driven**. The
+substitutions file names WANTED ROOTS and the converter walks the transitive closure, so adding a
+kinetic component is one string there rather than a hand-written recipe file per ingredient it
+drags in — which is the failure it was written against, ten hand-authored files that had drifted
+from each other on the same substitution. A corpus row nothing converts is therefore normal here
+and nowhere else in the repo.
+
+The check asserts the closure is *closed* (every wanted root arrived, every substitution fired),
+that counts survive the conversion, one hand recipe per item — Create's `*_from_conversion` pairs
+are orientation swaps that craft directly here, so they are skipped rather than duplicated into EMI
+— and that every `{"tag": ...}` names a tag that exists — `create:cogwheel` and `create:belt_connector` are items, not tags, and a tag that
+does not exist matches nothing with no error in any log. Note that `create:shaft` and
+`create:cogwheel` were substituted away by `grid-substitutions.json` and are now `keep`: they are
+functional BLOCKS, and a recipe calling for a shaft means the shaft, not a rod that costs the same.
+Whether the sweep kept these recipes in a running game is a world load. Whether a water wheel
+then turns is Create's own business and not this pack's to check.
+See `docs/testing/create-recipe-check.md`.
+
+### Recipe duplication check
+
+`tests/factorio/test_recipe_duplication.py` asserts no item is made by two emitted recipes unless
+`MULTI_ROUTE` names it and says what the second route earns. Every other recipe check owns one
+subtree and one input table, which is the right shape for "did this converter do its job" and blind
+to the question none of them can ask: whether two converters, or one converter twice, made the same
+item. Two routes to one block fails no schema, appears in no log and loads perfectly — it reaches
+the player as two EMI entries for the same thing, and if both are `factorio_category: crafting` the
+Personal Assembler's resolver has no cost model to choose between them. It shipped once, when
+Create's two gearbox conversions and the large cogwheel's second route were emitted alongside the
+direct recipes they duplicate and every subtree-local check passed. Four items legitimately have a
+second route — Factorio's three solid-fuel oils and the three Power Grid conversion pairs, each of
+which is the only route to its counterpart — and each is a row with its reason.
+
+It also holds the **file-path invariant**, which is the other way one recipe becomes two entries and
+the one nothing else can see: a GT recipe's first path component must equal its recipe type's path.
+GregTech re-registers every loaded GTRecipe — `RecipeManagerLateMixin` strips everything before the
+first `/` of the id and `GTRecipeBuilder.save` puts the type's path back on (#87, stated in full in
+`factorio-recipe-convert.py`'s `emitted_path`) — so `recipe/grid/copper_coil.json` lands in the
+manager as BOTH `planetaryfactory:grid/copper_coil` and `planetaryfactory:assembling/copper_coil`.
+The file is valid, the sweep keeps it, and `ServerEvents.recipes` runs BEFORE the re-registration,
+so even a probe inside the recipe event sees one recipe; only EMI shows the two. That is why
+`grid/`, `create/` and the hand-written `pack/` all sit INSIDE `assembling/` — the Factorio
+converter had the rule from #87 and the other three subtrees did not, so it shipped 91 duplicate
+entries. `planetaryfactory:smelting` is the pack's own class, not a GTRecipe, so its four recipes
+are not cloned and stay flat; that exemption is `FLAT_TYPES`, recorded rather than assumed.
+
+Run it after any converter change. It does not assert the routes are balanced; costing is a
+decision.
 
 ### Hand-written recipe check
 
-`kubejs/data/planetaryfactory/recipe/pack/` is the one subtree no converter generates: ADR-0039's
+`kubejs/data/planetaryfactory/recipe/assembling/pack/` is the one subtree no converter generates: ADR-0039's
 two Engineer's Pick recipes, which the corpus can never author because Factorio has no mining-tool
 prototype. `tests/factorio/test_pack_recipes.py` is what holds them, since every other recipe here
 is checked against the corpus and these are checked against nothing otherwise — that both

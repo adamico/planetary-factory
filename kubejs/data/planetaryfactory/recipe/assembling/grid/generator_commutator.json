@@ -5,9 +5,17 @@
       {
         "content": {
           "ingredient": {
-            "tag": "c:copper_coils"
+            "tag": "c:plates/copper"
           },
-          "count": 4
+          "count": 1
+        }
+      },
+      {
+        "content": {
+          "ingredient": {
+            "tag": "minecraft:coals"
+          },
+          "count": 2
         }
       },
       {
@@ -15,13 +23,21 @@
           "ingredient": {
             "tag": "c:plates/iron"
           },
-          "count": 4
+          "count": 3
         }
       },
       {
         "content": {
           "ingredient": {
-            "item": "gtceu:iron_rod"
+            "item": "create:shaft"
+          },
+          "count": 1
+        }
+      },
+      {
+        "content": {
+          "ingredient": {
+            "item": "powergrid:pins"
           },
           "count": 1
         }
@@ -33,7 +49,7 @@
       {
         "content": {
           "ingredient": {
-            "item": "powergrid:generator_induction_rotor"
+            "item": "powergrid:generator_commutator"
           },
           "count": 1
         }

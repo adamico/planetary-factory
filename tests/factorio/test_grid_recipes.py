@@ -49,7 +49,7 @@ MACHINES = ROOT / "kubejs/startup_scripts/machines.js"
 
 # The grid subtree, which this check owns and the Factorio converter is taught to skip. Named
 # once so the exclusion below is not four string literals across three files.
-GRID_SUBTREE = "grid"
+GRID_SUBTREE = "assembling/grid"
 GRID = EMITTED / GRID_SUBTREE
 
 
@@ -146,7 +146,7 @@ def main():
     routes = json.loads(CATEGORY_MAP.read_text())["routes"]
     envelope = max_item_inputs()
 
-    check(GRID.is_dir(), "kubejs/data/planetaryfactory/recipe/grid/ does not exist -- run "
+    check(GRID.is_dir(), "kubejs/data/planetaryfactory/recipe/assembling/grid/ does not exist -- run "
                          "scripts/powergrid-recipe-convert.py")
     if not GRID.is_dir():
         return report()

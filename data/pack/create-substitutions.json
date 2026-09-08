@@ -1,0 +1,117 @@
+{
+  "_comment": [
+    "Create's own kinetic recipes -> what Terra crafts them from instead.",
+    "",
+    "WHY THIS FILE EXISTS. ADR-0034's sweep is default-deny, so a Create recipe ships only if the",
+    "pack authors it. Create ships 653 grid recipes and the pack wants a dozen, so unlike",
+    "`grid-substitutions.json` -- where the corpus IS the converted set -- this file names the",
+    "WANTED ROOTS and `scripts/create-recipe-convert.py` walks the transitive closure from them.",
+    "That is the whole point: adding a kinetic component is one string here, not a hand-written",
+    "recipe file per ingredient it drags in.",
+    "",
+    "THE PROBLEM THIS FILE SOLVES. ADR-0021 closes the input alphabet to iron, copper, coal and",
+    "uranium plus stone and what the surface grows, and cuts zinc outright. ADR-0034 then removes",
+    "every recipe the pack does not author, so a vanilla item is obtainable only if it DROPS.",
+    "Planks, andesite, iron nuggets and dried kelp are all grid-crafted or unreachable on Terra,",
+    "and Create's kinetic line is built on all four.",
+    "",
+    "WHAT IS CRAFTED AND WHAT IS SUBSTITUTED. ADR-0017 puts Create's casings and kinetic parts on",
+    "the Assembling Machine rather than substituting them away -- they are functional BLOCKS, and a",
+    "recipe calling for a shaft means the shaft, not a rod that happens to cost the same. So the",
+    "shaft, the cogwheels, the gearboxes, the water wheels, the chute, the funnel and the tunnel",
+    "are really crafted here. Substitution is reserved for what the closure bottoms out in and the",
+    "pack cannot supply. `grid-substitutions.json` substitutes `create:shaft` and `create:cogwheel`",
+    "away, which was wrong for the same reason -- those rows are corrected to `keep` now that this",
+    "converter emits both.",
+    "",
+    "ALMOSTUNIFIED IS WHY THE IRON TARGET IS ONE ITEM. `create:iron_sheet` and `gtceu:iron_plate`",
+    "are unified into one tag at load, which `core/assembler/Ingredient.java` documents by name, so",
+    "the pack's smelted iron plate IS Create's iron sheet in the running game. Every iron form below",
+    "therefore targets `gtceu:iron_plate`: it is the item the pack actually emits (#91), and the",
+    "tracked recipes that already ship -- `assembling/transport_belt.json`, `assembling/lab.json` --",
+    "name it in that form.",
+    "",
+    "THE RULE: COUNTS ARE NEVER CHANGED. A substitution replaces an ingredient one-for-one at the",
+    "amount Create asked for. Re-costing Create's kinetic line against Factorio's own timings is a",
+    "later ticket's call, not this one's.",
+    "",
+    "FIELDS.",
+    "  `wanted`      the roots. The converter emits these and everything their recipes need,",
+    "                transitively, and nothing else. An item here with no grid recipe is a hard",
+    "                failure -- it means the item is made on a surface this pack does not execute.",
+    "  `keep`        an ingredient already obtainable, passed through untouched. Every entry names",
+    "                why, because 'it looks vanilla' is not a reason under a default-deny sweep.",
+    "                An item the closure itself emits is obtainable by construction and needs no",
+    "                row -- the converter knows what it wrote.",
+    "  `substitute`  `to` is the replacement, `reason` is the role being preserved.",
+    "  `skip`        a recipe in the closure that is not emitted, and why.",
+    "  `machine_only` a recipe forced to `advanced-crafting`. Two cases, both structural: a",
+    "                2-cycle, and a second hand route to an item that already has one. The",
+    "                Personal Assembler's resolver picks a route with no cost model, so a second",
+    "                hand recipe is ambiguity it cannot resolve (`test_hand_resolver.py`).",
+    "  `duration`    ticks by Factorio category, plus per-recipe overrides.",
+    "",
+    "AN INGREDIENT IN NEITHER `keep` NOR `substitute`, AND NOT EMITTED BY THE CLOSURE, IS A HARD",
+    "FAILURE, following `item-map.json`'s rule: a name nobody has looked at must never be quietly",
+    "passed through into a recipe the player cannot craft."
+  ],
+  "wanted": {
+    "create:shaft": "The root of Create's kinetic line -- every other rotational part takes one. ADR-0017 puts it on the Assembling Machine.",
+    "create:cogwheel": "Rotation ratio, and the input to the large cogwheel and both gearboxes.",
+    "create:large_cogwheel": "The other half of a gear ratio.",
+    "create:gearbox": "Rotation direction. Drags `create:vertical_gearbox` in through its conversion pair.",
+    "create:water_wheel": "Terra's first rotational power source, and the only one reachable before the burner line.",
+    "create:large_water_wheel": "Its tier-two form.",
+    "create:chute": "Vertical item logistics; ADR-0017 gives Create the item-logistics line.",
+    "create:andesite_funnel": "Insert and extract at a belt or a block face.",
+    "create:andesite_tunnel": "Belt distribution."
+  },
+  "keep": {},
+  "substitute": {
+    "#minecraft:planks": {
+      "to": "#minecraft:logs",
+      "reason": "Planks are grid-crafted and the vanilla grid is inert (#90/#34, #140), so the log is the only wood the player holds. Lossy -- a log is four planks -- and called out rather than re-costed, following the grid line's rule."
+    },
+    "#c:plates/iron": {
+      "to": "gtceu:iron_plate",
+      "reason": "The pack smelts it from raw iron (#91, `recipe/iron_plate.json`). Resolved to the concrete item rather than kept as a tag so the emitted recipes read like the tracked ones; AlmostUnified makes it interchangeable with `create:iron_sheet` anyway."
+    },
+    "#c:ingots/iron": {
+      "to": "gtceu:iron_plate",
+      "reason": "Vanilla's `raw iron -> iron ingot` smelt is swept by ADR-0034 and the pack smelts raw iron to a PLATE instead (#91), so no ingot is ever held. Same substitution the grid line makes."
+    },
+    "create:andesite_alloy": {
+      "to": "gtceu:iron_plate",
+      "reason": "Its two grid recipes take `minecraft:andesite` plus iron or zinc nuggets. Zinc is cut by ADR-0021, andesite does not generate on Terra and nugget recipes are swept, so the alloy is unreachable at its own root. Same target `grid-substitutions.json` gives it, for the same reason."
+    },
+    "create:andesite_casing": {
+      "to": "gtceu:iron_plate",
+      "reason": "Has NO grid recipe at all -- Create makes it with `create:item_application` (andesite alloy on a stripped log), a surface no block in this pack executes, and nothing in the pack emits it. It cannot be crafted into the closure, so it substitutes. Same target as `grid-substitutions.json`."
+    },
+    "minecraft:dried_kelp": {
+      "to": "create:belt_connector",
+      "reason": "Kelp is an ocean plant and Terra grows the five marshland floras instead, so nothing on the surface drops it. The belt is what Create actually builds out of dried kelp, and the pack already emits it as Factorio's `transport-belt` (`item-map.json`, `assembling/transport_belt.json`) -- so the role survives the substitution rather than being approximated."
+    }
+  },
+  "skip": {
+    "andesite_alloy": "Substituted away, so its own recipe is never reached. Listed so a re-extraction that changes it fails here rather than silently.",
+    "andesite_alloy_from_zinc": "As above, and zinc is cut outright by ADR-0021.",
+    "andesite_alloy_from_block": "As above; also one half of a 2-cycle with `andesite_alloy_block`.",
+    "andesite_alloy_block": "The other half. Storage-block round trips carry no progression and both directions would be hand recipes.",
+    "large_cogwheel_from_little": "A SECOND route to `create:large_cogwheel`, which `large_cogwheel` already makes from a shaft and two logs. Create ships it as a convenience for a player holding a small cogwheel; here it is one more EMI entry for an item that is already craftable, so it is dropped rather than moved to the machine.",
+    "vertical_gearbox_from_conversion": "The other half, and skipped for the same reason. Note this also drops `create:vertical_gearbox` out of the closure entirely -- it was reached ONLY through this pair. If the vertical gearbox is wanted as a craftable block in its own right, add it to `wanted` rather than restoring these two.",
+    "vertical_gearbox": "Not reachable once the conversion pair above is skipped, and not a wanted root. Listed so the closure's shape is a recorded decision rather than a side effect.",
+    "gearbox_from_conversion": "Create ships the two gearbox conversions so a player can flip a placed gearbox's orientation without re-crafting. In this pack BOTH orientations craft directly from a casing and four cogwheels at the same cost, so the pair adds a 2-cycle and two duplicate EMI entries and buys nothing. Skipped rather than forced onto the machine."
+  },
+  "machine_only": {},
+  "duration": {
+    "_reason": "Ticks per recipe, by the Factorio category the source surface maps to. A vanilla grid recipe carries no duration, so one has to be chosen; it is here rather than in the converter because nothing is decided in the script. These sit above the grid line's 20/40 because Create's kinetic parts are a mid-chain assembly rather than a wiring step.",
+    "crafting": 200,
+    "advanced-crafting": 400,
+    "_overrides_reason": "Per-recipe, for the two water wheels: eight logs is the largest single-recipe wood cost in the pack and the duration says so.",
+    "overrides": {
+      "water_wheel": 400,
+      "large_water_wheel": 400
+    }
+  }
+}

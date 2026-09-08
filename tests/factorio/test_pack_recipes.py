@@ -4,7 +4,7 @@
 `docs/testing/what-to-check.md`'s "cross-file references resolve" claim, for the one subtree of
 `kubejs/data/planetaryfactory/recipe/` that no converter generates.
 
-`recipe/pack/` is ADR-0031's single stated exception: the corpus authors every recipe it contains,
+`recipe/assembling/pack/` is ADR-0031's single stated exception: the corpus authors every recipe it contains,
 and Factorio has no mining-tool prototype, so the Engineer's Pick's two recipes cannot come from
 `data/factorio/recipe.json` at all. That exemption is what makes this file necessary -- every other
 recipe here is regenerated and checked against the corpus, and these two are checked against
@@ -22,7 +22,7 @@ What fails quietly without it:
     player cannot build yet, and rung 0 is a dead end.
   - a file under `kubejs/` whose name carries an uppercase letter. KubeJS validates every name it
     scans and rejects one outright -- `Invalid file name: Uppercase 'R' in
-    kubejs/data/planetaryfactory/recipe/pack/README.md` -- and that ERROR stops a world from
+    kubejs/data/planetaryfactory/recipe/assembling/pack/README.md` -- and that ERROR stops a world from
     loading. It is asserted here because this subtree is the one place a human writes files under
     `kubejs/` by hand rather than generating them, and a README next to the recipes is the obvious
     thing to reach for.
@@ -45,7 +45,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 EMITTED = ROOT / "kubejs/data/planetaryfactory/recipe"
-SUBTREE = "pack"
+SUBTREE = "assembling/pack"
 PACK = EMITTED / SUBTREE
 PICK_TIER = ROOT / "mod/src/main/java/com/planetaryfactory/core/mining/PickTier.java"
 PICK_ITEM = ROOT / "mod/src/main/java/com/planetaryfactory/core/mining/EngineersPick.java"

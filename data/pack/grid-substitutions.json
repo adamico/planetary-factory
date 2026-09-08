@@ -67,6 +67,8 @@
     "#minecraft:coals": "minecraft:coal -- a Terra ore drop, and one of ADR-0021's four (#124).",
     "powergrid:battery": "#148 emits it as Factorio's accumulator (`assembling/accumulator.json`).",
     "create:fluid_pipe": "the pack emits it (`assembling/pipe.json`); ADR-0017 gives Create fluid logistics.",
+    "create:shaft": "emitted by `scripts/create-recipe-convert.py` (`recipe/create/shaft.json`). It was substituted to `gtceu:iron_rod` and that was WRONG: the shaft is a functional kinetic BLOCK and a Power Grid recipe calling for one means the shaft, not a rod that happens to cost the same. A rod cannot be placed and cannot transmit rotation, so the substitution produced a craftable recipe for an unbuildable machine.",
+    "create:cogwheel": "emitted by `scripts/create-recipe-convert.py` (`recipe/create/cogwheel.json`). Substituted to `gtceu:iron_gear` for the same wrong reason as the shaft, and corrected with it.",
     "powergrid:vertical_generator_housing": "emitted by this converter, from Power Grid's own `vertical_generator_housing_from_conversion` recipe.",
     "powergrid:generator_vertical_commutator": "emitted by this converter, from Power Grid's own `generator_vertical_commutator_from_conversion` recipe."
   },
@@ -130,14 +132,6 @@
     "powergrid:transformer_core": {
       "to": "#c:plates/iron",
       "reason": "Made on a surface this ticket does not convert. A transformer core is laminated iron."
-    },
-    "create:shaft": {
-      "to": "gtceu:iron_rod",
-      "reason": "Andesite alloy, so zinc-bearing. The pack emits an iron rod (`assembling/iron_stick.json`) and it is the same rotational-shaft role."
-    },
-    "create:cogwheel": {
-      "to": "gtceu:iron_gear",
-      "reason": "Andesite alloy again. The pack emits an iron gear (`assembling/iron_gear_wheel.json`), which is Factorio's own name for the part."
     },
     "create:clutch": {
       "to": "gtceu:iron_gear",

@@ -5,31 +5,15 @@
       {
         "content": {
           "ingredient": {
-            "item": "gtceu:iron_gear"
+            "tag": "minecraft:logs"
           },
-          "count": 6
+          "count": 2
         }
       },
       {
         "content": {
           "ingredient": {
-            "item": "powergrid:modular_display"
-          },
-          "count": 1
-        }
-      },
-      {
-        "content": {
-          "ingredient": {
-            "tag": "c:plates/copper"
-          },
-          "count": 1
-        }
-      },
-      {
-        "content": {
-          "ingredient": {
-            "item": "powergrid:pins"
+            "item": "create:shaft"
           },
           "count": 1
         }
@@ -41,14 +25,14 @@
       {
         "content": {
           "ingredient": {
-            "item": "powergrid:energy_meter"
+            "item": "create:large_cogwheel"
           },
           "count": 1
         }
       }
     ]
   },
-  "duration": 20,
+  "duration": 200,
   "data": {
     "factorio_category": "crafting"
   }
