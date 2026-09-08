@@ -66,7 +66,7 @@ public final class FurnaceEnergyBuffer {
     }
 
     /** The pole is the boundary: a GT cable run gets nothing. */
-    public long acceptFromNetwork(long voltage, long amperage) {
+    public long acceptFromNetwork() {
         return 0L;
     }
 

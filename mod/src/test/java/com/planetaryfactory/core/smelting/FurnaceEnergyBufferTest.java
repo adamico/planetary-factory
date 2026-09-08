@@ -45,7 +45,7 @@ class FurnaceEnergyBufferTest {
     @Test
     void aCableIsRefused() {
         FurnaceEnergyBuffer buffer = new FurnaceEnergyBuffer(2080L);
-        assertEquals(0L, buffer.acceptFromNetwork(32L, 4L));
+        assertEquals(0L, buffer.acceptFromNetwork());
         assertEquals(0L, buffer.getEnergyStored());
         assertFalse(buffer.inputsEnergy());
         assertEquals(0L, buffer.inputVoltage());

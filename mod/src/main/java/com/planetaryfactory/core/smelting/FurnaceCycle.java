@@ -44,11 +44,16 @@ public final class FurnaceCycle {
      * its recipe and merely cannot deliver <em>holds</em> -- it resumes where the belt left it.
      * One whose input was pulled or swapped has nothing left to finish, and carrying its progress
      * onto whatever is put in next would hand a player a free head start on a different smelt.
+     *
+     * @return true when progress was discarded, which the caller has to persist -- a reset that
+     *     never reached disk is re-read as the progress it threw away
      */
-    public void idle(boolean hasRecipe) {
-        if (!hasRecipe) {
-            reset();
+    public boolean idle(boolean hasRecipe) {
+        if (hasRecipe || progress == 0) {
+            return false;
         }
+        reset();
+        return true;
     }
 
     public int progress() {
