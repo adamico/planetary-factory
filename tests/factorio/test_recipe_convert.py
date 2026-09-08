@@ -42,6 +42,11 @@ MOD = ROOT / "mod/src/main/java/com/planetaryfactory/core"
 PF_BLOCKS = MOD / "PFBlocks.java"
 PF_ITEMS = MOD / "PFItems.java"
 POLE_TIER = MOD / "energy/PoleTier.java"
+FURNACE_TIER = MOD / "smelting/FurnaceTier.java"
+
+# The pack's own smelting type (#155). Its ingredient carries a count, which vanilla's cannot,
+# and it is the only type the three furnace tiers read.
+PACK_SMELTING = "planetaryfactory:smelting"
 
 # The namespaces an item-map target may live in: this pack, the game, and the three mods whose
 # capabilities ADR-0017 puts on Terra. Mekanism is deliberately absent -- ADR-0035 takes it out
@@ -68,14 +73,18 @@ def mod_registered_blocks():
     Reading only the startup scripts would now report four registered blocks as unregistered, and
     the natural "fix" for that is to weaken the check, which is the one thing it must not do.
 
-    The poles derive their ids from the `PoleTier` enum, so they are read the same way rather than
-    typed out: a fifth tier is then registered here without this file being edited.
+    The poles and the furnaces derive their ids from their tier enums, so they are read the same
+    way rather than typed out: a fifth pole tier or a fourth furnace is then registered here
+    without this file being edited.
     """
     blocks = set(re.findall(r'BLOCKS\.register\("([a-z0-9_]+)"',
                             (PF_BLOCKS).read_text(encoding="utf-8")))
     tiers = re.findall(r"^\s{4}([A-Z][A-Z_]*)\(\d+\)[,;]",
                        POLE_TIER.read_text(encoding="utf-8"), re.MULTILINE)
     blocks |= {f"{tier.lower()}_electric_pole" for tier in tiers}
+    furnaces = re.findall(r"^\s{4}([A-Z][A-Z_]*)\([^)]*\)[,;]",
+                          FURNACE_TIER.read_text(encoding="utf-8"), re.MULTILINE)
+    blocks |= {f"{tier.lower()}_furnace" for tier in furnaces}
     return {f"planetaryfactory:{name}" for name in blocks}
 
 
@@ -226,13 +235,18 @@ def check_emitted(items, recipe_types, failures):
         if path.relative_to(EMITTED).parts[0] in FOREIGN_SUBTREES:
             continue
         recipe = json.loads(path.read_text())
-        if recipe.get("type") == "minecraft:smelting":
+        if recipe.get("type") == PACK_SMELTING:
             named = [recipe["ingredient"].get("item") or recipe["ingredient"].get("tag"),
                      recipe["result"]["id"]]
             for target in named:
                 resolves(path, "the recipe", target)
             if not isinstance(recipe.get("cookingtime"), int) or recipe["cookingtime"] <= 0:
                 failures.append(f"{path.name} has cookingtime {recipe.get('cookingtime')!r}")
+            # THE COUNT IS WHY THIS TYPE EXISTS. A smelt that lost it would be a working recipe
+            # asking for one item instead of five -- wrong output, no error and no log line, which
+            # is the failure #155 registered a type of its own to make impossible.
+            if not isinstance(recipe.get("count"), int) or recipe["count"] <= 0:
+                failures.append(f"{path.name} has count {recipe.get('count')!r}")
             if "tag" in recipe["ingredient"] and recipe["result"]["id"].startswith("#"):
                 failures.append(f"{path.name} has a tag as its result")
             continue

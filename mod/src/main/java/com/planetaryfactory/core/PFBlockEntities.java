@@ -1,10 +1,15 @@
 package com.planetaryfactory.core;
 
+import com.gregtechceu.gtceu.api.capability.GTCapability;
 import com.planetaryfactory.core.energy.PoleColumn;
 import com.planetaryfactory.core.energy.PoleTier;
 import com.planetaryfactory.core.energy.SupplyAreaPoleBlockEntity;
+import com.planetaryfactory.core.smelting.FurnaceBlockEntity;
+import com.planetaryfactory.core.smelting.FurnaceItemHandler;
+import com.planetaryfactory.core.smelting.FurnaceTier;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.capabilities.Capabilities;
@@ -13,10 +18,11 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 /**
- * Block entities, which currently means the supply-area pole and nothing else.
+ * Block entities: the supply-area pole and the furnace ladder.
  *
- * <p>All four pole tiers share one {@link BlockEntityType}: they differ in supply area and in
- * nothing else, so there is one behaviour and four blocks pointing at it.
+ * <p>All four pole tiers share one {@link BlockEntityType}, and so do all three furnace tiers:
+ * each set differs in numbers its tier enum carries and in nothing else, so there is one behaviour
+ * and several blocks pointing at it.
  */
 public final class PFBlockEntities {
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES =
@@ -31,11 +37,26 @@ public final class PFBlockEntities {
                             // which is the standing position rather than an oversight here.
                             null));
 
+    /**
+     * All three furnace tiers share one type (#155). They differ in speed and in where their
+     * energy comes from, both of which are on {@link FurnaceTier}, so there is one behaviour and
+     * three blocks pointing at it -- the same arrangement as the pole above.
+     */
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<FurnaceBlockEntity>>
+            FURNACE = BLOCK_ENTITIES.register("furnace",
+                    () -> new BlockEntityType<>(FurnaceBlockEntity::new, PFBlocks.furnaceBlocks(),
+                            null));
+
     private PFBlockEntities() {
     }
 
     static void register(IEventBus modBus) {
         BLOCK_ENTITIES.register(modBus);
+    }
+
+    static void registerCapabilities(RegisterCapabilitiesEvent event) {
+        registerPoleCapabilities(event);
+        registerFurnaceCapabilities(event);
     }
 
     /**
@@ -58,7 +79,7 @@ public final class PFBlockEntities {
      * are not in the path at all. A segment with no base below it -- an orphan mid-collapse -- has
      * no storage to name, so it answers null and the connector treats it as not connected.
      */
-    static void registerCapabilities(RegisterCapabilitiesEvent event) {
+    private static void registerPoleCapabilities(RegisterCapabilitiesEvent event) {
         for (PoleTier tier : PoleTier.values()) {
             event.registerBlock(
                     Capabilities.EnergyStorage.BLOCK,
@@ -71,6 +92,37 @@ public final class PFBlockEntities {
                                 instanceof SupplyAreaPoleBlockEntity pole ? pole.feSide() : null;
                     },
                     PFBlocks.pole(tier).get());
+        }
+    }
+
+    /**
+     * The furnace's two faces (#155), both answered on every direction and on the null side.
+     *
+     * <p><b>The item handler is unsided on purpose.</b> Direction never decides in or out -- the
+     * item does, and {@link FurnaceItemHandler} routes it. That is Factorio's arrangement, and it
+     * is what makes a Create funnel work on whichever face a player put it on: funnels reach a
+     * neighbour through a {@code BlockCapability<IItemHandler, Direction>}, so a nominated-face
+     * inventory answers a funnel on any other face with silence and no diagnosis.
+     *
+     * <p>The energy face is the Electric tier's alone. {@code energySide()} is null on the two
+     * burner tiers, so a supply-area pole does not count a Stone Furnace as a machine it is
+     * failing to power.
+     */
+    private static void registerFurnaceCapabilities(RegisterCapabilitiesEvent event) {
+        for (FurnaceTier tier : FurnaceTier.values()) {
+            Block block = PFBlocks.furnace(tier).get();
+            event.registerBlock(
+                    Capabilities.ItemHandler.BLOCK,
+                    (level, pos, state, blockEntity, side) ->
+                            blockEntity instanceof FurnaceBlockEntity furnace
+                                    ? new FurnaceItemHandler(furnace) : null,
+                    block);
+            event.registerBlock(
+                    GTCapability.CAPABILITY_ENERGY_CONTAINER,
+                    (level, pos, state, blockEntity, side) ->
+                            blockEntity instanceof FurnaceBlockEntity furnace
+                                    ? furnace.energySide() : null,
+                    block);
         }
     }
 }

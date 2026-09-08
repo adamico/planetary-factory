@@ -1,6 +1,7 @@
 package com.planetaryfactory.core;
 
 import com.planetaryfactory.core.energy.PoleTier;
+import com.planetaryfactory.core.smelting.FurnaceTier;
 import com.planetaryfactory.core.energy.SupplyAreaPoleItem;
 import com.planetaryfactory.core.fluid.BarrelFluidHandler;
 import com.planetaryfactory.core.fluid.BarrelItem;
@@ -77,6 +78,9 @@ public final class PFItems {
             // pack has, so its item is a SupplyAreaPoleItem for the tooltip alone.
             FUNCTIONAL.add(ITEMS.register(PFBlocks.pole(tier).getId().getPath(),
                     () -> new SupplyAreaPoleItem(PFBlocks.pole(tier).get(), new Item.Properties())));
+        }
+        for (FurnaceTier tier : FurnaceTier.values()) {
+            FUNCTIONAL.add(ITEMS.registerSimpleBlockItem(PFBlocks.furnace(tier)));
         }
         FUNCTIONAL.add(BARREL);
         // Tools sit with the machinery, not with the saplings: a pick is the first thing a player

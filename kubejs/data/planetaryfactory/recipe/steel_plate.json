@@ -1,12 +1,12 @@
 {
   "type": "planetaryfactory:smelting",
   "ingredient": {
-    "tag": "c:raw_materials/iron"
+    "item": "gtceu:iron_plate"
   },
-  "count": 1,
+  "count": 5,
   "result": {
-    "id": "gtceu:iron_plate",
+    "id": "gtceu:steel_plate",
     "count": 1
   },
-  "cookingtime": 64
+  "cookingtime": 320
 }

@@ -48,7 +48,7 @@ var RECIPE_SURVIVORS = [
   },
   {
     surface: 'smelting',
-    type: 'minecraft:smelting',
-    why: "#91 puts the smelting categories on vanilla `minecraft:smelting`. ADR-0034 §2: the TYPE survives and carries pack content -- vanilla smelting is curated, not deleted. What is curated is the pack's own rows; #91's two named cuts (log to charcoal, ore to ingot) plus every stock smelt nobody has decided go by default-deny, not by a per-recipe decision, and re-admitting any of them is the follow-on ticket's call."
+    type: 'planetaryfactory:smelting',
+    why: "#155 puts the smelting categories on the pack's own `planetaryfactory:smelting`, whose ingredient carries a count -- vanilla's holds none, so the 5:1 steel smelt and the 2:1 stone brick (ADR-0046) cannot be expressed on it at all. Vanilla `minecraft:smelting` is NOT admitted alongside it: under default-deny every recipe on it was already going, so nothing is read from the vanilla type and the vanilla Furnace, Smoker and Blast Furnace are inert rather than merely uncraftable. That takes Minecraft's food cooking with it, which the hunger ticket owns."
   }
 ]

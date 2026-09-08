@@ -3,6 +3,7 @@ package com.planetaryfactory.core;
 import com.planetaryfactory.core.assembler.AssemblerPanelMenu;
 import com.planetaryfactory.core.assembler.CraftingPlanMenu;
 import com.planetaryfactory.core.assembler.SelectAmountMenu;
+import com.planetaryfactory.core.smelting.FurnaceMenu;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.inventory.MenuType;
 import net.neoforged.bus.api.IEventBus;
@@ -34,6 +35,14 @@ public final class PFMenus {
 
     public static final Supplier<MenuType<CraftingPlanMenu>> CRAFTING_PLAN =
             MENUS.register("assembler_crafting_plan", () -> IMenuTypeExtension.create(CraftingPlanMenu::new));
+
+    /**
+     * One menu for all three furnace tiers (#155), not one per tier: they differ in whether there
+     * is a fuel slot and whether there is an energy bar, and the tier travels in the opening
+     * packet so the client can tell.
+     */
+    public static final Supplier<MenuType<FurnaceMenu>> FURNACE =
+            MENUS.register("furnace", () -> IMenuTypeExtension.create(FurnaceMenu::new));
 
     private PFMenus() {
     }
