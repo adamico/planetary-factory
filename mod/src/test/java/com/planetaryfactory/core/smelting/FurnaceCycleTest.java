@@ -71,4 +71,20 @@ class FurnaceCycleTest {
         cycle.idle(false);
         assertEquals(0, cycle.progress(), "an empty input starts over");
     }
+
+    /**
+     * The reset has to reach disk. A block entity that discards progress without being marked
+     * dirty can unload with the old progress still on the save, which is the free head start the
+     * reset exists to prevent -- so idle reports whether it actually threw anything away.
+     */
+    @Test
+    void discardingProgressAsksToBeSaved() {
+        FurnaceCycle cycle = new FurnaceCycle();
+        for (int tick = 0; tick < 40; tick++) {
+            cycle.tick(true, 160);
+        }
+        assertFalse(cycle.idle(true), "holding progress changes nothing to save");
+        assertTrue(cycle.idle(false), "discarding progress has to be persisted");
+        assertFalse(cycle.idle(false), "an idle furnace at zero does not re-dirty every tick");
+    }
 }

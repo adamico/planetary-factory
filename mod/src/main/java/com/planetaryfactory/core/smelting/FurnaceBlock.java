@@ -49,7 +49,7 @@ public class FurnaceBlock extends BaseEntityBlock {
      */
     public static final com.mojang.serialization.MapCodec<FurnaceBlock> CODEC =
             com.mojang.serialization.Codec.STRING
-                    .xmap(FurnaceTier::valueOf, FurnaceTier::name)
+                    .xmap(FurnaceTier::byName, FurnaceTier::serializedName)
                     .fieldOf("tier")
                     .xmap(FurnaceBlock::new, FurnaceBlock::tier);
 

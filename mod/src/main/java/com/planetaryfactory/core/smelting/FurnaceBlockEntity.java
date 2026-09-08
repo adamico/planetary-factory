@@ -135,7 +135,9 @@ public class FurnaceBlockEntity extends BlockEntity implements Container, MenuPr
             // EU -- the lit coal is already spent, but the ticks left on it are, and a stall that
             // quietly ate them would make backpressure cost the player the fuel it was meant to
             // save. That is the same rule the output side keeps under ADR-0041.
-            cycle.idle(found.isPresent());
+            if (cycle.idle(found.isPresent())) {
+                setChanged();
+            }
             setLit(litTicks > 0);
             return;
         }
@@ -147,7 +149,9 @@ public class FurnaceBlockEntity extends BlockEntity implements Container, MenuPr
         if (cycle.tick(powered, duration)) {
             complete(smelt);
         }
-        setLit(tier.burnsFuel() ? litTicks > 0 : powered);
+        // Whether this tick was paid for, not whether the next one can be: reading litTicks here
+        // would go dark on the tick the last burn tick of a coal is spent, mid-smelt.
+        setLit(powered);
         setChanged();
     }
 
@@ -259,7 +263,8 @@ public class FurnaceBlockEntity extends BlockEntity implements Container, MenuPr
     private final IEnergyContainer gtContainer = new IEnergyContainer() {
         @Override
         public long acceptEnergyFromNetwork(Direction side, long voltage, long amperage) {
-            return energy.acceptFromNetwork(voltage, amperage);
+            // voltage and amperage are GregTech's signature, not ours; nothing here reads them.
+            return energy.acceptFromNetwork();
         }
 
         @Override

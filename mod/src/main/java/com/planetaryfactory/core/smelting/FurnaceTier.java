@@ -91,4 +91,14 @@ public enum FurnaceTier {
     public String serializedName() {
         return name().toLowerCase(Locale.ROOT);
     }
+
+    /** The inverse of {@link #serializedName()}, which is the spelling every other id path uses. */
+    public static FurnaceTier byName(String name) {
+        for (FurnaceTier tier : values()) {
+            if (tier.serializedName().equals(name)) {
+                return tier;
+            }
+        }
+        throw new IllegalArgumentException("no furnace tier named " + name);
+    }
 }
