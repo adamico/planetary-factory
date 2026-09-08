@@ -10,6 +10,10 @@
     quietly broken: a hand-edited resource would place a 3x3 burner rig with nothing failing, since
     the mod's own `RigFootprintsTest` only asserts the numbers it reads and would read the edit.
     So the resource is asserted against the corpus itself, not against the expected integers.
+  - **The vertical extent.** How many blocks a rig stands is the one figure the corpus cannot
+    supply: Factorio is played on a plane and a prototype states `tile_width` and `tile_height`,
+    both ground extent. ADR-0043 carries the declared exception; what is asserted here is only that
+    it has not silently gone back to one, which is what read as a platform rather than a machine.
   - **The pack-side files.** Both rigs are `planetaryfactory:` blocks, so GregTech's model provider
     does not serve them and every hop is ours: blockstate to model to texture, a lang key, and a
     loot table. Each way of breaking those fails quietly -- an untextured black-and-magenta cube
@@ -36,15 +40,16 @@ GENERATOR = ROOT / "scripts/build-rig-assets.py"
 ASSETS = ROOT / "kubejs/assets/planetaryfactory"
 DATA = ROOT / "kubejs/data/planetaryfactory"
 
-# `BURNER("burner-mining-drill"),` -- the enum constant and the corpus key it reads its size from.
-TIER_RE = re.compile(r'^\s{4}([A-Z][A-Z_]*)\("([a-z-]+)"\)[,;]', re.MULTILINE)
+# `BURNER("burner-mining-drill", 2),` -- the enum constant, the corpus key it reads its ground size
+# from, and the one number here the corpus cannot supply: how many blocks tall it stands.
+TIER_RE = re.compile(r'^\s{4}([A-Z][A-Z_]*)\("([a-z-]+)",\s*(\d+)\)[,;]', re.MULTILINE)
 
 
 def registered_tiers():
     tiers = TIER_RE.findall(RIG_TIER.read_text(encoding="utf-8"))
     if not tiers:
         raise AssertionError(f"no rig tiers parsed out of {RIG_TIER} -- has the enum moved?")
-    return {name.lower(): factorio for name, factorio in tiers}
+    return {name.lower(): (factorio, int(tall)) for name, factorio, tall in tiers}
 
 
 def resolves(path):
@@ -79,7 +84,16 @@ def main():
             f"{(generated.stdout + generated.stderr).strip()}"
         )
 
-    for tier, factorio_name in sorted(tiers.items()):
+    for tier, (factorio_name, blocks_tall) in sorted(tiers.items()):
+        # The vertical extent is chosen, not extracted -- Factorio states two ground figures and
+        # no third -- so it is asserted here rather than against the corpus. A rig one block tall
+        # is the thing that read as a platform rather than as a machine, and nothing upstream of
+        # this file can catch a silent return to it. ADR-0043 carries the declared exception.
+        if blocks_tall < 2:
+            failures.append(
+                f"{tier} stands {blocks_tall} block tall -- a one-block rig reads as a platform; "
+                "see ADR-0043's declared exception"
+            )
         row = corpus.get(factorio_name)
         if row is None:
             failures.append(
@@ -125,7 +139,7 @@ def main():
         if not resolves(ASSETS / f"models/item/{block}.json"):
             failures.append(f"{block} has no item model")
 
-    stray = set(footprints) - set(tiers.values())
+    stray = set(footprints) - {factorio for factorio, _ in tiers.values()}
     if stray:
         failures.append(
             f"footprint.json carries {sorted(stray)}, which no registered tier reads -- "

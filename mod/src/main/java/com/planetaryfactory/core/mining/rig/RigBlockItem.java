@@ -28,7 +28,9 @@ import net.minecraft.world.level.gameevent.GameEvent;
  *
  * <p><b>Placement is refused with nothing consumed where the footprint does not fit.</b> Every
  * target tile is checked before any block is placed and before the stack is shrunk; a partial
- * footprint that ate the item on a failed 2x2 is exactly ADR-0043's "bad first machine".
+ * rig that ate the item on a failed placement is exactly ADR-0043's "bad first machine". Note the
+ * vertical extent makes this likelier, not less so: a rig placed under a low ceiling now fails on a
+ * tile the player cannot see from above.
  */
 public class RigBlockItem extends BlockItem {
 
@@ -49,10 +51,11 @@ public class RigBlockItem extends BlockItem {
         Direction facing = context.getHorizontalDirection();
         RigFacing rigFacing = RigDirections.toRigFacing(facing);
         RigFootprints.Size size = RigFootprints.get().sizeOf(tier);
-        List<RigGeometry.Offset> offsets = RigGeometry.footprint(size.width(), size.height(), rigFacing);
+        List<RigGeometry.Offset> offsets = RigGeometry.footprint(
+                size.width(), size.height(), tier.blocksTall(), rigFacing);
 
         boolean fits = RigGeometry.fits(offsets, offset -> {
-            BlockPos pos = anchorPos.offset(offset.dx(), 0, offset.dz());
+            BlockPos pos = anchorPos.offset(offset.dx(), offset.dy(), offset.dz());
             return level.isInWorldBounds(pos) && level.getBlockState(pos).canBeReplaced();
         });
         if (!fits) {
@@ -66,10 +69,10 @@ public class RigBlockItem extends BlockItem {
 
         level.setBlock(anchorPos, anchorState, Block.UPDATE_ALL);
         for (RigGeometry.Offset offset : offsets) {
-            if (offset.dx() == 0 && offset.dz() == 0) {
+            if (offset.dx() == 0 && offset.dy() == 0 && offset.dz() == 0) {
                 continue;
             }
-            BlockPos pos = anchorPos.offset(offset.dx(), 0, offset.dz());
+            BlockPos pos = anchorPos.offset(offset.dx(), offset.dy(), offset.dz());
             level.setBlock(pos, partState, Block.UPDATE_ALL);
             if (level.getBlockEntity(pos) instanceof RigPartBlockEntity part) {
                 part.setAnchorPos(anchorPos);

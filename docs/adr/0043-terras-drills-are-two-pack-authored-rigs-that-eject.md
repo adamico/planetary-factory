@@ -145,7 +145,33 @@ does not currently satisfy it here: it holds twelve crafting machines and no min
 
 That is not bookkeeping. **The 2×2 and 3×3 footprints this ADR turns on become extracted facts
 rather than two integers somebody typed**, and Vulcanus's Big Mining Drill later arrives as a data
-row instead of a code change.
+row instead of a code change. #188 landed that widening.
+
+### The one exception: how tall a rig stands
+
+**Factorio is played on a plane.** A prototype states `tile_width` and `tile_height`, both of them
+ground extent, and there is no third figure anywhere in the dump to read. So the vertical extent of
+a rig cannot be extracted, and under ADR-0041 that makes it a **declared exception** in the shape
+ADR-0028 established for row keys — named here, in one place, rather than appearing quietly in a
+corpus reader.
+
+**The burner rig is a 2×2×2 and the electric rig a 3×3×3.** A rig one block tall was built first
+and rejected on sight: flush with the topsoil and one block deep, it reads as a platform or a floor
+tile rather than as a machine, which is the wrong signal for the block that is the player's first
+piece of automation. The height scales with the tier rather than being one constant, so the upgrade
+reads as a visibly bigger machine and not merely a wider one.
+
+Three consequences follow and are deliberate:
+
+- **A rig can be refused by a ceiling.** The upper layers are checked at placement like any other,
+  so a site whose ground plane is clear can still refuse the rig. That is the same
+  nothing-is-consumed refusal as any other bad site, but it fails on tiles the player cannot see
+  from where they clicked.
+- **The anchor stays at the base.** The mining area is the layer directly beneath the rig, and an
+  anchor in the middle of the column would make "beneath" mean two things.
+- **It is asserted in exactly two places**, because nothing upstream can catch it: the geometry
+  unit test, and the static check's floor of two blocks. A silent return to a one-block rig is the
+  regression this exception exists to make visible.
 
 ## Fuel is Factorio's, because there is no vanilla fuel to fall back on
 
@@ -192,6 +218,11 @@ GregTech wrapping FE does not.
   "the counter always wins the argument while the player believes their eyes".
 - **Push to any adjacent inventory rather than one faced tile.** The friendlier Minecraft idiom, and
   the one that turns a Factorio mechanic into a hopper.
+- **A one-block-tall rig**, the literal reading of Factorio's flat tiles. Built first, and rejected
+  on sight in-world: it reads as a platform rather than as a machine.
+- **A uniform two-block height on both rigs**, making the vertical extent one constant instead of a
+  per-tier number. Cheaper to hold, and it costs the tier upgrade its visible step: the electric rig
+  would read as wider rather than bigger.
 - **A single-block rig with the areas rounded to 1×1 and 5×5.** Cheapest, and it costs the burner
   drill its entire justification: ADR-0040 put it in the starting pocket because "a burner drill
   covers four tiles and beats hands even at 0.25 items/s".
