@@ -12,6 +12,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.Vec2;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import snownee.jade.api.BlockAccessor;
@@ -23,6 +24,7 @@ import snownee.jade.api.IWailaCommonRegistration;
 import snownee.jade.api.IWailaPlugin;
 import snownee.jade.api.WailaPlugin;
 import snownee.jade.api.config.IPluginConfig;
+import snownee.jade.api.ui.IElement;
 import snownee.jade.api.ui.IElementHelper;
 
 /**
@@ -64,6 +66,10 @@ public class RigJadePlugin implements IWailaPlugin {
     private static final String FUEL_CAPACITY = "RigFuelCapacity";
     private static final String HAS_ORE = "RigHasOre";
     private static final String FUEL_ITEM = "RigFuelItem";
+
+    /** Jade draws an item at 16 and the font at 8; the difference is what the figure is dropped by. */
+    private static final float ICON_HEIGHT = 16F;
+    private static final float TEXT_HEIGHT = 8F;
 
     /**
      * The rig behind whatever the crosshair is on: itself if it is the anchor, and otherwise the
@@ -130,8 +136,7 @@ public class RigJadePlugin implements IWailaPlugin {
             // The banked stack and how far along the rig is, read left to right the way the ore
             // moves: out of the ground, into the buffer. A full buffer against frozen progress is
             // push-or-stall's only visible symptom, and nothing outside the block shows it today.
-            tooltip.add(banked(elements, data));
-            tooltip.append(elements.text(progress(data)));
+            line(tooltip, elements, banked(elements, data), progress(data));
 
             if (!data.getBoolean(HAS_ORE)) {
                 // The line the rig needs most. An exhausted footprint is not a fault, and without
@@ -142,10 +147,9 @@ public class RigJadePlugin implements IWailaPlugin {
                 // The stack first, then the buffer: what will burn next, then how much is left of
                 // what is burning now. An empty slot is the dash rather than a gap, for the same
                 // reason the banked line uses one.
-                tooltip.add(fuel(elements, accessor, data));
-                tooltip.append(elements.text(
+                line(tooltip, elements, fuel(elements, accessor, data),
                         Component.translatable("tooltip.planetaryfactory.rig.jade.fuel",
-                                data.getInt(FUEL), data.getInt(FUEL_CAPACITY))));
+                                data.getInt(FUEL), data.getInt(FUEL_CAPACITY)));
             }
         }
 
@@ -156,10 +160,25 @@ public class RigJadePlugin implements IWailaPlugin {
     };
 
     /**
+     * One icon-and-figure line: an icon, a gap, and the number that goes with it.
+     *
+     * <p>Both of the numbers on this tooltip belong to the icon on their left, so both lines are
+     * laid out here rather than appended raw. Two things are being fixed against the default: an
+     * icon is 16 pixels tall against text's 8, which leaves the figure sitting on the icon's top
+     * edge rather than beside it; and appended elements butt up against each other, which reads as
+     * one run of glyphs rather than as a column of icons and a column of figures.
+     */
+    private static void line(ITooltip tooltip, IElementHelper elements, IElement icon, Component text) {
+        tooltip.add(icon);
+        tooltip.append(elements.spacer(4, 0));
+        tooltip.append(elements.text(text).translate(new Vec2(0F, ICON_HEIGHT / 2F - TEXT_HEIGHT / 2F)));
+    }
+
+    /**
      * What the rig is holding. An empty buffer is a dash rather than a blank, for the same reason
      * the furnace's ends are: "nothing banked" is half the diagnosis, and a gap does not say it.
      */
-    private static snownee.jade.api.ui.IElement banked(IElementHelper elements, CompoundTag data) {
+    private static IElement banked(IElementHelper elements, CompoundTag data) {
         if (!data.contains(BUFFER_ITEM)) {
             return elements.text(Component.translatable("tooltip.planetaryfactory.rig.jade.empty"));
         }
@@ -174,7 +193,7 @@ public class RigJadePlugin implements IWailaPlugin {
     }
 
     /** What is in the fuel slot, drawn as its icon and count -- the dash when the slot is empty. */
-    private static snownee.jade.api.ui.IElement fuel(
+    private static IElement fuel(
             IElementHelper elements, BlockAccessor accessor, CompoundTag data) {
         ItemStack held = data.contains(FUEL_ITEM)
                 ? ItemStack.parse(accessor.getLevel().registryAccess(), data.getCompound(FUEL_ITEM))
