@@ -8,6 +8,8 @@ import com.planetaryfactory.core.fluid.BarrelItem;
 import com.planetaryfactory.core.fluid.BarrelSpec;
 import com.planetaryfactory.core.mining.EngineersPick;
 import com.planetaryfactory.core.mining.PickTier;
+import com.planetaryfactory.core.mining.rig.RigBlockItem;
+import com.planetaryfactory.core.mining.rig.RigTier;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.neoforged.bus.api.IEventBus;
@@ -66,6 +68,15 @@ public final class PFItems {
     private static final Map<PickTier, DeferredHolder<Item, EngineersPick>> PICKS =
             new EnumMap<>(PickTier.class);
 
+    /**
+     * Both rigs' items (#192, ADR-0043). Each is a {@link RigBlockItem}, not
+     * {@code registerSimpleBlockItem}: the anchor's default single-block placement would leave the
+     * parts behind, so the item is what places the whole footprint in one click. There is no item
+     * for the part block -- it is never held, placed, or offered in a creative tab, only ever
+     * produced by this item's own placement.
+     */
+    private static final Map<RigTier, DeferredHolder<Item, RigBlockItem>> RIGS = new EnumMap<>(RigTier.class);
+
     static {
         for (PickTier tier : PickTier.values()) {
             PICKS.put(tier, ITEMS.register(tier.id(),
@@ -82,6 +93,12 @@ public final class PFItems {
         for (FurnaceTier tier : FurnaceTier.values()) {
             FUNCTIONAL.add(ITEMS.registerSimpleBlockItem(PFBlocks.furnace(tier)));
         }
+        for (RigTier tier : RigTier.values()) {
+            DeferredHolder<Item, RigBlockItem> item = ITEMS.register(tier.blockName(),
+                    () -> new RigBlockItem(tier, new Item.Properties()));
+            RIGS.put(tier, item);
+            FUNCTIONAL.add(item);
+        }
         FUNCTIONAL.add(BARREL);
         // Tools sit with the machinery, not with the saplings: a pick is the first thing a player
         // reaches for and the last place they would look for it is NATURAL_BLOCKS.
@@ -90,6 +107,10 @@ public final class PFItems {
 
 
     private PFItems() {
+    }
+
+    public static DeferredHolder<Item, RigBlockItem> rig(RigTier tier) {
+        return RIGS.get(tier);
     }
 
     static void register(IEventBus modBus) {

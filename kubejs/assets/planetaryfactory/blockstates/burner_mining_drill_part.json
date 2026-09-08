@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "planetaryfactory:block/burner_mining_drill_part"
+    },
+    "facing=east": {
+      "model": "planetaryfactory:block/burner_mining_drill_part",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "planetaryfactory:block/burner_mining_drill_part",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "planetaryfactory:block/burner_mining_drill_part",
+      "y": 270
+    }
+  }
+}

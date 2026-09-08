@@ -4,6 +4,8 @@ import com.gregtechceu.gtceu.api.capability.GTCapability;
 import com.planetaryfactory.core.energy.PoleColumn;
 import com.planetaryfactory.core.energy.PoleTier;
 import com.planetaryfactory.core.energy.SupplyAreaPoleBlockEntity;
+import com.planetaryfactory.core.mining.rig.RigBlockEntity;
+import com.planetaryfactory.core.mining.rig.RigPartBlockEntity;
 import com.planetaryfactory.core.smelting.FurnaceBlockEntity;
 import com.planetaryfactory.core.smelting.FurnaceItemHandler;
 import com.planetaryfactory.core.smelting.FurnaceTier;
@@ -46,6 +48,20 @@ public final class PFBlockEntities {
             FURNACE = BLOCK_ENTITIES.register("furnace",
                     () -> new BlockEntityType<>(FurnaceBlockEntity::new, PFBlocks.furnaceBlocks(),
                             null));
+
+    /**
+     * Both rigs' anchors share one type (#192, ADR-0043), the same arrangement as the pole and
+     * furnace above. It carries no fields yet -- #192 is an inert footprint -- so both tiers are
+     * genuinely identical here; #193/#194 are what will need the tier on this entity.
+     */
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<RigBlockEntity>>
+            RIG = BLOCK_ENTITIES.register("rig",
+                    () -> new BlockEntityType<>(RigBlockEntity::new, PFBlocks.rigBlocks(), null));
+
+    /** Both rigs' parts share one type; each part's only field is its anchor's position. */
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<RigPartBlockEntity>>
+            RIG_PART = BLOCK_ENTITIES.register("rig_part",
+                    () -> new BlockEntityType<>(RigPartBlockEntity::new, PFBlocks.rigPartBlocks(), null));
 
     private PFBlockEntities() {
     }

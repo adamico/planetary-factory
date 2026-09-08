@@ -1,0 +1,12 @@
+{
+  "drills": {
+    "burner-mining-drill": {
+      "tile_width": 2,
+      "tile_height": 2
+    },
+    "electric-mining-drill": {
+      "tile_width": 3,
+      "tile_height": 3
+    }
+  }
+}

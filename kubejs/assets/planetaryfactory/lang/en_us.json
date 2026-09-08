@@ -32,14 +32,14 @@
   "tooltip.planetaryfactory.barrel.empty": "Empty",
   "tooltip.planetaryfactory.barrel.amount": "%s / %s mB",
   "tooltip.planetaryfactory.pole.area": "Supplies a %sx%s area, %s blocks up and down",
-  "tooltip.planetaryfactory.pole.wireless": "Powers machines directly — no wires needed",
+  "tooltip.planetaryfactory.pole.wireless": "Powers machines directly \u2014 no wires needed",
   "tooltip.planetaryfactory.pole.column": "Measured at the base; extend with another %s (up to %s tall)",
   "tooltip.planetaryfactory.pole.jade.machines": "Machines in area: %s",
   "tooltip.planetaryfactory.pole.jade.supply": "This pole: %s / %s EU/t",
   "tooltip.planetaryfactory.pole.jade.idle": "Nothing drawing power",
   "tooltip.planetaryfactory.furnace.jade.progress": "%s%%",
   "tooltip.planetaryfactory.furnace.jade.idle": "idle",
-  "tooltip.planetaryfactory.furnace.jade.empty": "—",
+  "tooltip.planetaryfactory.furnace.jade.empty": "\u2014",
   "tooltip.planetaryfactory.furnace.jade.energy": "Buffer: %s / %s EU",
   "tooltip.planetaryfactory.furnace.energy": "%s / %s EU",
   "tooltip.planetaryfactory.furnace.usage": "Draws %s EU/t while smelting",
@@ -59,5 +59,9 @@
   "emi.category.planetaryfactory.smelting": "Smelting",
   "emi.planetaryfactory.smelting.seconds": "%ss",
   "tooltip.planetaryfactory.fuel.joules": "Fuel: %s J",
-  "tooltip.planetaryfactory.fuel.burn": "%ss of furnace work"
+  "tooltip.planetaryfactory.fuel.burn": "%ss of furnace work",
+  "block.planetaryfactory.burner_mining_drill": "Burner Mining Drill",
+  "block.planetaryfactory.burner_mining_drill_part": "Burner Mining Drill (part)",
+  "block.planetaryfactory.electric_mining_drill": "Electric Mining Drill",
+  "block.planetaryfactory.electric_mining_drill_part": "Electric Mining Drill (part)"
 }

@@ -1,6 +1,9 @@
 package com.planetaryfactory.core;
 
 import com.planetaryfactory.core.energy.PoleTier;
+import com.planetaryfactory.core.mining.rig.RigBlock;
+import com.planetaryfactory.core.mining.rig.RigPartBlock;
+import com.planetaryfactory.core.mining.rig.RigTier;
 import com.planetaryfactory.core.ore.OreBlock;
 import com.planetaryfactory.core.ore.OreResource;
 import com.planetaryfactory.core.smelting.FurnaceBlock;
@@ -83,6 +86,22 @@ public final class PFBlocks {
         }
     }
 
+    /**
+     * The two rigs' anchors, and the parts that surround them (#192, ADR-0043). One anchor and one
+     * part block per tier, the way the furnace and pole ladders are one class per tier -- the
+     * anchor holds the block entity and every part forwards a break to it.
+     */
+    private static final Map<RigTier, DeferredHolder<Block, RigBlock>> RIGS = new EnumMap<>(RigTier.class);
+    private static final Map<RigTier, DeferredHolder<Block, RigPartBlock>> RIG_PARTS =
+            new EnumMap<>(RigTier.class);
+
+    static {
+        for (RigTier tier : RigTier.values()) {
+            RIGS.put(tier, BLOCKS.register(tier.blockName(), () -> new RigBlock(tier)));
+            RIG_PARTS.put(tier, BLOCKS.register(tier.partBlockName(), () -> new RigPartBlock(tier)));
+        }
+    }
+
     private PFBlocks() {
     }
 
@@ -106,6 +125,24 @@ public final class PFBlocks {
     /** The three furnace blocks, for the block entity type that serves all of them. */
     public static Set<Block> furnaceBlocks() {
         return FURNACES.values().stream().map(DeferredHolder::get).collect(Collectors.toUnmodifiableSet());
+    }
+
+    public static DeferredHolder<Block, RigBlock> rig(RigTier tier) {
+        return RIGS.get(tier);
+    }
+
+    public static DeferredHolder<Block, RigPartBlock> rigPart(RigTier tier) {
+        return RIG_PARTS.get(tier);
+    }
+
+    /** Both rigs' anchor blocks, for the block entity type that serves both. */
+    public static Set<Block> rigBlocks() {
+        return RIGS.values().stream().map(DeferredHolder::get).collect(Collectors.toUnmodifiableSet());
+    }
+
+    /** Both rigs' part blocks, for the block entity type that serves both. */
+    public static Set<Block> rigPartBlocks() {
+        return RIG_PARTS.values().stream().map(DeferredHolder::get).collect(Collectors.toUnmodifiableSet());
     }
 
     static void register(IEventBus modBus) {
