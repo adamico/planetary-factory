@@ -118,7 +118,9 @@ public final class OreMining {
         OreDelta.Draw draw = delta.draw(pos.asLong(), initial);
         level.getChunk(pos).setUnsaved(true);
 
-        LOGGER.info("ore draw: {} at {}, initial={}, paid={}, remaining={}, exhausted={}",
+        // debug, not info: this was a hand break's line, one per player gesture. A running rig
+        // draws every few ticks and several rigs would make this the loudest thing in the log.
+        LOGGER.debug("ore draw: {} at {}, initial={}, paid={}, remaining={}, exhausted={}",
                 ore.resource().key(), pos, initial, draw.paid(), draw.remaining(), draw.exhausted());
         if (draw.exhausted()) {
             // The hole argument is served by the stages and by the patch visibly shrinking; a

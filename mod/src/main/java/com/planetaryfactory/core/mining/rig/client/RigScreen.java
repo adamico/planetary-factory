@@ -27,9 +27,9 @@ public class RigScreen extends AbstractContainerScreen<RigMenu> {
     private static final ResourceLocation BURN_PROGRESS =
             ResourceLocation.withDefaultNamespace("container/furnace/burn_progress");
 
-    private static final int ENERGY_FULL = 0xFFFFD84D;
-    private static final int ENERGY_EMPTY = 0xFF3A3A3A;
-    private static final int ENERGY_BORDER = 0xFF373737;
+    private static final int FUEL_FULL = 0xFFFFD84D;
+    private static final int FUEL_EMPTY = 0xFF3A3A3A;
+    private static final int FUEL_BORDER = 0xFF373737;
     private static final int PANEL = 0xFFC6C6C6;
 
     /** The gauge, screen-relative, so the draw and the hover cannot drift apart. */
@@ -67,10 +67,10 @@ public class RigScreen extends AbstractContainerScreen<RigMenu> {
             int barLeft = left + BAR_X;
             int barTop = top + BAR_Y;
             graphics.fill(barLeft - 1, barTop - 1, barLeft + BAR_WIDTH + 1, barTop + BAR_HEIGHT + 1,
-                    ENERGY_BORDER);
-            graphics.fill(barLeft, barTop, barLeft + BAR_WIDTH, barTop + BAR_HEIGHT, ENERGY_EMPTY);
+                    FUEL_BORDER);
+            graphics.fill(barLeft, barTop, barLeft + BAR_WIDTH, barTop + BAR_HEIGHT, FUEL_EMPTY);
             if (filled > 0) {
-                graphics.fill(barLeft, barTop, barLeft + filled, barTop + BAR_HEIGHT, ENERGY_FULL);
+                graphics.fill(barLeft, barTop, barLeft + filled, barTop + BAR_HEIGHT, FUEL_FULL);
             }
         }
 
