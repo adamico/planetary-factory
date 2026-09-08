@@ -99,8 +99,13 @@ public class RigBlockEntity extends BlockEntity implements Container, MenuProvid
      * tick already computes this and then throws it away, so it is remembered here rather than
      * recomputed by whatever asks -- the search walks the whole area and is the tick's own work,
      * not a getter's.
+     *
+     * <p>Starts <b>true</b>, and that direction is load-bearing: a rig read back off disk has not
+     * ticked yet, and a false start would put "nothing left to mine" on a freshly loaded rig
+     * standing on a full patch -- the exact misreading this line exists to prevent. One tick later
+     * it is the truth either way.
      */
-    private boolean hasOre;
+    private boolean hasOre = true;
 
     private final ContainerData data = new ContainerData() {
         @Override
@@ -182,6 +187,14 @@ public class RigBlockEntity extends BlockEntity implements Container, MenuProvid
             // stall clears the moment the faced tile takes what is banked.
             if (cycle.idle(hasOre)) {
                 setChanged();
+            }
+            if (!hasOre) {
+                // Nothing to scale a gauge to any more. Progress was just thrown away with the
+                // block it was aimed at, and a duration left behind would hold the bar at the last
+                // operation's percentage forever -- a rig on an exhausted patch would read as one
+                // frozen mid-mine (#199). A blocked-output stall keeps its duration, because there
+                // the progress really is being held.
+                duration = 0;
             }
             push(server);
             return;
@@ -335,8 +348,8 @@ public class RigBlockEntity extends BlockEntity implements Container, MenuProvid
 
     /**
      * Whether the rig's area still holds anything to mine, as of its last tick (#199). A rig that
-     * has never ticked answers {@code false}, which is the safe direction: it is stated on the HUD
-     * only alongside a still rig, and one tick later it is the truth.
+     * has not ticked yet answers {@code true}, so a freshly loaded rig is never accused of standing
+     * on nothing; one tick later it is the truth.
      */
     public boolean hasOre() {
         return hasOre;

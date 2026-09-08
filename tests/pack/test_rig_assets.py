@@ -135,8 +135,10 @@ JADE_PLUGIN = ROOT / "mod/src/main/java/com/planetaryfactory/core/compat/RigJade
 
 # `Component.translatable("tooltip.planetaryfactory.rig.jade.no_ore"` -- every key the HUD plugin
 # asks for, read out of the plugin rather than typed here, so a line added to the tooltip without
-# its string fails this check instead of shipping a raw key onto the crosshair.
-JADE_KEY_RE = re.compile(r'translatable\(\s*"(tooltip\.planetaryfactory\.rig\.jade\.[a-z_.]+)"')
+# its string fails this check instead of shipping a raw key onto the crosshair. Deliberately any
+# `planetaryfactory` key and not just the `rig.jade.` ones: a line that reuses the rig screen's own
+# strings is exactly as unchecked, and anchoring on the infix would wave it through.
+JADE_KEY_RE = re.compile(r'translatable\(\s*"([a-z_.]*planetaryfactory[a-z_.]+)"')
 
 
 def check_jade_lang(lang, failures):

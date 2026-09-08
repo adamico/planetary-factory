@@ -149,8 +149,14 @@ public class RigJadePlugin implements IWailaPlugin {
         if (!data.contains(BUFFER_ITEM)) {
             return elements.text(Component.translatable("tooltip.planetaryfactory.rig.jade.empty"));
         }
+        // The buffer names its item by string, so the id has to be resolved here rather than read
+        // off a saved stack. An id this client cannot resolve is air, and `elements.item` on an
+        // empty stack draws a blank -- which is the one thing this method promises not to do.
         Item item = BuiltInRegistries.ITEM.get(ResourceLocation.parse(data.getString(BUFFER_ITEM)));
-        return elements.item(new ItemStack(item, data.getInt(BUFFER_COUNT)));
+        ItemStack banked = new ItemStack(item, data.getInt(BUFFER_COUNT));
+        return banked.isEmpty()
+                ? elements.text(Component.translatable("tooltip.planetaryfactory.rig.jade.empty"))
+                : elements.item(banked);
     }
 
     private static Component progress(CompoundTag data) {
