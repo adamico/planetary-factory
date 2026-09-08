@@ -17,7 +17,12 @@ import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.item.ItemStack;
+import com.planetaryfactory.core.network.FuelTablePacket;
+import com.planetaryfactory.core.network.PFNetwork;
+
+import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
+import net.neoforged.neoforge.event.OnDatapackSyncEvent;
 import org.slf4j.Logger;
 
 /**
@@ -32,6 +37,12 @@ import org.slf4j.Logger;
  * another mod to use, and a foreign file landing in the pack's default-deny table would be the one
  * kind of surprise the table exists to prevent.
  *
+ * <p><b>The client gets the table too.</b> A data pack is server truth and never reaches a client
+ * on its own, so the rows are sent on datapack sync -- login and {@code /reload}, the same two
+ * moments the table can change -- the way the Assembler's hand-recipe set is (ADR-0038). Without
+ * it an item's fuel tooltip would be right in single-player and blank on a server, which is the
+ * worse of the two failures because only one of them is ever noticed.
+ *
  * <p>The arithmetic and the default-deny rule are {@link FuelTable}'s, which has no Minecraft on
  * it; this class only turns a {@link ItemStack} into the two strings that class asks for.
  */
@@ -40,14 +51,47 @@ public final class PFFuel {
     private static final Logger LOG = LogUtils.getLogger();
     private static final Gson GSON = new Gson();
 
-    /** Replaced wholesale on reload; read from the server thread. */
+    /** Replaced wholesale on reload or on sync; read from both threads. */
     private static volatile FuelTable table = FuelTable.EMPTY;
+
+    /** The same rows, kept flat so the sync packet does not have to take the table apart. */
+    private static volatile List<FuelRow> rows = List.of();
 
     private PFFuel() {
     }
 
     public static void register(AddReloadListenerEvent event) {
         event.addListener(new Listener());
+    }
+
+    /** Login and {@code /reload}: the two moments the table can differ from what a client holds. */
+    public static void onDatapackSync(OnDatapackSyncEvent event) {
+        if (event.getPlayer() != null) {
+            send(event.getPlayer());
+        } else {
+            event.getPlayerList().getPlayers().forEach(PFFuel::send);
+        }
+    }
+
+    private static void send(ServerPlayer player) {
+        PFNetwork.sendToPlayer(player, new FuelTablePacket(rows));
+    }
+
+    /**
+     * Takes a whole table, from the reload listener or from the packet.
+     *
+     * <p>One holder for both sides. In single-player the two arrive at the same static with the
+     * same content, and a second client-side holder would be a copy to keep in step for no
+     * mechanic in return.
+     */
+    public static void accept(List<FuelRow> loaded) {
+        rows = List.copyOf(loaded);
+        table = new FuelTable(rows);
+    }
+
+    /** What a burner spends per tick, for the tooltip that turns joules into seconds. */
+    public static long joulesPerTick() {
+        return FurnaceTier.STONE.joulesPerTick();
     }
 
     /** What one of this stack is worth as furnace fuel, or 0 if it is not fuel at all. */
@@ -93,7 +137,7 @@ public final class PFFuel {
                         GsonHelper.getAsLong(body, "fuel_value"),
                         GsonHelper.getAsString(body, "fuel_category")));
             }
-            table = new FuelTable(rows);
+            accept(rows);
             LOG.info("Loaded {} furnace fuels from {} rows", table.size(), rows.size());
         }
     }

@@ -57,5 +57,7 @@
   "block.planetaryfactory.stone_ore": "Stone Patch",
   "tooltip.planetaryfactory.ore.jade.amount": "Ore left: %s of %s",
   "emi.category.planetaryfactory.smelting": "Smelting",
-  "emi.planetaryfactory.smelting.seconds": "%ss"
+  "emi.planetaryfactory.smelting.seconds": "%ss",
+  "tooltip.planetaryfactory.fuel.joules": "Fuel: %s J",
+  "tooltip.planetaryfactory.fuel.burn": "%ss of furnace work"
 }

@@ -6,6 +6,7 @@ import com.planetaryfactory.core.crafting.client.InventoryGridBlank;
 import com.planetaryfactory.core.network.PFNetwork;
 import com.planetaryfactory.core.recipes.PFRecipes;
 import com.planetaryfactory.core.smelting.PFFuel;
+import com.planetaryfactory.core.smelting.client.FuelTooltip;
 import com.planetaryfactory.core.smelting.client.FurnaceClient;
 import com.planetaryfactory.core.ore.OreMining;
 import com.planetaryfactory.core.worldgen.PFWorldgen;
@@ -53,6 +54,7 @@ public final class PlanetaryFactoryCore {
         // What burns is datapack JSON generated from Factorio's own fuel values (ADR-0047), so
         // it reloads with the rest rather than being a table compiled into this jar.
         NeoForge.EVENT_BUS.addListener(PFFuel::register);
+        NeoForge.EVENT_BUS.addListener(PFFuel::onDatapackSync);
         // The Personal Assembler's queue runs whether or not its panel is open (ADR-0038).
         // One break gesture draws one unit, and the block stands until it is spent (ADR-0041).
         NeoForge.EVENT_BUS.addListener(OreMining::onBreak);
@@ -63,6 +65,9 @@ public final class PlanetaryFactoryCore {
         if (FMLEnvironment.dist == Dist.CLIENT) {
             AssemblerClient.register(modBus);
             FurnaceClient.register(modBus);
+            // What an item is worth as fuel, on its own tooltip: the fuel table is default-deny,
+            // so vanilla's intuitions about what burns are wrong in both directions.
+            FuelTooltip.register();
             // The 2x2 grid is gone (#140); what is left of it on the inventory texture goes too.
             InventoryGridBlank.register();
         }

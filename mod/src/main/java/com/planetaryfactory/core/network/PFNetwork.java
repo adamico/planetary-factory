@@ -10,7 +10,7 @@ import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 /**
  * The Personal Assembler's round trip (ADR-0038, #160).
  *
- * <p>Five of the seven packets go client-to-server, which is the shape the ADR demands: the plan is
+ * <p>Five of the eight packets go client-to-server, which is the shape the ADR demands: the plan is
  * server truth, so the client asks and the server decides. The other two go back: the queue's
  * display view, and the set of recipe ids the Assembler can plan at all -- and nothing about a plan
  * crosses in that direction except what is drawn.
@@ -22,7 +22,7 @@ import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 public final class PFNetwork {
 
     /** Bumped when a payload's shape changes; clients on the old shape are refused, not confused. */
-    private static final String VERSION = "2";
+    private static final String VERSION = "3";
 
     private PFNetwork() {
     }
@@ -36,6 +36,9 @@ public final class PFNetwork {
         registrar.playToServer(PlanCancelPacket.TYPE, PlanCancelPacket.STREAM_CODEC, PlanCancelPacket::handle);
         registrar.playToClient(QueueSyncPacket.TYPE, QueueSyncPacket.STREAM_CODEC, QueueSyncPacket::handle);
         registrar.playToClient(HandRecipeSetPacket.TYPE, HandRecipeSetPacket.STREAM_CODEC, HandRecipeSetPacket::handle);
+        // Not the Assembler's: a data pack is server truth, and the fuel table has to reach a
+        // client for an item to say what it is worth (ADR-0047).
+        registrar.playToClient(FuelTablePacket.TYPE, FuelTablePacket.STREAM_CODEC, FuelTablePacket::handle);
     }
 
     public static void sendToPlayer(ServerPlayer player, CustomPacketPayload payload) {

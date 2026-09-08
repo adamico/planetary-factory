@@ -206,7 +206,11 @@ def main():
                       .read_text(encoding="utf-8"))
     for key in ("tooltip.planetaryfactory.furnace.fuel",
                 "tooltip.planetaryfactory.furnace.fuel.seconds",
-                "tooltip.planetaryfactory.furnace.fuel.out"):
+                "tooltip.planetaryfactory.furnace.fuel.out",
+                # The item tooltip is where a default-deny table stops being invisible: vanilla's
+                # intuitions about what burns are wrong in both directions here.
+                "tooltip.planetaryfactory.fuel.joules",
+                "tooltip.planetaryfactory.fuel.burn"):
         if key not in lang:
             failures.append(f"{key} is not in the lang file, so the burner's hover reads as its key")
 
