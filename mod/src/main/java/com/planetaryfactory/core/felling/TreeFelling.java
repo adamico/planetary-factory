@@ -17,6 +17,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent.PlayerLoggedOutEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
 
 /**
@@ -51,8 +52,16 @@ public final class TreeFelling {
             Registries.BLOCK,
             ResourceLocation.fromNamespaceAndPath(PlanetaryFactoryCore.NAMESPACE, "fellable"));
 
-    /** One survey per player, held only while they keep looking at the same block. */
-    private static final Map<UUID, Survey> SURVEYS = new ConcurrentHashMap<>();
+    /**
+     * One survey per player, held only while they keep looking at the same block.
+     *
+     * <p>Keyed by side as well as by player, because in single-player the client and the server run
+     * in one process with one {@link UUID}: the break-speed listener runs on both, and a single
+     * entry would have each side overwriting the other's. They compute the same shape today, so the
+     * symptom would be churn rather than a wrong answer -- which is exactly the kind of thing that
+     * stops being true quietly.
+     */
+    private static final Map<Key, Survey> SURVEYS = new ConcurrentHashMap<>();
 
     private TreeFelling() {
     }
@@ -104,7 +113,7 @@ public final class TreeFelling {
         }
 
         FellTree tree = surveyFor(player, base);
-        SURVEYS.remove(player.getUUID());
+        SURVEYS.remove(Key.of(player));
         if (!tree.fells()) {
             return;
         }
@@ -140,7 +149,8 @@ public final class TreeFelling {
 
     /** The survey for this player at this block, computed once and reused while they stay on it. */
     private static FellTree surveyFor(Player player, BlockPos pos) {
-        Survey cached = SURVEYS.get(player.getUUID());
+        Key key = Key.of(player);
+        Survey cached = SURVEYS.get(key);
         if (cached != null && cached.pos().equals(pos)) {
             return cached.tree();
         }
@@ -148,15 +158,23 @@ public final class TreeFelling {
                 new LevelTreeSurvey(player.level()),
                 LevelTreeSurvey.toFellPos(pos),
                 FellBounds.DEFAULT);
-        SURVEYS.put(player.getUUID(), new Survey(pos, tree));
+        SURVEYS.put(key, new Survey(pos, tree));
         return tree;
     }
 
     /** Forget a player's survey when they leave, so the map does not outlive the session. */
-    public static void onLogout(net.neoforged.neoforge.event.entity.player.PlayerEvent.PlayerLoggedOutEvent event) {
-        SURVEYS.remove(event.getEntity().getUUID());
+    public static void onLogout(PlayerLoggedOutEvent event) {
+        SURVEYS.remove(Key.of(event.getEntity()));
     }
 
     private record Survey(BlockPos pos, FellTree tree) {
+    }
+
+    /** Who is looking, and on which side. */
+    private record Key(UUID player, boolean client) {
+
+        static Key of(Player player) {
+            return new Key(player.getUUID(), player.level().isClientSide());
+        }
     }
 }

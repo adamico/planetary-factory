@@ -32,7 +32,31 @@ import java.util.Set;
  */
 public final class TreeShape {
 
+    /**
+     * The 26 offsets to the blocks touching one block, built once.
+     *
+     * <p>Trees branch diagonally, so a six-way fill drops limbs. The list is constant and the fill
+     * walks it for every block it visits, which is the one place in here where allocating would be
+     * felt: a survey runs on the break-speed tick.
+     */
+    private static final int[][] AROUND = around();
+
     private TreeShape() {
+    }
+
+    private static int[][] around() {
+        int[][] offsets = new int[26][];
+        int next = 0;
+        for (int dx = -1; dx <= 1; dx++) {
+            for (int dy = -1; dy <= 1; dy++) {
+                for (int dz = -1; dz <= 1; dz++) {
+                    if (dx != 0 || dy != 0 || dz != 0) {
+                        offsets[next++] = new int[] {dx, dy, dz};
+                    }
+                }
+            }
+        }
+        return offsets;
     }
 
     /**
@@ -73,7 +97,8 @@ public final class TreeShape {
      */
     private static boolean grew(TreeSurvey world, FellPos base) {
         for (FellPos trunk = base; world.isLog(trunk); trunk = trunk.above()) {
-            for (FellPos neighbour : around(trunk)) {
+            for (int[] step : AROUND) {
+                FellPos neighbour = trunk.offset(step[0], step[1], step[2]);
                 if (world.isLeaf(neighbour) && world.isNaturalLeaf(neighbour)) {
                     return true;
                 }
@@ -94,7 +119,9 @@ public final class TreeShape {
         queue.add(base);
 
         while (!queue.isEmpty()) {
-            for (FellPos neighbour : around(queue.poll())) {
+            FellPos log = queue.poll();
+            for (int[] step : AROUND) {
+                FellPos neighbour = log.offset(step[0], step[1], step[2]);
                 if (logs.contains(neighbour) || !world.isLog(neighbour)) {
                     continue;
                 }
@@ -122,7 +149,8 @@ public final class TreeShape {
         Deque<FellPos> queue = new ArrayDeque<>();
 
         for (FellPos log : logs) {
-            for (FellPos neighbour : around(log)) {
+            for (int[] step : AROUND) {
+                FellPos neighbour = log.offset(step[0], step[1], step[2]);
                 if (accept(world, neighbour, base, bounds, budget, leaves, 0)) {
                     queue.add(neighbour);
                 }
@@ -131,7 +159,8 @@ public final class TreeShape {
         while (!queue.isEmpty()) {
             FellPos leaf = queue.poll();
             int distance = world.leafDistance(leaf);
-            for (FellPos neighbour : around(leaf)) {
+            for (int[] step : AROUND) {
+                FellPos neighbour = leaf.offset(step[0], step[1], step[2]);
                 if (accept(world, neighbour, base, bounds, budget, leaves, distance)) {
                     queue.add(neighbour);
                 }
@@ -168,21 +197,6 @@ public final class TreeShape {
                 && up < bounds.maxHeight()
                 && Math.abs(pos.x() - base.x()) <= bounds.maxRadius()
                 && Math.abs(pos.z() - base.z()) <= bounds.maxRadius();
-    }
-
-    /** The 26 blocks touching this one. Trees branch diagonally; a six-way fill drops limbs. */
-    private static Iterable<FellPos> around(FellPos pos) {
-        Set<FellPos> neighbours = new LinkedHashSet<>();
-        for (int dx = -1; dx <= 1; dx++) {
-            for (int dy = -1; dy <= 1; dy++) {
-                for (int dz = -1; dz <= 1; dz++) {
-                    if (dx != 0 || dy != 0 || dz != 0) {
-                        neighbours.add(pos.offset(dx, dy, dz));
-                    }
-                }
-            }
-        }
-        return neighbours;
     }
 
     /** The work cap, and whether it was ever the reason something was left standing. */
