@@ -15,6 +15,11 @@ what separates the hand from an assembling machine, is **chain-crafting**: reque
 ingredients you lack queues the sub-crafts automatically. No document in this repo recorded that, and
 a flat queue silently drops it.
 
+> **Amended by [ADR-0052](0052-an-assembler-item-is-its-id-and-its-component-patch.md).** The item
+> identity this ADR's queue, resolver and codecs are built on is no longer the bare registry id: it
+> is the id together with the item's data component patch, still encoded as one string and still
+> Minecraft-free. Read 0052 before changing anything that names an item.
+
 ## The rule
 
 **The Personal Assembler resolves a Crafting Plan before it crafts anything.** The interaction is

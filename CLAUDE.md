@@ -130,9 +130,15 @@ behind it. `AssemblerCodecsTest` is the data attachment's round trip, which ADR-
 name — a codec that drops a field does not crash, it returns a queue that silently emptied over a
 logout. `PlanResolverTest` is the other half: chain-crafting, an intermediate already held being used
 rather than remade, `Missing` against `Locked`, and `all` as the largest count the inventory covers.
+`ItemKeyTest` is the identity itself (ADR-0052): an item is its registry id plus its data component
+patch, encoded as one string, so an empty patch encodes to the bare id and every existing key is
+unchanged, two differently-ordered patches encode identically, and matching is exact string equality
+— a deliberate divergence from `neoforge:components`' subset match, without which the resolver would
+have to compare `ItemStack`s and stop being a unit test. It is what lets Researchd's four science
+packs, which are one item told apart by a component, be four items to the queue.
 `PlanToQueueTest` is the seam between them, and the one neither side can assert alone — a plan the
 resolver calls complete must be one the queue can run to the end, because a step the buffer cannot
-feed throws *after* the reservation was taken. All four are
+feed throws *after* the reservation was taken. All five are
 `./gradlew :planetaryfactory_core:test` with no game launch: the queue and the resolver name items by
 string and the codec is DataFixerUpper's rather than Minecraft's, which is what keeps them checkable.
 
