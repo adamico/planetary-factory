@@ -25,6 +25,14 @@ numbers the decision was made on:
     is ADR-0039's amendment and stated here as a ratio rather than as a second number to
     keep in step. `steel-axe`'s modifier is a *fraction* -- `base * (1 + modifier)`, so +100%
     and not +1 -- which is what makes `PickTier.STEEL`'s 1.0 the researched speed.
+  - **The character walks, and the opening is still crossable in Factorio's time.**
+    `running_speed` is read off the same `character` prototype `mining_speed` comes from, and
+    a regenerated corpus that drops it fails here rather than silently emitting nothing. The
+    row it decides is #207's, which is `adapted, no change` on one arithmetic claim: Terra's
+    furthest starting field, walked at Minecraft's speed, is no further in *time* than
+    Factorio's `starting_resource_placement_radius` at the engineer's. Both halves are read
+    -- the speeds from the corpus, `DISTANCES` out of `scripts/build-terra-start.py` -- so
+    moving the fields out or the radius in fails the check that the ledger row rests on.
   - **The stage ratios are material-independent, to rounding.** Iron, copper, coal and
     stone share one `stage_counts` list outright. Uranium's is that list scaled by about
     2/3 and then *rounded to two or three figures* -- its last rung is 50 where an exact
@@ -50,6 +58,17 @@ STARTING_PATCH = {
     "stone": True,
     "uranium-ore": False,
 }
+
+# Minecraft's own walking speed, in blocks per second. It is a game constant with no dump to
+# read it from, which is why it is stated here and is the only number in the movement
+# comparison that is not extracted. Sprinting (5.612) is deliberately not used: it burns hunger
+# and #183 has not decided whether hunger stays in the pack.
+MINECRAFT_WALK_SPEED = 4.317
+
+# Where `DISTANCES` is authored, and the pattern that reads it. The check compares Terra's
+# furthest starting field against Factorio's starting radius in seconds, not in blocks.
+TERRA_START = "scripts/build-terra-start.py"
+DISTANCES_PATTERN = re.compile(r"^DISTANCES\s*=\s*\[([^\]]*)\]", re.M)
 
 # ADR-0041's table, which is quoted in prose and so must not drift silently.
 STARTING_TOTALS = {
@@ -206,6 +225,39 @@ def main():
     if "regular_density_at" not in data["outfield_law"]:
         failures.append("no regular_density_at -- the outfield law did not come across")
 
+    movement = data.get("character_movement") or {}
+    running = movement.get("running_speed")
+    ticks = movement.get("ticks_per_second")
+    per_second = movement.get("running_speed_per_second")
+    radius = data["constants"].get("starting_resource_placement_radius")
+    if not running:
+        failures.append(
+            "the corpus carries no character running_speed -- #207's row rests on it and a "
+            "regenerated dump has dropped it"
+        )
+    elif not ticks or abs(per_second - running * ticks) > 1e-9:
+        failures.append(
+            f"running_speed {running} tiles/tick at {ticks} ticks/s is {running * ticks} "
+            f"tiles/s, and the corpus says {per_second}"
+        )
+    elif radius:
+        source = (ROOT / TERRA_START).read_text()
+        match = DISTANCES_PATTERN.search(source)
+        if not match:
+            failures.append(f"{TERRA_START} states no DISTANCES -- the pack half is unreadable")
+        else:
+            furthest = max(float(part) for part in match.group(1).split(","))
+            terra_seconds = furthest / MINECRAFT_WALK_SPEED
+            factorio_seconds = radius / per_second
+            if terra_seconds > factorio_seconds:
+                failures.append(
+                    f"Terra's furthest starting field is {furthest:.0f} blocks, {terra_seconds:.1f}s "
+                    f"at {MINECRAFT_WALK_SPEED} blocks/s, against Factorio's {radius:.0f} tiles at "
+                    f"{per_second} tiles/s = {factorio_seconds:.1f}s -- the opening now costs more "
+                    "walking than Factorio's, which is the claim `Character movement on foot` is "
+                    "`adapted, no change` on"
+                )
+
     for index, failure in enumerate(failures, 1):
         print(f"FAIL {index}: {failure}")
     if failures:
@@ -213,7 +265,9 @@ def main():
     print(
         f"ok   {len(resources)} resources, {len(staged)} with stages, one distance law "
         f"flat within 1600 tiles; totals re-derive from {formula}; PickTier {bare}/{researched} "
-        f"matches the character"
+        f"matches the character; the opening crosses in "
+        f"{max(float(part) for part in DISTANCES_PATTERN.search((ROOT / TERRA_START).read_text()).group(1).split(',')) / MINECRAFT_WALK_SPEED:.1f}s "
+        f"against Factorio's {data['constants']['starting_resource_placement_radius'] / per_second:.1f}s"
     )
     return 0
 

@@ -24,6 +24,11 @@ Three things are read, and nothing is decided:
     from the wiki, not extracted*, because `data/factorio/` held no resource dump and so
     they could not be checked against the repo the way the technology tree can. It holds
     one now, and `tests/factorio/test_resource_extract.py` asserts `PickTier` against them.
+  - **The character's walking speed.** `running_speed` sits beside `mining_speed` in the same
+    `character` prototype, in tiles per tick. It is here because the starting area's traversal
+    budget has two halves and both were unextracted (#207): Factorio's engineer's speed against
+    Minecraft's, and Factorio's `starting_resource_placement_radius` against Terra's own
+    distances. On foot only -- vehicles are #121.
   - **The stage thresholds.** `stage_counts` is what Factorio renders its eight sprite
     stages against. They are extracted as *ratios of each resource's own first rung*,
     because that is the only form usable against blocks holding a thousand units rather
@@ -76,6 +81,12 @@ PATCH_FUNCTION = "resource_autoplace_all_patches"
 # existence but not their default values, so this is the one number here that is stated
 # rather than read -- and it is a map setting, not a property of any resource.
 DEFAULT_CONTROL = 1.0
+
+# Factorio's tick rate. `running_speed` is tiles *per tick*, so this is what turns it into the
+# tiles per second a Minecraft blocks-per-second figure can be set beside. It is an engine
+# constant rather than a property of any prototype, which is why it is stated here and is the
+# only number in the movement extraction that is not read.
+TICKS_PER_SECOND = 60
 
 # The local expressions worth carrying whole: the outfield law's three radii, in tiles,
 # which are blocks one-for-one.
@@ -186,6 +197,35 @@ def hand_mining(dump):
     }
 
 
+def character_movement(dump):
+    """The character's walking speed, read off the same prototype `mining_speed` comes from.
+
+    `running_speed` is a sibling key of `mining_speed` in the `character` prototype and carries
+    tiles per tick; at 60 ticks a second that is the tiles per second a Minecraft walking speed
+    is compared against (#207). A Factorio tile and a Minecraft block are both one metre, so the
+    comparison needs no conversion beyond the tick rate.
+
+    Base movement only. `character-running-speed` modifiers are collected so that a research
+    granting one would appear here rather than be assumed absent -- in the base game and Space
+    Age the bonuses come from equipment (exoskeletons), not technology, and the list is empty.
+    Vehicles are out of scope: that is Personal transport, #121.
+    """
+    character = (dump.get("character") or {}).get("character") or {}
+    speed = character.get("running_speed")
+    modifiers = sorted(
+        name
+        for name, technology in (dump.get("technology") or {}).items()
+        for effect in (technology.get("effects") or [])
+        if effect.get("type") == "character-running-speed"
+    )
+    return {
+        "running_speed": speed,
+        "ticks_per_second": TICKS_PER_SECOND,
+        "running_speed_per_second": None if speed is None else speed * TICKS_PER_SECOND,
+        "running_speed_technologies": modifiers,
+    }
+
+
 def extract(dump):
     function = (dump.get("noise-function") or {}).get(PATCH_FUNCTION)
     if not function:
@@ -254,6 +294,7 @@ def extract(dump):
             for name, body in sorted(functions.items())
         },
         "hand_mining": hand_mining(dump),
+        "character_movement": character_movement(dump),
         "resources": resources,
         "skipped": skipped,
     }, laws
@@ -326,6 +367,11 @@ def main():
         f"hand mining     character {out['hand_mining']['character_mining_speed']}, "
         f"steel-axe +{out['hand_mining']['steel_axe_modifier']:.0%} "
         f"-> {out['hand_mining']['character_mining_speed_researched']}"
+    )
+    movement = out["character_movement"]
+    print(
+        f"movement        character {movement['running_speed']} tiles/tick "
+        f"-> {movement['running_speed_per_second']} tiles/s"
     )
     print(f"wrote      {args.out.relative_to(REPO)}")
     print(f"wrote      {args.mod_out.relative_to(REPO)} ({len(slice_['resources'])} pack ores)")

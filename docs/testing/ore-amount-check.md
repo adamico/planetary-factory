@@ -27,6 +27,15 @@ The same check reads `PickTier.java` and asserts the pack's `MINING_TIME` is hal
 reading `character-mining-speed` as an addend: Factorio applies the modifier as `base * (1 +
 modifier)`, so steel is 1.0 rather than 1.5. The value was already right; its prose was not.
 
+The same check also holds the starting area's **traversal budget** (#207), which rides here because
+it reads the same corpus file. `character_movement.running_speed` is extracted off the same
+`character` prototype `mining_speed` comes from, and the check asserts Terra's furthest starting
+field — `DISTANCES` read out of `scripts/build-terra-start.py` — is no further *in seconds* at
+Minecraft's walking speed than Factorio's `starting_resource_placement_radius` is at the engineer's.
+That is the one arithmetic claim the `Character movement on foot` ledger row's `adapted, no change`
+rests on, so moving the fields out, or a regenerated dump dropping the speed, fails rather than
+leaving the row asserting something nobody re-derived.
+
 ## The mechanism pays out what the block holds
 
 `mod/src/test/java/com/planetaryfactory/core/ore/` under `./gradlew :planetaryfactory_core:test`.

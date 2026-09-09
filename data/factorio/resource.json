@@ -48,6 +48,12 @@
     "steel_axe_modifier": 1,
     "character_mining_speed_researched": 1.0
   },
+  "character_movement": {
+    "running_speed": 0.15,
+    "ticks_per_second": 60,
+    "running_speed_per_second": 9.0,
+    "running_speed_technologies": []
+  },
   "resources": [
     {
       "name": "coal",

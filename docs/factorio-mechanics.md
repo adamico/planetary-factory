@@ -72,6 +72,7 @@ text and commits to no jar; **`pack` is admissible as a candidate only with a na
 | [Research and science packs](#research-and-science-packs) | `planned` | all bodies |
 | [The technology tree](#the-technology-tree) | `shipped` | pack-wide |
 | [Rocket silo and rocket launch](#rocket-silo-and-rocket-launch) | `planned` | all bodies |
+| [Character movement on foot](#character-movement-on-foot) | `adapted` | all bodies |
 | [Personal transport](#personal-transport) | `blocked` | — |
 | [Terrain modification](#terrain-modification) | `adapted` | all bodies |
 | [Repair and entity damage](#repair-and-entity-damage) | `excluded` | — |
@@ -884,6 +885,47 @@ Sub-rules:
   `docs/gdd.md` §4 makes it explicit that the launch is the payoff and is never simulated.
 - **Rocket parts are produced continuously and buffer in the silo** — `unargued`, no verdict.
 - **Cargo landing pad** — `planned`, the post-launch arc.
+
+### Character movement on foot
+
+- **verdict**: `adapted`
+- **where**: all bodies
+- **via**: Minecraft's own walk, against Terra's starting-area distances
+- **owner**: #207
+
+Base movement on foot only. Vehicles are [Personal transport](#personal-transport) and #121; the two
+do not collide.
+
+Factorio's engineer and Minecraft's player do not walk at the same speed, and the pack does not
+change that. The traversal budget has two halves, and both are extracted rather than felt:
+
+| | Factorio | Terra |
+| --- | --- | --- |
+| speed | `character.running_speed` 0.15 tiles/tick × 60 = **9.0 tiles/s** | Minecraft's walk **4.317 blocks/s** (sprint 5.612) |
+| furthest starting resource | `starting_resource_placement_radius` **150 tiles** | `DISTANCES` in `scripts/build-terra-start.py`, furthest field **62 blocks** |
+| time to cross the opening | 150 / 9.0 = **16.7 s** | 62 / 4.317 = **14.4 s** (nearest field 34 → 7.9 s) |
+
+A tile and a block are both one metre, so nothing is converted but the tick rate. The speed is read
+in `scripts/factorio-resource-extract.py`'s `character_movement()` into
+`data/factorio/resource.json` and asserted by `tests/factorio/test_resource_extract.py`; the radius
+is the corpus constant the same file already carried.
+
+**Both halves drifted, in opposite directions, and they cancel.** Terra's player walks at 48% of the
+engineer's speed and its furthest starting field sits at 41% of Factorio's starting radius, so the
+crossing that matters is *shorter* here — 14.4 s against 16.7 s. Matching Factorio's opening exactly
+at Minecraft's walk would put the furthest field at 72 blocks, further out than `DISTANCES` puts it.
+So: **no base speed is set, and `DISTANCES` does not move.** A flat global buff would also have spent
+Block Runner's concrete bonus ([Terrain modification](#terrain-modification)), which is `adapted`
+precisely so that a built surface is the thing that makes you faster.
+
+The playtest report that opened #207 stands as a report — the opening *feels* long — but the
+arithmetic says the cause is not distance or speed. Factorio lets you zoom out and see all three
+patches at once; Minecraft does not. That is legibility, and its surfaces are #116 (radar and surface
+indicators) and #158 (pole supply-area overlay), not movement.
+
+Sprinting is not counted above. It burns hunger, and #183 has not decided whether Minecraft's hunger
+mechanic stays in the pack at all; a budget that assumed sprinting would be load-bearing on an
+undecided mechanic.
 
 ### Personal transport
 
