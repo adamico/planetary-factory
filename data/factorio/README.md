@@ -35,6 +35,7 @@ JSON
 scripts/factorio-tech-extract.py
 scripts/factorio-recipe-extract.py
 scripts/factorio-machine-extract.py
+scripts/factorio-fluid-extract.py
 scripts/factorio-resource-extract.py
 scripts/factorio-fuel-extract.py
 python3 tests/factorio/test_tech_extract.py
@@ -51,10 +52,12 @@ The last pair is downstream of the extraction rather than part of it: `fuel.json
 onto `data/pack/item-map.json` into the table the mod loads (ADR-0047), so a re-extraction
 that moves a fuel has to be followed by a re-conversion or the game keeps the old table.
 
-All five extractors read the same dump, so a single `--dump-data` run feeds them. Order
-matters: the recipe extractor reads `technology.json`, and the machine extractor reads
-`recipe.json` for its scope. The resource extractor reads only the dump, and the fuel
-extractor reads `recipe.json` for a flag rather than for a scope -- see below.
+All six extractors read the same dump, so a single `--dump-data` run feeds them. Order
+matters: the recipe extractor reads `technology.json`, the machine extractor reads
+`recipe.json` for its scope, and the fluid extractor reads `machine.json` for its scope
+(the fluid names the boiler's own fluid boxes filter on -- see below). The resource
+extractor reads only the dump, and the fuel extractor reads `recipe.json` for a flag rather
+than for a scope -- see below.
 
 The dump lands in `~/Library/Application Support/factorio/script-output/data-raw-dump.json`. The
 extractor finds it and the Steam install by default; both are overridable with `--dump` and
@@ -150,6 +153,14 @@ is stale.
   `containers`, the fluid anchors for the 1 unit = 1 mB derivation: a storage tank holds
   25 000 units over 3×3 tiles, a pipe 100 over 1×1.
 
+  `pumps` — ADR-0050/#210's fourth prototype, alongside `drills`, `boilers` and
+  `generators` for the same reason: an offshore pump crafts nothing, so it is listed apart
+  from `machines` rather than inside it. Carries `pumping_speed` (per *Factorio tick*, not
+  per second — see the fluid extractor's note below), `energy_source` (`void`; the pump
+  draws no power, and the `energy_usage` sitting beside it in the corpus is a display
+  figure with no consumer, per ADR-0050), and its fluid box. Scope is the same
+  "its own item recipe is in `recipe.json`" rule as the rest of this file.
+
   `categories`, every recipe category in the game and every entity declaring it — the
   authority `data/pack/category-map.json`'s left-hand side is checked against.
   `hand-crafting` belongs to the character rather than to a machine, and `parameters` to
@@ -200,6 +211,22 @@ effect recording the rule that produced them.
 
   The denominator lives in `machine.json`, not here: ADR-0047 spends a fuel item's joules at
   the machine's own `energy_usage`, scaled by its burner `effectivity`.
+
+- **`fluid.json`** — the two thermal constants ADR-0050/#210's pump:boiler ratio needs, and
+  nothing else. One `fluids` array. **Scope is deliberately narrow**: only the fluids
+  `machine.json`'s boiler already declares in its own fluid boxes (`water` in, `steam`
+  out), read off that file rather than typed here, so a future boiler change widens the
+  scope with it instead of this file drifting from it. It is not a general fluid corpus —
+  widening to the dump's other 31 fluids would carry rows nothing reads.
+
+  Per fluid: `name`, `heat_capacity` in joules, `heat_capacity_raw` (Factorio's own
+  `0.2kJ`/`2kJ` string, kept the way `fuel.json` keeps `fuel_value_raw` so the check can
+  re-derive rather than trust the parse), and `default_temperature`.
+
+  **`water.heat_capacity` is a red herring.** It is `2kJ`, six times steam's `0.2kJ`, and it
+  is *not* the term the boiler's arithmetic reads — see ADR-0050's "the ratio, which is the
+  number that means something" and the trap comments in
+  `tests/factorio/test_resource_extract.py`.
 
 - **`resource.json`** — how much ore the ground holds (ADR-0041). Read from the dump's own
   `resource_autoplace_all_patches` rather than from map generation, because Factorio's

@@ -517,6 +517,26 @@
       "tile_height": 5
     }
   ],
+  "pumps": [
+    {
+      "name": "offshore-pump",
+      "type": "offshore-pump",
+      "pumping_speed": 20,
+      "energy_source": "void",
+      "fluid_boxes": [
+        {
+          "production_type": "output",
+          "volume": 100,
+          "filter": null,
+          "minimum_temperature": null,
+          "maximum_temperature": null,
+          "name": "fluid_box"
+        }
+      ],
+      "tile_width": 1,
+      "tile_height": 1
+    }
+  ],
   "categories": {
     "advanced-crafting": [
       "assembling-machine/assembling-machine-1",

@@ -86,6 +86,12 @@ DRILL_TYPE = "mining-drill"
 BOILER_TYPE = "boiler"
 GENERATOR_TYPE = "generator"
 
+# #210 adds the fourth: an offshore pump crafts nothing either, and carries
+# `pumping_speed` rather than a fluid box filter -- it draws whatever source fluid is
+# adjacent, which is ADR-0050's whole predicate (no minimum body, no biome test). It is
+# listed apart from `machines` for the same reason the other three are.
+PUMP_TYPE = "offshore-pump"
+
 # Factorio's default electric drain, from the engine rather than from any prototype: an
 # electric energy source with no `drain` set draws 1/30 of its `energy_usage` while idle.
 DEFAULT_DRAIN_FRACTION = 30
@@ -333,6 +339,37 @@ def extract_boilers(dump, scope):
     return boilers
 
 
+def extract_pumps(dump, scope):
+    """Offshore pumps. `pumping_speed` is per Factorio TICK, not per second.
+
+    ADR-0050 multiplies this by Factorio's own 60 ticks/s to reach mB/s. The trap: the
+    prototype's `20` *coincidentally* equals Minecraft's own tick rate (20 ticks/s) --
+    two unrelated numbers that happen to match -- so a reader who has Minecraft's 20 in
+    their head is tempted to treat `pumping_speed` as already-per-second and skip the
+    multiplication entirely, or to multiply by the wrong tick rate. The multiplication
+    itself belongs to the converter that reads this file, not to this extractor; it is
+    recorded here as a warning to whoever writes that converter next.
+    """
+    pumps = []
+    kind = PUMP_TYPE
+    for name, prototype in sorted((dump.get(kind) or {}).items()):
+        if name not in scope:
+            continue
+        width, height = footprint(prototype)
+        pumps.append(
+            {
+                "name": name,
+                "type": kind,
+                "pumping_speed": prototype.get("pumping_speed"),
+                "energy_source": (prototype.get("energy_source") or {}).get("type"),
+                "fluid_boxes": fluid_boxes(prototype, "fluid_box"),
+                "tile_width": width,
+                "tile_height": height,
+            }
+        )
+    return pumps
+
+
 def extract_generators(dump, scope):
     """Generators, and the one number of theirs Factorio does not state.
 
@@ -434,6 +471,7 @@ def main():
     drills = extract_drills(dump, scope)
     boilers = extract_boilers(dump, scope)
     generators = extract_generators(dump, scope)
+    pumps = extract_pumps(dump, scope)
     categories = extract_categories(dump)
 
     out = {
@@ -442,6 +480,7 @@ def main():
         "drills": drills,
         "boilers": boilers,
         "generators": generators,
+        "pumps": pumps,
         "categories": categories,
     }
     args.out.parent.mkdir(parents=True, exist_ok=True)
@@ -490,6 +529,9 @@ def main():
                 f"{b['filter']} >={b['minimum_temperature']}C" for b in generator["fluid_boxes"]
             )
         )
+    print("\npumps:")
+    for pump in pumps:
+        print(f"  {pump['name']:22} {pump['pumping_speed']} units/tick  {pump['tile_width']}x{pump['tile_height']}")
     print("\ncategories with no crafting entity: "
           + ", ".join(n for n, who in categories.items() if not who))
 
