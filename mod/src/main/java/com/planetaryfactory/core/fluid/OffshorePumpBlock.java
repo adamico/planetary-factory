@@ -41,7 +41,7 @@ import net.minecraft.world.level.material.MapColor;
  * and it is safe here for a reason ADR-0050 spells out: water cannot be created, so a pump can never
  * be talked into a site that was invalid to begin with.
  *
- * <p>Facing is cosmetic. The predicate looks at every horizontal neighbour, so a pump works
+ * <p>Facing is cosmetic. The predicate looks at every neighbour, so a pump works
  * whichever way it points; the orientation exists so the player can see which side is against the
  * water.
  */
@@ -69,9 +69,10 @@ public class OffshorePumpBlock extends BaseEntityBlock {
     /**
      * What surrounds a position, in the terms {@link OffshorePumpSiting} understands.
      *
-     * <p>Horizontal neighbours only. A pump sits on the shore with water beside it, and admitting
-     * the block underneath would let one stand on top of a one-block puddle, which reads as
-     * levitating machinery rather than as a pump.
+     * <p>All six faces, which is ADR-0050's "one adjacent water block" taken literally. An earlier
+     * pass restricted this to the four horizontal ones, reasoning that a pump standing on a puddle
+     * reads as levitating machinery -- but that is a narrowing neither #213 nor the ADR asked for,
+     * and a pump sunk into a pond with water above it is a perfectly ordinary thing to build.
      *
      * <p>{@code FluidState.isSource} is the whole test. It is enough here only because nothing in
      * the pack can create a source -- see {@link OffshorePumpSiting} for why that, and not any
@@ -79,7 +80,7 @@ public class OffshorePumpBlock extends BaseEntityBlock {
      */
     public static List<OffshorePumpSiting.Neighbour> neighboursOf(BlockGetter level, BlockPos pos) {
         List<OffshorePumpSiting.Neighbour> neighbours = new ArrayList<>();
-        for (Direction direction : Direction.Plane.HORIZONTAL) {
+        for (Direction direction : Direction.values()) {
             FluidState fluid = level.getFluidState(pos.relative(direction));
             if (fluid.isEmpty()) {
                 neighbours.add(OffshorePumpSiting.Neighbour.DRY);

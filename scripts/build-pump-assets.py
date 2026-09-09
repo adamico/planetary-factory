@@ -103,8 +103,8 @@ def blockstate(model_name):
 def oriented_model():
     """A model with a distinct front face, so the pump's facing is visible on the block.
 
-    The facing is not mechanism here -- the predicate looks at every horizontal neighbour, so a
-    pump works whichever way it points. It is oriented anyway because a `cube_all` machine reads as
+    The facing is not mechanism here -- the predicate looks at every neighbour, so a pump works
+    whichever way it points. It is oriented anyway because a `cube_all` machine reads as
     scenery, and the player needs to see at a glance which side of it is against the water.
     """
     return {
