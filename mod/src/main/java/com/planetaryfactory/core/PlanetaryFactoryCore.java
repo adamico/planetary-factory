@@ -3,6 +3,7 @@ package com.planetaryfactory.core;
 import com.planetaryfactory.core.assembler.AssemblerTicker;
 import com.planetaryfactory.core.assembler.client.AssemblerClient;
 import com.planetaryfactory.core.crafting.client.InventoryGridBlank;
+import com.planetaryfactory.core.fluid.WaterConservation;
 import com.planetaryfactory.core.network.PFNetwork;
 import com.planetaryfactory.core.recipes.PFRecipes;
 import com.planetaryfactory.core.smelting.PFFuel;
@@ -53,6 +54,10 @@ public final class PlanetaryFactoryCore {
         modBus.addListener(PFNetwork::register);
         // Game bus, not the mod bus: this one fires per running server, not per mod load.
         NeoForge.EVENT_BUS.addListener(TerraStartingArea::onServerStarted);
+        // Water is extracted and transported, never created (ADR-0050): re-asserted every server
+        // start rather than defaulted once, because a player's own /gamerule toggle would otherwise
+        // survive a reload.
+        NeoForge.EVENT_BUS.addListener(WaterConservation::onServerStarting);
         // The area is once per world; the kit that the spec's Opening opens on is once per player
         // (#203). Both are grants, and neither is once per join.
         NeoForge.EVENT_BUS.addListener(StartingKitGrant::onLogin);

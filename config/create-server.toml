@@ -384,10 +384,10 @@
 	bottomlessFluidMode = "ALLOW_BY_TAG"
 	#.
 	#Whether hose pulleys should be allowed to place fluid sources.
-	fluidFillPlaceFluidSourceBlocks = true
+	fluidFillPlaceFluidSourceBlocks = false
 	#.
 	#Whether open-ended pipes should be allowed to place fluid sources.
-	pipesPlaceFluidSourceBlocks = true
+	pipesPlaceFluidSourceBlocks = false
 
 #.
 #Tweaks for logistical components
