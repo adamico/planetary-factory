@@ -66,7 +66,7 @@ OUT_DIR = ROOT / "kubejs/data/planetaryfactory/recipe"
 # directly under `grid/`, `create/` or `pack/` would be re-registered by GregTech under
 # `assembling/<name>` and appear twice. Nesting them inside `assembling/` closes that round trip,
 # which is why these are two-part paths and not directory names.
-FOREIGN_SUBTREES = ("assembling/grid", "assembling/pack", "assembling/create")
+FOREIGN_SUBTREES = ("assembling/grid", "assembling/pack", "assembling/create", "assembling/sapling")
 
 
 def is_ours(path):

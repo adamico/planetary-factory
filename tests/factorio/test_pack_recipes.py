@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Assert ADR-0039's hand-written recipe subtree, and the Engineer's Pick's pack-side files.
+"""Assert the hand-written recipe subtrees, and the Engineer's Pick's pack-side files.
 
 `docs/testing/what-to-check.md`'s "cross-file references resolve" claim, for the one subtree of
 `kubejs/data/planetaryfactory/recipe/` that no converter generates.
@@ -31,6 +31,22 @@ What fails quietly without it:
   - the steel recipe not consuming the iron pick, which ADR-0039 states in one line and which no
     other file would notice.
 
+ADR-0051 adds the second such subtree, `recipe/assembling/sapling/`, for the same reason and with a
+different one behind it: Factorio's `tree-seed` is a recipe costing `wood x2`, and its wild trees drop
+no seed at all, so the pack carries that over -- felling drops no sapling and replanting is bought
+with logs. The corpus cannot author these either, because Factorio's seed is one generic item and
+Minecraft's sapling is a species.
+
+That species-ness is what this check is really for. `#minecraft:oak_logs -> oak_sapling` is only
+correct while Terra actually grows oak; a recipe for a species no biome places is a sapling the
+player can never plant a second of, and nothing else in the repo compares the two. So the species
+list is read out of `kubejs/data/planetaryfactory/worldgen/biome/terra_*.json` rather than typed, and
+the recipes are asserted against it in both directions.
+
+The `fellable` block tag is here for the same class of reason: the mod names it with a `TagKey`,
+which resolves to an empty tag rather than an error when the JSON is missing, and an empty tag means
+no tree in the pack fells with no log line anywhere.
+
 The item ids are read out of `PickTier.java` rather than typed here, so a third tier fails this
 check instead of shipping without assets or a recipe.
 
@@ -47,6 +63,20 @@ ROOT = Path(__file__).resolve().parents[2]
 EMITTED = ROOT / "kubejs/data/planetaryfactory/recipe"
 SUBTREE = "assembling/pack"
 PACK = EMITTED / SUBTREE
+SAPLING_SUBTREE = "assembling/sapling"
+SAPLINGS = EMITTED / SAPLING_SUBTREE
+BIOMES = ROOT / "kubejs/data/planetaryfactory/worldgen/biome"
+FELLABLE_TAG = ROOT / "kubejs/data/planetaryfactory/tags/block/fellable.json"
+FELLING = ROOT / "mod/src/main/java/com/planetaryfactory/core/felling/TreeFelling.java"
+# Which vanilla tree placement carries which species. Terra's biomes name the placed feature, and
+# the feature is what decides whether a sapling recipe has a tree behind it.
+PLACEMENT_SPECIES = {
+    "trees_plains": ("oak",),
+    "trees_birch_and_oak": ("oak", "birch"),
+    "trees_savanna": ("acacia",),
+    "trees_sparse_jungle": ("jungle",),
+    "trees_taiga": ("spruce",),
+}
 PICK_TIER = ROOT / "mod/src/main/java/com/planetaryfactory/core/mining/PickTier.java"
 PICK_ITEM = ROOT / "mod/src/main/java/com/planetaryfactory/core/mining/EngineersPick.java"
 ASSETS = ROOT / "kubejs/assets/planetaryfactory"
@@ -148,6 +178,69 @@ def texture_resolves(item, layer):
                   % (item, layer, namespace))
 
 
+def terra_species():
+    """The tree species Terra's own biomes place, read from the biome files."""
+    species = set()
+    for path in sorted(BIOMES.glob("terra_*.json")):
+        text = path.read_text(encoding="utf-8")
+        for placement, names in PLACEMENT_SPECIES.items():
+            if ('"minecraft:%s"' % placement) in text:
+                species.update(names)
+    return species
+
+
+def check_saplings():
+    """ADR-0051's sapling recipes: one per species Terra grows, and none for one it does not."""
+    grown = terra_species()
+    check(bool(grown),
+          "no Terra biome places a tree placement this check knows -- either worldgen changed or "
+          "PLACEMENT_SPECIES is stale, and either way the sapling recipes are unchecked")
+    if not check(SAPLINGS.is_dir(),
+                 "%s does not exist -- ADR-0051 replaces the dropped sapling with a recipe, so "
+                 "without it felling deletes replanting" % SAPLINGS):
+        return
+
+    recipes = {p.stem: json.loads(p.read_text()) for p in sorted(SAPLINGS.glob("*.json"))}
+    expected = {"%s_sapling" % name for name in grown}
+    check(set(recipes) == expected,
+          "recipe/%s/ holds %s; Terra grows %s. A recipe for a species no biome places is a sapling "
+          "nobody can plant twice, and a species with no recipe has no way back after a fell"
+          % (SAPLING_SUBTREE, sorted(recipes), sorted(expected)))
+
+    types = survivor_types()
+    for name, recipe in sorted(recipes.items()):
+        where = "%s/%s.json" % (SAPLING_SUBTREE, name)
+        species = name[: -len("_sapling")]
+        check(recipe["type"] in types.values(),
+              "%s is type %r, which recipe_survivors.js does not admit -- ADR-0034's sweep removes "
+              "it on load with no error" % (where, recipe["type"]))
+        check(recipe.get("data", {}).get("factorio_category") == HAND_CATEGORY,
+              "%s is not category %r, so the Personal Assembler will not plan it and a sapling "
+              "needs a machine the player has no reason to have built" % (where, HAND_CATEGORY))
+        check(items_of(recipe, "outputs") == [("minecraft:%s" % name, 1)],
+              "%s does not output one %s" % (where, name))
+        inputs = dict(items_of(recipe, "inputs"))
+        check(inputs == {"#minecraft:%s_logs" % species: 2},
+              "%s takes %s; Factorio's `tree-seed` costs `wood x2`, and the species has to match -- "
+              "two birch logs must not buy an oak" % (where, sorted(inputs)))
+
+
+def check_fellable_tag():
+    """The tag ADR-0051's fill reads. A missing one is an empty tag, which fells nothing."""
+    if not check(FELLABLE_TAG.is_file(),
+                 "%s is missing. The mod names it with a TagKey, which resolves to an EMPTY tag "
+                 "rather than an error -- so every tree in the pack silently stops felling"
+                 % FELLABLE_TAG.name):
+        return
+    values = json.loads(FELLABLE_TAG.read_text(encoding="utf-8")).get("values") or []
+    check("#minecraft:logs" in values,
+          "fellable.json does not carry `#minecraft:logs`, so Terra's own trees do not fell")
+    declared = re.search(r'"fellable"', FELLING.read_text(encoding="utf-8"))
+    check(declared is not None,
+          "TreeFelling.java no longer names the `fellable` tag; the JSON and the TagKey are the two "
+          "halves of one lookup and neither fails loudly on its own")
+
+
 def main():
     picks = tiers()
 
@@ -192,6 +285,9 @@ def main():
         check(inputs.get("%s:engineers_iron_pick" % NAMESPACE) == 1,
               "the Steel Pick recipe does not consume the Iron Pick. ADR-0039 has the player "
               "holding one tier or the other, never both")
+
+    check_saplings()
+    check_fellable_tag()
 
     # The pack-side files each registered pick needs. Every one of these fails silently.
     lang = json.loads((ASSETS / "lang/en_us.json").read_text(encoding="utf-8"))
@@ -261,8 +357,9 @@ def report():
         print("FAIL " + failure)
     if failures:
         return 1
-    print("ok   %d hand-written recipe(s), both surfaces admitted and both picks dressed"
-          % len(list(PACK.glob("*.json"))))
+    print("ok   %d pick recipe(s) and %d sapling recipe(s), every surface admitted, both picks "
+          "dressed and the fellable tag resolved"
+          % (len(list(PACK.glob("*.json"))), len(list(SAPLINGS.glob("*.json")))))
     return 0
 
 

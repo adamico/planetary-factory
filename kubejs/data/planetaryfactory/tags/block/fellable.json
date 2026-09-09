@@ -1,0 +1,7 @@
+{
+  "__comment": "The blocks a felling gesture treats as part of a tree (ADR-0051). A tag rather than a list in the jar, so a species Terra grows later joins by being added here -- and so Sapros's yumako and jellystem can join on the day #23 decides they should, rather than needing a second code path. `#minecraft:logs` is the whole rule: the nether stems it carries have no leaves at all, and the fill refuses to fell anything with no naturally-grown leaf on it, so they fall out as a consequence rather than by name.",
+  "replace": false,
+  "values": [
+    "#minecraft:logs"
+  ]
+}

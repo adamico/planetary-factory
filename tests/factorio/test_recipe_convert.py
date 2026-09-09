@@ -39,7 +39,7 @@ EMITTED = ROOT / "kubejs/data/planetaryfactory/recipe"
 # `create/` is `scripts/create-recipe-convert.py`'s, whose names come from Create's own registry
 # rather than from `item-map.json` -- a kinetic component has no Factorio prototype to map from,
 # so requiring a row here would be requiring one that cannot exist.
-FOREIGN_SUBTREES = ("assembling/grid", "assembling/pack", "assembling/create")
+FOREIGN_SUBTREES = ("assembling/grid", "assembling/pack", "assembling/create", "assembling/sapling")
 STARTUP = ROOT / "kubejs/startup_scripts"
 MOD = ROOT / "mod/src/main/java/com/planetaryfactory/core"
 PF_BLOCKS = MOD / "PFBlocks.java"

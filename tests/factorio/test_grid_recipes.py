@@ -78,6 +78,12 @@ OBTAINABLE = {
     "minecraft:coal": "as `#minecraft:coals`.",
     "minecraft:cobblestone": "Terra's stone drops it; ADR-0021 keeps stone in the alphabet.",
     "#minecraft:logs": "what Terra's surface grows -- ADR-0016's Sapros trees.",
+    # The three species Terra actually grows (`trees_plains`, `trees_birch_and_oak`,
+    # `trees_savanna`), which ADR-0051's sapling recipes take two of. Species-specific rather than
+    # `#minecraft:logs` because a sapling is a species: two birch logs must not buy an oak.
+    "#minecraft:oak_logs": "Terra's grassland and woodland grow oak (ADR-0051).",
+    "#minecraft:birch_logs": "Terra's woodland grows birch (ADR-0051).",
+    "#minecraft:acacia_logs": "Terra's dry steppe grows acacia (ADR-0051).",
     "#c:plates/iron": "holds `gtceu:iron_plate`, which `recipe/iron_plate.json` smelts (#91).",
     "#c:plates/copper": "holds `gtceu:copper_plate`, which `recipe/copper_plate.json` smelts.",
     "#c:wires/copper": "holds `powergrid:wire`, which `assembling/copper_cable.json` emits (#148).",

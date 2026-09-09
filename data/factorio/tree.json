@@ -1,0 +1,381 @@
+{
+  "seconds_per_log": 0.1375,
+  "rate_from": [
+    "tree-01",
+    "tree-02",
+    "tree-02-red",
+    "tree-03",
+    "tree-04",
+    "tree-05",
+    "tree-06",
+    "tree-06-brown",
+    "tree-07",
+    "tree-08",
+    "tree-08-brown",
+    "tree-08-red",
+    "tree-09",
+    "tree-09-brown",
+    "tree-09-red"
+  ],
+  "trees": [
+    {
+      "name": "ashland-lichen-tree",
+      "mining_time": 0.5,
+      "results": {
+        "carbon": 2
+      },
+      "autoplace_control": null,
+      "living": false,
+      "growth_ticks": null
+    },
+    {
+      "name": "ashland-lichen-tree-flaming",
+      "mining_time": 0.5,
+      "results": {
+        "carbon": 2
+      },
+      "autoplace_control": null,
+      "living": false,
+      "growth_ticks": null
+    },
+    {
+      "name": "boompuff",
+      "mining_time": 0.5,
+      "results": {
+        "spoilage": 6,
+        "wood": 4
+      },
+      "autoplace_control": "gleba_plants",
+      "living": true,
+      "growth_ticks": null
+    },
+    {
+      "name": "cuttlepop",
+      "mining_time": 0.5,
+      "results": {
+        "spoilage": 8,
+        "wood": 2
+      },
+      "autoplace_control": "gleba_plants",
+      "living": true,
+      "growth_ticks": null
+    },
+    {
+      "name": "dead-dry-hairy-tree",
+      "mining_time": 0.5,
+      "results": {
+        "wood": 2
+      },
+      "autoplace_control": "trees",
+      "living": false,
+      "growth_ticks": null
+    },
+    {
+      "name": "dead-grey-trunk",
+      "mining_time": 0.5,
+      "results": {
+        "wood": 2
+      },
+      "autoplace_control": "trees",
+      "living": false,
+      "growth_ticks": null
+    },
+    {
+      "name": "dead-tree-desert",
+      "mining_time": 0.5,
+      "results": {
+        "wood": 2
+      },
+      "autoplace_control": "trees",
+      "living": false,
+      "growth_ticks": null
+    },
+    {
+      "name": "dry-hairy-tree",
+      "mining_time": 0.5,
+      "results": {
+        "wood": 2
+      },
+      "autoplace_control": "trees",
+      "living": false,
+      "growth_ticks": null
+    },
+    {
+      "name": "dry-tree",
+      "mining_time": 0.5,
+      "results": {
+        "wood": 4
+      },
+      "autoplace_control": "trees",
+      "living": false,
+      "growth_ticks": null
+    },
+    {
+      "name": "funneltrunk",
+      "mining_time": 0.5,
+      "results": {
+        "spoilage": 4,
+        "wood": 6
+      },
+      "autoplace_control": "gleba_plants",
+      "living": true,
+      "growth_ticks": null
+    },
+    {
+      "name": "hairyclubnub",
+      "mining_time": 0.5,
+      "results": {
+        "spoilage": 5,
+        "wood": 5
+      },
+      "autoplace_control": "gleba_plants",
+      "living": true,
+      "growth_ticks": null
+    },
+    {
+      "name": "lickmaw",
+      "mining_time": 0.5,
+      "results": {
+        "spoilage": 10
+      },
+      "autoplace_control": "gleba_plants",
+      "living": true,
+      "growth_ticks": null
+    },
+    {
+      "name": "slipstack",
+      "mining_time": 0.5,
+      "results": {
+        "spoilage": 6,
+        "stone": 4
+      },
+      "autoplace_control": "gleba_plants",
+      "living": true,
+      "growth_ticks": null
+    },
+    {
+      "name": "stingfrond",
+      "mining_time": 0.5,
+      "results": {
+        "spoilage": 8,
+        "wood": 2
+      },
+      "autoplace_control": "gleba_plants",
+      "living": true,
+      "growth_ticks": null
+    },
+    {
+      "name": "sunnycomb",
+      "mining_time": 0.5,
+      "results": {
+        "spoilage": 10
+      },
+      "autoplace_control": "gleba_plants",
+      "living": true,
+      "growth_ticks": null
+    },
+    {
+      "name": "teflilly",
+      "mining_time": 0.5,
+      "results": {
+        "spoilage": 5,
+        "wood": 5
+      },
+      "autoplace_control": "gleba_plants",
+      "living": true,
+      "growth_ticks": null
+    },
+    {
+      "name": "tree-01",
+      "mining_time": 0.55,
+      "results": {
+        "wood": 4
+      },
+      "autoplace_control": "trees",
+      "living": true,
+      "growth_ticks": null
+    },
+    {
+      "name": "tree-02",
+      "mining_time": 0.55,
+      "results": {
+        "wood": 4
+      },
+      "autoplace_control": "trees",
+      "living": true,
+      "growth_ticks": null
+    },
+    {
+      "name": "tree-02-red",
+      "mining_time": 0.55,
+      "results": {
+        "wood": 4
+      },
+      "autoplace_control": "trees",
+      "living": true,
+      "growth_ticks": null
+    },
+    {
+      "name": "tree-03",
+      "mining_time": 0.55,
+      "results": {
+        "wood": 4
+      },
+      "autoplace_control": "trees",
+      "living": true,
+      "growth_ticks": null
+    },
+    {
+      "name": "tree-04",
+      "mining_time": 0.55,
+      "results": {
+        "wood": 4
+      },
+      "autoplace_control": "trees",
+      "living": true,
+      "growth_ticks": null
+    },
+    {
+      "name": "tree-05",
+      "mining_time": 0.55,
+      "results": {
+        "wood": 4
+      },
+      "autoplace_control": "trees",
+      "living": true,
+      "growth_ticks": null
+    },
+    {
+      "name": "tree-06",
+      "mining_time": 0.55,
+      "results": {
+        "wood": 4
+      },
+      "autoplace_control": "trees",
+      "living": true,
+      "growth_ticks": null
+    },
+    {
+      "name": "tree-06-brown",
+      "mining_time": 0.55,
+      "results": {
+        "wood": 4
+      },
+      "autoplace_control": "trees",
+      "living": true,
+      "growth_ticks": null
+    },
+    {
+      "name": "tree-07",
+      "mining_time": 0.55,
+      "results": {
+        "wood": 4
+      },
+      "autoplace_control": "trees",
+      "living": true,
+      "growth_ticks": null
+    },
+    {
+      "name": "tree-08",
+      "mining_time": 0.55,
+      "results": {
+        "wood": 4
+      },
+      "autoplace_control": "trees",
+      "living": true,
+      "growth_ticks": null
+    },
+    {
+      "name": "tree-08-brown",
+      "mining_time": 0.55,
+      "results": {
+        "wood": 4
+      },
+      "autoplace_control": "trees",
+      "living": true,
+      "growth_ticks": null
+    },
+    {
+      "name": "tree-08-red",
+      "mining_time": 0.55,
+      "results": {
+        "wood": 4
+      },
+      "autoplace_control": "trees",
+      "living": true,
+      "growth_ticks": null
+    },
+    {
+      "name": "tree-09",
+      "mining_time": 0.55,
+      "results": {
+        "wood": 4
+      },
+      "autoplace_control": "trees",
+      "living": true,
+      "growth_ticks": null
+    },
+    {
+      "name": "tree-09-brown",
+      "mining_time": 0.55,
+      "results": {
+        "wood": 4
+      },
+      "autoplace_control": "trees",
+      "living": true,
+      "growth_ticks": null
+    },
+    {
+      "name": "tree-09-red",
+      "mining_time": 0.55,
+      "results": {
+        "wood": 4
+      },
+      "autoplace_control": "trees",
+      "living": true,
+      "growth_ticks": null
+    },
+    {
+      "name": "water-cane",
+      "mining_time": 0.1,
+      "results": {
+        "wood": 1
+      },
+      "autoplace_control": "gleba_plants",
+      "living": true,
+      "growth_ticks": null
+    }
+  ],
+  "plants": [
+    {
+      "name": "jellystem",
+      "mining_time": 0.5,
+      "results": {
+        "jellynut": 50
+      },
+      "autoplace_control": "gleba_plants",
+      "living": true,
+      "growth_ticks": 18000
+    },
+    {
+      "name": "tree-plant",
+      "mining_time": 0.5,
+      "results": {
+        "wood": 4
+      },
+      "autoplace_control": null,
+      "living": true,
+      "growth_ticks": 36000
+    },
+    {
+      "name": "yumako-tree",
+      "mining_time": 0.5,
+      "results": {
+        "yumako": 50
+      },
+      "autoplace_control": "gleba_plants",
+      "living": true,
+      "growth_ticks": 18000
+    }
+  ]
+}

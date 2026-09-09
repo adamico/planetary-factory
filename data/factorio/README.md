@@ -38,14 +38,17 @@ scripts/factorio-machine-extract.py
 scripts/factorio-fluid-extract.py
 scripts/factorio-resource-extract.py
 scripts/factorio-fuel-extract.py
+scripts/factorio-tree-extract.py
 python3 tests/factorio/test_tech_extract.py
 python3 tests/factorio/test_recipe_extract.py
 python3 tests/factorio/test_machine_extract.py
 python3 tests/factorio/test_resource_extract.py
 python3 tests/factorio/test_fuel_extract.py
+python3 tests/factorio/test_tree_extract.py
 
 scripts/factorio-fuel-convert.py
 python3 tests/factorio/test_fuel_convert.py
+scripts/build-tree-assets.py
 ```
 
 The last pair is downstream of the extraction rather than part of it: `fuel.json` is joined

@@ -70,6 +70,26 @@ per-tier duration, the 13 EU/t draw and its buffer, the unsided routing by item,
 a blocked output starts no smelt, burns no fuel and voids nothing (ADR-0041). Whether the three
 blocks smelt in a running game is a world load, and its GameTests land with #156.
 
+### Felling check
+
+A tree is one entity holding an amount, and one gesture takes it whole (ADR-0051). Three checks,
+none of which launches the game. `mod/src/test/java/com/planetaryfactory/core/felling/` is the rule:
+`TreeShapeTest` is the fill over a block-position graph — it terminates on a ring of logs, respects
+each of its three bounds, refuses a mid-trunk block, refuses a log cabin (no naturally-grown leaf),
+never descends below the base, and does not cross into a touching canopy, which is vanilla's leaf
+`distance` doing the work. `FellingCostTest` is the arithmetic: `amount × 0.1375s`, halved by
+research, and a four-log tree costing Factorio's own 0.55s exactly — the rate is asked of
+`TreeCorpus` rather than typed, because `0.5/4 = 0.125` is the *dead* trees' and the plants' rate and
+#205 was written against it. `tests/factorio/test_tree_extract.py` re-derives the rate from the
+corpus and names the three prototypes the discriminant must exclude, each of which yields a
+different plausible-looking wrong number. `tests/factorio/test_pack_recipes.py` carries the two
+hand-written recipe subtrees and the `fellable` tag: the sapling recipes' species list is read out
+of Terra's biome files, since `oak_logs → oak_sapling` is only right while Terra grows oak, and a
+`TagKey` whose JSON is missing resolves to an empty tag rather than an error — every tree silently
+stops felling. Re-run `scripts/factorio-tree-extract.py` and then `scripts/build-tree-assets.py`
+after a dump refresh; the second is the copy the mod reads. Whether a tree falls in a running game
+is a world load.
+
 ### Starting kit check
 
 The pocket and the hold `docs/spec/terra-progression.md` specifies are granted once per *player*

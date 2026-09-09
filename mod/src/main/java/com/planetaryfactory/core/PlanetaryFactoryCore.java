@@ -3,6 +3,7 @@ package com.planetaryfactory.core;
 import com.planetaryfactory.core.assembler.AssemblerTicker;
 import com.planetaryfactory.core.assembler.client.AssemblerClient;
 import com.planetaryfactory.core.crafting.client.InventoryGridBlank;
+import com.planetaryfactory.core.felling.TreeFelling;
 import com.planetaryfactory.core.fluid.WaterConservation;
 import com.planetaryfactory.core.network.PFNetwork;
 import com.planetaryfactory.core.recipes.PFRecipes;
@@ -68,6 +69,11 @@ public final class PlanetaryFactoryCore {
         // The Personal Assembler's queue runs whether or not its panel is open (ADR-0038).
         // One break gesture draws one unit, and the block stands until it is spent (ADR-0041).
         NeoForge.EVENT_BUS.addListener(OreMining::onBreak);
+        // A tree is one entity, so mining its base fells it, and the gesture costs the whole tree's
+        // time on that one block (ADR-0051). Both listeners survey the same shape on purpose.
+        NeoForge.EVENT_BUS.addListener(TreeFelling::onBreakSpeed);
+        NeoForge.EVENT_BUS.addListener(TreeFelling::onBreak);
+        NeoForge.EVENT_BUS.addListener(TreeFelling::onLogout);
         NeoForge.EVENT_BUS.addListener(AssemblerTicker::onPlayerTick);
         NeoForge.EVENT_BUS.addListener(AssemblerTicker::onLogin);
         NeoForge.EVENT_BUS.addListener(AssemblerTicker::onDatapackSync);
