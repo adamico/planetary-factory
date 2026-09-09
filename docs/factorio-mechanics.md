@@ -903,7 +903,9 @@ change that. The traversal budget has two halves, and both are extracted rather 
 | --- | --- | --- |
 | speed | `character.running_speed` 0.15 tiles/tick × 60 = **9.0 tiles/s** | Minecraft's walk **4.317 blocks/s** (sprint 5.612) |
 | furthest starting resource | `starting_resource_placement_radius` **150 tiles** | `DISTANCES` in `scripts/build-terra-start.py`, furthest field **62 blocks** |
-| time to cross the opening | 150 / 9.0 = **16.7 s** | 62 / 4.317 = **14.4 s** (nearest field 34 → 7.9 s) |
+| hub to furthest field | 150 / 9.0 = **16.7 s** | 62 / 4.317 = **14.4 s** |
+| two fields, perpendicular | 212 / 9.0 = **23.6 s** | 88 / 4.317 = **20.3 s** |
+| two fields, opposite | 300 / 9.0 = **33.3 s** | 124 / 4.317 = **28.7 s** |
 
 A tile and a block are both one metre, so nothing is converted but the tick rate. The speed is read
 in `scripts/factorio-resource-extract.py`'s `character_movement()` into
@@ -911,15 +913,24 @@ in `scripts/factorio-resource-extract.py`'s `character_movement()` into
 is the corpus constant the same file already carried.
 
 **Both halves drifted, in opposite directions, and they cancel.** Terra's player walks at 48% of the
-engineer's speed and its furthest starting field sits at 41% of Factorio's starting radius, so the
-crossing that matters is *shorter* here — 14.4 s against 16.7 s. Matching Factorio's opening exactly
-at Minecraft's walk would put the furthest field at 72 blocks, further out than `DISTANCES` puts it.
+engineer's speed and its fields sit at 41% of Factorio's starting radius, so **every** leg comes out
+at 0.86× Factorio's time — the ratio is the same whichever pair you measure, which is what keeps the
+verdict from resting on a chosen leg. Three legs are tabled rather than one because #170's report is
+about moving *between patches*, not out from the hub: Terra's four fields sit on the four cardinal
+faces (iron east, copper north, coal west, stone south) at the size variant's distance, so the
+traversal a player actually makes is a chord — up to 124 blocks — and not the 62-block radius.
 So: **no base speed is set, and `DISTANCES` does not move.** A flat global buff would also have spent
 Block Runner's concrete bonus ([Terrain modification](#terrain-modification)), which is `adapted`
 precisely so that a built surface is the thing that makes you faster.
 
-The playtest report that opened #207 stands as a report — the opening *feels* long — but the
-arithmetic says the cause is not distance or speed. Factorio lets you zoom out and see all three
+**The one soft number is Factorio's side.** `starting_resource_placement_radius` is the bound a
+starting patch may be placed within, not where patches typically land. If Factorio's own starting
+patches cluster well inside 150, the 0.86 flatters Terra and this row is worth reopening against
+measured patch positions rather than the bound.
+
+The playtest report that opened #207 stands as a report — the opening *feels* long, and a measured
+patch-to-patch leg is about 100 blocks, some 23 s walked — but the arithmetic says the cause is not
+distance or speed relative to Factorio. Factorio lets you zoom out and see all three
 patches at once; Minecraft does not. That is legibility, and its surfaces are #116 (radar and surface
 indicators) and #158 (pole supply-area overlay), not movement.
 
