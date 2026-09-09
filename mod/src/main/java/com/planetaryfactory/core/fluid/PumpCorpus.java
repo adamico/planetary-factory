@@ -71,16 +71,15 @@ public final class PumpCorpus {
     }
 
     /**
-     * Whether the pump draws power. Factorio's is {@code void}, so this is false -- read rather
-     * than assumed, so that the pack's "it takes no power" is a fact about the prototype and not
-     * something nobody got round to wiring up.
+     * Whether the pump draws power. Factorio's is {@code void}, so this is false.
+     *
+     * <p>Nothing branches on it, and that is deliberate: it exists so "the pump takes no power" is
+     * a fact read off the prototype and asserted, rather than an omission nobody got round to. If
+     * the row ever stopped saying {@code void}, {@code PumpCorpusTest} fails and someone has to
+     * decide what a powered pump means here -- which is the conversation ADR-0050 would want,
+     * rather than a machine that quietly kept running for free.
      */
     public boolean takesPower() {
         return !"void".equals(energySource);
-    }
-
-    /** What one Minecraft tick may produce, in millibuckets. */
-    public int milliBucketsPerTick() {
-        return OffshorePumpSpec.milliBucketsPerTick(pumpingSpeed);
     }
 }

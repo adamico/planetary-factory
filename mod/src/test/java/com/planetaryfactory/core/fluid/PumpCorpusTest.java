@@ -26,7 +26,7 @@ class PumpCorpusTest {
     @Test
     @DisplayName("a Minecraft tick may produce 60 mB")
     void perTickIsSixty() {
-        assertEquals(60, PumpCorpus.get().milliBucketsPerTick());
+        assertEquals(60, OffshorePumpSpec.milliBucketsPerTick(PumpCorpus.get().pumpingSpeed()));
     }
 
     @Test

@@ -33,7 +33,7 @@ public class OffshorePumpBlockEntity extends BlockEntity {
      * One tick's production. Not a tank: a pump that banks water while unconnected would deliver a
      * burst on connection, which is a behaviour a player would have to learn.
      */
-    private final FluidTank buffer = new FluidTank(PumpCorpus.get().milliBucketsPerTick()) {
+    private final FluidTank buffer = new FluidTank(OffshorePumpSpec.milliBucketsPerTick(PumpCorpus.get().pumpingSpeed())) {
         @Override
         protected void onContentsChanged() {
             setChanged();
