@@ -48,6 +48,7 @@ text and commits to no jar; **`pack` is admissible as a candidate only with a na
 | --- | --- | --- |
 | [Resource patches and finite ore](#resource-patches-and-finite-ore) | `shipped` | Terra, Ignus, Sapros |
 | [Manual mining](#manual-mining) | `adapted` | all bodies |
+| [Trees and wood](#trees-and-wood) | `adapted` | all bodies |
 | [Mining drills](#mining-drills) | `adapted` | all bodies |
 | [Water as a resource](#water-as-a-resource) | `planned` | all bodies |
 | [Fluid handling](#fluid-handling) | `planned` | all bodies |
@@ -216,6 +217,46 @@ Sub-rules:
   arrived. The Pick answers `doesSneakBypassUse` to get past that, which is the hook NeoForge
   provides where GregTech's own tools use `onItemUseFirst`. Confirmed turning a machine in-game.
   *This entry read "`planned`, no owner yet".*
+
+### Trees and wood
+
+- **verdict**: `adapted`
+- **where**: all bodies
+- **via**: `pack`
+- **owner**: ADR-0051
+- **ticket**: #205
+
+A Factorio tree is a **single entity**: one mining gesture removes it and yields its wood, with no
+trunk, no canopy and no second gesture. Minecraft's log-by-log felling is a mechanic the pack
+inherited rather than one Factorio has, so felling is re-authored in `planetaryfactory_core` — one
+gesture at the base removes the connected tree and pays out at the base block.
+
+The **yield diverges from the corpus on purpose**. Factorio's tree gives a flat `wood ×4`; the pack
+gives **the log count of the tree actually broken**, so a jungle giant pays more than a birch. What is
+kept from Factorio is the **rate**: `tree-01.mining_time 0.55` for `wood ×4` is **0.1375 s per log**,
+extracted into `data/factorio/tree.json`, and the gesture costs `amount × 0.1375 s` — so a 4-log tree
+costs Factorio's own 0.55 s exactly. The divergence is cheap because wood is terminal in Factorio:
+five recipes consume it (`wooden-chest`, `small-electric-pole`, `shotgun`, `combat-shotgun`,
+`tree-seed`) and no ratio downstream depends on it.
+
+Sub-rules:
+
+- **Felling is the base gesture only** — `adapted`, ADR-0051. A log with a log beneath it is
+  mid-trunk and breaks normally, which is also what stops a touching canopy being felled from the
+  wrong tree. The fill is bounded by count and radius; over the bound it fells what fits and leaves
+  the rest standing.
+- **A placed structure never fells** — `adapted`, ADR-0051. The fill requires at least one
+  non-persistent leaf, which a build has none of. Nether stems fall out of this as a consequence
+  rather than by name.
+- **Leaves are removed with the tree** — `adapted`, ADR-0051. No drops, no decay ticks. Factorio has
+  no leaves at all.
+- **Felling time is halved by research** — `adapted`, ADR-0051. It rides ADR-0039's `steel-axe`
+  ladder rather than declaring a second speed rule.
+- **A sapling is crafted, not dropped** — `adapted`, ADR-0051. Factorio's wild tree yields only wood
+  and `tree-seed` is a recipe costing `wood ×2`; the pack carries that over, so felling drops no
+  sapling and the forest stays renewable through the recipe.
+- **Trees are not a fuel or a science input beyond Factorio's own use** — `shipped`. The fuel table
+  already carries `wood` as the tag `minecraft:logs` (ADR-0047).
 
 ### Mining drills
 
@@ -1228,7 +1269,22 @@ Sub-rules:
 
 Sub-rules:
 
-- **Crops are farmed and replanted, not mined** — `planned`.
+- **Crops are farmed and replanted, not mined** — `planned`. Yumako and jellystem are Factorio
+  `plant` prototypes, not `tree`s: `growth_ticks 18000`, grown from a seed, and one harvest yields
+  **50 fruit and zero wood**, consuming the plant. They are deliberately **out of ADR-0051's felling
+  rule** — wood is terminal, while these are the first link of the agricultural science loop
+  (`yumako-mash ×15 + jelly ×12 → bioflux ×4`; `bioflux + pentapod-egg → agricultural-science-pack`;
+  `yumako-mash ×4 → nutrients ×6`, feeding the towers that produce the input). The real mechanic is
+  the Agricultural Tower, so building the harvest gesture alone would be a different mechanic wearing
+  the same blocks. Until #23, Sapros's trees stay log-by-log and `yumako_leaves` keeps rolling fruit
+  and sapling.
+- **Seeds come from processing the fruit, never from harvesting** — `planned`. `yumako-processing`
+  and `jellynut-processing` return a seed at `independent_probability 0.02` alongside mash or jelly.
+  Both are category-less (so hand-craftable in Factorio) but `enabled: false`, and **neither is in
+  `data/factorio/recipe.json` nor `data/pack/item-map.json` today** — Space Age pruning dropped them.
+  The 2 % output is also the pack's first probabilistic recipe result, which ADR-0038's queue
+  contract does not currently admit: a step that can deliver nothing is not a step
+  `PlanToQueue` can guarantee runs to the end. #23 owns both problems.
 - **Nutrients as a consumable that machines eat** — `unargued`, no verdict. The biochamber's whole
   economy hangs on it.
 - **Metal arrives by bacteria that spoil into ore** — `planned`. ADR-0016; no veins on Sapros.
