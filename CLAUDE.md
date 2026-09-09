@@ -70,6 +70,21 @@ per-tier duration, the 13 EU/t draw and its buffer, the unsided routing by item,
 a blocked output starts no smelt, burns no fuel and voids nothing (ADR-0041). Whether the three
 blocks smelt in a running game is a world load, and its GameTests land with #156.
 
+### Starting kit check
+
+The pocket and the hold `docs/spec/terra-progression.md` specifies are granted once per *player*
+by `core/start/`, not once per join — a grant that re-fires on login is an unlimited iron supply
+and would invalidate every pace reading after the first relog (#203). Two checks, neither of which
+launches the game. `tests/pack/test_starting_kit.py` asserts every granted id resolves — ours
+against the tier enums that produce the registry paths, the prospector and the quest book against
+the installed jars, the hold against `data/pack/item-map.json` — and that the pocket is the spec's
+pocket and the hold exactly the spec's three items: an id that names nothing is a silent empty slot,
+and the moment the hold holds a green circuit rung 0 has stopped being taught.
+`mod/src/test/java/com/planetaryfactory/core/start/` is the once-per-player rule and the flag's
+codec round trip, which are Minecraft-free because the kit names items by string. Run both after
+editing `core/start/` or the spec's Opening. Whether the kit is in the inventory at spawn is a
+world load.
+
 ### Fuel table check
 
 What a burner furnace burns is generated datapack JSON, not Forge's burn table (ADR-0047).

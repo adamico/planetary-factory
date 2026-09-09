@@ -4,6 +4,8 @@ import com.planetaryfactory.core.assembler.AssemblerCodecs;
 import com.planetaryfactory.core.assembler.AssemblerQueue;
 import com.planetaryfactory.core.ore.OreCodecs;
 import com.planetaryfactory.core.ore.OreDelta;
+import com.planetaryfactory.core.start.StartingCodecs;
+import com.planetaryfactory.core.start.StartingGrant;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -49,6 +51,22 @@ public final class PFAttachments {
             "ore_delta",
             () -> AttachmentType.builder(OreDelta::new)
                     .serialize(OreCodecs.DELTA)
+                    .build());
+
+    /**
+     * Whether this player has already been handed the starting kit (#203).
+     *
+     * <p>{@code copyOnDeath} because dying is not a reason to be handed a second one -- without it
+     * the kit costs one death, which is the cheapest thing to do in the opening. Why the flag is
+     * persisted at all is on {@link StartingGrant}.
+     */
+    public static final Supplier<AttachmentType<StartingGrant>> STARTING_GRANT = ATTACHMENTS.register(
+            "starting_grant",
+            // The cast picks the Supplier overload: StartingGrant's boolean constructor makes the
+            // bare method reference ambiguous against builder(Function<IAttachmentHolder, T>).
+            () -> AttachmentType.builder((Supplier<StartingGrant>) StartingGrant::new)
+                    .serialize(StartingCodecs.GRANT)
+                    .copyOnDeath()
                     .build());
 
     private PFAttachments() {

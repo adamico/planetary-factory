@@ -10,6 +10,7 @@ import com.planetaryfactory.core.smelting.client.FuelTooltip;
 import com.planetaryfactory.core.mining.rig.client.RigClient;
 import com.planetaryfactory.core.smelting.client.FurnaceClient;
 import com.planetaryfactory.core.ore.OreMining;
+import com.planetaryfactory.core.start.StartingKitGrant;
 import com.planetaryfactory.core.worldgen.PFWorldgen;
 import com.planetaryfactory.core.worldgen.TerraStartingArea;
 import net.neoforged.api.distmarker.Dist;
@@ -52,6 +53,9 @@ public final class PlanetaryFactoryCore {
         modBus.addListener(PFNetwork::register);
         // Game bus, not the mod bus: this one fires per running server, not per mod load.
         NeoForge.EVENT_BUS.addListener(TerraStartingArea::onServerStarted);
+        // The area is once per world; the kit that the spec's Opening opens on is once per player
+        // (#203). Both are grants, and neither is once per join.
+        NeoForge.EVENT_BUS.addListener(StartingKitGrant::onLogin);
         // What burns is datapack JSON generated from Factorio's own fuel values (ADR-0047), so
         // it reloads with the rest rather than being a table compiled into this jar.
         NeoForge.EVENT_BUS.addListener(PFFuel::register);
