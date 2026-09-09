@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Terra's starting area: no two ore fields may claim the same ground.
+"""Terra's starting area: no two ore fields may claim the same ground, and the hub has water.
 
 Vanilla drops a jigsaw child whose bounding box overlaps one already placed, and it does so
 without logging anything -- a rejected child is an ordinary outcome, not an error. So a hub
@@ -12,6 +12,11 @@ to the far end of the field, so two fields on perpendicular hub faces both cover
 beside the hub unless the hub is wide enough to hold them apart. This asserts that for every
 hub variant against every combination of size variants -- the size is drawn at world
 generation, so only the worst case is a guarantee.
+
+The pool is the same failure class and so it is asserted here rather than anywhere else. ADR-0050
+refuses a bucket and Create's water wheel is the pack's only rotational source before the burner
+line, so a hub that arrives without its pool ships as "rung 0 has no power" -- with nothing in any
+log, because a template that quietly lost a block is not an error either.
 
 Reads the generated .nbt templates, not the generator's own tables, so it fails if
 `scripts/build-terra-start.py` is edited and not re-run.
@@ -100,6 +105,27 @@ def jigsaws(template):
     return out
 
 
+def water(template):
+    """The pool: every water cell in a template, as (x, z), with the air above each checked.
+
+    The clearance matters as much as the water. The pool is one block deep and flush with the
+    ground, so whatever grew on those columns -- tall grass is two blocks -- is left standing in
+    the water unless the template clears it.
+    """
+    palette = template["palette"]
+    cells = set()
+    air = set()
+    for block in template["blocks"]:
+        name = palette[block["state"]]["Name"]
+        x, y, z = block["pos"]
+        if name == "minecraft:water":
+            assert y == 0, "water at y=%d: the pool is one block deep and flush" % y
+            cells.add((x, z))
+        elif name == "minecraft:air":
+            air.add((x, y, z))
+    return cells, air
+
+
 def patch_box(connector, facing, template):
     """Where a patch template lands, in hub-local coordinates.
 
@@ -154,6 +180,22 @@ def main():
                 failures.append("%s: connector at %d,%d faces %s into its own box"
                                 % (hub_file, cx, cz, facing))
 
+        pool, air = water(hub)
+        if not pool:
+            failures.append("%s: no water pool -- rung 0 has no power and nothing logs it"
+                            % hub_file)
+        for (cx, _, cz), _, _ in connectors:
+            if (cx, cz) in pool:
+                failures.append("%s: the pool floods the connector at %d,%d" % (hub_file, cx, cz))
+        for x, z in sorted(pool):
+            if not (hub_box[0] <= x <= hub_box[2] and hub_box[1] <= z <= hub_box[3]):
+                failures.append("%s: pool cell %d,%d is outside the hub's own box" % (hub_file, x, z))
+            if (x, 1, z) not in air:
+                failures.append("%s: pool cell %d,%d has nothing cleared above it" % (hub_file, x, z))
+
+        pool_box = (min(x for x, _ in pool), min(z for _, z in pool),
+                    max(x for x, _ in pool), max(z for _, z in pool)) if pool else None
+
         for draw in itertools.product(SIZES, repeat=len(connectors)):
             boxes = []
             for (connector, facing, pool), size in zip(connectors, draw):
@@ -166,6 +208,9 @@ def main():
                         "%s: %s %s overlaps %s %s (%s vs %s) -- one of them will not place"
                         % (hub_file, ra, sa, rb, sb, ba, bb))
             for resource, size, box in boxes:
+                if pool_box and overlaps(box, pool_box):
+                    failures.append("%s: %s %s overlaps the water pool (%s vs %s)"
+                                    % (hub_file, resource, size, box, pool_box))
                 if overlaps(box, hub_box):
                     failures.append("%s: %s %s overlaps the hub itself (%s)"
                                     % (hub_file, resource, size, box))
@@ -175,7 +220,8 @@ def main():
     if failures:
         print("\n%d starting-area geometry failure(s)" % len(set(failures)))
         return 1
-    print("ok   %d hub variant(s) x %d size draw(s): no field overlaps another or the hub"
+    print("ok   %d hub variant(s) x %d size draw(s): every hub has its pool, and no field "
+          "overlaps another, the pool or the hub"
           % (len(hubs), len(SIZES) ** len(RESOURCES)))
     return 0
 

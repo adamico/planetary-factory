@@ -286,6 +286,11 @@ Sub-rules:
   creation and defeats every siting constraint above it.
 - **Buckets** — `excluded`. ADR-0050 refuses a 1,000 mB hand container beside ADR-0037's 50 mB barrel.
   Rung 0 reaches water by digging a channel from the hub pool, not by carrying it.
+- **Water in the starting area** — `shipped` (#212). `scripts/build-terra-start.py` puts a pool in
+  the hub itself — the hub's own blocks, one deep and flush with the ground, not a fifth jigsaw
+  child that vanilla could drop silently. Factorio starts the player beside water and the pack has
+  no bucket, so without it rung 0's water wheel waits on an unbounded walk ADR-0049's traversal
+  budget has no room for. `tests/worldgen/test_start_geometry.py` asserts the pool's presence.
 - **Placed flowing water** — `planned`. A pack outlet block maintaining flowing water from a pipe, for
   contraptions tidier than a dug channel. Safe without any tracking because what it places is never a
   source. Lands after the pump and pipes.
