@@ -4,6 +4,7 @@ import com.gregtechceu.gtceu.api.capability.GTCapability;
 import com.planetaryfactory.core.energy.PoleColumn;
 import com.planetaryfactory.core.energy.PoleTier;
 import com.planetaryfactory.core.energy.SupplyAreaPoleBlockEntity;
+import com.planetaryfactory.core.fluid.OffshorePumpBlockEntity;
 import com.planetaryfactory.core.mining.rig.RigBlockEntity;
 import com.planetaryfactory.core.mining.rig.RigItemHandler;
 import com.planetaryfactory.core.mining.rig.RigPartBlockEntity;
@@ -65,6 +66,15 @@ public final class PFBlockEntities {
             RIG_PART = BLOCK_ENTITIES.register("rig_part",
                     () -> new BlockEntityType<>(RigPartBlockEntity::new, PFBlocks.rigPartBlocks(), null));
 
+    /**
+     * The Offshore Pump (#213, ADR-0050). One block, so one type with one block in it -- the
+     * ladders above share a type because they are ladders, not because sharing is the idiom.
+     */
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<OffshorePumpBlockEntity>>
+            OFFSHORE_PUMP = BLOCK_ENTITIES.register("offshore_pump",
+                    () -> new BlockEntityType<>(OffshorePumpBlockEntity::new,
+                            java.util.Set.of(PFBlocks.OFFSHORE_PUMP.get()), null));
+
     private PFBlockEntities() {
     }
 
@@ -76,6 +86,21 @@ public final class PFBlockEntities {
         registerPoleCapabilities(event);
         registerFurnaceCapabilities(event);
         registerRigCapabilities(event);
+        registerPumpCapabilities(event);
+    }
+
+    /**
+     * The pump's fluid face, on every side. Extract-only -- see
+     * {@link OffshorePumpBlockEntity#fluidHandler()} -- so a pipe can take water from it and
+     * nothing can push water into it.
+     */
+    private static void registerPumpCapabilities(RegisterCapabilitiesEvent event) {
+        event.registerBlock(
+                Capabilities.FluidHandler.BLOCK,
+                (level, pos, state, blockEntity, side) ->
+                        blockEntity instanceof OffshorePumpBlockEntity pump
+                                ? pump.fluidHandler() : null,
+                PFBlocks.OFFSHORE_PUMP.get());
     }
 
     /**

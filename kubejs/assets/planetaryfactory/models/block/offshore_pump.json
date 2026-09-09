@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "front": "minecraft:block/dispenser_front",
+    "side": "minecraft:block/furnace_side",
+    "top": "minecraft:block/cauldron_top",
+    "particle": "minecraft:block/furnace_side"
+  }
+}

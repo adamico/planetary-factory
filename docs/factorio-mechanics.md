@@ -274,11 +274,13 @@ is extracted and transported, never created.**
 
 Sub-rules:
 
-- **The offshore pump** — `planned`, pack-authored. ADR-0048 had made it `not_emitted` on the
+- **The offshore pump** — `shipped` (#213), pack-authored. ADR-0048 had made it `not_emitted` on the
   reasoning that Create's Mechanical Pump covered the water half; that block is a pipe-network pump
   and does not extract from the world at all, so ADR-0050 reverses the call. One adjacent source
   block, no minimum body size, no power (`energy_source: void`), 1,200 mB/s — which is exactly twenty
-  Boilers at their extracted 60 mB/s.
+  Boilers at their extracted 60 mB/s. Placement is refused with a message where no source adjoins;
+  the rate is read from the corpus and never typed, and `tests/pack/test_pump_assets.py` is what
+  holds the copy honest.
 - **Water source formation** — `excluded`. `waterSourceConversion` is off, forced by the mod on level
   load. Vanilla's 3x1x1 trench turns two buckets into unlimited water anywhere, which is water
   creation and defeats every siting constraint above it.

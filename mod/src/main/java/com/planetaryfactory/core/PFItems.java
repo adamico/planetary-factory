@@ -5,6 +5,7 @@ import com.planetaryfactory.core.smelting.FurnaceTier;
 import com.planetaryfactory.core.energy.SupplyAreaPoleItem;
 import com.planetaryfactory.core.fluid.BarrelFluidHandler;
 import com.planetaryfactory.core.fluid.BarrelItem;
+import com.planetaryfactory.core.fluid.OffshorePumpItem;
 import com.planetaryfactory.core.fluid.BarrelSpec;
 import com.planetaryfactory.core.mining.EngineersPick;
 import com.planetaryfactory.core.mining.PickTier;
@@ -99,6 +100,10 @@ public final class PFItems {
             RIGS.put(tier, item);
             FUNCTIONAL.add(item);
         }
+        // Not registerSimpleBlockItem: the pump refuses to place away from water, and the refusal
+        // is the item's, because by the time a block exists it is too late to decline.
+        FUNCTIONAL.add(ITEMS.register("offshore_pump",
+                () -> new OffshorePumpItem(new Item.Properties())));
         FUNCTIONAL.add(BARREL);
         // Tools sit with the machinery, not with the saplings: a pick is the first thing a player
         // reaches for and the last place they would look for it is NATURAL_BLOCKS.

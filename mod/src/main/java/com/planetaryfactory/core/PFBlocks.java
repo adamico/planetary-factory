@@ -9,6 +9,7 @@ import com.planetaryfactory.core.ore.OreResource;
 import com.planetaryfactory.core.smelting.FurnaceBlock;
 import com.planetaryfactory.core.smelting.FurnaceTier;
 import com.planetaryfactory.core.energy.SupplyAreaPoleBlock;
+import com.planetaryfactory.core.fluid.OffshorePumpBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SaplingBlock;
 import net.minecraft.world.level.block.SoundType;
@@ -43,6 +44,13 @@ public final class PFBlocks {
             sapling("yumako_sapling", PFTrees.YUMAKO);
     public static final DeferredHolder<Block, SaplingBlock> JELLYSTEM_SAPLING =
             sapling("jellystem_sapling", PFTrees.JELLYSTEM);
+
+    /**
+     * Factorio's Offshore Pump (#213, ADR-0050): the single point at which water enters the
+     * factory. One block rather than a ladder -- Factorio has one pump and so does this pack.
+     */
+    public static final DeferredHolder<Block, OffshorePumpBlock> OFFSHORE_PUMP =
+            BLOCKS.register("offshore_pump", OffshorePumpBlock::new);
 
     /**
      * One block per {@link OreResource}: Terra's five ore blocks (ADR-0041).

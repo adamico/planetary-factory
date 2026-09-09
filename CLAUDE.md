@@ -166,6 +166,26 @@ ADR has overridden. Run `scripts/adr-backlink-check.sh` after committing an ADR 
 key — it needs an authenticated `gh`, so it is not part of any offline check. See
 `docs/agents/domain.md`.
 
+### Offshore Pump check
+
+`tests/pack/test_pump_assets.py` asserts the one block water enters the factory through (#213,
+ADR-0050). `scripts/build-pump-assets.py` copies `data/factorio/machine.json`'s `pumps` row into a
+resource the mod reads at class-init, the way `build-rig-assets.py` feeds `RigCorpus`, and the check
+asserts that copy **field by field against the corpus** rather than against literals — a
+hand-edited resource would run the pump at a rate somebody chose with nothing else failing. It also
+holds the seam neither the corpus check nor the asset hops can see: that `pumping_speed` is still
+Factorio's 20, so ADR-0050's "one pump feeds twenty boilers" has not quietly changed meaning; that
+the item-map row names the block now that it exists; and that the **refusal message** has a lang key,
+read out of `OffshorePumpItem` rather than typed, because a missing one renders the raw key on the
+very gesture the message exists to explain.
+
+The rule itself is Minecraft-free and lives under `mod/src/test/java/com/planetaryfactory/core/fluid/`:
+`OffshorePumpSitingTest` is the predicate — one adjacent source, flowing refused, no minimum size —
+and `OffshorePumpSpecTest` the two tick rates, which are the easiest thing here to get wrong, since
+`pumping_speed` is stated per *Factorio* tick and its value happens to be Minecraft's tick rate.
+`PumpCorpusTest` closes the loop by parsing the generated resource. Whether a pump placed against
+the hub pool actually feeds a pipe is a world load.
+
 ### Factorio mechanic ledger
 
 `docs/factorio-mechanics.md` is the tracked list of every Factorio mechanic — base game and Space

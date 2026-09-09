@@ -71,5 +71,7 @@
   "tooltip.planetaryfactory.rig.jade.idle": "idle",
   "tooltip.planetaryfactory.rig.jade.empty": "\u2014",
   "tooltip.planetaryfactory.rig.jade.fuel": "Fuel: %s / %s J",
-  "tooltip.planetaryfactory.rig.jade.no_ore": "Nothing left to mine"
+  "tooltip.planetaryfactory.rig.jade.no_ore": "Nothing left to mine",
+  "block.planetaryfactory.offshore_pump": "Offshore Pump",
+  "message.planetaryfactory.offshore_pump.no_water": "An Offshore Pump must touch still water. Flowing water is not a source."
 }

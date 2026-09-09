@@ -531,9 +531,10 @@
       "ticket": 135
     },
     "offshore-pump": {
-      "status": "undecided",
-      "note": "The fluid rig half of the same shelf.",
-      "ticket": 105
+      "kind": "item",
+      "target": "planetaryfactory:offshore_pump",
+      "note": "Where water enters the factory, and the only place it can (ADR-0050). Flipped from `undecided` when the block landed, not before: an item-map target for a block that does not exist emits a recipe naming nothing.",
+      "ticket": 213
     },
     "oil-refinery": {
       "kind": "item",
