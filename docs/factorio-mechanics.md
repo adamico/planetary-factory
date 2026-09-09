@@ -891,7 +891,7 @@ Sub-rules:
 - **verdict**: `adapted`
 - **where**: all bodies
 - **via**: Minecraft's own walk, against Terra's starting-area distances
-- **owner**: #207
+- **owner**: ADR-0049, #207
 
 Base movement on foot only. Vehicles are [Personal transport](#personal-transport) and #121; the two
 do not collide.
