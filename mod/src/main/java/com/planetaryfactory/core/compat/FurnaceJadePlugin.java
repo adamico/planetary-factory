@@ -101,9 +101,13 @@ public class FurnaceJadePlugin implements IWailaPlugin {
             // One line, read left to right the way the item moves: what goes in, how far along,
             // what has come out. An empty end is stated rather than left blank -- "nothing here"
             // is the diagnosis, and a gap in the line does not say it.
+            // Laid out through JadeLayout rather than appended raw: Jade draws an item at 16 and
+            // the font at 8, so an appended figure sits on the icon's top edge, and appended
+            // elements butt straight up against each other. The rig's tooltip has the same shape
+            // and the same gap, so the two machines read the same (#209).
             tooltip.add(end(elements, input));
-            tooltip.append(elements.text(progress(data)));
-            tooltip.append(end(elements, output));
+            JadeLayout.appendFigure(tooltip, elements, progress(data));
+            JadeLayout.appendSpaced(tooltip, elements, end(elements, output));
 
             if (data.contains(CAPACITY)) {
                 tooltip.add(Component.translatable("tooltip.planetaryfactory.furnace.jade.energy",
