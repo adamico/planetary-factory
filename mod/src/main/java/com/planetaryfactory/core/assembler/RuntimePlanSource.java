@@ -3,7 +3,6 @@ package com.planetaryfactory.core.assembler;
 import com.portingdeadmods.researchd.api.ResearchdApi;
 import java.util.List;
 import java.util.UUID;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
@@ -78,7 +77,11 @@ public final class RuntimePlanSource implements PlanSource {
         ItemBag bag = new ItemBag();
         for (ItemStack stack : player.getInventory().items) {
             if (stack.isEmpty()) continue;
-            bag.add(BuiltInRegistries.ITEM.getKey(stack.getItem()).toString(), stack.getCount());
+            // A stack the key format cannot name -- a transient component, an unencodable one --
+            // is stock nothing can plan against, so it is not stock. It is also not a recipe, so
+            // unlike the graph's refusal there is nobody to tell.
+            String key = ItemKeys.of(stack, player.registryAccess());
+            if (key != null) bag.add(key, stack.getCount());
         }
         return bag;
     }

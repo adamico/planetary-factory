@@ -128,7 +128,7 @@ public final class PersonalAssembler {
         AssemblerQueue.CancelResult result = queue.cancel(planId, new InventoryPlayerItems(player.getInventory()));
         if (!result.cancelled()) return false;
         for (ItemAmount leftover : result.notReturned()) {
-            player.getInventory().placeItemBackInInventory(InventoryPlayerItems.toStack(leftover));
+            player.getInventory().placeItemBackInInventory(ItemKeys.toStack(leftover, player.registryAccess()));
         }
         player.setData(PFAttachments.ASSEMBLER_QUEUE.get(), queue);
         sync(player);

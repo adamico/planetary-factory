@@ -107,4 +107,33 @@ class AssemblerCodecsTest {
 
         assertTrue(decode(AssemblerCodecs.QUEUE, written).isEmpty());
     }
+    @Test
+    void aQueuedSciencePackComesBackAsTheSamePack() {
+        // ADR-0052 asks for this one by name. The key carries a data component patch and encodes it
+        // in vanilla's item-argument syntax -- quotes, brackets and all -- and a codec that mangled
+        // it would not crash: it would hand back a different science pack over a logout, which is
+        // exactly the failure ADR-0038 wanted a round trip for.
+        String red = "researchd:research_pack[researchd:research_pack=\"planetary_factory:automation_science_pack\"]";
+        String green = "researchd:research_pack[researchd:research_pack=\"planetary_factory:logistic_science_pack\"]";
+        CraftStep step = new CraftStep("lab", List.of(new ItemAmount(red, 2)),
+                List.of(new ItemAmount(green, 1)), 40);
+        CraftingPlan plan = new CraftingPlan(
+                UUID.fromString("6f1b1e5e-0000-4000-8000-0000000fedcb"),
+                green, 1, List.of(new ItemAmount(red, 2)), List.of(step));
+        TestPlayerItems items = new TestPlayerItems().with(red, 2);
+        AssemblerQueue queue = new AssemblerQueue();
+        queue.enqueue(plan, items);
+
+        JsonElement written = AssemblerCodecs.QUEUE
+                .encodeStart(JsonOps.INSTANCE, queue)
+                .result()
+                .orElseThrow();
+        AssemblerQueue restored = decode(AssemblerCodecs.QUEUE, written);
+
+        assertEquals(queue.entries(), restored.entries());
+        assertEquals(Map.of(red, 2), restored.entries().get(0).buffer());
+        for (int i = 0; i < 41; i++) restored.tick(items);
+        assertEquals(1, items.count(green), "the plan delivers the pack it was queued for");
+        assertEquals(0, items.count("researchd:research_pack"), "and not a blank one");
+    }
 }

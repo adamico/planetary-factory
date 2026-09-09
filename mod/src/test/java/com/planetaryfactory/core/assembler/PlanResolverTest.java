@@ -320,4 +320,28 @@ class PlanResolverTest {
         assertEquals(Map.of("fancy_plate", 2), asMap(resolution.locked()));
         assertTrue(resolution.missing().isEmpty());
     }
+    @Test
+    void twoItemsSharingARegistryIdAreNotFoldedOntoOneAnother() {
+        // #222/ADR-0052. Researchd's science packs are all researchd:research_pack, told apart by a
+        // data component, so the key carries the patch. A resolver that saw only the id would answer
+        // "complete" here out of a stack of the wrong pack -- which is why the graph refused both
+        // recipes rather than fold them.
+        String red = "researchd:research_pack[researchd:research_pack=\"planetary_factory:automation_science_pack\"]";
+        String green = "researchd:research_pack[researchd:research_pack=\"planetary_factory:logistic_science_pack\"]";
+        RecipeGraph graph = RecipeGraph.builder()
+                .add(new HandRecipe("red", List.of(Ingredient.of("copper", 1)),
+                        List.of(new ItemAmount(red, 1)), 10))
+                .add(new HandRecipe("lab", List.of(Ingredient.of(red, 2)),
+                        List.of(new ItemAmount("lab", 1)), 10))
+                .build();
+        PlanResolver resolver = new PlanResolver(graph, Set.of()::contains);
+
+        PlanResolver.Resolution fromGreen = resolver.resolve("lab", 1, have(green, 2));
+        assertFalse(fromGreen.complete(), "a lab is not craftable out of the other pack");
+        assertEquals(Map.of("copper", 2), asMap(fromGreen.missing()));
+
+        PlanResolver.Resolution fromRed = resolver.resolve("lab", 1, have(red, 2));
+        assertTrue(fromRed.complete());
+        assertEquals(Map.of(red, 2), asMap(fromRed.rawCost()));
+    }
 }

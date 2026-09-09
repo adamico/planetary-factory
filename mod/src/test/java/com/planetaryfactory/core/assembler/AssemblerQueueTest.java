@@ -257,4 +257,26 @@ class AssemblerQueueTest {
         assertNotNull(queue.head());
         assertTrue(queue.head().isEmpty());
     }
+    @Test
+    void aPlanReservesAndDeliversTheExactPackItNames() {
+        // #222/ADR-0052: the queue counts keys, and two science packs share a registry id. A
+        // reservation taken by id would spend the wrong pack, and a delivery by id would hand back
+        // a blank one -- a plan that resolved and ran correctly and produced the wrong item.
+        String red = "researchd:research_pack[researchd:research_pack=\"planetary_factory:automation_science_pack\"]";
+        String green = "researchd:research_pack[researchd:research_pack=\"planetary_factory:logistic_science_pack\"]";
+        CraftStep step = new CraftStep("lab", List.of(new ItemAmount(red, 2)),
+                List.of(new ItemAmount(green, 1)), 2);
+        CraftingPlan plan = new CraftingPlan(
+                UUID.randomUUID(), green, 1, List.of(new ItemAmount(red, 2)), List.of(step));
+        TestPlayerItems items = new TestPlayerItems().with(red, 2).with(green, 5);
+        AssemblerQueue queue = new AssemblerQueue();
+
+        queue.enqueue(plan, items);
+        assertEquals(Map.of(green, 5), items.contents(), "only the pack the plan names is reserved");
+
+        tick(queue, items, 2);
+
+        assertEquals(Map.of(green, 6), items.contents());
+        assertTrue(queue.isEmpty());
+    }
 }

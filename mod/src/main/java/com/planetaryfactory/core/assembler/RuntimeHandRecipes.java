@@ -6,7 +6,7 @@ import com.gregtechceu.gtceu.api.recipe.kind.GTRecipe;
 import com.mojang.logging.LogUtils;
 import java.util.ArrayList;
 import java.util.List;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
@@ -50,30 +50,30 @@ public final class RuntimeHandRecipes {
     public static RecipeGraph graph(Level level) {
         RecipeManager manager = level.getRecipeManager();
         if (manager == builtFrom) return graph;
-        return rebuild(manager);
+        return rebuild(manager, level.registryAccess());
     }
 
-    private static synchronized RecipeGraph rebuild(RecipeManager manager) {
+    private static synchronized RecipeGraph rebuild(RecipeManager manager, HolderLookup.Provider registries) {
         if (manager == builtFrom) return graph;
-        RecipeGraph built = build(manager);
+        RecipeGraph built = build(manager, registries);
         graph = built;
         builtFrom = manager;
         LOGGER.info("Personal Assembler: {} hand-craftable recipe(s) loaded.", built.size());
         return built;
     }
 
-    private static RecipeGraph build(RecipeManager manager) {
+    private static RecipeGraph build(RecipeManager manager, HolderLookup.Provider registries) {
         RecipeGraph.Builder builder = RecipeGraph.builder();
         List<String> refused = new ArrayList<>();
         for (RecipeHolder<?> holder : manager.getRecipes()) {
             if (!(holder.value() instanceof GTRecipe recipe)) continue;
             if (!isHandCraftable(recipe)) continue;
-            String reason = unreadable(recipe);
+            String reason = unreadable(recipe, registries);
             if (reason != null) {
                 refused.add(recipe.id + " (" + reason + ")");
                 continue;
             }
-            builder.add(read(recipe));
+            builder.add(read(recipe, registries));
         }
         if (!refused.isEmpty()) {
             // Named, not counted. A recipe in the hand category that the Assembler will not plan
@@ -91,7 +91,7 @@ public final class RuntimeHandRecipes {
      * category that the Assembler silently ignores is worse than one it refuses out loud: the player
      * gets a plan dialog with three empty columns and no way to find out why.
      */
-    private static String unreadable(GTRecipe recipe) {
+    private static String unreadable(GTRecipe recipe, HolderLookup.Provider registries) {
         if (!recipe.inputs.keySet().stream().allMatch(cap -> cap == ItemRecipeCapability.CAP)) {
             return "a non-item input, which the Assembler has nowhere to hold";
         }
@@ -99,9 +99,9 @@ public final class RuntimeHandRecipes {
             return "a non-item output";
         }
         if (recipe.hasTick()) return "a per-tick input or output";
-        String inputs = unreadableSide(recipe.getInputContents(ItemRecipeCapability.CAP), false);
+        String inputs = unreadableSide(recipe.getInputContents(ItemRecipeCapability.CAP), false, registries);
         if (inputs != null) return "an input with " + inputs;
-        String outputs = unreadableSide(recipe.getOutputContents(ItemRecipeCapability.CAP), true);
+        String outputs = unreadableSide(recipe.getOutputContents(ItemRecipeCapability.CAP), true, registries);
         if (outputs != null) return "an output with " + outputs;
         if (recipe.getOutputContents(ItemRecipeCapability.CAP).isEmpty()) return "no item output";
         return null;
@@ -116,7 +116,8 @@ public final class RuntimeHandRecipes {
      * name. Tag ingredients and AlmostUnified's unification both land in the first case, which is
      * most of this pack's hand set.
      */
-    private static String unreadableSide(List<Content> contents, boolean isOutput) {
+    private static String unreadableSide(
+            List<Content> contents, boolean isOutput, HolderLookup.Provider registries) {
         for (Content content : contents) {
             if (isOutput && content.isChanced()) return "a chance attached";
             if (!(content.content instanceof SizedIngredient sized)) return "no fixed count";
@@ -126,11 +127,13 @@ public final class RuntimeHandRecipes {
                 return matches.length + " possible items (" + matches[0].getItem() + ", ...)";
             }
             for (ItemStack match : matches) {
-                // An item whose identity is partly in its data components cannot be named by its
-                // registry id, and naming it by that id anyway would fold Researchd's science packs
-                // -- which differ only by a component -- onto one another.
-                if (!match.getComponentsPatch().isEmpty()) {
-                    return "data components on " + match.getItem();
+                // A key that names nothing is refused here and nowhere else: the resolver stays free
+                // of any notion of resolvability, and the failure arrives as a named line rather
+                // than as a queue that pauses forever with nothing in the log.
+                String key = ItemKeys.of(match, registries);
+                if (key == null) return "a component nothing can name on " + match.getItem();
+                if (ItemKeys.toStack(key, 1, registries).isEmpty()) {
+                    return "an item that resolves to nothing (" + key + ")";
                 }
                 if (match.getCount() <= 0) return "a count of zero";
             }
@@ -143,21 +146,21 @@ public final class RuntimeHandRecipes {
     }
 
     /** One GregTech recipe as the resolver sees it. Only ever called after {@link #unreadable}. */
-    private static HandRecipe read(GTRecipe recipe) {
+    private static HandRecipe read(GTRecipe recipe, HolderLookup.Provider registries) {
         return new HandRecipe(
                 recipe.id.toString(),
-                ingredients(recipe.getInputContents(ItemRecipeCapability.CAP)),
-                amounts(recipe.getOutputContents(ItemRecipeCapability.CAP)),
+                ingredients(recipe.getInputContents(ItemRecipeCapability.CAP), registries),
+                amounts(recipe.getOutputContents(ItemRecipeCapability.CAP), registries),
                 recipe.duration);
     }
 
-    private static List<Ingredient> ingredients(List<Content> contents) {
+    private static List<Ingredient> ingredients(List<Content> contents, HolderLookup.Provider registries) {
         List<Ingredient> read = new ArrayList<>(contents.size());
         for (Content content : contents) {
             ItemStack[] matches = ((SizedIngredient) content.content).getItems();
             List<String> items = new ArrayList<>(matches.length);
             for (ItemStack match : matches) {
-                items.add(BuiltInRegistries.ITEM.getKey(match.getItem()).toString());
+                items.add(ItemKeys.of(match, registries));
             }
             // Every match of one ingredient carries the same count, so the first one's is the
             // ingredient's. getItems() has already applied it -- read out of NeoForge's bytecode,
@@ -168,12 +171,11 @@ public final class RuntimeHandRecipes {
         return read;
     }
 
-    private static List<ItemAmount> amounts(List<Content> contents) {
+    private static List<ItemAmount> amounts(List<Content> contents, HolderLookup.Provider registries) {
         List<ItemAmount> read = new ArrayList<>(contents.size());
         for (Content content : contents) {
             ItemStack stack = ((SizedIngredient) content.content).getItems()[0];
-            read.add(new ItemAmount(
-                    BuiltInRegistries.ITEM.getKey(stack.getItem()).toString(), stack.getCount()));
+            read.add(new ItemAmount(ItemKeys.of(stack, registries), stack.getCount()));
         }
         return read;
     }

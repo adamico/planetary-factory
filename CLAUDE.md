@@ -142,6 +142,11 @@ feed throws *after* the reservation was taken. All five are
 `./gradlew :planetaryfactory_core:test` with no game launch: the queue and the resolver name items by
 string and the codec is DataFixerUpper's rather than Minecraft's, which is what keeps them checkable.
 
+`tests/factorio/test_science_packs.py` is the emitted half of #222 — that both science pack recipes
+are in the hand set and that every component-bearing output there is one the key format can name.
+Whether the `RecipeGraph` admits them is a running server, and the absence of a refusal line naming
+them is the signal.
+
 `tests/factorio/test_hand_resolver.py` is the corpus half — that the *design* terminates. All 113
 category-`crafting` recipes resolve to plans bottoming out in the 21 known leaves, no item has two
 hand recipes (the resolver picks a route with no cost model), and there are no cycles. It reads

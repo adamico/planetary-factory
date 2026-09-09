@@ -1,28 +1,32 @@
 package com.planetaryfactory.core.assembler.client;
 
-import net.minecraft.core.registries.BuiltInRegistries;
+import com.planetaryfactory.core.assembler.ItemKeys;
+import net.minecraft.client.Minecraft;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
 /**
- * An item id as the client draws it.
+ * An item key as the client draws it.
  *
- * <p>The plan and the queue travel as strings, because the resolver and the queue count ids and
+ * <p>The plan and the queue travel as strings, because the resolver and the queue count keys and
  * never learn what an {@code Item} is -- which is what keeps both of them unit-testable with no
  * Minecraft at all. Turning one back into a sprite or a name is a client-side job, and this is the
  * one place it happens: the three screens and the HUD would otherwise each have their own answer for
- * an id nothing is registered under.
+ * a key nothing is registered under.
+ *
+ * <p>The whole key, patch and all (ADR-0052). Drawing the bare item would put four identical icons
+ * in a plan's {@code To Craft} list for Researchd's four science packs -- the same fold the queue no
+ * longer makes, moved onto the screen, where it looks like a duplicate row.
  */
 final class PlanItems {
 
     private PlanItems() {}
 
-    /** The item's display name, or the raw id when nothing is registered under it. */
-    static Component name(String id) {
-        Item item = item(id);
-        return item == null ? Component.literal(id) : item.getDescription();
+    /** The item's display name, or the raw key when nothing is registered under it. */
+    static Component name(String key) {
+        ItemStack stack = stack(key);
+        return stack.isEmpty() ? Component.literal(key) : stack.getHoverName();
     }
 
     /**
@@ -32,13 +36,12 @@ final class PlanItems {
      * painted into the corner of the sprite would say it twice, differently, the moment a plan asks
      * for more than a stack.
      */
-    static ItemStack stack(String id) {
-        Item item = item(id);
-        return item == null ? ItemStack.EMPTY : new ItemStack(item);
+    static ItemStack stack(String key) {
+        HolderLookup.Provider registries = registries();
+        return registries == null ? ItemStack.EMPTY : ItemKeys.toStack(key, 1, registries);
     }
 
-    private static Item item(String id) {
-        ResourceLocation key = ResourceLocation.tryParse(id);
-        return key == null ? null : BuiltInRegistries.ITEM.get(key);
+    private static HolderLookup.Provider registries() {
+        return Minecraft.getInstance().level == null ? null : Minecraft.getInstance().level.registryAccess();
     }
 }
