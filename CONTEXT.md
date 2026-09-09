@@ -202,13 +202,21 @@ The pack's own high-temperature fluid, emitted directly by the reactor with no h
 _Avoid_: high-pressure steam, hot steam, 500-degree steam
 
 **Boiler**:
-Terra's rung 0 pack-authored machine that burns solid fuel to turn water into **Steam**. One tier; joules in a buffer drained at its own rate (ADR-0047). It replaces the mod boiler the ledger used to name.
+Terra's rung 0 pack-authored machine that burns solid fuel to turn water into **Steam**. One tier; joules in a buffer drained at its own rate (ADR-0047). It replaces the mod boiler the ledger used to name. Its water draw is Factorio's own 60 mB/s, which makes one **Offshore Pump** exactly twenty Boilers (ADR-0050).
 _Avoid_: LP Solid Boiler, heater, steam generator
 
 **Steam Engine**:
 The pack-authored machine that consumes **Steam** and emits Create rotation. It is the pack's rung 0 prime mover and it generates no electricity: rotation becomes volts one rung later, at Create: Power Grid's generator assembly (ADR-0048).
 _Avoid_: Create's Steam Engine, generator, alternator, turbine
 
+
+**Offshore Pump**:
+The pack-authored block that is the **only** origin of water on any body: placed against one natural water source block, it emits 1,200 mB/s and needs no power, both Factorio's own figures (ADR-0050). ADR-0048 had written it off; that call is reversed, because Create's Mechanical Pump moves fluid between pipes and never touches world water.
+_Avoid_: water pump, water extractor, intake, Mechanical Pump
+
+**Natural water**:
+Water a world generator or a structure placed — the only water the **Offshore Pump** accepts. It is not a tracked property and needs no marking: the pack never creates a source block, so every source in the world is natural by construction (ADR-0050). The rule in one line is that **water is extracted and transported, never created**.
+_Avoid_: real water, unplaced water, virgin water, source water
 
 ### Making things
 

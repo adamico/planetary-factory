@@ -77,7 +77,9 @@ kinetic block extends Create's own class. ADR-0043 avoided this dependency and A
 belts without needing it. It is taken here knowingly, as the `create-*.jar` line in
 `mod/build.gradle`'s `compileOnly fileTree` — the same shape as GTCEu's and Researchd's.
 
-**`offshore-pump` becomes `not_emitted`.** Create's Mechanical Pump against a vanilla water source is
+**`offshore-pump` becomes `not_emitted`.** *(Amended by ADR-0050, which reverses this: the
+Mechanical Pump is a pipe-network block and does not extract from the world, so the pump is
+pack-authored after all. The steam chain below is unaffected.)* Create's Mechanical Pump against a vanilla water source is
 the water half, and there is no Factorio entity to author. `pumpjack` is unaffected — it is oil, and
 stays on its own shelf.
 

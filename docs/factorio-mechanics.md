@@ -49,6 +49,7 @@ text and commits to no jar; **`pack` is admissible as a candidate only with a na
 | [Resource patches and finite ore](#resource-patches-and-finite-ore) | `shipped` | Terra, Ignus, Sapros |
 | [Manual mining](#manual-mining) | `adapted` | all bodies |
 | [Mining drills](#mining-drills) | `adapted` | all bodies |
+| [Water as a resource](#water-as-a-resource) | `planned` | all bodies |
 | [Fluid handling](#fluid-handling) | `planned` | all bodies |
 | [Oil processing](#oil-processing) | `planned` | Terra, Ignus, Gelida |
 | [Smelting](#smelting) | `planned` | all bodies |
@@ -258,6 +259,37 @@ Sub-rules:
   block in its area, when looked at and when held for placement. Factorio shows this on a flat map;
   here it is a render on a surface the player walks on.
 - **A body-locked large drill** (Vulcanus's Big Mining Drill) — `planned`, see [Planet-locked buildings](#planet-locked-buildings).
+
+### Water as a resource
+
+- **verdict**: `planned`
+- **where**: all bodies
+- **via**: `pack` (the Offshore Pump), vanilla water, `create` for pipes
+- **owner**: ADR-0050
+- **ticket**: #200
+
+Factorio's water is infinite in volume and **fixed in place** — that property is the whole reason the
+offshore pump exists and why shoreline is a siting concern. ADR-0050 keeps it with one rule: **water
+is extracted and transported, never created.**
+
+Sub-rules:
+
+- **The offshore pump** — `planned`, pack-authored. ADR-0048 had made it `not_emitted` on the
+  reasoning that Create's Mechanical Pump covered the water half; that block is a pipe-network pump
+  and does not extract from the world at all, so ADR-0050 reverses the call. One adjacent source
+  block, no minimum body size, no power (`energy_source: void`), 1,200 mB/s — which is exactly twenty
+  Boilers at their extracted 60 mB/s.
+- **Water source formation** — `excluded`. `waterSourceConversion` is off, forced by the mod on level
+  load. Vanilla's 3x1x1 trench turns two buckets into unlimited water anywhere, which is water
+  creation and defeats every siting constraint above it.
+- **Buckets** — `excluded`. ADR-0050 refuses a 1,000 mB hand container beside ADR-0037's 50 mB barrel.
+  Rung 0 reaches water by digging a channel from the hub pool, not by carrying it.
+- **Placed flowing water** — `planned`. A pack outlet block maintaining flowing water from a pipe, for
+  contraptions tidier than a dug channel. Safe without any tracking because what it places is never a
+  source. Lands after the pump and pipes.
+- **Water barrelling** — `shipped` via the barrel; see [Fluid handling](#fluid-handling). Hauling
+  water in barrels is Factorio's own answer and is not a hole in the rule: the water still came from
+  a pump on natural water.
 
 ### Fluid handling
 
