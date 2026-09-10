@@ -58,7 +58,6 @@ public final class PlanetaryFactoryCore {
         PFFluidTypes.register(modBus);
         PFFluids.register(modBus);
         modBus.addListener(PFItems::addToCreativeTabs);
-        modBus.addListener(PFFluids::addToCreativeTabs);
         modBus.addListener(PFBlockEntities::registerCapabilities);
         modBus.addListener(PFItems::registerCapabilities);
         modBus.addListener(PFNetwork::register);

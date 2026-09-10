@@ -15,12 +15,14 @@ that consume them pick their own fields out of what is already on disk. A hand-e
 would run the Boiler at a rate somebody chose, with nothing else failing; that is the one thing
 this script exists to prevent.
 
-Alongside the corpus copy, this script also writes the two fluids' lang keys (`fluid_type` and
-bucket item names) and the two bucket items' models. Registration itself -- the `Fluid`,
-`FluidType`, `LiquidBlock` and `BucketItem` -- is mechanism (ADR-0015) and lives in the mod as
-ordinary Java; only the display names and the bucket icons are pack-side data, and both buckets
-point at vanilla's own filled-bucket textures the way the Offshore Pump points at vanilla's own
-block textures -- reused by reference, not duplicated.
+Alongside the corpus copy, this script writes the two fluids' `fluid_type` lang keys. Registration
+itself -- the `Fluid`, the `FluidType` and the `LiquidBlock` -- is mechanism (ADR-0015) and lives in
+the mod as ordinary Java; only the display names are pack-side data.
+
+**Neither fluid has a bucket**, so there is no bucket model and no bucket lang key to write.
+ADR-0037 already answered portable fluid for this pack -- `planetaryfactory:barrel`, any fluid at
+Factorio's own 50 mB -- and states that capacity as a rule a later container "does not get to be
+re-argued from Minecraft's bucket" against. See `PFFluids`' javadoc.
 
 Usage:
 
@@ -49,19 +51,7 @@ FLUIDS = {
     "superheated_steam": "Superheated Steam",
 }
 
-# Vanilla's own filled-bucket textures, referenced rather than duplicated -- the same reuse the
-# Offshore Pump makes of vanilla's block textures. Steam borrows the water bucket's icon (it is,
-# after all, boiled water); Superheated Steam borrows the lava bucket's -- the hottest thing vanilla
-# draws a bucket for.
-BUCKET_TEXTURES = {
-    "steam": "minecraft:item/water_bucket",
-    "superheated_steam": "minecraft:item/lava_bucket",
-}
-
 FLUID_LANG = {f"fluid_type.{NAMESPACE}.{name}": display for name, display in FLUIDS.items()}
-BUCKET_LANG = {
-    f"item.{NAMESPACE}.{name}_bucket": f"{display} Bucket" for name, display in FLUIDS.items()
-}
 
 
 def steam_chain_from_corpus():
@@ -90,13 +80,6 @@ def steam_chain_from_corpus():
     }
 
 
-def bucket_item_model(fluid_name):
-    return {
-        "parent": "minecraft:item/generated",
-        "textures": {"layer0": BUCKET_TEXTURES[fluid_name]},
-    }
-
-
 def write(path, data):
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, "w", encoding="utf-8") as handle:
@@ -106,13 +89,7 @@ def write(path, data):
 
 def planned_files(rows):
     files = {STEAM_CHAIN_RESOURCE: rows}
-    for fluid_name in FLUIDS:
-        files[os.path.join(ASSETS, "models", "item", f"{fluid_name}_bucket.json")] = (
-            bucket_item_model(fluid_name)
-        )
-    lang = dict(FLUID_LANG)
-    lang.update(BUCKET_LANG)
-    return files, lang
+    return files, dict(FLUID_LANG)
 
 
 def lang_path():

@@ -3,9 +3,6 @@ package com.planetaryfactory.core.fluid;
 import com.planetaryfactory.core.PlanetaryFactoryCore;
 
 import net.minecraft.core.registries.Registries;
-import net.minecraft.world.item.BucketItem;
-import net.minecraft.world.item.CreativeModeTabs;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Fluid;
@@ -13,23 +10,29 @@ import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.block.SoundType;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.fluids.BaseFlowingFluid;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 /**
- * Terra's two pack-owned steam fluids, made real: still, flowing, a block and a bucket each
+ * Terra's two pack-owned steam fluids, made real: still, flowing and a block each
  * (#223, ADR-0048).
  *
- * <p>Three registries, kept together because the four objects for one fluid are mutually
+ * <p>Two registries, kept together because the three objects for one fluid are mutually
  * referential -- the fluid needs the block to convert to on placement, the block needs the fluid's
- * source, the bucket needs the source too, and all three are resolved lazily through
- * {@link DeferredHolder#get()}, never eagerly. Vanilla's own {@code FLUID}, {@code BLOCK} and
- * {@code ITEM} registries fire their {@code RegisterEvent} in that declared order (see
- * {@code net.minecraft.core.registries.BuiltInRegistries}), which is what makes it safe for the
- * block and bucket suppliers below to call {@code .get()} on a fluid holder from inside their own
- * registration lambda.
+ * source, and both are resolved lazily through {@link DeferredHolder#get()}, never eagerly.
+ * Vanilla's own {@code FLUID} and {@code BLOCK} registries fire their {@code RegisterEvent} in that
+ * declared order (see {@code net.minecraft.core.registries.BuiltInRegistries}), which is what makes
+ * it safe for the block suppliers below to call {@code .get()} on a fluid holder from inside their
+ * own registration lambda.
+ *
+ * <p><b>Neither fluid has a bucket, deliberately.</b> ADR-0037 already answered portable fluid for
+ * this pack: {@code planetaryfactory:barrel}, which takes any fluid at Factorio's own 50 mB. That
+ * ADR states the capacity as a rule rather than as a fact about one item -- a portable container
+ * holds the Factorio number under the converter's 1:1 unit rule, and "does not get to be re-argued
+ * from Minecraft's bucket". A 1 000 mB bucket of steam is exactly the twentyfold dose it rejects,
+ * and it would hand the player a hand-carry route around the Boiler-pipe-Engine chain that rung 0
+ * exists to teach. A {@link net.neoforged.neoforge.fluids.FluidType} needs no bucket to register.
  *
  * <p>No model or blockstate JSON is generated for either liquid block: {@link LiquidBlock}s are not
  * rendered from one -- {@link com.planetaryfactory.core.fluid.client.SteamFluidClient} supplies the
@@ -41,8 +44,6 @@ public final class PFFluids {
             DeferredRegister.create(Registries.FLUID, PlanetaryFactoryCore.NAMESPACE);
     public static final DeferredRegister.Blocks BLOCKS =
             DeferredRegister.createBlocks(PlanetaryFactoryCore.NAMESPACE);
-    public static final DeferredRegister.Items ITEMS =
-            DeferredRegister.createItems(PlanetaryFactoryCore.NAMESPACE);
 
     // ---- Steam ----------------------------------------------------------------------------
 
@@ -54,9 +55,6 @@ public final class PFFluids {
     public static final DeferredHolder<Block, PFLiquidBlock> STEAM_BLOCK =
             BLOCKS.register("steam", () -> new PFLiquidBlock(STEAM_SOURCE.get(), liquidProperties()));
 
-    public static final DeferredHolder<Item, BucketItem> STEAM_BUCKET = ITEMS.register(
-            "steam_bucket",
-            () -> new BucketItem(STEAM_SOURCE.get(), new Item.Properties().stacksTo(1)));
 
     // ---- Superheated Steam ------------------------------------------------------------------
 
@@ -77,23 +75,18 @@ public final class PFFluids {
             "superheated_steam",
             () -> new PFLiquidBlock(SUPERHEATED_STEAM_SOURCE.get(), liquidProperties()));
 
-    public static final DeferredHolder<Item, BucketItem> SUPERHEATED_STEAM_BUCKET = ITEMS.register(
-            "superheated_steam_bucket",
-            () -> new BucketItem(SUPERHEATED_STEAM_SOURCE.get(), new Item.Properties().stacksTo(1)));
 
     private PFFluids() {
     }
 
     private static BaseFlowingFluid.Properties steamProperties() {
         return new BaseFlowingFluid.Properties(PFFluidTypes.STEAM, STEAM_SOURCE, STEAM_FLOWING)
-                .bucket(STEAM_BUCKET)
                 .block(STEAM_BLOCK);
     }
 
     private static BaseFlowingFluid.Properties superheatedSteamProperties() {
         return new BaseFlowingFluid.Properties(
                 PFFluidTypes.SUPERHEATED_STEAM, SUPERHEATED_STEAM_SOURCE, SUPERHEATED_STEAM_FLOWING)
-                .bucket(SUPERHEATED_STEAM_BUCKET)
                 .block(SUPERHEATED_STEAM_BLOCK);
     }
 
@@ -113,14 +106,6 @@ public final class PFFluids {
     public static void register(IEventBus modBus) {
         FLUIDS.register(modBus);
         BLOCKS.register(modBus);
-        ITEMS.register(modBus);
     }
 
-    /** Both buckets, where vanilla's own water and lava buckets live. */
-    public static void addToCreativeTabs(BuildCreativeModeTabContentsEvent event) {
-        if (event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
-            event.accept(STEAM_BUCKET.get());
-            event.accept(SUPERHEATED_STEAM_BUCKET.get());
-        }
-    }
 }

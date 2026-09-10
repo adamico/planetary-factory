@@ -9,9 +9,14 @@ Three things are asserted, and each fails in a different way:
     run the Boiler at a rate somebody chose with nothing else failing, since neither #224 nor #225
     exists yet to notice. So the resource is asserted against the corpus field by field, never
     against a literal, the `test_pump_assets.py` pattern.
-  - **The fluids' lang keys and bucket models.** These are `planetaryfactory:` fluids, so nothing
-    else in the pack names or textures them. A missing `fluid_type` key renders the raw key in a
-    tank tooltip; a missing bucket model is a black-and-magenta cube in the hand.
+  - **The fluids' lang keys.** These are `planetaryfactory:` fluids, so nothing else in the pack
+    names them, and a missing `fluid_type` key renders the raw key in a tank tooltip.
+  - **That neither fluid has a bucket.** ADR-0037 answered portable fluid for this pack --
+    `planetaryfactory:barrel`, any fluid at Factorio's own 50 mB -- and states that capacity as a
+    rule a later container "does not get to be re-argued from Minecraft's bucket" against. A
+    1 000 mB bucket of steam is the twentyfold dose that ADR rejects, and it hands the player a
+    hand-carry route around the Boiler-pipe-Engine chain rung 0 exists to teach. Asserted as an
+    absence rather than left undone, because a bucket is the obvious thing to add back.
   - **That neither fluid is a GT material.** ADR-0048's central point: `gtceu:steam` is not inert,
     and nothing here may reach for it. Checked by grepping the fluid registration source for the
     string, since a static check cannot ask GregTech's own registry what accepted it.
@@ -103,22 +108,31 @@ def check_assets(lang, failures):
             failures.append(f"{fluid_name} has no {fluid_type_key} lang entry -- it would show its "
                             "raw key in a tank tooltip")
 
+
+def check_no_bucket(lang, failures):
+    """ADR-0037: the barrel is this pack's portable fluid container, at Factorio's 50 mB.
+
+    A bucket is the obvious thing for a later hand to add back, so the absence is asserted rather
+    than merely left undone.
+    """
+    source = PF_FLUIDS.read_text(encoding="utf-8")
+    code = re.sub(r"/\*.*?\*/", "", source, flags=re.DOTALL)
+    code = re.sub(r"//.*", "", code)
+    if "BucketItem" in code:
+        failures.append(
+            "PFFluids registers a BucketItem -- ADR-0037 makes planetaryfactory:barrel this pack's "
+            "portable fluid container at Factorio's 50 mB, and says a later container does not get "
+            "to be re-argued from Minecraft's bucket"
+        )
+
+    for fluid_name in FLUIDS:
         bucket_key = f"item.planetaryfactory.{fluid_name}_bucket"
-        if not lang.get(bucket_key):
-            failures.append(f"{fluid_name} has no {bucket_key} lang entry")
+        if lang.get(bucket_key):
+            failures.append(f"{bucket_key} is a lang entry, but {fluid_name} has no bucket")
 
         model = ASSETS / f"models/item/{fluid_name}_bucket.json"
-        if not resolves(model):
-            failures.append(f"{fluid_name}_bucket has no item model -- it would be invisible in "
-                            "the hand")
-        else:
-            declared = json.loads(model.read_text())
-            texture = declared.get("textures", {}).get("layer0")
-            if not texture or not texture.startswith("minecraft:item/"):
-                failures.append(
-                    f"{fluid_name}_bucket's model does not point at a vanilla bucket texture -- "
-                    f"got {texture!r}"
-                )
+        if resolves(model):
+            failures.append(f"{model} exists, but {fluid_name} has no bucket")
 
 
 def check_not_gtceu_steam(failures):
@@ -157,6 +171,7 @@ def main():
 
     check_corpus(failures)
     check_assets(lang, failures)
+    check_no_bucket(lang, failures)
     check_not_gtceu_steam(failures)
 
     if failures:
