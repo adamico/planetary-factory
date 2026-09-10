@@ -220,6 +220,10 @@ _Avoid_: real water, unplaced water, virgin water, source water
 
 ### Making things
 
+**Plate**:
+The pack's one item per material — GregTech's, for every material (ADR-0053). It is what a furnace yields, since ore smelts 1:1 to a plate with no ingot step, and it is the form every recipe consumes. There is exactly one per material and never a second: where another mod ships a rival form for the same material, the pack's unification priority decides in GregTech's favour and the rival becomes unobtainable. Vanilla still owns the ingot, ore, nugget and raw forms, which the pack does not use.
+_Avoid_: sheet, ingot, GT plate, unified plate
+
 **Engineer's Pick**:
 The player's only mining tool, in two tiers — **Engineer's Iron Pick** and **Engineer's Steel Pick** — both indestructible, the steel one unlocked by the `steel-axe` research and crafted from the iron one, which it consumes. It mines every block class, so the pack has no axe, shovel or shears, and it is what dismantles a GregTech machine. The tiers differ only in mining speed: Terra's ores, coal and stone take a flat second by hand and half a second after the research, while everything else keeps vanilla hardness. Factorio's two mining speeds and the ratio between the tiers are kept, but the mining time itself is the pack's — half of Factorio's, after 2.0s failed ADR-0039's human-on-delivery check.
 _Avoid_: pickaxe, the pick, mining tool, wrench
