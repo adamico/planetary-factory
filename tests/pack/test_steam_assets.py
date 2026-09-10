@@ -179,8 +179,8 @@ def main():
         for failure in failures:
             print(f"  - {failure}")
         return 1
-    print("ok   steam chain: boiler and steam-engine rows extracted, both fluids named and "
-          "textured, neither is gtceu:steam")
+    print("ok   steam chain: boiler and steam-engine rows extracted, both fluids named, "
+          "no bucket, neither is gtceu:steam")
     return 0
 
 
