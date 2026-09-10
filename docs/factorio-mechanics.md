@@ -429,11 +429,14 @@ Sub-rules:
 - **verdict**: `planned`
 - **where**: all bodies
 - **via**: `pack`
-- **owner**: ADR-0026, ADR-0029
+- **owner**: ADR-0026, ADR-0029, ADR-0056
 - **ticket**: #87 (the machines are registered; the recipe conversion is not)
 
-Three pack-authored Assembling Machines on a GT chassis. Recipe routing follows Factorio's own
-`category` (ADR-0021), not the owning mod.
+Three pack-authored Assembling Machines. Recipe routing follows Factorio's own `category`
+(ADR-0021), not the owning mod. ~~On a GT chassis~~ — **ADR-0056 takes GregTech out of the pack and
+makes Modern Industrialization the chassis.** The three machines, their tiers and their recipe type
+stay pack-authored; what changes underneath them is which mod supplies the block and the recipe
+lookup.
 
 Sub-rules:
 
@@ -443,6 +446,19 @@ Sub-rules:
   overclocking never fires above base tier.
 - **`energy_usage` as a machine property** — `planned`. ADR-0029 emits no `EUt` on a recipe at all;
   a machine modifier supplies it, scaled so the Oil Refinery's 420 kW lands on LV's 32 EU/t.
+- **Recipe selection in a machine** — `blocked`. In Factorio a machine is *told* its recipe: the
+  player picks it from a list, the machine displays it, holds it whether or not it is fed, and the
+  setting copies to another machine. The pack has **no surface for this at all**, and that is the
+  design gap, not the absence of a programmed circuit. GregTech's answer is the circuit, which
+  ADR-0026 removed on purpose and #236 measured the cost of: GregTech keys its recipe lookup on the
+  ingredient set, so with no circuit a colliding recipe is refused into the lookup at load and 44 of
+  139 emitted recipes never reach the machine. ADR-0056 removes that mod, and Modern
+  Industrialization keeps every colliding recipe in a flat candidate list — but MI's own lock is
+  *slot*-level, so a machine with locked outputs and empty inputs stores no recipe and displays
+  none. **The mechanic therefore still has no implementation the pack has committed to**, which is
+  what `blocked` means here rather than `planned`. Whichever gesture lands, its check is a static
+  assertion that no two emitted recipes of one type share an ingredient set (#237) plus an in-world
+  test that a fed machine picks the intended recipe (#238).
 - **Machine idle draw** — `excluded`. A Factorio machine consumes power while idle: the
   [Electric system](https://wiki.factorio.com/Electric_system) page notes *"an active assembling
   machine 2 will consume 155 kW (150 kW energy consumption + 5 kW drain)"*, about a thirtieth of the
