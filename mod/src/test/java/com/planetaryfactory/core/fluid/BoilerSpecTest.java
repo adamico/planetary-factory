@@ -67,6 +67,15 @@ class BoilerSpecTest {
     }
 
     @Test
+    @DisplayName("a rate that does not land on a whole tick is refused, not truncated")
+    void unevenRateIsRefused() {
+        // 90,000 J a tick over a 40,000 J unit is 2.25 mB, and integer division would boil at 2 --
+        // two thirds of the prototype, with a plausible number on the gauge and nothing in a log.
+        assertThrows(IllegalArgumentException.class,
+                () -> BoilerSpec.milliBucketsPerTick(90_000L, 40_000L));
+    }
+
+    @Test
     @DisplayName("a target at the water's own temperature is refused, not divided by zero")
     void noRiseIsRefused() {
         assertThrows(IllegalArgumentException.class,

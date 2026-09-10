@@ -88,9 +88,21 @@ public final class SteamChainCorpus {
         return boiler.get("target_temperature").getAsInt();
     }
 
-    /** The Boiler's fuel draw, in joules -- {@code fuel_value * effectivity} under ADR-0047. */
+    /** The Boiler's fuel draw, in joules a second, as the prototype states it. */
     public double boilerEnergyConsumption() {
         return boiler.get("energy_consumption").getAsDouble();
+    }
+
+    /**
+     * How much of a fuel item's value the Boiler's burner actually banks (ADR-0047).
+     *
+     * <p>Factorio's is 1, so it multiplies nothing today. It is read and applied anyway rather
+     * than elided, because a burner whose effectivity is silently ignored is a machine running at
+     * a rate the prototype does not state, and the omission would only surface as a wrong number
+     * the day a prototype changed.
+     */
+    public double boilerEffectivity() {
+        return boiler.getAsJsonObject("burner").get("effectivity").getAsDouble();
     }
 
     /** The Steam Engine's maximum input temperature. Also 165 °C -- one boiler tier, ADR-0048. */
@@ -147,7 +159,7 @@ public final class SteamChainCorpus {
     }
 
     /**
-     * The raw boiler row, for a field #224 needs that this class does not yet expose by name.
+     * The raw boiler row, for a field this class does not expose by name.
      *
      * <p>Deliberately escape-hatch shaped: the resource copies the whole row, and this class is not
      * meant to gatekeep which of its fields a later ticket may read.

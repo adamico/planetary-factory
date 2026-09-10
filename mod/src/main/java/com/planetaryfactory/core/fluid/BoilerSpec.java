@@ -41,8 +41,8 @@ public final class BoilerSpec {
      * What one tick of boiling costs, in joules: 1.8 MW over twenty ticks is 90,000 J.
      *
      * <p>{@code effectivity} is not applied here. Under ADR-0047 it multiplies the fuel item's
-     * value on the way *in* to the buffer, not the draw on the way out, which is the same place
-     * the Furnace and the rig apply it.
+     * value on the way *in* to the buffer, not the draw on the way out --
+     * {@link BoilerBlockEntity} is where it is spent.
      */
     public static long joulesPerTick(double energyConsumptionPerSecond) {
         return Math.round(energyConsumptionPerSecond / MINECRAFT_TICKS_PER_SECOND);
@@ -84,6 +84,15 @@ public final class BoilerSpec {
      * heat capacity, and that is already spent above.
      */
     public static int milliBucketsPerTick(long joulesPerTick, long joulesPerUnit) {
+        if (joulesPerTick % joulesPerUnit != 0) {
+            // Refused rather than truncated, the same way a non-positive rise above is. Integer
+            // division here would boil at a rate nobody chose and nothing states -- 2 mB a tick
+            // instead of 2.9 is a machine running at two thirds of its prototype, with no
+            // refusal, no log line and a plausible number on the gauge.
+            throw new IllegalArgumentException(
+                    joulesPerTick + " J a tick is not a whole number of " + joulesPerUnit
+                            + " J units -- the prototype's rate no longer lands on Minecraft's tick");
+        }
         return (int) (joulesPerTick / joulesPerUnit);
     }
 }

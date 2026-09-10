@@ -71,6 +71,9 @@ public class BoilerBlockEntity extends BlockEntity implements Container, MenuPro
             CORPUS.fluidDefaultTemperature("water"),
             // Steam's, not water's. BoilerSpec is where that trap is written down.
             CORPUS.fluidHeatCapacity("steam"));
+    /** ADR-0047's multiplier on the way *in* to the buffer. Factorio's is 1. */
+    private static final double EFFECTIVITY = CORPUS.boilerEffectivity();
+
     private static final int MILLIBUCKETS_PER_TICK =
             BoilerSpec.milliBucketsPerTick(JOULES_PER_TICK, JOULES_PER_MILLIBUCKET);
 
@@ -163,7 +166,14 @@ public class BoilerBlockEntity extends BlockEntity implements Container, MenuPro
         setChanged();
     }
 
-    /** Consume one fuel item whole and report what it was worth, the rig's own idiom. */
+    /**
+     * Consume one fuel item whole and report what it was worth, the rig's own idiom.
+     *
+     * <p>ADR-0047's rule in full: {@code fuel_value * effectivity} joules into the buffer. The
+     * Boiler's effectivity is 1, so the multiplication changes nothing today -- it is here so that
+     * the rule is executed rather than assumed, and a prototype that ever stated otherwise would
+     * be obeyed instead of silently ignored.
+     */
     private long light() {
         ItemStack stack = items.get(BoilerSlots.FUEL);
         long joules = PFFuel.joules(stack);
@@ -171,7 +181,7 @@ public class BoilerBlockEntity extends BlockEntity implements Container, MenuPro
             return 0L;
         }
         stack.shrink(1);
-        return joules;
+        return Math.round(joules * EFFECTIVITY);
     }
 
     /** Whether the generated fuel table names this stack (ADR-0047). Default-deny. */

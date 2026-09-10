@@ -59,6 +59,14 @@ class SteamChainCorpusTest {
     }
 
     @Test
+    @DisplayName("the burner's effectivity is Factorio's 1, and is read rather than assumed")
+    void boilerEffectivity() {
+        // ADR-0047 banks `fuel_value * effectivity`. The multiplier is 1 here, so a Boiler that
+        // ignored it would look identical -- which is exactly why it is read and asserted.
+        assertEquals(1.0, SteamChainCorpus.get().boilerEffectivity());
+    }
+
+    @Test
     @DisplayName("the whole chain resolves to Factorio's own 60 mB a second")
     void theRateTheCorpusImplies() {
         SteamChainCorpus corpus = SteamChainCorpus.get();

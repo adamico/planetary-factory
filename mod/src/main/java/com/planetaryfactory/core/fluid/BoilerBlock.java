@@ -114,10 +114,14 @@ public class BoilerBlock extends BaseEntityBlock {
     /**
      * Breaking a Boiler pays back the fuel it still holds.
      *
-     * <p>Nothing in this pack is a resource sink. The water and the steam go -- both are made
-     * again by a pump and a tick of fuel, and neither is an item to drop -- but coal is finite in
-     * the ground under ADR-0041, and voiding it on a break would make dismantling a machine cost
+     * <p>Nothing in this pack is a resource sink <em>in items</em>. Coal is finite in the ground
+     * under ADR-0041, and voiding a stack of it on a break would make dismantling a machine cost
      * the player ore they had already mined.
+     *
+     * <p>What does go is the water, the steam and the part-spent joules in the buffer -- none of
+     * them is an item to drop, and all three are a tick or two of a machine that is still running
+     * somewhere. That is the furnace ladder's own bargain and it is stated here rather than left
+     * to be noticed.
      */
     @Override
     protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState,

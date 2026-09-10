@@ -54,9 +54,12 @@ public record BoilerItemHandler(BoilerBlockEntity boiler) implements IItemHandle
 
     @Override
     public ItemStack extractItem(int slot, int amount, boolean simulate) {
-        // BoilerSlots.canExtract is false for every slot: a Boiler holds only the fuel it is
-        // burning, and letting a funnel take that back is pulling the coal out mid-tick.
-        return ItemStack.EMPTY;
+        if (!BoilerSlots.canExtract(slot)) {
+            // Which is every slot: a Boiler holds only the fuel it is burning, and letting a
+            // funnel take that back is pulling the coal out from under it mid-tick.
+            return ItemStack.EMPTY;
+        }
+        return boiler.removeItem(slot, amount);
     }
 
     @Override

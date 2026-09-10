@@ -233,7 +233,8 @@ which GregTech's model provider does not serve for a `planetaryfactory:` block, 
 item-map row is `authored` and names the block the mod registers rather than the LP Solid Boiler it
 replaces, and a **second, independent derivation** of the 60 mB/s straight from the corpus. Run both
 after editing `core/fluid/`, `scripts/build-steam-assets.py` or the corpus. Whether a placed Boiler
-boils water is a world load.
+boils water is a world load, and — unlike the furnace ladder's, which are filed on #156 — no
+GameTest is filed for it yet; that is a gap rather than a decision.
 
 ### Factorio mechanic ledger
 

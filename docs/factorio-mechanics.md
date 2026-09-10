@@ -753,7 +753,7 @@ Sub-rules:
   Mekanism, which registers no generator block at all, so the clause naming it never named anything.
   **`gregtech` was struck by ADR-0048**: the boiler is the pack's, and `create` is now on the row for
   the rotation the pack's Steam Engine emits rather than for an engine of Create's own.
-- **ticket**: #104, #189
+- **ticket**: #104, #189, #224
 
 Sub-rules:
 
