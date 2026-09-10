@@ -1,0 +1,63 @@
+{
+  "boiler": {
+    "name": "boiler",
+    "type": "boiler",
+    "energy_consumption": 1800000.0,
+    "target_temperature": 165,
+    "effectivity": 1,
+    "mode": "output-to-separate-pipe",
+    "energy_type": "burner",
+    "drain": null,
+    "drain_source": "none",
+    "burner": {
+      "fuel_categories": [
+        "chemical"
+      ],
+      "effectivity": 1,
+      "fuel_inventory_size": 1
+    },
+    "fluid_boxes": [
+      {
+        "production_type": "input",
+        "volume": 200,
+        "filter": "water",
+        "minimum_temperature": null,
+        "maximum_temperature": null,
+        "name": "fluid_box"
+      },
+      {
+        "production_type": "output",
+        "volume": 200,
+        "filter": "steam",
+        "minimum_temperature": null,
+        "maximum_temperature": null,
+        "name": "output_fluid_box"
+      }
+    ],
+    "tile_width": 3,
+    "tile_height": 2
+  },
+  "steam-engine": {
+    "name": "steam-engine",
+    "type": "generator",
+    "energy_source": "electric",
+    "effectivity": 1,
+    "fluid_usage_per_tick": 0.5,
+    "maximum_temperature": 165,
+    "max_power_output": 900000.0,
+    "max_power_output_source": "derived",
+    "burns_fluid": false,
+    "fluid_boxes": [
+      {
+        "production_type": "input",
+        "volume": 200,
+        "filter": "steam",
+        "minimum_temperature": 100,
+        "maximum_temperature": null,
+        "name": "fluid_box"
+      }
+    ],
+    "tile_width": 3,
+    "tile_height": 5
+  }
+}

@@ -73,5 +73,9 @@
   "tooltip.planetaryfactory.rig.jade.fuel": "Fuel: %s / %s J",
   "tooltip.planetaryfactory.rig.jade.no_ore": "Nothing left to mine",
   "block.planetaryfactory.offshore_pump": "Offshore Pump",
-  "message.planetaryfactory.offshore_pump.no_water": "An Offshore Pump must touch still water. Flowing water is not a source."
+  "message.planetaryfactory.offshore_pump.no_water": "An Offshore Pump must touch still water. Flowing water is not a source.",
+  "fluid_type.planetaryfactory.steam": "Steam",
+  "fluid_type.planetaryfactory.superheated_steam": "Superheated Steam",
+  "item.planetaryfactory.steam_bucket": "Steam Bucket",
+  "item.planetaryfactory.superheated_steam_bucket": "Superheated Steam Bucket"
 }

@@ -4,7 +4,10 @@ import com.planetaryfactory.core.assembler.AssemblerTicker;
 import com.planetaryfactory.core.assembler.client.AssemblerClient;
 import com.planetaryfactory.core.crafting.client.InventoryGridBlank;
 import com.planetaryfactory.core.felling.TreeFelling;
+import com.planetaryfactory.core.fluid.PFFluidTypes;
+import com.planetaryfactory.core.fluid.PFFluids;
 import com.planetaryfactory.core.fluid.WaterConservation;
+import com.planetaryfactory.core.fluid.client.SteamFluidClient;
 import com.planetaryfactory.core.network.PFNetwork;
 import com.planetaryfactory.core.recipes.PFRecipes;
 import com.planetaryfactory.core.smelting.PFFuel;
@@ -49,7 +52,13 @@ public final class PlanetaryFactoryCore {
         PFBlockEntities.register(modBus);
         PFWorldgen.register(modBus);
         PFRecipes.register(modBus);
+        // Terra's two pack-owned steam fluids (#223, ADR-0048). Fluid types before fluids before
+        // blocks before items, matching the order BuiltInRegistries declares those registries in --
+        // see PFFluids' own javadoc for why that order is load-bearing here.
+        PFFluidTypes.register(modBus);
+        PFFluids.register(modBus);
         modBus.addListener(PFItems::addToCreativeTabs);
+        modBus.addListener(PFFluids::addToCreativeTabs);
         modBus.addListener(PFBlockEntities::registerCapabilities);
         modBus.addListener(PFItems::registerCapabilities);
         modBus.addListener(PFNetwork::register);
@@ -82,6 +91,10 @@ public final class PlanetaryFactoryCore {
             AssemblerClient.register(modBus);
             FurnaceClient.register(modBus);
             RigClient.register(modBus);
+            // The client extension seam neither fluid registration touches otherwise -- see the
+            // class javadoc for why an invisible or missing-texture fluid is the failure this
+            // guards against.
+            SteamFluidClient.register(modBus);
             // What an item is worth as fuel, on its own tooltip: the fuel table is default-deny,
             // so vanilla's intuitions about what burns are wrong in both directions.
             FuelTooltip.register();
