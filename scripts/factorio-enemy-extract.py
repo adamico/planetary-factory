@@ -80,6 +80,13 @@ WORM_TYPE = "turret"
 # What a wall is, and what a gate is. Same body, one of them opens.
 WALL_TYPES = ("wall", "gate")
 
+# What a target takes is `target_effects`; `source_effects` is what the attacker pays
+# itself, and reading it as damage is a sign error rather than a rounding one. This is a
+# property of the data and is kept apart from the art keys below, which are only a walk that
+# would otherwise spend most of its time in sprites.
+NOT_DAMAGE = ("source_effects",)
+NO_ACTIONS = ("animation", "sound", "cyclic_sound", "graphics_set", "icon")
+
 # The four map-settings blocks ADR-0055's rules are argued in.
 SETTINGS_BLOCKS = ("enemy_evolution", "enemy_expansion", "unit_group", "pollution")
 
@@ -147,9 +154,10 @@ def collect_damage(node, referenced, source, out, seen):
       - **One attack can deal several damages.** That same wriggler deals two, and its hit
         is their sum -- 7.5, which is neither of them.
       - **The delivery may be a reference.** A biter's damage is inline; a spitter's and a
-        worm's is in the `stream` prototype the delivery names, and a laser turret's is in
-        the `beam` one. Following neither leaves half the enemies in the game and every
-        electric turret stating no damage at all.
+        worm's is in the `stream` prototype the delivery names, a laser turret's is in the
+        `beam` one, and a shell's is in the `projectile` one. Following none of them leaves
+        half the enemies in the game, every electric turret and most of the ammo stating no
+        damage at all.
     """
     if isinstance(node, list):
         for entry in node:
@@ -163,7 +171,7 @@ def collect_damage(node, referenced, source, out, seen):
         out.append({"amount": damage.get("amount"), "type": damage.get("type"), "via": source})
         return
 
-    for field in ("stream", "beam"):
+    for field in ("stream", "beam", "projectile"):
         name = node.get(field)
         if isinstance(name, str) and (field, name) not in seen:
             seen.add((field, name))
@@ -178,9 +186,7 @@ def collect_damage(node, referenced, source, out, seen):
                 )
 
     for key, value in node.items():
-        # `source_effects` is what the attacker pays, not what the target takes. Art, sound
-        # and geometry hold no action, and walking them is most of the runtime on a 28MB dump.
-        if key in ("source_effects", "animation", "sound", "cyclic_sound", "graphics_set", "icon"):
+        if key in NOT_DAMAGE or key in NO_ACTIONS:
             continue
         if isinstance(value, (dict, list)):
             collect_damage(value, referenced, source, out, seen)
@@ -300,6 +306,33 @@ def turret_row(name, prototype, referenced, corpus):
     }
 
 
+def ammo_row(name, prototype, referenced, corpus):
+    """One `ammo` item, and what firing it does.
+
+    A gun turret and a rocket turret state no damage of their own -- the magazine decides
+    it -- so a corpus that stops at the turret has no damage figure for two of the three
+    turrets ADR-0055 would arm a base with. The ammo's `ammo_type` is the same action tree
+    the enemies' is, walked the same way, and `ammo_category` is the join back to the turret
+    that accepts it.
+    """
+    ammo_type = prototype.get("ammo_type")
+    if isinstance(ammo_type, list):
+        # Quality-varying ammo states a list; the first entry is the base one.
+        ammo_type = ammo_type[0] if ammo_type else None
+    damages = []
+    if isinstance(ammo_type, dict):
+        collect_damage(ammo_type, referenced, "inline", damages, set())
+    return {
+        "name": name,
+        "in_corpus": name in corpus,
+        "ammo_category": prototype.get("ammo_category")
+        or (ammo_type or {}).get("ammo_category"),
+        "magazine_size": prototype.get("magazine_size"),
+        "damages": damages,
+        "damage_per_shot": sum(d["amount"] for d in damages) if damages else None,
+    }
+
+
 def wall_row(name, prototype, corpus):
     return {
         "name": name,
@@ -360,7 +393,9 @@ def corpus_names(path):
 
 
 def extract(dump, corpus):
-    referenced = {"stream": dump.get("stream") or {}, "beam": dump.get("beam") or {}}
+    referenced = {
+        field: dump.get(field) or {} for field in ("stream", "beam", "projectile")
+    }
     spawners = dump.get("unit-spawner") or {}
 
     nauvis_units = {
@@ -386,6 +421,10 @@ def extract(dump, corpus):
         for type_name in TURRET_TYPES
         for name, prototype in sorted((dump.get(type_name) or {}).items())
     ]
+    ammo = [
+        ammo_row(name, prototype, referenced, corpus)
+        for name, prototype in sorted((dump.get("ammo") or {}).items())
+    ]
     walls = [
         wall_row(name, prototype, corpus)
         for type_name in WALL_TYPES
@@ -401,6 +440,7 @@ def extract(dump, corpus):
         "spawners": spawner_rows,
         "worms": worms,
         "turrets": turrets,
+        "ammo": ammo,
         "walls": walls,
         "emissions": emission_rows(dump, corpus),
     }
@@ -418,7 +458,10 @@ def main():
         "--out", type=Path, default=REPO / "data" / "factorio" / "enemy.json"
     )
     parser.add_argument(
-        "--recipes", type=Path, default=REPO / "data" / "factorio" / "recipe.json"
+        "--recipes",
+        type=Path,
+        default=REPO / "data" / "factorio" / "recipe.json",
+        help="the recipe corpus `in_corpus` is read against",
     )
     args = parser.parse_args()
 
@@ -438,7 +481,8 @@ def main():
     print(
         f"{len(out['units'])} units ({len(nauvis)} Nauvis), "
         f"{len(out['spawners'])} spawners, {len(out['worms'])} worms, "
-        f"{len(out['turrets'])} turrets, {len(out['walls'])} walls, "
+        f"{len(out['turrets'])} turrets, {len(out['ammo'])} ammo, "
+        f"{len(out['walls'])} walls, "
         f"{len(out['emissions'])} emitters"
     )
     print(f"wrote      {args.out.relative_to(REPO)}\n")

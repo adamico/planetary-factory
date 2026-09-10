@@ -253,8 +253,8 @@ effect recording the rule that produced them.
   `skipped` names the other planets' six, which have no starting patch to read.
 
 - **`enemy.json`** -- Terra's enemies, the turrets that shoot them and the entities whose
-  emission feeds them (ADR-0055). Nine sections: `units`, `spawners`, `worms`, `turrets`,
-  `walls`, `emissions`, and the four map-settings blocks `enemy_evolution`,
+  emission feeds them (ADR-0055). Ten sections: `units`, `spawners`, `worms`, `turrets`,
+  `walls`, `ammo`, `emissions`, and the four map-settings blocks `enemy_evolution`,
   `enemy_expansion`, `unit_group` and `pollution`, carried whole because they are small,
   flat and entirely coefficients -- taking a subset would decide which of ADR-0055's rules
   gets numbers.
@@ -279,7 +279,9 @@ effect recording the rule that produced them.
   several damages and the hit is their sum; `damages`, `damage_base` and `damage_modifier`
   are all kept so the check re-derives `damage_per_shot` rather than trusting it. A gun
   turret has no damage of its own -- a magazine decides it -- and `damage_source` records
-  that as `ammo` rather than as a bare null.
+  that as `ammo` rather than as a bare null. `ammo` is the section that answers those: every
+  `ammo` item with the same walk over its `ammo_type`, joined back to the turret by
+  `ammo_category`, so the two turrets that state no damage still have one in the corpus.
 
   **`emissions` is scoped by the field, not by the prototype type.** Twenty-four prototypes
   across seven types state an `energy_source.emissions_per_minute`, and `machine.json`'s

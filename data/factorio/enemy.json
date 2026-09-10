@@ -1465,6 +1465,259 @@
       }
     }
   ],
+  "ammo": [
+    {
+      "name": "artillery-shell",
+      "in_corpus": false,
+      "ammo_category": "artillery-shell",
+      "magazine_size": null,
+      "damages": [],
+      "damage_per_shot": null
+    },
+    {
+      "name": "atomic-bomb",
+      "in_corpus": false,
+      "ammo_category": "rocket",
+      "magazine_size": null,
+      "damages": [
+        {
+          "amount": 400,
+          "type": "explosion",
+          "via": "projectile:atomic-rocket"
+        },
+        {
+          "amount": 100,
+          "type": "explosion",
+          "via": "projectile:atomic-bomb-ground-zero-projectile"
+        },
+        {
+          "amount": 400,
+          "type": "explosion",
+          "via": "projectile:atomic-bomb-wave"
+        }
+      ],
+      "damage_per_shot": 900
+    },
+    {
+      "name": "cannon-shell",
+      "in_corpus": false,
+      "ammo_category": "cannon-shell",
+      "magazine_size": null,
+      "damages": [
+        {
+          "amount": 1000,
+          "type": "physical",
+          "via": "projectile:cannon-projectile"
+        },
+        {
+          "amount": 100,
+          "type": "explosion",
+          "via": "projectile:cannon-projectile"
+        }
+      ],
+      "damage_per_shot": 1100
+    },
+    {
+      "name": "capture-robot-rocket",
+      "in_corpus": false,
+      "ammo_category": "rocket",
+      "magazine_size": null,
+      "damages": [],
+      "damage_per_shot": null
+    },
+    {
+      "name": "explosive-cannon-shell",
+      "in_corpus": false,
+      "ammo_category": "cannon-shell",
+      "magazine_size": null,
+      "damages": [
+        {
+          "amount": 180,
+          "type": "physical",
+          "via": "projectile:explosive-cannon-projectile"
+        }
+      ],
+      "damage_per_shot": 180
+    },
+    {
+      "name": "explosive-rocket",
+      "in_corpus": false,
+      "ammo_category": "rocket",
+      "magazine_size": null,
+      "damages": [
+        {
+          "amount": 50,
+          "type": "explosion",
+          "via": "projectile:explosive-rocket"
+        },
+        {
+          "amount": 100,
+          "type": "explosion",
+          "via": "projectile:explosive-rocket"
+        }
+      ],
+      "damage_per_shot": 150
+    },
+    {
+      "name": "explosive-uranium-cannon-shell",
+      "in_corpus": false,
+      "ammo_category": "cannon-shell",
+      "magazine_size": null,
+      "damages": [
+        {
+          "amount": 350,
+          "type": "physical",
+          "via": "projectile:explosive-uranium-cannon-projectile"
+        }
+      ],
+      "damage_per_shot": 350
+    },
+    {
+      "name": "firearm-magazine",
+      "in_corpus": true,
+      "ammo_category": "bullet",
+      "magazine_size": 10,
+      "damages": [
+        {
+          "amount": 5,
+          "type": "physical",
+          "via": "inline"
+        }
+      ],
+      "damage_per_shot": 5
+    },
+    {
+      "name": "flamethrower-ammo",
+      "in_corpus": false,
+      "ammo_category": "flamethrower",
+      "magazine_size": 100,
+      "damages": [
+        {
+          "amount": 2,
+          "type": "fire",
+          "via": "stream:handheld-flamethrower-fire-stream"
+        }
+      ],
+      "damage_per_shot": 2
+    },
+    {
+      "name": "piercing-rounds-magazine",
+      "in_corpus": true,
+      "ammo_category": "bullet",
+      "magazine_size": 10,
+      "damages": [
+        {
+          "amount": 8,
+          "type": "physical",
+          "via": "inline"
+        }
+      ],
+      "damage_per_shot": 8
+    },
+    {
+      "name": "piercing-shotgun-shell",
+      "in_corpus": false,
+      "ammo_category": "shotgun-shell",
+      "magazine_size": 10,
+      "damages": [
+        {
+          "amount": 12,
+          "type": "physical",
+          "via": "projectile:piercing-shotgun-pellet"
+        }
+      ],
+      "damage_per_shot": 12
+    },
+    {
+      "name": "railgun-ammo",
+      "in_corpus": false,
+      "ammo_category": "railgun",
+      "magazine_size": null,
+      "damages": [
+        {
+          "amount": 10000,
+          "type": "physical",
+          "via": "inline"
+        }
+      ],
+      "damage_per_shot": 10000
+    },
+    {
+      "name": "rocket",
+      "in_corpus": false,
+      "ammo_category": "rocket",
+      "magazine_size": null,
+      "damages": [
+        {
+          "amount": 200,
+          "type": "explosion",
+          "via": "projectile:rocket"
+        }
+      ],
+      "damage_per_shot": 200
+    },
+    {
+      "name": "shotgun-shell",
+      "in_corpus": true,
+      "ammo_category": "shotgun-shell",
+      "magazine_size": 10,
+      "damages": [
+        {
+          "amount": 8,
+          "type": "physical",
+          "via": "projectile:shotgun-pellet"
+        }
+      ],
+      "damage_per_shot": 8
+    },
+    {
+      "name": "tesla-ammo",
+      "in_corpus": false,
+      "ammo_category": "tesla",
+      "magazine_size": 10,
+      "damages": [
+        {
+          "amount": 30,
+          "type": "electric",
+          "via": "beam:chain-tesla-gun-beam-start"
+        }
+      ],
+      "damage_per_shot": 30
+    },
+    {
+      "name": "uranium-cannon-shell",
+      "in_corpus": false,
+      "ammo_category": "cannon-shell",
+      "magazine_size": null,
+      "damages": [
+        {
+          "amount": 2000,
+          "type": "physical",
+          "via": "projectile:uranium-cannon-projectile"
+        },
+        {
+          "amount": 200,
+          "type": "explosion",
+          "via": "projectile:uranium-cannon-projectile"
+        }
+      ],
+      "damage_per_shot": 2200
+    },
+    {
+      "name": "uranium-rounds-magazine",
+      "in_corpus": false,
+      "ammo_category": "bullet",
+      "magazine_size": 10,
+      "damages": [
+        {
+          "amount": 24,
+          "type": "physical",
+          "via": "inline"
+        }
+      ],
+      "damage_per_shot": 24
+    }
+  ],
   "walls": [
     {
       "name": "stone-wall",

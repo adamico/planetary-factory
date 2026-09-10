@@ -250,7 +250,8 @@ which yields a different plausible-looking wrong number: a premature wriggler's
 `source_effects` hold a *negative* damage the attacker pays itself, a small spitter's damage
 is 1 in a `stream` prototype and 12 in the game, a laser turret's is in a `beam` prototype
 and reads as none if the reference is not followed, and a gun turret genuinely has none
-because a magazine decides it. Run it after re-running `scripts/factorio-enemy-extract.py`.
+because a magazine decides it — and the magazines are extracted too, so the turrets that
+state no damage still have one in the corpus. Run it after re-running `scripts/factorio-enemy-extract.py`.
 Nothing consumes this corpus yet; ADR-0055's arithmetic is filed against later tickets.
 
 ### Factorio mechanic ledger

@@ -9,15 +9,22 @@ game -- is whether the *committed* output still supports the decision:
     trusted.** Factorio updates evolution every 60 ticks by
     `(time + pollution*pollution_factor + kills*destroy_factor) * (1 - evolution)^3`, and
     that differential equation has a closed form: after `t` seconds of time alone,
-    `1 - 1/sqrt(1 + 2*time_factor*t)`. The check steps the formula a second at a time from
-    the extracted coefficient and asserts the two agree, the way
-    `test_resource_extract.py` re-derives a starting total from the game's own expression.
-    A hand-edited `time_factor` fails here; nothing in a running game would look wrong.
-  - **absorption is re-derived against the thing that emits.** A nest absorbs
-    `absolute + proportional * chunk` per second, and the pack's own Boiler is the dirtiest
-    prototype it has shipped. The ratio between the two -- how many boilers one nest eats --
-    is asked of the corpus rather than typed, because it is the number ADR-0055's loop
-    balances on and neither figure means anything alone.
+    `1 - 1/sqrt(1 + 2*time_factor*t)`. Two things are asserted and they are different
+    assertions: stepping the corpus's own coefficient must agree with the closed form of
+    that same coefficient, which proves the *algebra*; and an hour stepped from the corpus
+    must land where an hour of Factorio's own published 4e-06 lands, which proves the
+    *file*. A hand-edited coefficient fails here and nowhere in a running game.
+  - **absorption is stated as a rate against the thing that emits.** A nest absorbs
+    `absolute + proportional * chunk` per second, and both halves are the rule -- dropping
+    either is a different loop. The success line reports it against the Boiler's own
+    emission rate so the two are read together, but no balance between them is asserted:
+    what a nest ought to keep up with is a decision, and a decision is a diff to a design
+    document.
+  - **an ammo-fed turret's damage is its magazine's, and the magazine is extracted.** A gun
+    turret and a rocket turret state no damage at all, so a corpus that stopped at the
+    turret would hold no damage figure for two of the three turrets #227 names. Every
+    turret whose `damage_source` is `ammo` must have extracted ammo of its own category
+    that deals some.
   - **the damage walk still walks.** Four prototypes are named as the ones it must get
     right, each for a different reason and each of which produced a different
     plausible-looking wrong number while #227 was being written: a premature wriggler's
@@ -28,9 +35,11 @@ game -- is whether the *committed* output still supports the decision:
     all" if the reference is not followed; and a gun turret genuinely has none, because a
     magazine decides it -- a number appearing there means the walk picked up something that
     is not the turret's.
-  - **the Nauvis discriminant still discriminates.** The dump holds Gleba's spawners and
-    wrigglers too, and they are extracted rather than filtered. A run that marks them Nauvis
-    would put pentapods in Terra's nests.
+  - **the Nauvis discriminant still discriminates, in both directions.** The dump holds
+    Gleba's spawners and wrigglers too, and they are extracted rather than filtered: a run
+    that marks them Nauvis would put pentapods in Terra's nests. The mark is read off the
+    nests' own `result_units`, so the two must agree both ways -- a unit a Nauvis nest
+    spawns and the file calls Gleba's is a tier that silently vanishes from every wave.
   - **every band spawns something.** A spawner's `result_units` are piecewise-linear weights
     against the evolution factor; interpolated across 0 to 1, some unit must always have
     weight. A band where every weight is zero is a nest that absorbs and sends nothing, and
@@ -48,8 +57,14 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent.parent
 
-# Factorio's tick rate, and the interval its evolution update runs on.
+# Factorio's tick rate, and the interval its evolution update runs on -- which is also the
+# seconds a minute holds, and so the conversion from an absorption rate to an emission one.
 TICKS_PER_SECOND = 60
+
+# Factorio's own published coefficients, which are the anchors the corpus is checked
+# against: the closed form and the stepped simulation are fed the *same* extracted number,
+# so their agreement proves the algebra rather than the file, and these prove the file.
+PUBLISHED = {"time_factor": 4e-06, "pollution_factor": 9e-07, "destroy_factor": 0.002}
 
 # An hour of game time with no pollution and no kills, which is the anchor the closed form
 # and the stepped simulation have to agree on.
@@ -135,6 +150,12 @@ def main():
     for coefficient in ("time_factor", "pollution_factor", "destroy_factor"):
         if not evolution.get(coefficient):
             failures.append(f"enemy_evolution has no {coefficient} -- ADR-0055 names all three")
+    for coefficient, published in sorted(PUBLISHED.items()):
+        if evolution.get(coefficient) != published:
+            failures.append(
+                f"enemy_evolution.{coefficient} is {evolution.get(coefficient)}, not "
+                f"Factorio's own {published} -- the corpus was edited by hand"
+            )
     if not failures:
         closed = evolution_closed_form(evolution["time_factor"], ONE_HOUR)
         stepped = evolution_stepped(evolution, ONE_HOUR)
@@ -143,10 +164,11 @@ def main():
                 f"an hour of evolution steps to {stepped:.8f} but the closed form of the "
                 f"same coefficient gives {closed:.8f} -- one of them is not Factorio's rule"
             )
-        if not 0.013 < stepped < 0.015:
+        published_hour = evolution_closed_form(PUBLISHED["time_factor"], ONE_HOUR)
+        if abs(stepped - published_hour) > 1e-6:
             failures.append(
-                f"an hour of time alone now evolves to {stepped:.5f}; Factorio's own "
-                "coefficient puts it at about 0.0141, so the corpus has been edited"
+                f"an hour of time alone now evolves to {stepped:.6f} where Factorio's own "
+                f"coefficient gives {published_hour:.6f}"
             )
         # The destroy term is the counter-intuitive one ADR-0055 leans on: clearing nests
         # evolves the swarm. One kill at zero evolution is exactly the coefficient.
@@ -177,17 +199,11 @@ def main():
                 f"{name} has no proportional absorption; the rule is a flat rate PLUS a "
                 "share of the chunk, and dropping either half changes the loop"
             )
-        if boiler:
-            per_minute = rate["absolute"] * 60
-            boiler_rate = boiler["emissions_per_minute"].get("pollution")
-            if not boiler_rate:
-                failures.append(f"{BOILER} emits no pollution -- there is nothing to absorb")
-            elif per_minute / boiler_rate < 1:
-                failures.append(
-                    f"one {name} absorbs {per_minute}/min against a boiler's {boiler_rate}"
-                    "/min: a nest can no longer keep up with a single burner, which is not "
-                    "the loop ADR-0055 describes"
-                )
+        if boiler and not boiler["emissions_per_minute"].get("pollution"):
+            failures.append(
+                f"{BOILER} emits no pollution -- there is then nothing for {name} to "
+                "absorb, and the two halves of ADR-0055's loop no longer meet"
+            )
 
     # -- the damage walk, and the four numbers it gets wrong when it is wrong ------------
     for name, why in DAMAGE_TRAPS.items():
@@ -244,6 +260,36 @@ def main():
     for name in nauvis_units:
         if "pentapod" in name:
             failures.append(f"{name} is marked Nauvis; pentapods are Gleba's")
+
+    # A unit is Nauvis's because a Nauvis nest lists it, so the two have to agree both ways.
+    listed = {
+        row["unit"]
+        for name in NAUVIS_SPAWNERS
+        for row in (spawners.get(name) or {}).get("result_units", [])
+    }
+    for name in sorted(listed - nauvis_units):
+        failures.append(
+            f"{name} is spawned by a Nauvis nest but is not marked Nauvis -- the mark is "
+            "read off the nests, so the two cannot disagree without one of them being wrong"
+        )
+    for name in sorted(nauvis_units - listed):
+        failures.append(f"{name} is marked Nauvis but no Nauvis nest spawns it")
+
+    # -- an ammo-fed turret's damage is its magazine's, and the magazine is extracted -------
+    ammo_by_category = {}
+    for row in data["ammo"]:
+        ammo_by_category.setdefault(row["ammo_category"], []).append(row)
+    for name, turret in sorted(turrets.items()):
+        hit = turret["attack"] or {}
+        if hit.get("damage_source") != "ammo":
+            continue
+        category = hit.get("ammo_category")
+        armed = [a for a in ammo_by_category.get(category, []) if a["damage_per_shot"]]
+        if not armed:
+            failures.append(
+                f"{name} takes `{category}` ammo and no extracted ammo of that category "
+                "deals damage -- the corpus then holds no damage figure for it at all"
+            )
 
     # -- every evolution band spawns something -------------------------------------------
     for name in sorted(NAUVIS_SPAWNERS):
@@ -312,7 +358,10 @@ def main():
         sys.exit(1)
 
     hours = evolution_stepped(data["enemy_evolution"], ONE_HOUR)
-    absorbed = spawners["biter-spawner"]["absorptions_per_second"]["pollution"]["absolute"] * 60
+    absorbed = (
+        spawners["biter-spawner"]["absorptions_per_second"]["pollution"]["absolute"]
+        * TICKS_PER_SECOND
+    )
     print(
         f"ok  {len(data['units'])} units ({len(nauvis_units)} Nauvis), "
         f"{len(data['spawners'])} spawners, {len(data['turrets'])} turrets, "
