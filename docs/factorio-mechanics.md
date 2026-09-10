@@ -765,7 +765,9 @@ Sub-rules:
   *(#104 corrects "three steps" and "a Create Steam Engine burns fuel": the Steam Engine burns
   nothing — it is the prime mover.)* **ADR-0048 re-cut both of the first two steps.** The first was
   #37's LP Solid Boiler; the boiler is now pack-authored, one tier, under ADR-0047's burner model —
-  the third customer of the buffer the Furnace and the Burner Mining Drill already share. The second
+  the third customer of the buffer the Furnace and the Burner Mining Drill already share, and #224
+  shipped it: `planetaryfactory:boiler`, fuel and water in, low-temperature steam out at Factorio's
+  own 60 mB/s. The second
   was *"a Create Steam Engine turns that steam into rotation"*, and it **was never implementable**:
   Create has no steam fluid at all. Its boiler is a Fluid Tank multiblock holding **water**, heated
   by Blaze Burners, and the Steam Engine mounts on that tank — it cannot consume steam from a pipe,

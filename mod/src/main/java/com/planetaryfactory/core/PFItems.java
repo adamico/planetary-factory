@@ -100,6 +100,7 @@ public final class PFItems {
             RIGS.put(tier, item);
             FUNCTIONAL.add(item);
         }
+        FUNCTIONAL.add(ITEMS.registerSimpleBlockItem(PFBlocks.BOILER));
         // Not registerSimpleBlockItem: the pump refuses to place away from water, and the refusal
         // is the item's, because by the time a block exists it is too late to decline.
         FUNCTIONAL.add(ITEMS.register("offshore_pump",

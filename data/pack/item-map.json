@@ -109,9 +109,11 @@
       "note": "Dropped by #147 on building the pole. A tier here is a supply footprint and nothing else: Factorio's big pole justifies its 4x4 area -- smaller than the medium pole's 7x7 -- by buying 30 tiles of wire reach, and the pack has no reach to sell. Power Grid owns transmission with catenary whose span is a property of the wire, not of the pole it hangs on, so the big pole would ship as a strictly worse medium pole. The remaining three are 5x5, 7x7 and 18x18, Factorio's own numbers. docs/factorio-mechanics.md splits the row this turns on: the supply area is `shipped`, the wire reach is `excluded`."
     },
     "boiler": {
-      "status": "undecided",
-      "note": "#37 removed GregTech's power layer and ADR-0036 puts the grid on a pack-authored pole, so the GT boiler's remaining justification is the steam chain rather than the drill ladder. It was the steam mining drill that put this row here, and ADR-0040 deleted that drill; ADR-0043 then gave both rungs to `planetaryfactory_core`, so nothing in the drill ladder wants a boiler at all. ADR-0048 makes Terra's steam two pack-owned fluids on a pack-authored chain, which is where the decision belongs.",
-      "ticket": 189
+      "kind": "item",
+      "target": "planetaryfactory:boiler",
+      "source": "authored",
+      "note": "Terra's Boiler: fuel and water in, low-temperature steam out (#224, ADR-0048). It REPLACES the LP Solid Boiler this row used to point at -- ADR-0048 makes the steam chain pack-authored on two pack-owned fluids, and a GT boiler emitting `gtceu:steam` would re-open the power layer #37 removed. Third customer of the burner model the Furnace and the Burner Mining Drill share (ADR-0047): `fuel_value * effectivity` into a buffer, drained at the prototype's own draw. One tier -- ADR-0033's reactor emits superheated steam directly, so `heat-exchanger` stays on #135. Flipped from `undecided` when the block landed, not before: an item-map target for a block that does not exist emits a recipe naming nothing.",
+      "ticket": 224
     },
     "bulk-inserter": {
       "status": "undecided",

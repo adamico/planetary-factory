@@ -4,6 +4,8 @@ import com.gregtechceu.gtceu.api.capability.GTCapability;
 import com.planetaryfactory.core.energy.PoleColumn;
 import com.planetaryfactory.core.energy.PoleTier;
 import com.planetaryfactory.core.energy.SupplyAreaPoleBlockEntity;
+import com.planetaryfactory.core.fluid.BoilerBlockEntity;
+import com.planetaryfactory.core.fluid.BoilerItemHandler;
 import com.planetaryfactory.core.fluid.OffshorePumpBlockEntity;
 import com.planetaryfactory.core.mining.rig.RigBlockEntity;
 import com.planetaryfactory.core.mining.rig.RigItemHandler;
@@ -75,6 +77,15 @@ public final class PFBlockEntities {
                     () -> new BlockEntityType<>(OffshorePumpBlockEntity::new,
                             java.util.Set.of(PFBlocks.OFFSHORE_PUMP.get()), null));
 
+    /**
+     * Terra's Boiler (#224, ADR-0048). One block, so one type with one block in it -- the same
+     * reason the pump's type has one.
+     */
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BoilerBlockEntity>>
+            BOILER = BLOCK_ENTITIES.register("boiler",
+                    () -> new BlockEntityType<>(BoilerBlockEntity::new,
+                            java.util.Set.of(PFBlocks.BOILER.get()), null));
+
     private PFBlockEntities() {
     }
 
@@ -87,6 +98,7 @@ public final class PFBlockEntities {
         registerFurnaceCapabilities(event);
         registerRigCapabilities(event);
         registerPumpCapabilities(event);
+        registerBoilerCapabilities(event);
     }
 
     /**
@@ -101,6 +113,30 @@ public final class PFBlockEntities {
                         blockEntity instanceof OffshorePumpBlockEntity pump
                                 ? pump.fluidHandler() : null,
                 PFBlocks.OFFSHORE_PUMP.get());
+    }
+
+    /**
+     * The Boiler's two faces (#224), both answered on every direction and on the null side.
+     *
+     * <p>Fluid: water in through tank 0, steam out of tank 1, and neither reachable the other way
+     * round -- see {@link BoilerBlockEntity#fluidHandler()}. Item: fuel in and nothing out at all.
+     *
+     * <p>Unsided, for the reason the furnace's and the rig's are: Factorio decides in-or-out by the
+     * inserter's direction rather than by the machine's face, and a nominated-face inventory
+     * answers a Create funnel on any other face with silence and no diagnosis.
+     */
+    private static void registerBoilerCapabilities(RegisterCapabilitiesEvent event) {
+        event.registerBlock(
+                Capabilities.FluidHandler.BLOCK,
+                (level, pos, state, blockEntity, side) ->
+                        blockEntity instanceof BoilerBlockEntity boiler ? boiler.fluidHandler() : null,
+                PFBlocks.BOILER.get());
+        event.registerBlock(
+                Capabilities.ItemHandler.BLOCK,
+                (level, pos, state, blockEntity, side) ->
+                        blockEntity instanceof BoilerBlockEntity boiler
+                                ? new BoilerItemHandler(boiler) : null,
+                PFBlocks.BOILER.get());
     }
 
     /**

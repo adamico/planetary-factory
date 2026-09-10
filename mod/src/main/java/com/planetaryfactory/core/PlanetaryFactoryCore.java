@@ -7,6 +7,7 @@ import com.planetaryfactory.core.felling.TreeFelling;
 import com.planetaryfactory.core.fluid.PFFluidTypes;
 import com.planetaryfactory.core.fluid.PFFluids;
 import com.planetaryfactory.core.fluid.WaterConservation;
+import com.planetaryfactory.core.fluid.client.BoilerClient;
 import com.planetaryfactory.core.fluid.client.SteamFluidClient;
 import com.planetaryfactory.core.network.PFNetwork;
 import com.planetaryfactory.core.recipes.PFRecipes;
@@ -94,6 +95,7 @@ public final class PlanetaryFactoryCore {
             // class javadoc for why an invisible or missing-texture fluid is the failure this
             // guards against.
             SteamFluidClient.register(modBus);
+            BoilerClient.register(modBus);
             // What an item is worth as fuel, on its own tooltip: the fuel table is default-deny,
             // so vanilla's intuitions about what burns are wrong in both directions.
             FuelTooltip.register();

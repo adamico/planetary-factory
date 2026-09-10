@@ -59,5 +59,19 @@
     ],
     "tile_width": 3,
     "tile_height": 5
+  },
+  "fluids": {
+    "water": {
+      "name": "water",
+      "heat_capacity": 2000.0,
+      "heat_capacity_raw": "2kJ",
+      "default_temperature": 15
+    },
+    "steam": {
+      "name": "steam",
+      "heat_capacity": 200.0,
+      "heat_capacity_raw": "0.2kJ",
+      "default_temperature": 15
+    }
   }
 }

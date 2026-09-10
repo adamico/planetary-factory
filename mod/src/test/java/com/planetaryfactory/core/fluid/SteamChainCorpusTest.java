@@ -41,6 +41,36 @@ class SteamChainCorpusTest {
     }
 
     @Test
+    @DisplayName("both fluid boxes' volumes are read by role, not by name")
+    void fluidBoxVolumes() {
+        assertEquals(200, SteamChainCorpus.get().boilerFluidBoxVolume(BoilerSpec.INPUT));
+        assertEquals(200, SteamChainCorpus.get().boilerFluidBoxVolume(BoilerSpec.OUTPUT));
+    }
+
+    @Test
+    @DisplayName("the two fluids' rows carry the constants the Boiler's rate is derived from")
+    void fluidRows() {
+        // Steam's is the one that governs (BoilerSpec's trap one). Water's is asserted beside it
+        // so that a resource which silently lost the distinction fails here rather than reaching
+        // the player as a Boiler running at a tenth of its rate.
+        assertEquals(200.0, SteamChainCorpus.get().fluidHeatCapacity("steam"));
+        assertEquals(2_000.0, SteamChainCorpus.get().fluidHeatCapacity("water"));
+        assertEquals(15, SteamChainCorpus.get().fluidDefaultTemperature("water"));
+    }
+
+    @Test
+    @DisplayName("the whole chain resolves to Factorio's own 60 mB a second")
+    void theRateTheCorpusImplies() {
+        SteamChainCorpus corpus = SteamChainCorpus.get();
+        long perUnit = BoilerSpec.joulesPerMilliBucket(
+                corpus.boilerTargetTemperature(),
+                corpus.fluidDefaultTemperature("water"),
+                corpus.fluidHeatCapacity("steam"));
+        assertEquals(60,
+                BoilerSpec.milliBucketsPerSecond(corpus.boilerEnergyConsumption(), perUnit));
+    }
+
+    @Test
     @DisplayName("the raw rows are still there for #224 and #225 to read from")
     void rawRowsCarryTheirOwnName() {
         assertEquals("boiler", SteamChainCorpus.get().boilerRow().get("name").getAsString());

@@ -37,6 +37,7 @@ import sys
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 STEAM_CHAIN = ROOT / "mod/src/main/resources/planetaryfactory_core/fluid/steam_chain.json"
 MACHINE_CORPUS = ROOT / "data/factorio/machine.json"
+FLUID_CORPUS = ROOT / "data/factorio/fluid.json"
 GENERATOR = ROOT / "scripts/build-steam-assets.py"
 ASSETS = ROOT / "kubejs/assets/planetaryfactory"
 
@@ -48,6 +49,11 @@ BOILER_NAME = "boiler"
 STEAM_ENGINE_NAME = "steam-engine"
 
 FLUIDS = ("steam", "superheated_steam")
+
+# The two Factorio fluid prototypes the resource carries for #224's arithmetic. Not the same list
+# as FLUIDS above: `superheated_steam` is this pack's own fluid and has no Factorio prototype,
+# while `water` has one and is not a pack fluid.
+CORPUS_FLUIDS = ("water", "steam")
 
 
 def resolves(path):
@@ -90,6 +96,22 @@ def check_corpus(failures):
             f"{STEAM_ENGINE_NAME}'s row in steam_chain.json does not match the corpus field by "
             "field -- every number here is extracted, not hand-edited"
         )
+
+    corpus_fluids = {
+        row["name"]: row for row in json.loads(FLUID_CORPUS.read_text()).get("fluids", [])
+    }
+    mod_fluids = mod_rows.get("fluids", {})
+    for name in CORPUS_FLUIDS:
+        if corpus_fluids.get(name) is None:
+            failures.append(
+                f"{name} is not in {FLUID_CORPUS.relative_to(ROOT)} -- re-run the fluid extractor"
+            )
+        elif mod_fluids.get(name) != corpus_fluids[name]:
+            failures.append(
+                f"{name}'s row in steam_chain.json does not match the corpus field by field -- "
+                "the Boiler's rate is derived from these two heat capacities (#224), and water's "
+                "is ten times steam's, so a hand-edited row is a plausible-looking wrong rate"
+            )
 
     # ADR-0048: one boiler tier, and the Steam Engine's ceiling is the same 165 C the Boiler
     # targets. If the corpus ever restated either, the ADR's "one boiler tier" claim would have
@@ -179,7 +201,8 @@ def main():
         for failure in failures:
             print(f"  - {failure}")
         return 1
-    print("ok   steam chain: boiler and steam-engine rows extracted, both fluids named, "
+    print("ok   steam chain: boiler, steam-engine and both Factorio fluid rows extracted, "
+          "both pack fluids named, "
           "no bucket, neither is gtceu:steam")
     return 0
 

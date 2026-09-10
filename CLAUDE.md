@@ -217,6 +217,24 @@ and `OffshorePumpSpecTest` the two tick rates, which are the easiest thing here 
 `PumpCorpusTest` closes the loop by parsing the generated resource. Whether a pump placed against
 the hub pool actually feeds a pipe is a world load.
 
+### Boiler check
+
+Terra's Boiler is the burner model's third customer (#224, ADR-0048): fuel and water in,
+low-temperature steam out. Two checks, neither of which launches the game.
+`mod/src/test/java/com/planetaryfactory/core/fluid/` holds the arithmetic and the stall —
+`BoilerSpecTest` is the rate, and every figure in it is reachable by a wrong route that looks
+right: the rise is paid for at **steam's** 0.2 kJ and water's is ten times larger (6 mB/s instead
+of 60), and `energy_consumption` is per *second* against a buffer drained per tick. `BoilerCycleTest`
+is the stall #224 names as mattering as much as the rate — a full steam tank makes no steam, burns
+no fuel and, because water and room are asked *before* the fuel buffer is, lights no item either;
+a boiler quietly eating coal into a full tank is a leak with no symptom.
+`tests/pack/test_boiler_assets.py` is the pack side: the blockstate/model/texture/lang/loot hops,
+which GregTech's model provider does not serve for a `planetaryfactory:` block, that `boiler`'s
+item-map row is `authored` and names the block the mod registers rather than the LP Solid Boiler it
+replaces, and a **second, independent derivation** of the 60 mB/s straight from the corpus. Run both
+after editing `core/fluid/`, `scripts/build-steam-assets.py` or the corpus. Whether a placed Boiler
+boils water is a world load.
+
 ### Factorio mechanic ledger
 
 `docs/factorio-mechanics.md` is the tracked list of every Factorio mechanic — base game and Space

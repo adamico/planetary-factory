@@ -1,0 +1,39 @@
+{
+  "type": "gtceu:assembling",
+  "inputs": {
+    "item": [
+      {
+        "content": {
+          "ingredient": {
+            "item": "planetaryfactory:stone_furnace"
+          },
+          "count": 1
+        }
+      },
+      {
+        "content": {
+          "ingredient": {
+            "item": "create:fluid_pipe"
+          },
+          "count": 4
+        }
+      }
+    ]
+  },
+  "outputs": {
+    "item": [
+      {
+        "content": {
+          "ingredient": {
+            "item": "planetaryfactory:boiler"
+          },
+          "count": 1
+        }
+      }
+    ]
+  },
+  "duration": 10,
+  "data": {
+    "factorio_category": "crafting"
+  }
+}

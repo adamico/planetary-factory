@@ -9,6 +9,7 @@ import com.planetaryfactory.core.ore.OreResource;
 import com.planetaryfactory.core.smelting.FurnaceBlock;
 import com.planetaryfactory.core.smelting.FurnaceTier;
 import com.planetaryfactory.core.energy.SupplyAreaPoleBlock;
+import com.planetaryfactory.core.fluid.BoilerBlock;
 import com.planetaryfactory.core.fluid.OffshorePumpBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SaplingBlock;
@@ -51,6 +52,15 @@ public final class PFBlocks {
      */
     public static final DeferredHolder<Block, OffshorePumpBlock> OFFSHORE_PUMP =
             BLOCKS.register("offshore_pump", OffshorePumpBlock::new);
+
+    /**
+     * Terra's Boiler (#224, ADR-0048): fuel and water in, low-temperature steam out.
+     *
+     * <p>One block, not a ladder. ADR-0033 has the reactor emitting superheated steam directly
+     * with no heat layer, so Factorio's second boiler tier has nothing to be in this pack.
+     */
+    public static final DeferredHolder<Block, BoilerBlock> BOILER =
+            BLOCKS.register("boiler", BoilerBlock::new);
 
     /**
      * One block per {@link OreResource}: Terra's five ore blocks (ADR-0041).

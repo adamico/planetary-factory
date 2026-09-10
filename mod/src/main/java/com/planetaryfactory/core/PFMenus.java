@@ -3,6 +3,7 @@ package com.planetaryfactory.core;
 import com.planetaryfactory.core.assembler.AssemblerPanelMenu;
 import com.planetaryfactory.core.assembler.CraftingPlanMenu;
 import com.planetaryfactory.core.assembler.SelectAmountMenu;
+import com.planetaryfactory.core.fluid.BoilerMenu;
 import com.planetaryfactory.core.mining.rig.RigMenu;
 import com.planetaryfactory.core.smelting.FurnaceMenu;
 import net.minecraft.core.registries.Registries;
@@ -52,6 +53,16 @@ public final class PFMenus {
      */
     public static final Supplier<MenuType<RigMenu>> RIG =
             MENUS.register("rig", () -> IMenuTypeExtension.create(RigMenu::new));
+
+    /**
+     * The Boiler's menu (#224). One, not a ladder: ADR-0048 authors one boiler tier.
+     *
+     * <p>No opening data -- there is nothing about a Boiler the client cannot read off the
+     * container data, which is why this one is a plain {@code MenuType} the way the panel is.
+     */
+    public static final Supplier<MenuType<BoilerMenu>> BOILER =
+            MENUS.register("boiler", () -> new MenuType<>(BoilerMenu::new,
+                    net.minecraft.world.flag.FeatureFlags.DEFAULT_FLAGS));
 
     private PFMenus() {
     }
