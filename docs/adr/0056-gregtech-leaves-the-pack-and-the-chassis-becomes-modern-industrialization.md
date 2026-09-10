@@ -140,14 +140,19 @@ voltage ladder and logistics are not adopted.
 
 **Not decided, and each needs its own ADR or ticket:**
 
-- **How a machine is locked to a recipe.** This is `#236`'s real question and it survives the swap.
-  MI's lock is *slot*-level, not recipe-level: `updateActiveRecipe:384` reads
-  `areAllOutputSlotsLocked()` and then takes the first runnable recipe, so an MI machine with locked
-  outputs and empty inputs stores no recipe and displays none. The stated requirement — search in
-  EMI, fill the recipe whether the ingredients are present or not, the machine is locked, the
-  machine *shows* the locked recipe, the setting copies to another machine — is not what MI ships.
-  It is a smaller change on MI than on GregTech, because the colliding recipes are all still in the
-  candidate list and no lookup has to be repaired.
+- ~~**How a machine is locked to a recipe.**~~ **Settled: the locked output slot is the surface.**
+  This entry originally read that MI's slot-level lock was not the recipe lock the pack wants, on
+  the grounds that a machine with locked outputs and empty inputs stores no recipe and displays
+  none. That was a reading of the server-side code with no client evidence behind it, and it is
+  **wrong in play**. One mechanism does three jobs: `updateActiveRecipe:384` takes the first
+  startable recipe once `areAllOutputSlotsLocked()`, which works because
+  `AbstractConfigurableStack.isResourceAllowedByLock:163` refuses a rival recipe's product and that
+  recipe then fails its own start simulation; the lock persists in NBT (`:78`) and survives an empty
+  slot, so it is the *display* as well as the selection; and `MIItemStorage:130-141` builds a pipe
+  insert whitelist from the same locked instance, which is the overfill guard. EMI's Fill Recipe
+  sets it with the ingredients absent. Copy/paste of machine configuration is not in MI and comes
+  from a third-party addon. What remains is coverage, not design — the candidate filter is the
+  *product*, so it disambiguates a group only where the members have distinct outputs (`#238`).
 - **What replaces GregTech's ore placement.**
 - **What the Supply Area Pole and the Electric furnace tier speak.** Both currently speak GT EU, and
   `core/energy/EnergyLedger.java:22` hard-codes GregTech's 4 FE/EU. ADR-0035's argument that FE

@@ -446,19 +446,26 @@ Sub-rules:
   overclocking never fires above base tier.
 - **`energy_usage` as a machine property** — `planned`. ADR-0029 emits no `EUt` on a recipe at all;
   a machine modifier supplies it, scaled so the Oil Refinery's 420 kW lands on LV's 32 EU/t.
-- **Recipe selection in a machine** — `blocked`. In Factorio a machine is *told* its recipe: the
+- **Recipe selection in a machine** — `planned`. In Factorio a machine is *told* its recipe: the
   player picks it from a list, the machine displays it, holds it whether or not it is fed, and the
   setting copies to another machine. The pack has **no surface for this at all**, and that is the
   design gap, not the absence of a programmed circuit. GregTech's answer is the circuit, which
   ADR-0026 removed on purpose and #236 measured the cost of: GregTech keys its recipe lookup on the
   ingredient set, so with no circuit a colliding recipe is refused into the lookup at load and 44 of
-  139 emitted recipes never reach the machine. ADR-0056 removes that mod, and Modern
-  Industrialization keeps every colliding recipe in a flat candidate list — but MI's own lock is
-  *slot*-level, so a machine with locked outputs and empty inputs stores no recipe and displays
-  none. **The mechanic therefore still has no implementation the pack has committed to**, which is
-  what `blocked` means here rather than `planned`. Whichever gesture lands, its check is a static
-  assertion that no two emitted recipes of one type share an ingredient set (#237) plus an in-world
-  test that a fed machine picks the intended recipe (#238).
+  139 emitted recipes never reach the machine.
+
+  ADR-0056 removes that mod, and Modern Industrialization's **locked output slot** is the surface.
+  One mechanism does three jobs: it selects the recipe (a locked slot refuses a rival recipe's
+  product, so that recipe fails its own start simulation), it shows which recipe is selected, and it
+  guards against overfill. The lock persists in NBT and survives an empty slot, so the selection
+  holds whether or not the machine is fed, and EMI's Fill Recipe sets it with the ingredients absent.
+  Machine-configuration copy/paste is not in MI itself and comes from a third-party addon.
+
+  `planned` rather than `shipped`: the mechanism is chosen and proven in play, and nothing is built
+  here yet. Its checks are a static assertion that no two emitted recipes of one type share an
+  ingredient set (#237) and an in-world test that locking covers every collision group (#238) —
+  the candidate filter is the *product*, so it disambiguates a group only where the group's members
+  have distinct outputs.
 - **Machine idle draw** — `excluded`. A Factorio machine consumes power while idle: the
   [Electric system](https://wiki.factorio.com/Electric_system) page notes *"an active assembling
   machine 2 will consume 155 kW (150 kW energy consumption + 5 kW drain)"*, about a thirtieth of the
