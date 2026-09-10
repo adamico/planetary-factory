@@ -740,35 +740,55 @@ Sub-rules:
 
 - **verdict**: `planned`
 - **where**: all bodies
-- **via**: `gregtech`, `create`, `powergrid`, `pack`
-- **owner**: ADR-0017 as amended by #101 (the grid mod owns steam and solar), #104 and #148. `via`
-  is ordered along the chain: GregTech's boiler, Create's Steam Engine, Power Grid's generation
-  multiblock, the pack's Steam Turbine. *#148: the third step was Electro's Alternator, a single
-  block; Power Grid's counterpart is a Create-kinetic multiblock — rotor, winding, housing,
-  commutator — standing in exactly the same place in the chain.* **`mekanism` was struck by #104** — the pack installs base Mekanism, which registers no
-  generator block at all, so the clause naming it never named anything.
-- **ticket**: #104
+- **via**: `pack`, `create`, `powergrid`
+- **owner**: ADR-0017 as amended by #104, #148 and **ADR-0048, which supersedes #101**. `via`
+  is ordered along the chain: the pack's Boiler, the pack's Steam Engine, Power Grid's generator
+  assembly, the pack's Steam Turbine. *#101 read "the grid mod owns steam and solar"; ADR-0048 makes
+  both steam fluids `planetaryfactory:` and leaves the grid mod owning solar. Power Grid never
+  touches steam — its generator takes rotation in and puts volts out.* *#148: the third step was
+  Electro's Alternator, a single block; Power Grid's counterpart is a **built assembly** rather than
+  a fixed structure — a Stator of Coils on Shafts, an Armature of Rotors, a Commutator and a
+  Generator Clutch, coupled to a Create kinetic network and needing an excitation current — standing
+  in exactly the same place in the chain.* **`mekanism` was struck by #104** — the pack installs base
+  Mekanism, which registers no generator block at all, so the clause naming it never named anything.
+  **`gregtech` was struck by ADR-0048**: the boiler is the pack's, and `create` is now on the row for
+  the rotation the pack's Steam Engine emits rather than for an engine of Create's own.
+- **ticket**: #104, #189
 
 Sub-rules:
 
 - **Boiler and steam engine as the first power** — `adapted`. The chain is **four** steps, not two:
-  **#37's LP Solid Boiler burns fuel and makes steam**, a Create Steam Engine turns that steam into
-  SU, Power Grid's generation multiblock turns SU into watts, and the grid carries them. A Factorio player's
-  boiler-and-engine pair has a rotational stage wedged in the middle of it, and the grid is granted
-  at a rung rather than arriving with the first fire. *(#104 corrects "three steps" and "a Create
-  Steam Engine burns fuel": the Steam Engine burns nothing — it is the prime mover, and the boiler
-  is GregTech's.)*
+  the **pack's Boiler** burns solid fuel and makes low-temperature steam, the **pack's Steam Engine**
+  eats that steam and emits Create rotation, Power Grid's generator assembly turns SU into watts, and
+  the grid carries them. A Factorio player's boiler-and-engine pair has a rotational stage wedged in
+  the middle of it, and the grid is granted at a rung rather than arriving with the first fire.
+  *(#104 corrects "three steps" and "a Create Steam Engine burns fuel": the Steam Engine burns
+  nothing — it is the prime mover.)* **ADR-0048 re-cut both of the first two steps.** The first was
+  #37's LP Solid Boiler; the boiler is now pack-authored, one tier, under ADR-0047's burner model —
+  the third customer of the buffer the Furnace and the Burner Mining Drill already share. The second
+  was *"a Create Steam Engine turns that steam into rotation"*, and it **was never implementable**:
+  Create has no steam fluid at all. Its boiler is a Fluid Tank multiblock holding **water**, heated
+  by Blaze Burners, and the Steam Engine mounts on that tank — it cannot consume steam from a pipe,
+  from any boiler or from anything else. The pack authors that step. The engine emits rotation and
+  not electricity on purpose: an engine that fed a pole directly would route around every mechanic
+  ADR-0036 selected Power Grid for.
 - **Solar panels and accumulators** — `planned`, and the grid mod's outright: Power Grid ships a
   real-PV Solar Panel and the Battery the pack borrows as Factorio's accumulator (#148). It is also
   the *planet* Electro's identity — see [Day and night cycle](#day-and-night-cycle).
-- **Steam as a stored, pipeable intermediate** — `planned`.
+- **Steam as a stored, pipeable intermediate** — `planned` (#189), and **two fluids rather than
+  one**. ADR-0048 registers low-temperature steam, which the Boiler makes and the Steam Engine eats,
+  and high-temperature steam, which ADR-0033's reactor emits and only the Steam Turbine takes — two
+  registry entries rather than one fluid carrying a temperature, because Factorio has exactly two
+  temperatures with exactly two consumers. Both are `planetaryfactory:`.
 - **The Steam Turbine, on superheated steam** — `planned`, the pack's, and **the pack's only FE-side
   generator**. *Moved here from [Nuclear fission](#nuclear-fission) by #104*: ADR-0033 names the row
   **for the fluid, not for fission**, and the Turbine has two producers on two bodies — Terra's
   Nuclear Reactor and Ignus's acid neutralisation. Filing a cross-body generator under Terra's
-  fission chapter hid what it is. Superheated steam is its own GT material and **only the Turbine
-  accepts it**; ordinary steam keeps the four-step chain above, which the Turbine will not take, and
-  that fluid split — not the Converter — is what stops it retiring the rung-0 Alternator. **Not
+  fission chapter hid what it is. Superheated steam is a **pack-owned fluid** — `planetaryfactory:`,
+  not GregTech's, since `gtceu:steam` is not inert and GregTech's own steam machines accept it,
+  which would re-open the power layer #37 removed (ADR-0048; this corrects an earlier "its own GT
+  material") — and **only the Turbine accepts it**; ordinary steam keeps the four-step chain above, which the Turbine will not take, and
+  that fluid split — not the Converter — is what stops it retiring the rung-1 generator assembly. **Not
   registered yet** (#107's siblings): ADR-0033's stated design, unbuilt.
 
 ### Nuclear fission

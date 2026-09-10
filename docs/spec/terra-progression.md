@@ -26,6 +26,13 @@ Factorio player stops recognising things.
 
 A chapter that lands far outside its budget has the wrong number of beats, not the wrong prices.
 
+**Rung 0's 3–4h is not slack, and the pace run should not read it as one.** A player fluent in
+Factorio reaches electricity there in an hour or two, and the gap is real. ADR-0018's budget is
+explicitly for a first-time player of *this pack*, learning blocks nobody has shown them — after
+ADR-0048, every block in rung 0 is pack-authored, so there is nothing in the chapter a Factorio
+player has muscle memory for. That learning is what the extra hours buy. `#170`'s one clean pace
+reading is what settles the number; until then it is not adjusted on this account.
+
 ## Who teaches what
 
 **The research graph shows cost. The book explains the verb.** Researchd's UI lists what a node
@@ -84,14 +91,18 @@ but the cost is that discovery is the opening's only job.
 
 *No science pack. Burner and kinetic, and not one watt anywhere.*
 
-**Granted**: the **Burner Mining Drill**, the pack's own **Stone Furnace** (`#155`), Create's Steam
-Engine as prime mover, mechanical belts. The boiler is ADR-0048's, not GregTech's (`#189`).
+**Granted**: the **Burner Mining Drill** (ADR-0043 / `#105`), the pack's own **Stone Furnace**
+(`#155`), the pack's **Boiler** and the pack's **Steam Engine** as prime mover (ADR-0048 / `#189`),
+mechanical belts. Every block on this list is pack-authored.
 
-*This list read "LP Solid Boiler, LP Steam Miner, the vanilla Furnace as Stone Furnace (`#91`)".
-ADR-0040 deleted the LP Steam Miner and ADR-0043 made both rungs of the drill ladder the pack's;
-ADR-0047 and `#155` made the furnace ladder the pack's rather than a re-skinned vanilla block; and
-ADR-0048 made Terra's steam two pack-owned fluids on a pack-authored chain. The rewrite lands with
-`#193`, which is the ticket that made the first of those true in the game.*
+*This list read "LP Solid Boiler, LP Steam Miner, the vanilla Furnace as Stone Furnace (`#91`)", and
+then "Create's Steam Engine as prime mover". ADR-0040 deleted the LP Steam Miner and ADR-0043 made
+both rungs of the drill ladder the pack's; ADR-0047 and `#155` made the furnace ladder the pack's
+rather than a re-skinned vanilla block; and ADR-0048 made Terra's steam two pack-owned fluids on a
+pack-authored chain, which took the boiler off GregTech and the engine off Create. **Create's Steam
+Engine could never have held that slot**: Create has no steam fluid, and its engine mounts on a
+water-filled Fluid Tank rather than consuming steam from a pipe. The rewrite lands with `#190`;
+`#193` is the ticket that made the first of these true in the game.*
 
 **What rung 1 needs it for**: `automation` packs are Personal-Assembler-only forever (`#42`), so
 rung 0's job is to make the plates that feed them faster than your hands can.
@@ -112,9 +123,11 @@ argument for rung 1, made by the game rather than by the book.
 
 ## Rung 1 — `automation`
 
-**Granted**: the Alternator and the FE grid, Assembling Machine I, **steel** (ADR-0039), and — off `steel-processing`, at no pack cost — **`steel-axe` and the Engineer's Steel Pick**, which halves seconds-per-ore from 2.0 to 1.0.
+**Granted**: Power Grid's **generator assembly** and the FE grid, Assembling Machine I, **steel** (ADR-0039), and — off `steel-processing`, at no pack cost — **`steel-axe` and the Engineer's Steel Pick**, which halves seconds-per-ore from 2.0 to 1.0.
 
-**Why the grid arrives here**: the Alternator turns Create's rotation into watts (`#92`), and
+**Why the grid arrives here**: the generator assembly turns Create's rotation into watts (`#92`,
+superseded on mechanism by ADR-0048 — it is a built assembly of Stator, Armature, Commutator and
+Generator Clutch, not Electro's single-block Alternator), and
 Assembling Machine I is FE-native (`#37`) — the grid arrives with its first customer and not one
 rung earlier. This holds whatever `#69` decided about ore multiplication — and ADR-0032 cut it entirely.
 
@@ -123,7 +136,7 @@ past here is assembled.
 
 | Beat | Fed by |
 | --- | --- |
-| Alternator on the Steam Engine. Rotation becomes watts; the first cable run. | machine |
+| Build the generator assembly off the Steam Engine's rotation — Stator, Armature, Commutator, Clutch. Rotation becomes watts; the first cable run. | machine |
 | Assembling Machine I. The Personal Assembler stops being how you *produce* — it never stops being how you *craft*. | machine |
 | Feed the Assembler from the belt, not from your hands. | machine |
 | Pipe the Lab. `logistic` packs arrive without you. | machine |
