@@ -1,0 +1,1843 @@
+{
+  "units": [
+    {
+      "name": "behemoth-biter",
+      "nauvis": true,
+      "max_health": 3000,
+      "healing_per_tick": 0.1,
+      "movement_speed": 0.3,
+      "vision_distance": 30,
+      "distraction_cooldown": 300,
+      "max_pursue_distance": 50,
+      "absorptions_to_join_attack": {
+        "pollution": 400
+      },
+      "spawning_time_modifier": 12,
+      "resistances": [
+        {
+          "type": "physical",
+          "decrease": 12,
+          "percent": 10
+        },
+        {
+          "type": "explosion",
+          "decrease": 12,
+          "percent": 10
+        }
+      ],
+      "attack": {
+        "type": "projectile",
+        "ammo_category": "melee",
+        "range": 1.5,
+        "min_range": null,
+        "cooldown": 50,
+        "cooldown_deviation": 0.15,
+        "damage_base": 90,
+        "damages": [
+          {
+            "amount": 90,
+            "type": "physical",
+            "via": "inline"
+          }
+        ],
+        "damage_modifier": 1,
+        "damage_per_shot": 90,
+        "shots_per_second": 1.2,
+        "damage_source": "inline"
+      }
+    },
+    {
+      "name": "behemoth-spitter",
+      "nauvis": true,
+      "max_health": 1500,
+      "healing_per_tick": 0.1,
+      "movement_speed": 0.15,
+      "vision_distance": 30,
+      "distraction_cooldown": 300,
+      "max_pursue_distance": 50,
+      "absorptions_to_join_attack": {
+        "pollution": 200
+      },
+      "spawning_time_modifier": 12,
+      "resistances": [
+        {
+          "type": "explosion",
+          "decrease": 0,
+          "percent": 30
+        }
+      ],
+      "attack": {
+        "type": "stream",
+        "ammo_category": "biological",
+        "range": 16,
+        "min_range": 10,
+        "cooldown": 100,
+        "cooldown_deviation": 0.15,
+        "damage_base": 1,
+        "damages": [
+          {
+            "amount": 1,
+            "type": "acid",
+            "via": "stream:acid-stream-spitter-behemoth"
+          }
+        ],
+        "damage_modifier": 60,
+        "damage_per_shot": 60,
+        "shots_per_second": 0.6,
+        "damage_source": "stream:acid-stream-spitter-behemoth"
+      }
+    },
+    {
+      "name": "big-biter",
+      "nauvis": true,
+      "max_health": 375,
+      "healing_per_tick": 0.02,
+      "movement_speed": 0.23000000000000004,
+      "vision_distance": 30,
+      "distraction_cooldown": 300,
+      "max_pursue_distance": 50,
+      "absorptions_to_join_attack": {
+        "pollution": 80
+      },
+      "spawning_time_modifier": 3,
+      "resistances": [
+        {
+          "type": "physical",
+          "decrease": 8,
+          "percent": 10
+        },
+        {
+          "type": "explosion",
+          "decrease": 0,
+          "percent": 10
+        }
+      ],
+      "attack": {
+        "type": "projectile",
+        "ammo_category": "melee",
+        "range": 1.5,
+        "min_range": null,
+        "cooldown": 35,
+        "cooldown_deviation": 0.15,
+        "damage_base": 30,
+        "damages": [
+          {
+            "amount": 30,
+            "type": "physical",
+            "via": "inline"
+          }
+        ],
+        "damage_modifier": 1,
+        "damage_per_shot": 30,
+        "shots_per_second": 1.714286,
+        "damage_source": "inline"
+      }
+    },
+    {
+      "name": "big-spitter",
+      "nauvis": true,
+      "max_health": 200,
+      "healing_per_tick": 0.01,
+      "movement_speed": 0.15,
+      "vision_distance": 30,
+      "distraction_cooldown": 300,
+      "max_pursue_distance": 50,
+      "absorptions_to_join_attack": {
+        "pollution": 30
+      },
+      "spawning_time_modifier": 3,
+      "resistances": [
+        {
+          "type": "explosion",
+          "decrease": 0,
+          "percent": 15
+        }
+      ],
+      "attack": {
+        "type": "stream",
+        "ammo_category": "biological",
+        "range": 15,
+        "min_range": 10,
+        "cooldown": 100,
+        "cooldown_deviation": 0.15,
+        "damage_base": 1,
+        "damages": [
+          {
+            "amount": 1,
+            "type": "acid",
+            "via": "stream:acid-stream-spitter-big"
+          }
+        ],
+        "damage_modifier": 36,
+        "damage_per_shot": 36,
+        "shots_per_second": 0.6,
+        "damage_source": "stream:acid-stream-spitter-big"
+      }
+    },
+    {
+      "name": "big-wriggler-pentapod",
+      "nauvis": false,
+      "max_health": 400,
+      "healing_per_tick": 0.013333333333333332,
+      "movement_speed": 0.2,
+      "vision_distance": 20,
+      "distraction_cooldown": 300,
+      "max_pursue_distance": 50,
+      "absorptions_to_join_attack": {
+        "spores": 2
+      },
+      "spawning_time_modifier": null,
+      "resistances": [
+        {
+          "type": "laser",
+          "decrease": 0,
+          "percent": 50
+        }
+      ],
+      "attack": {
+        "type": "projectile",
+        "ammo_category": "melee",
+        "range": 1.8,
+        "min_range": null,
+        "cooldown": 26,
+        "cooldown_deviation": 0.1,
+        "damage_base": 18,
+        "damages": [
+          {
+            "amount": 9,
+            "type": "physical",
+            "via": "inline"
+          },
+          {
+            "amount": 9,
+            "type": "poison",
+            "via": "inline"
+          }
+        ],
+        "damage_modifier": 1,
+        "damage_per_shot": 18,
+        "shots_per_second": 2.307692,
+        "damage_source": "inline"
+      }
+    },
+    {
+      "name": "big-wriggler-pentapod-premature",
+      "nauvis": false,
+      "max_health": 400,
+      "healing_per_tick": -0.13333333333333333,
+      "movement_speed": 0.2,
+      "vision_distance": 20,
+      "distraction_cooldown": 300,
+      "max_pursue_distance": 50,
+      "absorptions_to_join_attack": {
+        "spores": 0
+      },
+      "spawning_time_modifier": null,
+      "resistances": [
+        {
+          "type": "laser",
+          "decrease": 0,
+          "percent": 50
+        }
+      ],
+      "attack": {
+        "type": "projectile",
+        "ammo_category": "melee",
+        "range": 1.8,
+        "min_range": null,
+        "cooldown": 26,
+        "cooldown_deviation": 0.1,
+        "damage_base": 18,
+        "damages": [
+          {
+            "amount": 9,
+            "type": "physical",
+            "via": "inline"
+          },
+          {
+            "amount": 9,
+            "type": "poison",
+            "via": "inline"
+          }
+        ],
+        "damage_modifier": 1,
+        "damage_per_shot": 18,
+        "shots_per_second": 2.307692,
+        "damage_source": "inline"
+      }
+    },
+    {
+      "name": "medium-biter",
+      "nauvis": true,
+      "max_health": 75,
+      "healing_per_tick": 0.01,
+      "movement_speed": 0.24,
+      "vision_distance": 30,
+      "distraction_cooldown": 300,
+      "max_pursue_distance": 50,
+      "absorptions_to_join_attack": {
+        "pollution": 20
+      },
+      "spawning_time_modifier": null,
+      "resistances": [
+        {
+          "type": "physical",
+          "decrease": 4,
+          "percent": 10
+        },
+        {
+          "type": "explosion",
+          "decrease": 0,
+          "percent": 10
+        }
+      ],
+      "attack": {
+        "type": "projectile",
+        "ammo_category": "melee",
+        "range": 1,
+        "min_range": null,
+        "cooldown": 35,
+        "cooldown_deviation": 0.15,
+        "damage_base": 15,
+        "damages": [
+          {
+            "amount": 15,
+            "type": "physical",
+            "via": "inline"
+          }
+        ],
+        "damage_modifier": 1,
+        "damage_per_shot": 15,
+        "shots_per_second": 1.714286,
+        "damage_source": "inline"
+      }
+    },
+    {
+      "name": "medium-spitter",
+      "nauvis": true,
+      "max_health": 50,
+      "healing_per_tick": 0.01,
+      "movement_speed": 0.165,
+      "vision_distance": 30,
+      "distraction_cooldown": 300,
+      "max_pursue_distance": 50,
+      "absorptions_to_join_attack": {
+        "pollution": 12
+      },
+      "spawning_time_modifier": null,
+      "resistances": [
+        {
+          "type": "explosion",
+          "decrease": 0,
+          "percent": 10
+        }
+      ],
+      "attack": {
+        "type": "stream",
+        "ammo_category": "biological",
+        "range": 14,
+        "min_range": 10,
+        "cooldown": 100,
+        "cooldown_deviation": 0.15,
+        "damage_base": 1,
+        "damages": [
+          {
+            "amount": 1,
+            "type": "acid",
+            "via": "stream:acid-stream-spitter-medium"
+          }
+        ],
+        "damage_modifier": 24,
+        "damage_per_shot": 24,
+        "shots_per_second": 0.6,
+        "damage_source": "stream:acid-stream-spitter-medium"
+      }
+    },
+    {
+      "name": "medium-wriggler-pentapod",
+      "nauvis": false,
+      "max_health": 200,
+      "healing_per_tick": 0.006666666666666666,
+      "movement_speed": 0.18000000000000005,
+      "vision_distance": 20,
+      "distraction_cooldown": 300,
+      "max_pursue_distance": 50,
+      "absorptions_to_join_attack": {
+        "spores": 2
+      },
+      "spawning_time_modifier": null,
+      "resistances": [
+        {
+          "type": "laser",
+          "decrease": 0,
+          "percent": 50
+        }
+      ],
+      "attack": {
+        "type": "projectile",
+        "ammo_category": "melee",
+        "range": 1.4400000000000002,
+        "min_range": null,
+        "cooldown": 26,
+        "cooldown_deviation": 0.1,
+        "damage_base": 11.0,
+        "damages": [
+          {
+            "amount": 5.5,
+            "type": "physical",
+            "via": "inline"
+          },
+          {
+            "amount": 5.5,
+            "type": "poison",
+            "via": "inline"
+          }
+        ],
+        "damage_modifier": 1,
+        "damage_per_shot": 11.0,
+        "shots_per_second": 2.307692,
+        "damage_source": "inline"
+      }
+    },
+    {
+      "name": "medium-wriggler-pentapod-premature",
+      "nauvis": false,
+      "max_health": 200,
+      "healing_per_tick": -0.06666666666666667,
+      "movement_speed": 0.18000000000000005,
+      "vision_distance": 20,
+      "distraction_cooldown": 300,
+      "max_pursue_distance": 50,
+      "absorptions_to_join_attack": {
+        "spores": 0
+      },
+      "spawning_time_modifier": null,
+      "resistances": [
+        {
+          "type": "laser",
+          "decrease": 0,
+          "percent": 50
+        }
+      ],
+      "attack": {
+        "type": "projectile",
+        "ammo_category": "melee",
+        "range": 1.4400000000000002,
+        "min_range": null,
+        "cooldown": 26,
+        "cooldown_deviation": 0.1,
+        "damage_base": 11.0,
+        "damages": [
+          {
+            "amount": 5.5,
+            "type": "physical",
+            "via": "inline"
+          },
+          {
+            "amount": 5.5,
+            "type": "poison",
+            "via": "inline"
+          }
+        ],
+        "damage_modifier": 1,
+        "damage_per_shot": 11.0,
+        "shots_per_second": 2.307692,
+        "damage_source": "inline"
+      }
+    },
+    {
+      "name": "small-biter",
+      "nauvis": true,
+      "max_health": 15,
+      "healing_per_tick": 0.01,
+      "movement_speed": 0.2,
+      "vision_distance": 30,
+      "distraction_cooldown": 300,
+      "max_pursue_distance": 50,
+      "absorptions_to_join_attack": {
+        "pollution": 4
+      },
+      "spawning_time_modifier": null,
+      "resistances": [],
+      "attack": {
+        "type": "projectile",
+        "ammo_category": "melee",
+        "range": 0.5,
+        "min_range": null,
+        "cooldown": 35,
+        "cooldown_deviation": 0.15,
+        "damage_base": 7,
+        "damages": [
+          {
+            "amount": 7,
+            "type": "physical",
+            "via": "inline"
+          }
+        ],
+        "damage_modifier": 1,
+        "damage_per_shot": 7,
+        "shots_per_second": 1.714286,
+        "damage_source": "inline"
+      }
+    },
+    {
+      "name": "small-spitter",
+      "nauvis": true,
+      "max_health": 10,
+      "healing_per_tick": 0.01,
+      "movement_speed": 0.185,
+      "vision_distance": 30,
+      "distraction_cooldown": 300,
+      "max_pursue_distance": 50,
+      "absorptions_to_join_attack": {
+        "pollution": 4
+      },
+      "spawning_time_modifier": null,
+      "resistances": [],
+      "attack": {
+        "type": "stream",
+        "ammo_category": "biological",
+        "range": 13,
+        "min_range": 10,
+        "cooldown": 100,
+        "cooldown_deviation": 0.15,
+        "damage_base": 1,
+        "damages": [
+          {
+            "amount": 1,
+            "type": "acid",
+            "via": "stream:acid-stream-spitter-small"
+          }
+        ],
+        "damage_modifier": 12,
+        "damage_per_shot": 12,
+        "shots_per_second": 0.6,
+        "damage_source": "stream:acid-stream-spitter-small"
+      }
+    },
+    {
+      "name": "small-wriggler-pentapod",
+      "nauvis": false,
+      "max_health": 100,
+      "healing_per_tick": 0.003333333333333333,
+      "movement_speed": 0.16000000000000003,
+      "vision_distance": 20,
+      "distraction_cooldown": 300,
+      "max_pursue_distance": 50,
+      "absorptions_to_join_attack": {
+        "spores": 2
+      },
+      "spawning_time_modifier": null,
+      "resistances": [
+        {
+          "type": "laser",
+          "decrease": 0,
+          "percent": 50
+        }
+      ],
+      "attack": {
+        "type": "projectile",
+        "ammo_category": "melee",
+        "range": 1.08,
+        "min_range": null,
+        "cooldown": 26,
+        "cooldown_deviation": 0.1,
+        "damage_base": 7.5,
+        "damages": [
+          {
+            "amount": 3.75,
+            "type": "physical",
+            "via": "inline"
+          },
+          {
+            "amount": 3.75,
+            "type": "poison",
+            "via": "inline"
+          }
+        ],
+        "damage_modifier": 1,
+        "damage_per_shot": 7.5,
+        "shots_per_second": 2.307692,
+        "damage_source": "inline"
+      }
+    },
+    {
+      "name": "small-wriggler-pentapod-premature",
+      "nauvis": false,
+      "max_health": 100,
+      "healing_per_tick": -0.03333333333333333,
+      "movement_speed": 0.16000000000000003,
+      "vision_distance": 20,
+      "distraction_cooldown": 300,
+      "max_pursue_distance": 50,
+      "absorptions_to_join_attack": {
+        "spores": 0
+      },
+      "spawning_time_modifier": null,
+      "resistances": [
+        {
+          "type": "laser",
+          "decrease": 0,
+          "percent": 50
+        }
+      ],
+      "attack": {
+        "type": "projectile",
+        "ammo_category": "melee",
+        "range": 1.08,
+        "min_range": null,
+        "cooldown": 26,
+        "cooldown_deviation": 0.1,
+        "damage_base": 7.5,
+        "damages": [
+          {
+            "amount": 3.75,
+            "type": "physical",
+            "via": "inline"
+          },
+          {
+            "amount": 3.75,
+            "type": "poison",
+            "via": "inline"
+          }
+        ],
+        "damage_modifier": 1,
+        "damage_per_shot": 7.5,
+        "shots_per_second": 2.307692,
+        "damage_source": "inline"
+      }
+    }
+  ],
+  "spawners": [
+    {
+      "name": "biter-spawner",
+      "nauvis": true,
+      "max_health": 350,
+      "healing_per_tick": 0.02,
+      "absorptions_per_second": {
+        "pollution": {
+          "absolute": 20,
+          "proportional": 0.01
+        }
+      },
+      "spawning_cooldown": [
+        360,
+        150
+      ],
+      "spawning_radius": 2,
+      "spawning_spacing": 1,
+      "max_count_of_owned_units": 7,
+      "max_friends_around_to_spawn": 5,
+      "call_for_help_radius": 50,
+      "autoplace_control": "enemy-base",
+      "autoplace_probability": "enemy_autoplace_base(0, 6)",
+      "result_units": [
+        {
+          "unit": "small-biter",
+          "spawn_points": [
+            {
+              "evolution_factor": 0,
+              "weight": 0.3
+            },
+            {
+              "evolution_factor": 0.6,
+              "weight": 0
+            }
+          ]
+        },
+        {
+          "unit": "medium-biter",
+          "spawn_points": [
+            {
+              "evolution_factor": 0.2,
+              "weight": 0
+            },
+            {
+              "evolution_factor": 0.6,
+              "weight": 0.3
+            },
+            {
+              "evolution_factor": 0.7,
+              "weight": 0.1
+            }
+          ]
+        },
+        {
+          "unit": "big-biter",
+          "spawn_points": [
+            {
+              "evolution_factor": 0.5,
+              "weight": 0
+            },
+            {
+              "evolution_factor": 1,
+              "weight": 0.4
+            }
+          ]
+        },
+        {
+          "unit": "behemoth-biter",
+          "spawn_points": [
+            {
+              "evolution_factor": 0.9,
+              "weight": 0
+            },
+            {
+              "evolution_factor": 1,
+              "weight": 0.3
+            }
+          ]
+        }
+      ],
+      "resistances": [
+        {
+          "type": "physical",
+          "decrease": 2,
+          "percent": 15
+        },
+        {
+          "type": "explosion",
+          "decrease": 5,
+          "percent": 0
+        },
+        {
+          "type": "fire",
+          "decrease": 3,
+          "percent": 60
+        }
+      ],
+      "attack": null
+    },
+    {
+      "name": "gleba-spawner",
+      "nauvis": false,
+      "max_health": 500,
+      "healing_per_tick": 0.16666666666666666,
+      "absorptions_per_second": {
+        "spores": {
+          "absolute": 20,
+          "proportional": 0.01
+        }
+      },
+      "spawning_cooldown": [
+        360,
+        150
+      ],
+      "spawning_radius": 10,
+      "spawning_spacing": 3,
+      "max_count_of_owned_units": 2,
+      "max_friends_around_to_spawn": 3,
+      "call_for_help_radius": 50,
+      "autoplace_control": "gleba_enemy_base",
+      "autoplace_probability": "gleba_spawner",
+      "result_units": [
+        {
+          "unit": "small-wriggler-pentapod",
+          "spawn_points": [
+            {
+              "evolution_factor": 0,
+              "weight": 0.4
+            },
+            {
+              "evolution_factor": 0.1,
+              "weight": 0.4
+            },
+            {
+              "evolution_factor": 0.6,
+              "weight": 0
+            }
+          ]
+        },
+        {
+          "unit": "small-strafer-pentapod",
+          "spawn_points": [
+            {
+              "evolution_factor": 0,
+              "weight": 0.4
+            },
+            {
+              "evolution_factor": 0.1,
+              "weight": 0.4
+            },
+            {
+              "evolution_factor": 0.6,
+              "weight": 0
+            }
+          ]
+        },
+        {
+          "unit": "small-stomper-pentapod",
+          "spawn_points": [
+            {
+              "evolution_factor": 0,
+              "weight": 0.2
+            },
+            {
+              "evolution_factor": 0.1,
+              "weight": 0.2
+            },
+            {
+              "evolution_factor": 0.6,
+              "weight": 0
+            }
+          ]
+        },
+        {
+          "unit": "medium-wriggler-pentapod",
+          "spawn_points": [
+            {
+              "evolution_factor": 0.1,
+              "weight": 0
+            },
+            {
+              "evolution_factor": 0.6,
+              "weight": 0.4
+            },
+            {
+              "evolution_factor": 0.95,
+              "weight": 0
+            }
+          ]
+        },
+        {
+          "unit": "medium-strafer-pentapod",
+          "spawn_points": [
+            {
+              "evolution_factor": 0.1,
+              "weight": 0
+            },
+            {
+              "evolution_factor": 0.6,
+              "weight": 0.4
+            },
+            {
+              "evolution_factor": 0.95,
+              "weight": 0
+            }
+          ]
+        },
+        {
+          "unit": "medium-stomper-pentapod",
+          "spawn_points": [
+            {
+              "evolution_factor": 0.1,
+              "weight": 0
+            },
+            {
+              "evolution_factor": 0.6,
+              "weight": 0.2
+            },
+            {
+              "evolution_factor": 0.95,
+              "weight": 0
+            }
+          ]
+        },
+        {
+          "unit": "big-wriggler-pentapod",
+          "spawn_points": [
+            {
+              "evolution_factor": 0.6,
+              "weight": 0
+            },
+            {
+              "evolution_factor": 0.95,
+              "weight": 0.4
+            },
+            {
+              "evolution_factor": 1,
+              "weight": 0.4
+            }
+          ]
+        },
+        {
+          "unit": "big-strafer-pentapod",
+          "spawn_points": [
+            {
+              "evolution_factor": 0.6,
+              "weight": 0
+            },
+            {
+              "evolution_factor": 0.95,
+              "weight": 0.4
+            },
+            {
+              "evolution_factor": 1,
+              "weight": 0.4
+            }
+          ]
+        },
+        {
+          "unit": "big-stomper-pentapod",
+          "spawn_points": [
+            {
+              "evolution_factor": 0.6,
+              "weight": 0
+            },
+            {
+              "evolution_factor": 0.95,
+              "weight": 0.2
+            },
+            {
+              "evolution_factor": 1,
+              "weight": 0.2
+            }
+          ]
+        }
+      ],
+      "resistances": [
+        {
+          "type": "physical",
+          "decrease": 2,
+          "percent": 15
+        },
+        {
+          "type": "explosion",
+          "decrease": 5,
+          "percent": 15
+        },
+        {
+          "type": "fire",
+          "decrease": 3,
+          "percent": 60
+        }
+      ],
+      "attack": null
+    },
+    {
+      "name": "gleba-spawner-small",
+      "nauvis": false,
+      "max_health": 100,
+      "healing_per_tick": 0.08333333333333331,
+      "absorptions_per_second": {},
+      "spawning_cooldown": [
+        360,
+        150
+      ],
+      "spawning_radius": 10,
+      "spawning_spacing": 3,
+      "max_count_of_owned_units": 1,
+      "max_friends_around_to_spawn": 2,
+      "call_for_help_radius": 50,
+      "autoplace_control": "gleba_enemy_base",
+      "autoplace_probability": "gleba_spawner_small",
+      "result_units": [
+        {
+          "unit": "small-wriggler-pentapod",
+          "spawn_points": [
+            {
+              "evolution_factor": 0,
+              "weight": 0.9
+            },
+            {
+              "evolution_factor": 0.1,
+              "weight": 0.9
+            },
+            {
+              "evolution_factor": 0.6,
+              "weight": 0
+            }
+          ]
+        },
+        {
+          "unit": "medium-wriggler-pentapod",
+          "spawn_points": [
+            {
+              "evolution_factor": 0.1,
+              "weight": 0
+            },
+            {
+              "evolution_factor": 0.6,
+              "weight": 0.9
+            },
+            {
+              "evolution_factor": 0.95,
+              "weight": 0
+            }
+          ]
+        },
+        {
+          "unit": "big-wriggler-pentapod",
+          "spawn_points": [
+            {
+              "evolution_factor": 0.6,
+              "weight": 0
+            },
+            {
+              "evolution_factor": 0.95,
+              "weight": 0.9
+            },
+            {
+              "evolution_factor": 1,
+              "weight": 0.9
+            }
+          ]
+        }
+      ],
+      "resistances": [
+        {
+          "type": "physical",
+          "decrease": 2,
+          "percent": 15
+        },
+        {
+          "type": "explosion",
+          "decrease": 5,
+          "percent": 15
+        },
+        {
+          "type": "fire",
+          "decrease": 3,
+          "percent": 60
+        }
+      ],
+      "attack": null
+    },
+    {
+      "name": "spitter-spawner",
+      "nauvis": true,
+      "max_health": 350,
+      "healing_per_tick": 0.02,
+      "absorptions_per_second": {
+        "pollution": {
+          "absolute": 20,
+          "proportional": 0.01
+        }
+      },
+      "spawning_cooldown": [
+        360,
+        150
+      ],
+      "spawning_radius": 2,
+      "spawning_spacing": 1,
+      "max_count_of_owned_units": 7,
+      "max_friends_around_to_spawn": 5,
+      "call_for_help_radius": 50,
+      "autoplace_control": "enemy-base",
+      "autoplace_probability": "enemy_autoplace_base(0, 7)",
+      "result_units": [
+        {
+          "unit": "small-biter",
+          "spawn_points": [
+            {
+              "evolution_factor": 0,
+              "weight": 0.3
+            },
+            {
+              "evolution_factor": 0.35,
+              "weight": 0
+            }
+          ]
+        },
+        {
+          "unit": "small-spitter",
+          "spawn_points": [
+            {
+              "evolution_factor": 0.25,
+              "weight": 0
+            },
+            {
+              "evolution_factor": 0.5,
+              "weight": 0.3
+            },
+            {
+              "evolution_factor": 0.7,
+              "weight": 0
+            }
+          ]
+        },
+        {
+          "unit": "medium-spitter",
+          "spawn_points": [
+            {
+              "evolution_factor": 0.4,
+              "weight": 0
+            },
+            {
+              "evolution_factor": 0.7,
+              "weight": 0.3
+            },
+            {
+              "evolution_factor": 0.9,
+              "weight": 0.1
+            }
+          ]
+        },
+        {
+          "unit": "big-spitter",
+          "spawn_points": [
+            {
+              "evolution_factor": 0.5,
+              "weight": 0
+            },
+            {
+              "evolution_factor": 1,
+              "weight": 0.4
+            }
+          ]
+        },
+        {
+          "unit": "behemoth-spitter",
+          "spawn_points": [
+            {
+              "evolution_factor": 0.9,
+              "weight": 0
+            },
+            {
+              "evolution_factor": 1,
+              "weight": 0.3
+            }
+          ]
+        }
+      ],
+      "resistances": [
+        {
+          "type": "physical",
+          "decrease": 2,
+          "percent": 15
+        },
+        {
+          "type": "explosion",
+          "decrease": 5,
+          "percent": 0
+        },
+        {
+          "type": "fire",
+          "decrease": 3,
+          "percent": 60
+        }
+      ],
+      "attack": null
+    }
+  ],
+  "worms": [
+    {
+      "name": "behemoth-worm-turret",
+      "type": "turret",
+      "in_corpus": false,
+      "max_health": 3000,
+      "resistances": [
+        {
+          "type": "physical",
+          "decrease": 10,
+          "percent": 0
+        },
+        {
+          "type": "explosion",
+          "decrease": 10,
+          "percent": 30
+        },
+        {
+          "type": "fire",
+          "decrease": 3,
+          "percent": 70
+        },
+        {
+          "type": "laser",
+          "decrease": 0,
+          "percent": 80
+        }
+      ],
+      "energy_type": null,
+      "energy_buffer": null,
+      "drain": null,
+      "attack": {
+        "type": "stream",
+        "ammo_category": "biological",
+        "range": 48,
+        "min_range": 0,
+        "cooldown": 4,
+        "cooldown_deviation": null,
+        "damage_base": 1,
+        "damages": [
+          {
+            "amount": 1,
+            "type": "acid",
+            "via": "stream:acid-stream-worm-behemoth"
+          }
+        ],
+        "damage_modifier": 96,
+        "damage_per_shot": 96,
+        "shots_per_second": 15.0,
+        "damage_source": "stream:acid-stream-worm-behemoth"
+      }
+    },
+    {
+      "name": "big-worm-turret",
+      "type": "turret",
+      "in_corpus": false,
+      "max_health": 1500,
+      "resistances": [
+        {
+          "type": "physical",
+          "decrease": 10,
+          "percent": 0
+        },
+        {
+          "type": "explosion",
+          "decrease": 10,
+          "percent": 30
+        },
+        {
+          "type": "fire",
+          "decrease": 3,
+          "percent": 70
+        },
+        {
+          "type": "laser",
+          "decrease": 0,
+          "percent": 50
+        }
+      ],
+      "energy_type": null,
+      "energy_buffer": null,
+      "drain": null,
+      "attack": {
+        "type": "stream",
+        "ammo_category": "biological",
+        "range": 38,
+        "min_range": 0,
+        "cooldown": 4,
+        "cooldown_deviation": null,
+        "damage_base": 1,
+        "damages": [
+          {
+            "amount": 1,
+            "type": "acid",
+            "via": "stream:acid-stream-worm-big"
+          }
+        ],
+        "damage_modifier": 72,
+        "damage_per_shot": 72,
+        "shots_per_second": 15.0,
+        "damage_source": "stream:acid-stream-worm-big"
+      }
+    },
+    {
+      "name": "medium-worm-turret",
+      "type": "turret",
+      "in_corpus": false,
+      "max_health": 500,
+      "resistances": [
+        {
+          "type": "physical",
+          "decrease": 5,
+          "percent": 0
+        },
+        {
+          "type": "explosion",
+          "decrease": 5,
+          "percent": 15
+        },
+        {
+          "type": "fire",
+          "decrease": 2,
+          "percent": 50
+        },
+        {
+          "type": "laser",
+          "decrease": 0,
+          "percent": 20
+        }
+      ],
+      "energy_type": null,
+      "energy_buffer": null,
+      "drain": null,
+      "attack": {
+        "type": "stream",
+        "ammo_category": "biological",
+        "range": 30,
+        "min_range": 0,
+        "cooldown": 4,
+        "cooldown_deviation": null,
+        "damage_base": 1,
+        "damages": [
+          {
+            "amount": 1,
+            "type": "acid",
+            "via": "stream:acid-stream-worm-medium"
+          }
+        ],
+        "damage_modifier": 48,
+        "damage_per_shot": 48,
+        "shots_per_second": 15.0,
+        "damage_source": "stream:acid-stream-worm-medium"
+      }
+    },
+    {
+      "name": "small-worm-turret",
+      "type": "turret",
+      "in_corpus": false,
+      "max_health": 200,
+      "resistances": [],
+      "energy_type": null,
+      "energy_buffer": null,
+      "drain": null,
+      "attack": {
+        "type": "stream",
+        "ammo_category": "biological",
+        "range": 25,
+        "min_range": 0,
+        "cooldown": 4,
+        "cooldown_deviation": null,
+        "damage_base": 1,
+        "damages": [
+          {
+            "amount": 1,
+            "type": "acid",
+            "via": "stream:acid-stream-worm-small"
+          }
+        ],
+        "damage_modifier": 36,
+        "damage_per_shot": 36,
+        "shots_per_second": 15.0,
+        "damage_source": "stream:acid-stream-worm-small"
+      }
+    }
+  ],
+  "turrets": [
+    {
+      "name": "gun-turret",
+      "type": "ammo-turret",
+      "in_corpus": true,
+      "max_health": 400,
+      "resistances": [],
+      "energy_type": null,
+      "energy_buffer": null,
+      "drain": null,
+      "attack": {
+        "type": "projectile",
+        "ammo_category": "bullet",
+        "range": 18,
+        "min_range": null,
+        "cooldown": 6,
+        "cooldown_deviation": null,
+        "damage_base": null,
+        "damages": [],
+        "damage_modifier": 1,
+        "damage_per_shot": null,
+        "shots_per_second": 10.0,
+        "damage_source": "ammo"
+      }
+    },
+    {
+      "name": "railgun-turret",
+      "type": "ammo-turret",
+      "in_corpus": false,
+      "max_health": 4000,
+      "resistances": [],
+      "energy_type": "electric",
+      "energy_buffer": 11000000.0,
+      "drain": null,
+      "attack": {
+        "type": "projectile",
+        "ammo_category": "railgun",
+        "range": 40,
+        "min_range": 3.5,
+        "cooldown": 170,
+        "cooldown_deviation": null,
+        "damage_base": null,
+        "damages": [],
+        "damage_modifier": 1,
+        "damage_per_shot": null,
+        "shots_per_second": 0.352941,
+        "damage_source": "ammo"
+      }
+    },
+    {
+      "name": "rocket-turret",
+      "type": "ammo-turret",
+      "in_corpus": false,
+      "max_health": 1500,
+      "resistances": [],
+      "energy_type": null,
+      "energy_buffer": null,
+      "drain": null,
+      "attack": {
+        "type": "projectile",
+        "ammo_category": "rocket",
+        "range": 36,
+        "min_range": 15,
+        "cooldown": 120,
+        "cooldown_deviation": null,
+        "damage_base": null,
+        "damages": [],
+        "damage_modifier": 1,
+        "damage_per_shot": null,
+        "shots_per_second": 0.5,
+        "damage_source": "ammo"
+      }
+    },
+    {
+      "name": "laser-turret",
+      "type": "electric-turret",
+      "in_corpus": false,
+      "max_health": 1000,
+      "resistances": [],
+      "energy_type": "electric",
+      "energy_buffer": 801000.0,
+      "drain": 24000.0,
+      "attack": {
+        "type": "beam",
+        "ammo_category": "laser",
+        "range": 24,
+        "min_range": null,
+        "cooldown": 40,
+        "cooldown_deviation": null,
+        "damage_base": 10,
+        "damages": [
+          {
+            "amount": 10,
+            "type": "laser",
+            "via": "beam:laser-beam"
+          }
+        ],
+        "damage_modifier": 2,
+        "damage_per_shot": 20,
+        "shots_per_second": 1.5,
+        "damage_source": "beam:laser-beam"
+      }
+    },
+    {
+      "name": "tesla-turret",
+      "type": "electric-turret",
+      "in_corpus": false,
+      "max_health": 2000,
+      "resistances": [],
+      "energy_type": "electric",
+      "energy_buffer": 15000000.0,
+      "drain": 1000000.0,
+      "attack": {
+        "type": "beam",
+        "ammo_category": "tesla",
+        "range": 30,
+        "min_range": null,
+        "cooldown": 120,
+        "cooldown_deviation": null,
+        "damage_base": 120,
+        "damages": [
+          {
+            "amount": 120,
+            "type": "electric",
+            "via": "beam:chain-tesla-turret-beam-start"
+          }
+        ],
+        "damage_modifier": 1,
+        "damage_per_shot": 120,
+        "shots_per_second": 0.5,
+        "damage_source": "beam:chain-tesla-turret-beam-start"
+      }
+    },
+    {
+      "name": "flamethrower-turret",
+      "type": "fluid-turret",
+      "in_corpus": false,
+      "max_health": 1400,
+      "resistances": [
+        {
+          "type": "fire",
+          "decrease": 0,
+          "percent": 100
+        }
+      ],
+      "energy_type": null,
+      "energy_buffer": null,
+      "drain": null,
+      "attack": {
+        "type": "stream",
+        "ammo_category": "flamethrower",
+        "range": 30,
+        "min_range": 6,
+        "cooldown": 4,
+        "cooldown_deviation": null,
+        "damage_base": 3,
+        "damages": [
+          {
+            "amount": 3,
+            "type": "fire",
+            "via": "stream:flamethrower-fire-stream"
+          }
+        ],
+        "damage_modifier": 1,
+        "damage_per_shot": 3,
+        "shots_per_second": 15.0,
+        "damage_source": "stream:flamethrower-fire-stream"
+      }
+    }
+  ],
+  "walls": [
+    {
+      "name": "stone-wall",
+      "type": "wall",
+      "in_corpus": true,
+      "max_health": 350,
+      "resistances": [
+        {
+          "type": "physical",
+          "decrease": 3,
+          "percent": 20
+        },
+        {
+          "type": "impact",
+          "decrease": 45,
+          "percent": 60
+        },
+        {
+          "type": "explosion",
+          "decrease": 10,
+          "percent": 30
+        },
+        {
+          "type": "fire",
+          "decrease": 0,
+          "percent": 100
+        },
+        {
+          "type": "acid",
+          "decrease": 0,
+          "percent": 80
+        },
+        {
+          "type": "laser",
+          "decrease": 0,
+          "percent": 70
+        }
+      ],
+      "opening_speed": null
+    },
+    {
+      "name": "gate",
+      "type": "gate",
+      "in_corpus": true,
+      "max_health": 350,
+      "resistances": [
+        {
+          "type": "physical",
+          "decrease": 3,
+          "percent": 20
+        },
+        {
+          "type": "impact",
+          "decrease": 45,
+          "percent": 60
+        },
+        {
+          "type": "explosion",
+          "decrease": 10,
+          "percent": 30
+        },
+        {
+          "type": "fire",
+          "decrease": 0,
+          "percent": 100
+        },
+        {
+          "type": "acid",
+          "decrease": 0,
+          "percent": 80
+        },
+        {
+          "type": "laser",
+          "decrease": 0,
+          "percent": 70
+        }
+      ],
+      "opening_speed": 0.0666666
+    }
+  ],
+  "emissions": [
+    {
+      "name": "agricultural-tower",
+      "type": "agricultural-tower",
+      "in_corpus": false,
+      "emissions_per_minute": {
+        "spores": 4
+      },
+      "energy_type": "electric",
+      "energy_usage": 100000.0
+    },
+    {
+      "name": "assembling-machine-1",
+      "type": "assembling-machine",
+      "in_corpus": true,
+      "emissions_per_minute": {
+        "pollution": 4
+      },
+      "energy_type": "electric",
+      "energy_usage": 75000.0
+    },
+    {
+      "name": "assembling-machine-2",
+      "type": "assembling-machine",
+      "in_corpus": true,
+      "emissions_per_minute": {
+        "pollution": 3
+      },
+      "energy_type": "electric",
+      "energy_usage": 150000.0
+    },
+    {
+      "name": "assembling-machine-3",
+      "type": "assembling-machine",
+      "in_corpus": true,
+      "emissions_per_minute": {
+        "pollution": 2
+      },
+      "energy_type": "electric",
+      "energy_usage": 375000.0
+    },
+    {
+      "name": "biochamber",
+      "type": "assembling-machine",
+      "in_corpus": false,
+      "emissions_per_minute": {
+        "pollution": -1
+      },
+      "energy_type": "burner",
+      "energy_usage": 500000.0
+    },
+    {
+      "name": "captive-biter-spawner",
+      "type": "assembling-machine",
+      "in_corpus": false,
+      "emissions_per_minute": {
+        "pollution": -1
+      },
+      "energy_type": "burner",
+      "energy_usage": 100000.0
+    },
+    {
+      "name": "centrifuge",
+      "type": "assembling-machine",
+      "in_corpus": true,
+      "emissions_per_minute": {
+        "pollution": 4
+      },
+      "energy_type": "electric",
+      "energy_usage": 350000.0
+    },
+    {
+      "name": "chemical-plant",
+      "type": "assembling-machine",
+      "in_corpus": true,
+      "emissions_per_minute": {
+        "pollution": 4
+      },
+      "energy_type": "electric",
+      "energy_usage": 210000.0
+    },
+    {
+      "name": "crusher",
+      "type": "assembling-machine",
+      "in_corpus": true,
+      "emissions_per_minute": {
+        "pollution": 1
+      },
+      "energy_type": "electric",
+      "energy_usage": 540000.0
+    },
+    {
+      "name": "cryogenic-plant",
+      "type": "assembling-machine",
+      "in_corpus": false,
+      "emissions_per_minute": {
+        "pollution": 6
+      },
+      "energy_type": "electric",
+      "energy_usage": 1500000.0
+    },
+    {
+      "name": "electromagnetic-plant",
+      "type": "assembling-machine",
+      "in_corpus": false,
+      "emissions_per_minute": {
+        "pollution": 4
+      },
+      "energy_type": "electric",
+      "energy_usage": 2000000.0
+    },
+    {
+      "name": "foundry",
+      "type": "assembling-machine",
+      "in_corpus": false,
+      "emissions_per_minute": {
+        "pollution": 6
+      },
+      "energy_type": "electric",
+      "energy_usage": 2500000.0
+    },
+    {
+      "name": "oil-refinery",
+      "type": "assembling-machine",
+      "in_corpus": true,
+      "emissions_per_minute": {
+        "pollution": 6
+      },
+      "energy_type": "electric",
+      "energy_usage": 420000.0
+    },
+    {
+      "name": "boiler",
+      "type": "boiler",
+      "in_corpus": true,
+      "emissions_per_minute": {
+        "pollution": 30
+      },
+      "energy_type": "burner",
+      "energy_usage": 1800000.0
+    },
+    {
+      "name": "electric-furnace",
+      "type": "furnace",
+      "in_corpus": true,
+      "emissions_per_minute": {
+        "pollution": 1
+      },
+      "energy_type": "electric",
+      "energy_usage": 180000.0
+    },
+    {
+      "name": "recycler",
+      "type": "furnace",
+      "in_corpus": false,
+      "emissions_per_minute": {
+        "pollution": 2
+      },
+      "energy_type": "electric",
+      "energy_usage": 180000.0
+    },
+    {
+      "name": "steel-furnace",
+      "type": "furnace",
+      "in_corpus": true,
+      "emissions_per_minute": {
+        "pollution": 4
+      },
+      "energy_type": "burner",
+      "energy_usage": 90000.0
+    },
+    {
+      "name": "stone-furnace",
+      "type": "furnace",
+      "in_corpus": true,
+      "emissions_per_minute": {
+        "pollution": 2
+      },
+      "energy_type": "burner",
+      "energy_usage": 90000.0
+    },
+    {
+      "name": "biolab",
+      "type": "lab",
+      "in_corpus": false,
+      "emissions_per_minute": {
+        "pollution": 8
+      },
+      "energy_type": "electric",
+      "energy_usage": 300000.0
+    },
+    {
+      "name": "big-mining-drill",
+      "type": "mining-drill",
+      "in_corpus": false,
+      "emissions_per_minute": {
+        "pollution": 40
+      },
+      "energy_type": "electric",
+      "energy_usage": 300000.0
+    },
+    {
+      "name": "burner-mining-drill",
+      "type": "mining-drill",
+      "in_corpus": true,
+      "emissions_per_minute": {
+        "pollution": 12
+      },
+      "energy_type": "burner",
+      "energy_usage": 150000.0
+    },
+    {
+      "name": "electric-mining-drill",
+      "type": "mining-drill",
+      "in_corpus": true,
+      "emissions_per_minute": {
+        "pollution": 10
+      },
+      "energy_type": "electric",
+      "energy_usage": 90000.0
+    },
+    {
+      "name": "pumpjack",
+      "type": "mining-drill",
+      "in_corpus": true,
+      "emissions_per_minute": {
+        "pollution": 10
+      },
+      "energy_type": "electric",
+      "energy_usage": 90000.0
+    },
+    {
+      "name": "heating-tower",
+      "type": "reactor",
+      "in_corpus": false,
+      "emissions_per_minute": {
+        "pollution": 100
+      },
+      "energy_type": "burner",
+      "energy_usage": 40000000.0
+    }
+  ],
+  "enemy_evolution": {
+    "enabled": true,
+    "time_factor": 4e-06,
+    "destroy_factor": 0.002,
+    "pollution_factor": 9e-07
+  },
+  "enemy_expansion": {
+    "enabled": true,
+    "max_expansion_distance": 5,
+    "min_expansion_distance": 3,
+    "friendly_base_influence_radius": 6,
+    "enemy_building_influence_radius": 3,
+    "building_coefficient": 0.5,
+    "other_base_coefficient": 3,
+    "neighbouring_chunk_coefficient": 0.5,
+    "neighbouring_base_chunk_coefficient": 0.5,
+    "max_colliding_tiles_coefficient": 0.8,
+    "settler_group_min_size": 5,
+    "settler_group_max_size": 10,
+    "evolution_group_size_factor": 8,
+    "min_expansion_cooldown": 36000,
+    "max_expansion_cooldown": 216000,
+    "build_base_unit_dispatch_cooldown": 1800
+  },
+  "unit_group": {
+    "min_group_gathering_time": 3600,
+    "max_group_gathering_time": 36000,
+    "max_wait_time_for_late_members": 7200,
+    "max_group_radius": 30,
+    "min_group_radius": 5,
+    "max_member_speedup_when_behind": 1.4,
+    "max_member_slowdown_when_ahead": 0.6,
+    "max_group_slowdown_factor": 0.3,
+    "max_group_member_fallback_factor": 3,
+    "member_disown_distance": 10,
+    "tick_tolerance_when_member_arrives": 60,
+    "max_gathering_unit_groups": 30,
+    "max_unit_group_size": 200
+  },
+  "pollution": {
+    "enabled": true,
+    "diffusion_ratio": 0.02,
+    "min_to_diffuse": 15,
+    "ageing": 1,
+    "expected_max_per_chunk": 150,
+    "min_to_show_per_chunk": 50,
+    "min_pollution_to_damage_trees": 60,
+    "pollution_with_max_forest_damage": 150,
+    "pollution_per_tree_damage": 50,
+    "pollution_restored_per_tree_damage": 10,
+    "max_pollution_to_restore_trees": 20,
+    "enemy_attack_pollution_consumption_modifier": 1
+  }
+}

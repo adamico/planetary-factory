@@ -39,12 +39,14 @@ scripts/factorio-fluid-extract.py
 scripts/factorio-resource-extract.py
 scripts/factorio-fuel-extract.py
 scripts/factorio-tree-extract.py
+scripts/factorio-enemy-extract.py
 python3 tests/factorio/test_tech_extract.py
 python3 tests/factorio/test_recipe_extract.py
 python3 tests/factorio/test_machine_extract.py
 python3 tests/factorio/test_resource_extract.py
 python3 tests/factorio/test_fuel_extract.py
 python3 tests/factorio/test_tree_extract.py
+python3 tests/factorio/test_enemy_extract.py
 
 scripts/factorio-fuel-convert.py
 python3 tests/factorio/test_fuel_convert.py
@@ -55,12 +57,12 @@ The last pair is downstream of the extraction rather than part of it: `fuel.json
 onto `data/pack/item-map.json` into the table the mod loads (ADR-0047), so a re-extraction
 that moves a fuel has to be followed by a re-conversion or the game keeps the old table.
 
-All six extractors read the same dump, so a single `--dump-data` run feeds them. Order
+All eight extractors read the same dump, so a single `--dump-data` run feeds them. Order
 matters: the recipe extractor reads `technology.json`, the machine extractor reads
 `recipe.json` for its scope, and the fluid extractor reads `machine.json` for its scope
-(the fluid names the boiler's own fluid boxes filter on -- see below). The resource
-extractor reads only the dump, and the fuel extractor reads `recipe.json` for a flag rather
-than for a scope -- see below.
+(the fluid names the boiler's own fluid boxes filter on -- see below). The resource and
+tree extractors read only the dump, and the fuel and enemy extractors read `recipe.json`
+for a flag rather than for a scope -- see below.
 
 The dump lands in `~/Library/Application Support/factorio/script-output/data-raw-dump.json`. The
 extractor finds it and the Steam install by default; both are overridable with `--dump` and
@@ -249,3 +251,39 @@ effect recording the rule that produced them.
   `constants` and `outfield_law` carry `regular_density_at` and its three radii whole, for
   a later body siting outfield veins. **Scope is the six resources that function places**;
   `skipped` names the other planets' six, which have no starting patch to read.
+
+- **`enemy.json`** -- Terra's enemies, the turrets that shoot them and the entities whose
+  emission feeds them (ADR-0055). Nine sections: `units`, `spawners`, `worms`, `turrets`,
+  `walls`, `emissions`, and the four map-settings blocks `enemy_evolution`,
+  `enemy_expansion`, `unit_group` and `pollution`, carried whole because they are small,
+  flat and entirely coefficients -- taking a subset would decide which of ADR-0055's rules
+  gets numbers.
+
+  **Scope is every enemy prototype, with Nauvis marked rather than filtered.** The dump's
+  fourteen units include six Gleba wrigglers and its four spawners include two Gleba
+  spawners; they carry `nauvis: false` the way `fuel.json` carries `in_corpus`. Membership
+  is read off the spawners' own `autoplace.control` -- `enemy-base` is Nauvis's -- and a
+  unit is Nauvis's when a Nauvis spawner can spawn it, so no name list is typed here.
+
+  A spawner carries the absorption rule itself: `absorptions_per_second` is a flat
+  `absolute` **plus** a `proportional` share of what the chunk holds, and both halves are
+  the rule. Its `result_units` are Factorio's own `[evolution_factor, weight]` points,
+  carried as points rather than flattened into a tier-per-band guess, because the engine
+  interpolates between them.
+
+  **Damage is resolved through the delivery chain, and the modifier is applied.** A biter's
+  damage is inline; a spitter's and a worm's is in the `stream` prototype the delivery
+  names, and a laser turret's is in the `beam` one. `source_effects` are excluded -- a
+  premature wriggler pays itself a *negative* poison damage there, and a walker that takes
+  the first damage it finds reads that prototype as healing the player. One attack may deal
+  several damages and the hit is their sum; `damages`, `damage_base` and `damage_modifier`
+  are all kept so the check re-derives `damage_per_shot` rather than trusting it. A gun
+  turret has no damage of its own -- a magazine decides it -- and `damage_source` records
+  that as `ammo` rather than as a bare null.
+
+  **`emissions` is scoped by the field, not by the prototype type.** Twenty-four prototypes
+  across seven types state an `energy_source.emissions_per_minute`, and `machine.json`'s
+  "its own item recipe is in the corpus" rule would drop the heating tower and the biolab
+  while ADR-0055 is still deciding what emits; `in_corpus` records the distinction without
+  acting on it. The value is a map keyed by pollutant, because Space Age adds `spores`
+  beside `pollution` and a biochamber's rate is negative.

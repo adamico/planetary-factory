@@ -236,6 +236,23 @@ after editing `core/fluid/`, `scripts/build-steam-assets.py` or the corpus. Whet
 boils water is a world load, and — unlike the furnace ladder's, which are filed on #156 — no
 GameTest is filed for it yet; that is a gap rather than a decision.
 
+### Enemy corpus check
+
+`tests/factorio/test_enemy_extract.py` holds the eighth extractor's output — the units,
+nests, turrets, walls, map-settings coefficients and per-entity emission rates ADR-0055 is
+argued in. It **re-derives** rather than trusts, the way `test_resource_extract.py` does:
+the evolution factor is stepped through Factorio's own published update and checked against
+the closed form of the same differential equation, so a hand-edited `time_factor` fails here
+and nowhere in a running game; a nest's absorption is compared against the Boiler's own
+emission rather than against a literal; and each unit's `damage_per_shot` is recomputed from
+its `damages` and its `damage_modifier`. Four prototypes are the walk's controls, each of
+which yields a different plausible-looking wrong number: a premature wriggler's
+`source_effects` hold a *negative* damage the attacker pays itself, a small spitter's damage
+is 1 in a `stream` prototype and 12 in the game, a laser turret's is in a `beam` prototype
+and reads as none if the reference is not followed, and a gun turret genuinely has none
+because a magazine decides it. Run it after re-running `scripts/factorio-enemy-extract.py`.
+Nothing consumes this corpus yet; ADR-0055's arithmetic is filed against later tickets.
+
 ### Factorio mechanic ledger
 
 `docs/factorio-mechanics.md` is the tracked list of every Factorio mechanic — base game and Space
