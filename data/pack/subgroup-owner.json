@@ -500,42 +500,42 @@
     },
     "combat/ammo": {
       "owner": "not_emitted",
-      "reason": "#26 dropped Military science -- its ingredients feed nothing downstream.",
+      "reason": "#26 dropped Military science -- its ingredients feed nothing downstream. THAT PREMISE IS FALSE since #118 (ADR-0055): the combat line has customers and Military science returns. The shelf stays out of the corpus's emit scope only until `item-map.json` carries its rows; the ledger verdict is `planned` and this field is the other axis.",
       "count": 3
     },
     "combat/armor": {
       "owner": "not_emitted",
-      "reason": "#26 dropped Military science -- its ingredients feed nothing downstream.",
+      "reason": "#26 dropped Military science -- its ingredients feed nothing downstream. THAT PREMISE IS FALSE since #118 (ADR-0055): the combat line has customers and Military science returns. The shelf stays out of the corpus's emit scope only until `item-map.json` carries its rows; the ledger verdict is `planned` and this field is the other axis.",
       "count": 4
     },
     "combat/capsule": {
       "owner": "not_emitted",
-      "reason": "#26 dropped Military science -- its ingredients feed nothing downstream.",
+      "reason": "#26 dropped Military science -- its ingredients feed nothing downstream. THAT PREMISE IS FALSE since #118 (ADR-0055): the combat line has customers and Military science returns. The shelf stays out of the corpus's emit scope only until `item-map.json` carries its rows; the ledger verdict is `planned` and this field is the other axis.",
       "count": 1
     },
     "combat/equipment": {
       "owner": "not_emitted",
-      "reason": "#26 dropped Military science -- its ingredients feed nothing downstream.",
+      "reason": "#26 dropped Military science -- its ingredients feed nothing downstream. THAT PREMISE IS FALSE since #118 (ADR-0055): the combat line has customers and Military science returns. The shelf stays out of the corpus's emit scope only until `item-map.json` carries its rows; the ledger verdict is `planned` and this field is the other axis.",
       "count": 2
     },
     "combat/gun": {
       "owner": "not_emitted",
-      "reason": "#26 dropped Military science -- its ingredients feed nothing downstream.",
+      "reason": "#26 dropped Military science -- its ingredients feed nothing downstream. THAT PREMISE IS FALSE since #118 (ADR-0055): the combat line has customers and Military science returns. The shelf stays out of the corpus's emit scope only until `item-map.json` carries its rows; the ledger verdict is `planned` and this field is the other axis.",
       "count": 2
     },
     "combat/turret": {
       "owner": "not_emitted",
-      "reason": "#26 dropped Military science -- its ingredients feed nothing downstream.",
+      "reason": "#26 dropped Military science -- its ingredients feed nothing downstream. THAT PREMISE IS FALSE since #118 (ADR-0055): the combat line has customers and Military science returns. The shelf stays out of the corpus's emit scope only until `item-map.json` carries its rows; the ledger verdict is `planned` and this field is the other axis.",
       "count": 1
     },
     "combat/utility-equipment": {
       "owner": "not_emitted",
-      "reason": "#26 dropped Military science -- its ingredients feed nothing downstream.",
+      "reason": "#26 dropped Military science -- its ingredients feed nothing downstream. THAT PREMISE IS FALSE since #118 (ADR-0055): the combat line has customers and Military science returns. The shelf stays out of the corpus's emit scope only until `item-map.json` carries its rows; the ledger verdict is `planned` and this field is the other axis.",
       "count": 4
     },
     "combat/defensive-structure": {
       "owner": "not_emitted",
-      "reason": "#26 dropped Military science.",
+      "reason": "#26 dropped Military science -- its ingredients feed nothing downstream. THAT PREMISE IS FALSE since #118 (ADR-0055): the combat line has customers and Military science returns. The shelf stays out of the corpus's emit scope only until `item-map.json` carries its rows; the ledger verdict is `planned` and this field is the other axis. `radar` on this shelf was already authored separately by #57.",
       "note": "Contains `radar`. #57 decided a continuous FE Radar as a `gtceu:machine` KubeJS registration with the mechanism in `planetaryfactory_core`, unlocked by its own research node -- a pack machine, not Factorio's item, so this row stays cut and the Radar is authored rather than converted.",
       "count": 3
     },

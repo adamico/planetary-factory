@@ -67,9 +67,9 @@ text and commits to no jar; **`pack` is admissible as a candidate only with a na
 | [Nuclear fission](#nuclear-fission) | `adapted` | Terra |
 | [Pollution](#pollution) | `planned` | all bodies |
 | [Enemies and evolution](#enemies-and-evolution) | `planned` | Terra |
-| [Combat: guns, ammo, turrets, walls](#combat-guns-ammo-turrets-walls) | `excluded` | — |
-| [Armor and the equipment grid](#armor-and-the-equipment-grid) | `excluded` | — |
-| [Capsules](#capsules) | `excluded` | — |
+| [Combat: guns, ammo, turrets, walls](#combat-guns-ammo-turrets-walls) | `planned` | Terra |
+| [Armor and the equipment grid](#armor-and-the-equipment-grid) | `planned` | Terra |
+| [Capsules](#capsules) | `planned` | Terra |
 | [Modules and beacons](#modules-and-beacons) | `blocked` | — |
 | [Research and science packs](#research-and-science-packs) | `planned` | all bodies |
 | [The technology tree](#the-technology-tree) | `shipped` | pack-wide |
@@ -77,7 +77,7 @@ text and commits to no jar; **`pack` is admissible as a candidate only with a na
 | [Character movement on foot](#character-movement-on-foot) | `adapted` | all bodies |
 | [Personal transport](#personal-transport) | `blocked` | — |
 | [Terrain modification](#terrain-modification) | `adapted` | all bodies |
-| [Repair and entity damage](#repair-and-entity-damage) | `excluded` | — |
+| [Repair and entity damage](#repair-and-entity-damage) | `blocked` | — |
 | [Radar and map exploration](#radar-and-map-exploration) | `planned` | Terra |
 | [The logistic request and trash system](#the-logistic-request-and-trash-system) | `excluded` | — |
 | [Day and night cycle](#day-and-night-cycle) | `shipped` | Terra, Sapros |
@@ -591,8 +591,9 @@ Sub-rules:
   blueprints a logistics mechanic rather than a building tool, and nothing in the stack has it.
 - **Construction robots build, repair and rebuild from a roboport's range** — `excluded`.
   `by-consequence` of [Logistic robots](#logistic-robots): ADR-0017 cuts the routing mods, and a
-  construction network is that decision applied to building. It is also, with no biters, a network
-  with nothing to repair — see [Repair and entity damage](#repair-and-entity-damage).
+  construction network is that decision applied to building. The second half of that argument — "a
+  network with nothing to repair" — died with ADR-0055; see
+  [Repair and entity damage](#repair-and-entity-damage). ADR-0017 still carries the row on its own.
 - **Deconstruction planner** — `unargued`, no verdict.
 
 ### Trains
@@ -839,18 +840,24 @@ Sub-rules:
 
 - **verdict**: `planned`
 - **where**: all bodies
-- **via**: `kubejs`
-- **owner**: ADR-0005
-- **ticket**: #109
+- **via**: `kubejs`, `pack`
+- **owner**: ADR-0055 (supersedes ADR-0005)
+- **ticket**: #109, #118
 
 GTCEu 7.0.2 has no pollution system — the mod contains nothing matching `pollut` — so Emission is
 ours and none of it is built yet.
 
-Its shape already differs from Factorio's in a way worth recording before it lands: Emission is
-scored per chunk off the **EU/t draw of running GT machines**, not per recipe, so a machine idling is
-free and there is no pollution-per-craft number on a recipe tooltip. Power draw is the one number
-every GT machine already exposes, which is why no per-recipe tagging is needed. Expect this row to
-become `adapted` with that as its notice once it ships.
+**ADR-0005's EU/t proxy was superseded before it shipped.** That ADR scored Emission per chunk off
+the **EU/t draw of running GT machines** and rejected per-entity rates as costing "tagging every
+recipe in a GregTech pack". Factorio states emission per prototype as
+`energy_source.emissions_per_minute`, and that field is in the dump the extractors already read —
+extraction is not tagging, and the pipeline that makes it free was built *after* ADR-0005. ADR-0055
+takes the corpus rates instead. The proxy also misranks: a boiler pollutes far more per joule than
+an assembler, and an idle machine emits its idle rate rather than zero, so under EU/t a coal-fired
+base and an electric one of equal draw are equally dirty.
+
+Per-chunk accumulation, decay and diffusion are unchanged from ADR-0005 — they are what make the
+score a spatial problem and outpost placement a decision.
 
 Sub-rules:
 
@@ -864,58 +871,115 @@ Sub-rules:
 
 - **verdict**: `planned`
 - **where**: Terra
-- **via**: `kubejs`, `native_mechanic`
-- **owner**: `docs/gdd.md` §6
-- **ticket**: #110
+- **via**: `pack`, `native_mechanic`
+- **owner**: ADR-0055
+- **ticket**: #118
 
-Nothing here is built. The intended shape, for the same reason as [Pollution](#pollution): emission
-attracts **Illager raids to an Overseer at your outpost**, not biters out of a nest you can go and
-clear — no nest to destroy, no expansion, no evolution factor. Vanilla raid pathfinding is the
-substrate, and raids are Terra's alone.
+Nothing here is built. **The shape changed wholesale with ADR-0055**, which reversed the previous
+entry in this row: emission was to attract *Illager raids to an Overseer at your outpost*, with no
+nest, no expansion and no evolution factor. That design existed because `minecraft:raid` is
+village-anchored and needed something to path at. It was never argued against Factorio's own loop,
+and `docs/gdd.md` §6 describing it is stale prose with no standing (ADR-0054).
+
+Factorio's loop is one mechanism: nests absorb the pollution that reaches them, and absorbed
+pollution is what buys the attack groups. The raid *is* the nest's output. The pack reproduces
+that, with nests and waves held as saved data and entities as their rendering — the Dormant Siege's
+own idea, applied to the thing it is cheaper to apply it to.
 
 Sub-rules:
 
-- **Pollution triggers attacks** — `planned`.
-- **Attacks are state until a player is present** (the Dormant Siege) — `planned`. No Factorio analogue;
-  a pack addition that exists because chunks unload.
-- **Nests, expansion and clearing territory** — `excluded`. `by-consequence`: raids need no nest, so
-  the offensive half of Factorio's enemy loop has nowhere to attach.
-- **Evolution factor rising with pollution and time** — `blocked`.
+- **Pollution triggers attacks** — `planned`. Via nest absorption, not a threshold on the outpost.
+- **Attacks are state until a player is present** (the Dormant Siege) — `planned`. Generalised by
+  ADR-0055: nests and in-flight waves are both records, and mobs instantiate near the player a wave
+  is aimed at. A raider abandons its raid beyond 112 blocks, so a wave cannot walk Factorio's
+  distances as entities.
+- **Nests, expansion and clearing territory** — `planned`. ADR-0055. Was `excluded`/`by-consequence`
+  on the raid design; expansion runs on its own timer rather than on the cloud, capped by the same
+  distance-density rule that placed the original nests.
+- **Evolution factor rising with pollution and time** — `planned`. Was `blocked` for want of a nest
+  to evolve. One global scalar on all three of Factorio's inputs — time, emission produced, and
+  nests destroyed — the third being why clearing the map is not a permanent win.
+- **Enemies destroy structures** — `adapted`. Factorio's biters eat walls and turrets; Minecraft
+  mobs grief nothing, so this is ours to build, and it is bounded to the
+  `planetaryfactory:destructible` tag rather than to anything in the way.
 - **Gleba's pentapods** — `unargued`, no verdict. `docs/planets.md` marks them TBD.
 
 ### Combat: guns, ammo, turrets, walls
 
-- **verdict**: `excluded`
-- **where**: —
-- **owner**: `by-consequence`
+- **verdict**: `planned`
+- **where**: Terra
+- **via**: `pack`
+- **owner**: #118
+- **ticket**: #118
 
-**The canonical `by-consequence` row.** #26 dropped Military science because its ingredients feed
-nothing downstream, and seven `combat/*` shelves went `not_emitted` behind it — turrets, guns, ammo,
-armor, capsules, equipment and walls. Nobody decided this pack has no combat; a science-pack pruning
-decided it for them.
+**This was the canonical `by-consequence` row, and #118 reversed it.** #26 dropped Military science
+because its ingredients feed nothing downstream, and seven `combat/*` shelves went `not_emitted`
+behind it — turrets, guns, ammo, armor, capsules, equipment and walls. Nobody decided this pack has
+no combat; a science-pack pruning decided it for them. The premise is now false: with ADR-0055's
+nests on the map, those ingredients feed the thing you defend against and the thing you go and
+clear, so **all seven shelves come back together** rather than two of them staying cut for a reason
+nobody believes.
 
-Owned by this ledger, not handed back to #26. Whether the pack has turret defence at all is #118.
+Sub-rules:
 
-Note that `not_emitted` did **not** settle the shelf: `combat/defensive-structure` is `not_emitted`
-and #57 still shipped a Radar. That is the proof case for the two axes never reading each other.
+- **Turrets fed by ammo items** — `planned`. Not powered-and-free: ammo is a production cost with a
+  research ladder, and Factorio deliberately shares magazines between the gun turret and the SMG,
+  so one ammo line has two customers.
+- **Personal firearms** — `planned`. Pistol and SMG, sharing the turrets' ammo. A player expected to
+  go and clear a nest needs something to clear it with.
+- **Walls** — `planned`. Factorio's wall and gate, and the designated member of the
+  `planetaryfactory:destructible` tag — without one, every player picks a different block and the
+  mechanic has no shape.
+- **Military science returns** — `planned`. #26's pruning is reversed on its own stated reason; the
+  Factorio tech tree gates `military-2/3/4`, the laser/rocket turrets, `railgun`, `uranium-ammo`,
+  the shields and the power-armor rungs behind it, and ADR-0022 imports that tree as data precisely
+  so its prerequisites are not retyped. Reopens #26 and touches ADR-0018.
+- **Mechanism is first-party; art and possibly logic are delegated** — `unargued`. A research ticket
+  specifies which third-party mods supply models, textures and any borrowed behaviour, and what
+  their licenses permit. The `build-pick-textures.py` precedent derives art from a jar the pack
+  already depends on, and that reasoning does not transfer to a mod the pack would install only for
+  its assets.
+
+Note that `not_emitted` did **not** settle the shelf even while the row read `excluded`:
+`combat/defensive-structure` is `not_emitted` and #57 still shipped a Radar. That is the proof case
+for the two axes never reading each other, and it is why reversing this row is a ledger edit rather
+than a regeneration.
 
 ### Armor and the equipment grid
 
-- **verdict**: `excluded`
-- **where**: —
-- **owner**: `by-consequence`
+- **verdict**: `planned`
+- **where**: Terra
+- **via**: `pack`
+- **owner**: #118
+- **ticket**: #118
 
-Same #26 cascade. Partially contradicted already: MekaSuit is the spacesuit (`docs/gdd.md` §1), and a
-MekaSuit *is* an equipment grid with modules in it. So the mechanic arguably ships under another
-name, which is exactly the kind of thing a ledger is for. Flagged rather than resolved.
+Same #26 cascade, reversed with the rest of it. **The old note here was stale twice over**: it read
+"MekaSuit is the spacesuit (`docs/gdd.md` §1), and a MekaSuit *is* an equipment grid", but ADR-0035
+removed Mekanism from the pack jars and all (#146), and `docs/gdd.md` §1 now says so itself. The
+mechanic does not ship under another name; nothing in the pack expresses it.
+
+Factorio's shape is a six-rung ladder — `light-armor`, `heavy-armor`, `modular-armor`,
+`power-armor`, `power-armor-mk2`, `mech-armor` — with the grid arriving at `modular-armor` and
+seventeen equipment technologies above it. Factorio has **no** space suit; `grep -i
+"space-suit|spacesuit|oxygen|pressure|life-support"` over `data/factorio/*.json` returns nothing
+across 163 recipes and 162 technologies. Whether GCyR's suit and its `enableOxygen` default survive
+contact with the armour ladder is a reconciliation downstream of this row, not an input to it — the
+pack builds GCyR from source (ADR-0001), so it is a thing that changes rather than a constraint to
+route around.
 
 ### Capsules
 
-- **verdict**: `excluded`
-- **where**: —
-- **owner**: `by-consequence`
+- **verdict**: `planned`
+- **where**: Terra
+- **via**: `pack`
+- **owner**: #118
+- **ticket**: #118
 
-Same #26 cascade.
+Same #26 cascade, reversed with the rest of it. The seven shelves shared one stated reason and it is
+false, so leaving this one behind would keep a shelf cut for an argument nobody holds. `personal-roboport`
+in the utility-equipment shelf will collide with ADR-0017's one-mod-owns-each-capability rule, since
+Create owns logistics before AE2 — that needs its own argument, and it gets one rather than
+inheriting a dead premise.
 
 ### Modules and beacons
 
@@ -945,15 +1009,17 @@ unattended.
 Sub-rules:
 
 - **Each pack rung grants a capability the next rung physically requires** — `planned`. ADR-0018.
-- **Military science** — `excluded`. #26; see [Combat](#combat-guns-ammo-turrets-walls) for what went
-  with it.
+- **Military science** — `planned`. #26 dropped it because its ingredients fed nothing downstream;
+  #118 makes them feed the combat line, so the pruning is reversed on its own reason. See
+  [Combat](#combat-guns-ammo-turrets-walls). Reopens #26 and touches ADR-0018.
 - **Sapros's science pack spoils** — `planned`. The buffer-as-liability puzzle.
 - **Research consumes packs continuously while running** — `adapted`. Researchd's Lab consumes on
   completion of a pack batch rather than metering a rate; only `consumePack` reads the Lab.
 - **A lab draws power, so research competes with the factory for it** — `blocked`, #103. Researchd's
   Lab has no energy handler at all — no class in the jar carries the concept — so research is free of
-  the grid, and being free of the grid it also emits nothing (ADR-0005 scores EU/t draw), which makes
-  researching the one industrial activity on Terra with no hazard consequence.
+  the grid. Under ADR-0005's EU/t scoring that also made it emit nothing; under ADR-0055's per-entity
+  rates it emits whatever the corpus gives its prototype, so whether researching stays the one
+  industrial activity on Terra with no hazard consequence is now a question the extraction answers.
 
 ### The technology tree
 
@@ -1074,13 +1140,19 @@ Sub-rules:
 
 ### Repair and entity damage
 
-- **verdict**: `excluded`
+- **verdict**: `blocked`
 - **where**: —
-- **owner**: `by-consequence`
+- **owner**: #118
 
-`production/tool` is `undecided` on one recipe, `repair-pack`, with the reason stated plainly:
-nothing on Terra takes damage the way a Factorio entity does. With no biters attacking buildings, the
-whole repair loop has nothing to repair.
+`production/tool` is `undecided` on one recipe, `repair-pack`, and the reason this row carried —
+"nothing on Terra takes damage the way a Factorio entity does; with no biters attacking buildings,
+the whole repair loop has nothing to repair" — **was falsified by ADR-0055**. Enemies now damage
+blocks in the `planetaryfactory:destructible` tag, so there is something to repair.
+
+`blocked` rather than `planned`: the premise is gone but the argument has not been had. It is also
+load-bearing in the other direction — ADR-0055 bounded destruction to a tag partly because there is
+no repair mechanic underneath it, so a repair loop and the size of that tag are one question, not
+two.
 
 ### Radar and map exploration
 
@@ -1424,6 +1496,8 @@ settled inside a row. Filed:
 - #119 — where does redstone come from, now that #58 has cut it from Terra and the circuit network
   needs it? A resource question for #25; the row stays `adapted` whatever the answer.
 - #118 — does the pack have combat — biters, turrets, walls — or did Military science take them?
+  **Answered.** ADR-0054 and ADR-0055: nests absorb emission and send the waves, all seven `combat/*`
+  shelves come back, and Military science returns with them.
 - #120 — modules and beacons, and whether the retrofit-tradeoff mid-game exists here at all.
 - #121 — personal transport.
 - #122 — quality, and whether an item-quality axis is affordable at all.
