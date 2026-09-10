@@ -150,8 +150,14 @@ voltage ladder and logistics are not adopted.
   recipe then fails its own start simulation; the lock persists in NBT (`:78`) and survives an empty
   slot, so it is the *display* as well as the selection; and `MIItemStorage:130-141` builds a pipe
   insert whitelist from the same locked instance, which is the overfill guard. EMI's Fill Recipe
-  sets it with the ingredients absent. Copy/paste of machine configuration is not in MI and comes
-  from a third-party addon. What remains is coverage, not design — the candidate filter is the
+  sets it with the ingredients absent. Copy/paste of machine configuration is not in MI; the
+  reference implementation is Extended Industrialization's Machine Config Card, which copies each
+  slot's locked instance and adjusted capacity, matches on the same block and identical slot counts,
+  and applies on a simulate-then-act pass — read in
+  `docs/research/modern-industrialization-slot-locking.md`. **The addon is prior art, not a
+  dependency**: it arrives with 227 generated recipes and `tesseract_api`, all of which ADR-0034's
+  sweep would have to be argued against, and the pack's own carrier is ADR-0039's Engineer's Pick,
+  which is being reopened anyway because its GregTech wrench strings do not survive this ADR. What remains is coverage, not design — the candidate filter is the
   *product*, so it disambiguates a group only where the members have distinct outputs (`#238`).
 - **What replaces GregTech's ore placement.**
 - **What the Supply Area Pole and the Electric furnace tier speak.** Both currently speak GT EU, and

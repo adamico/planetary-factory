@@ -102,8 +102,69 @@ Rule 2 is worth flagging here: MI treats the unification target as the canonical
 when it has to choose one. This pack's equivalent choice is ADR-0053, which is accepted and
 unapplied.
 
-## What MI has no answer for
+## What MI has no answer for, and where the prior art actually is
 
-There is no copy or paste of a machine's configuration anywhere in the source — no clipboard, no
-configuration card, no settings tool. Factorio's shift-click copy of entity settings has no
-counterpart in MI, so the third requirement in #236's gesture has no prior art to borrow here.
+There is no copy or paste of a machine's configuration anywhere in MI's own source — no clipboard,
+no configuration card, no settings tool. Factorio's shift-click copy of entity settings has no
+counterpart in the base mod.
+
+**The addon has one.** `Swedz/Extended-Industrialization` ships a Machine Config Card, read against
+a clone at `9b0ea09` (2026-08-22), beside the pack as `../ei-src`. It is NeoForge 1.21.1, requires
+MI `[2.5.6-, 2.6-)` and additionally `tesseract_api`. **This is a reference, not a proposed
+dependency** — see the closing note.
+
+### The gestures
+
+`item/machineconfig/MachineConfigCardItem.java` is a plain `Item` with `stacksTo(1)` and four
+behaviours:
+
+| gesture | effect |
+| --- | --- |
+| shift + use on a machine (`:75-81`) | save that machine's config into the item's data component |
+| use on a machine (`:82-96`) | apply it — `Simulation.SIMULATE` first, then `ACT`, with a success or failure message either way |
+| shift + use in air (`:104-113`) | clear the stored config |
+| **place a machine holding the card in the off hand** (`:35-60`) | apply automatically, on `BlockEvent.EntityPlaceEvent` at `EventPriority.LOWEST` |
+
+The last one is the closest thing here to Factorio's blueprint paste, and it costs one event
+subscriber. The tooltip (`:117-133`) renders the machine block the config came from as an item
+image, so a configured card is identifiable in the inventory without being used.
+
+### What a config is
+
+`MachineConfig` (`:19-25`) is a record of `machineBlock`, `slots`, `orientation`, `panel` and an
+optional `activeShape`, with a `Codec` and a `StreamCodec`, stored as a data component.
+
+`MachineConfigSlots.from` (`:41-61`) is the part this pack cares about. Per item slot it reads
+`(index, getAdjustedCapacity(), getLockedInstance())`; per fluid slot `(index,
+getLockedInstance())`. **The copied thing is the lock the recipe selection rides on.** Applying
+(`:71-105`) calls `playerLock(...)` per slot and restores the adjusted capacity through an accessor
+mixin into MI (`mixin/mi/accessor/ConfigurableItemStackAccessor.setAdjustedCapacity`).
+
+`matches` is deliberately strict on both levels: `MachineConfig.matches` (`:50-53`) requires the
+**same block**, and `MachineConfigSlots.matches` (`:64-68`) requires identical item and fluid slot
+counts. A card is therefore per machine type, and a mismatched paste fails loudly rather than
+half-applying — which is what the simulate-then-act pass buys.
+
+### What to take and what to leave
+
+The mechanism is roughly 330 lines over five files — `MachineConfig`, `MachineConfigSlots`,
+`MachineConfigSlot`, `MachineConfigApplicable`, `MachineConfigCardItem` — plus that one accessor
+mixin. Only `MachineConfigPanel` (375 lines) is entangled with the addon's own content: it copies
+MI's casing, overdrive, redstone-control and upgrade components *and* EI's processing array and
+enchantment module. None of that applies here.
+
+Adopting the mod rather than the idea costs 278 Java files, 227 generated recipes, 35 items and 5
+blocks, plus `tesseract_api` as a second required jar. Under ADR-0034's default-deny sweep every one
+of those recipes is removed and every machine kept needs a `recipe_survivors.js` row naming a type
+`data/pack/category-map.json` registers — the shape #172 already paid for with Create: Power Grid.
+Against that, the pack's own carrier already exists and is already being reopened: ADR-0039's
+Engineer's Pick, whose GregTech wrench-ability strings (`core/mining/PickAbilities.java:41`) do not
+survive ADR-0056.
+
+### One limit, and it is MI's rather than the addon's
+
+`lockedInstance` is a bare `Item`, not an `ItemStack` — no data components, on either side. ADR-0052
+makes an assembler item its registry id **plus** its component patch precisely because Researchd's
+four science packs are one item told apart by a component. A slot cannot be locked to a particular
+science pack, and a config card cannot carry one. Worth confirming nothing in the pack needs that
+before a gesture is designed around slot locks.
