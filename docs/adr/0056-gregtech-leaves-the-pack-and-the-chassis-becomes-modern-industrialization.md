@@ -1,6 +1,6 @@
 ---
 status: accepted
-supersedes: [73]
+supersedes: [73, 237, 238]
 ---
 
 # GregTech leaves the pack, and the machine chassis becomes Modern Industrialization
