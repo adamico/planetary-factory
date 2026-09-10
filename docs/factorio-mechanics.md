@@ -81,6 +81,7 @@ text and commits to no jar; **`pack` is admissible as a candidate only with a na
 | [Radar and map exploration](#radar-and-map-exploration) | `planned` | Terra |
 | [The logistic request and trash system](#the-logistic-request-and-trash-system) | `excluded` | — |
 | [Day and night cycle](#day-and-night-cycle) | `shipped` | Terra, Sapros |
+| [Controls](#controls) | `planned` | all bodies |
 
 ### Space Age
 
@@ -1122,6 +1123,43 @@ Sub-rules:
 
 - **Solar output follows the cycle, and accumulators bridge the night** — `planned`, and it is
   Electro's identity. Electro's own cycle is `unargued`.
+
+### Controls
+
+- **verdict**: `planned`
+- **where**: all bodies
+- **via**: `planetaryfactory_core` (quick transfer), Mouse Tweaks (in-GUI), `native_mechanic` (pipette)
+- **owner**: #208
+- **ticket**: #208
+
+Factorio's control surface is a mechanic in its own right: the gestures are how the player moves
+items without a screen, and a pack that reproduces the production chains while making every transfer
+a two-step GUI operation has reproduced the arithmetic and not the game. The rows below are the whole
+surface, not only the one #208 asked for — a section admitting a single gesture would be re-argued
+the next time one came up.
+
+Sub-rules:
+
+- **Fast entity transfer and fast entity split** — `planned`, #208. The pack calls these **quick
+  transfer** and **quick split** (`CONTEXT.md`); Factorio's own names appear here and nowhere else,
+  per ADR-0028. Two `KeyMapping`s in `planetaryfactory_core`, defaulting to `CTRL` + left and right
+  mouse and declared in Controls so a conflict with Carry On or Building Gadgets is the player's to
+  resolve. Magnitude is Factorio's verbatim — the held stack in, everything the target will give up
+  out, halved for the split. The target set is every GregTech machine and every pack-authored block
+  that holds items, reached through the block's own item handler with no pack-authored slot policy.
+  **The mid-recipe question answers itself on both engines**: GregTech consumes inputs at
+  `RecipeLogic.setupRecipe`, so a running machine has nothing to take back, and the pack's furnace —
+  which consumes at completion instead — already refuses extraction from anything but its output slot
+  in `FurnaceItemHandler`. Delegating to the handler is what makes the two timings invisible.
+- **In-GUI stack and inventory transfer** (`SHIFT`/`CTRL` + click inside a machine screen) —
+  `shipped` via Mouse Tweaks, which is in the manifest and does exactly this. Distinct from the fast
+  entity gestures above: those need no screen open.
+- **Pipette tool** — `adapted`. Vanilla's pick-block is a near-exact match, already bound, and picks
+  from the inventory in survival. No work.
+- **Drop item into a machine** (`Z`) — `excluded`. It is a one-item quick transfer, and shipping both
+  means two bindings differing only in magnitude.
+- **Drag-building** — `excluded`. `by-consequence`: Create's belts are placed endpoint-to-endpoint
+  rather than one tile at a time (ADR-0044), so the gesture has nothing to drag across.
 
 ---
 

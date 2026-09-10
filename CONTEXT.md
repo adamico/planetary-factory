@@ -165,6 +165,16 @@ _Avoid_: shipment, trip, transit
 The deferred transition of a fully automated Platform from a physically built factory to a background throughput calculation. A contingency held in reserve against measured TPS cost, not a system currently being built.
 _Avoid_: abstraction, going virtual
 
+### Handling things
+
+**Quick transfer**:
+The gesture that moves the held stack into the block the player is looking at, or — with an empty hand — takes out everything that block will give up, without opening its screen. Reach is the player's own, so the gesture and the screen answer to the same ray trace. It reads and writes through the target's item handler and imposes no slot policy of its own, which is why it can never strip a furnace of its fuel or of an input it has not smelted yet, and why a GregTech machine mid-recipe has nothing left to take back.
+_Avoid_: fast entity transfer, ctrl-click, quick insert, fast transfer
+
+**Quick split**:
+Quick transfer at half the magnitude — half the held stack in, or half of what the block will give up out.
+_Avoid_: fast entity split, ctrl-right-click, half stack transfer
+
 ### Terra's ore
 
 **Ore patch**:
