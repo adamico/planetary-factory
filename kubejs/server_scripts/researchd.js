@@ -1,4 +1,5 @@
 // priority: 0
+// requires: researchd
 // The pack's research tree. Topology, names and pack costs come from Factorio's extracted
 // technology tree (data/factorio/technology.json); this file supplies only what Factorio
 // cannot know -- which Minecraft item is the icon, which recipe a research unlocks, and

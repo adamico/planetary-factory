@@ -1,4 +1,5 @@
 // priority: 10
+// requires: researchd
 // Builds Researchd researches from Factorio's extracted technology tree.
 //
 // The tree's *shape* is imported rather than invented (ADR-0022): Factorio has playtested

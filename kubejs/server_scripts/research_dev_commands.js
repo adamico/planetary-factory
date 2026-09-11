@@ -1,3 +1,4 @@
+// requires: researchd
 // Pack-side research dev commands -- the replacement for `/researchd research unlock|remove`.
 //
 // Researchd's own commands enumerate and resolve through the vanilla datapack registry

@@ -120,7 +120,7 @@ StartupEvents.registry('block', (event) => {
     .resistance(0.2)
     .requiresTool(false)
     .notSolid()
-    .renderType('cutout_mipped')
+    .renderType('cutout')
     .tagBlock('minecraft:leaves')
     .tagBlock('minecraft:mineable/hoe')
     .tagItem('minecraft:leaves');
@@ -146,7 +146,7 @@ StartupEvents.registry('block', (event) => {
     .resistance(0.2)
     .requiresTool(false)
     .notSolid()
-    .renderType('cutout_mipped')
+    .renderType('cutout')
     .tagBlock('minecraft:leaves')
     .tagBlock('minecraft:mineable/hoe')
     .tagItem('minecraft:leaves');
