@@ -89,6 +89,7 @@ docs/scratch/
 **/*client*.toml
 **/*client*.snbt
 **/*client*.json
+**/*client*.json5
 **/*client*.properties
 config/InventoryHUD/
 config/justzoom/

@@ -102,6 +102,7 @@ config/runelic.json
 *client*.toml
 *client*.snbt
 *client*.json
+*client*.json5
 *client*.properties
 options.txt
 servers.dat
