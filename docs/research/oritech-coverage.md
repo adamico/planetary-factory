@@ -11,6 +11,10 @@ they start with `data/`. Oritech is **CC0** (`LICENSE.md`), which matters for an
 mechanic-bearing palette were reduced to Create, Oritech and `planetaryfactory_core`, which rows of
 `docs/factorio-mechanics.md` could Oritech carry, and at what cost.
 
+**Adopted by ADR-0060**, with one change: Create's logistics row went to a SimpleBelts fork and
+Railcraft Reborn (`simplebelts-coverage.md`), and the pack moves to 26.1.2. The citations below are
+still at 1.2.12, and re-reading them at 2.0 is one of that ADR's open items.
+
 ## The hypothesis being surveyed
 
 | role | mod |

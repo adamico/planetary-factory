@@ -16,6 +16,9 @@ question: if Create left the pack and SimpleBelts took the belts, what would car
 `docs/factorio-mechanics.md` that Create carries today, and at what cost? Rulings made after the first
 pass (2026-09-11) are marked **Ruling** and are folded into the rows they settle.
 
+**Adopted by ADR-0060.** The hypothesis below is now the pack's plan, and the rulings are part of it.
+The survey stays as that decision's evidence and is not edited to match it.
+
 ## The hypothesis being surveyed
 
 This survey sits **on top of** `oritech-coverage.md`'s hypothesis and replaces that hypothesis's
@@ -355,13 +358,13 @@ What pf2612 already runs is **proven to load together**. The rest is what adopti
 | KubeJS / Rhino | 8.0.6 | loads. ADR-0023's pin was GTCEu's, and it goes with GregTech. |
 | JEI, Jade, Block Runner, Architectury, GeckoLib | yes | load |
 | **EMI** | `emi-unofficial-port-unstable` 1.1.24 | **loads, unofficially.** The Personal Assembler depends on EMI's Fill Recipe reaching its panel, so an unstable EMI is a risk to the hand-crafting surface, not just to recipe viewing. |
-| Railcraft Reborn | no | upstream `26.1.x` branch exists. Untried. |
-| FTB Quests | no | upstream `main` is 26.1.2. Untried. |
-| AE2, Sophisticated Backpacks | no | Modrinth lists 26.1.2 builds. Untried. |
-| Almost Unified | no | not found on Modrinth or GitHub for 26.1.2. **Unverified**, not absent. |
+| Railcraft Reborn | 1.4.3 | loads. A world was created with it (human, 2026-09-11). |
+| FTB Quests | yes | added after that world load. |
+| AE2, Sophisticated Backpacks | no | **leave**: neither is faithful to Factorio (ADR-0060). |
+| Almost Unified, Tree Harvester, ProbeJS | no | **leave**: with two tech mods none of them does any work for the pack (ADR-0060). |
 | **`planetaryfactory_core`** | no | ours. 16,800 lines. Ten classes on the old capability API, plus the pole on GregTech's (fact 9), plus Minecraft 26.1's renames across everything else. |
-| **Researchd** (fork) | no | ours to port. Upstream `Porting-Dead-Mods/Researchd` `main` is 1.21.1. |
-| **Respoiled** (fork) | no | ours to port. `main` is 1.21.1. |
+| **Researchd** (fork) | no | ours to port. Upstream `Porting-Dead-Mods/Researchd` `main` is 1.21.1. Its only required dependency, Porting Dead Libs, targets 26.1 on `main` (1.1.16). |
+| **Respoiled** (fork) | no | ours to port. Upstream has a `multi/26.1` branch to port against. |
 
 **The three forks are the real cost.** Everything else is "add it to pf2612 and launch".
 
