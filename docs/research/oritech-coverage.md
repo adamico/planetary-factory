@@ -159,6 +159,29 @@ recipe type the pack *does* use needs a survivor entry in `recipe_survivors.js` 
 worldgen — nickel and platinum ore, Resource Nodes, oil springs, uranium patches — is nine
 `data/oritech/neoforge/biome_modifier/*.json` files; overriding them in a datapack disables it. Native.
 
+### 9. Subclass the abstract base, not the concrete machine — and the model comes free
+
+Every abstract base in `block/base/entity/` takes a `BlockEntityType` in its constructor
+(`MachineBlockEntity:82`, `MultiblockMachineEntity:27`, `MultiblockGeneratorBlockEntity:26`,
+`UpgradableGeneratorBlockEntity:56`, `FluidMultiblockGeneratorBlockEntity:40`). Most *concrete*
+machines do not: `SteamEngineEntity:74`, `FoundryBlockEntity:20`, `CentrifugeBlockEntity:48` and
+`PumpBlockEntity:64` hard-code their own type in a `(pos, state)` constructor. A core subclass of one of
+those cannot have a type of its own. Vanilla's `BlockEntity` constructor calls `validateBlockState`, and
+a save reloads through the type's factory. Reusing Oritech's type would therefore bring the block back
+as Oritech's class. **`DeepDrillEntity:82` is the exception.** It has a second constructor that takes a
+type, with the comment "to allow addons to create custom deep drill entities with special logic".
+
+So the route for a fixed-type machine is to **extend its abstract base and copy the concrete logic**.
+CC0 makes copying free; the concrete classes run 70–300 lines. That changes the cost of a Java cell,
+but it never makes a Java cell impossible.
+
+**The visuals are one line.** Oritech registers each renderer as
+`new MachineRenderer<>("models/foundry_block")` (`client/init/ModRenderers.java:24,40,45`). Both
+`MachineRenderer` and `MachineModel` are public, and the path resolves into Oritech's own jar. A core
+block entity that implements `GeoBlockEntity` and names the same path renders with Oritech's model,
+texture and animations, and the pack ships no asset. A footprint larger than the model is a
+`poseStack.scale` in a renderer subclass. Whether a scaled model reads well is `world-load (human)`.
+
 ---
 
 ## The matrix — base game
@@ -167,12 +190,13 @@ Ledger verdicts are today's. **Level** is the cheapest that closes every gap in 
 
 | mechanic | ledger today | Oritech has | level | gap, and what closes it |
 | --- | --- | --- | --- | --- |
-| **Resource patches and finite ore** | `shipped` | Resource Nodes + Bedrock Extractor (`DeepDrillEntity`); ore worldgen | **Shape-only** (ADR-0020, 0041) | Nodes are infinite: `serverTick` never depletes. Keep the core's patches; disable Oritech's worldgen (Native, fact 8). |
+| **Resource patches and finite ore** — the patch | `shipped` | Resource Nodes; `ResourceNodeFeature` | **Core** (ADR-0020, 0041, 0045) | There is nothing in the nodes to reuse. Each one is a bare `new Block(ofFullCopy(BEDROCK))` (`init/BlockContent.java:328-358`) with no block entity and no state, so it cannot hold an amount. The amount is the core's `OreBlock` plus `OreDelta`, and that stays. `ResourceNodeFeature` places a bowl on bedrock under a surface boulder, with each block replaced at random `nodeOreChance`. ADR-0045 wants a solid surface disc, one block deep, at Factorio's spacing, so the feature is the wrong shape and no config fixes that. **GregTech's departure orphans a layer here.** The outfield patches are GregTech ore veins today (`kubejs/data/gtceu/gtceu/ore_vein/*.json`), so a core feature has to replace them. `core/worldgen/TerraStartingArea.java` already places the starting area. |
+| **Resource patches and finite ore** — the extractor on it | `shipped` | Deep Drill (`DeepDrillEntity`) | **Java** (see the electric drill) | The drill is reusable where the node is not: it *reads* the blocks under it and never breaks them, so fact 7 does not apply. As shipped it never depletes anything, because `craftResult` is private and only runs a recipe. A subclass draws each unit from the core's ore amount instead. |
 | **Manual mining** | `adapted` | Hand Drill, Chainsaw, Promethium tools | **Shape-only** (ADR-0039) | Charge-based tools against an indestructible two-tier pick. Core keeps the Engineer's Pick. |
 | **Trees and wood** | `adapted` | Tree Cutter (`TreefellerBlockEntity`) | **Shape-only** (ADR-0051) | A felling machine Factorio has none of, harvesting log-by-log; ADR-0051's tree is one entity. Unadmitted (fact 8). |
 | **Mining drills** — burner | `adapted` | nothing that burns | **Core** | Stays the pack's rig (ADR-0040, 0043). |
-| **Mining drills** — electric | `adapted` | Destroyer frame + Quarry Addon (`range *= 8` per addon, `DestroyerBlockEntity:81`); Bedrock Extractor | **Core**, on Oritech FE | The frame is a gantry the player builds around an area, not a 3x3 drill with a 5x5 reach; and it bypasses ore amounts (fact 7). The core rig stays, drawing through `EnergyApi`. |
-| **Mining drills** — pumpjack | `adapted` | Pump on oil springs | **Core** | `PumpBlockEntity` *drains* non-water sources (`:112-120`); Factorio's crude is infinite with a decaying yield. |
+| **Mining drills** — electric | `adapted` | Deep Drill (`DeepDrillEntity`); Destroyer frame + Quarry Addon | **Java**, on `DeepDrillEntity` | The Destroyer frame is out: it is a gantry that breaks blocks (fact 7). The Deep Drill fits nearly as shipped. It has a 3x3 footprint, which is Factorio's `tile_width`/`tile_height` 3 (`data/factorio/machine.json`). It is the one concrete class with a type-taking constructor (fact 9). Every method that needs changing is public. `loadOreBlocks` scans a 3x3; the subclass makes it a 5x5 (`resource_searching_radius` 2.49) and stores **positions**, where `targetedOre` stores `Block`s. `serverTick` changes to draw one unit through the core's amount every `mining_time / 0.5` s, at 90 kW. `getMaxRfInput()` returns 0 because the Enderic Laser is its only power source (`LaserArmBlockEntity:829`); the subclass returns a real rate and exposes energy on its cores through `getEnergyStorageForMultiblock` (null today). It is built from 26 machine cores, so single placement is fact 5. It is 3 blocks tall. The model is free (fact 9). This supersedes the core rig for the electric tier; the burner tier stays core. |
+| **Mining drills** — pumpjack | `adapted` | Pump; oil springs (`OilSpringFeature`) | **Java** on `DeepDrillEntity`, or **Core** | Oritech's oil does not fit Factorio's. `OilSpringFeature` places a sphere of **finite** oil source blocks with a column to the surface. `PumpBlockEntity` flood-fills them and drains each one (`drainSourceBlock`, `:112-120`). Only water counts as infinite. Factorio's crude is one well with a yield that decays to a floor. The Pump also cannot be subclassed with a type of its own (fact 9). What can be reused is **the Deep Drill again**: a 3x3 body that reads the block under its centre, subclassed to implement `FluidApi.BlockProvider` and pump from a core well block that holds a yield. The well is core data, like `OreBlock`. **This is not optional under the hypothesis.** Terra's crude today is a GregTech bedrock fluid deposit tapped by GregTech's Fluid Drilling Rig (`researchd.js:215`), and both leave. `OilSpringFeature`'s `blockId` is datapack config, but its shape (sphere, column, fountain) is not a well's. |
 | **Water as a resource** | `planned` | Pump | **Shape-only** (ADR-0050) | Water is treated as infinite, which fits, but `ENERGY_USAGE = 512` per bucket and `PUMP_RATE = 5` ticks are hard-coded constants (`:42-43`), against the Offshore Pump's 1,200 mB/s at zero power. Core keeps the Offshore Pump. |
 | **Fluid handling** | `planned` | fluid pipes (`fluidPipeInternalStorageBuckets`), Portable Tank | see the boundary section | Create owns it under the hypothesis. |
 | **Oil processing** — basic | `planned` | Refinery + Chamber modules; `oil`, `heavy_oil`, `naphtha`, `diesel`, `sulfuric_acid` fluids | **Java** | Schema fits (one fluid in, a list out), but the Refinery is a machine-core multiblock whose output count grows with stacked Chamber modules. It needs ADR-0059's single-placement 5x5 (fact 5) and a fixed three-output shape. Borrowing Oritech's fluids is item-layer work, which is out of scope. |
@@ -189,8 +213,8 @@ Ledger verdicts are today's. **Level** is the cheapest that closes every gap in 
 | **Circuit network** | `adapted` | Control Unit Addon (`RedstoneAddonBlockEntity`): enable/disable plus comparator output; the reactor's Redstone Port | **Native** for Oritech machines | Fits ADR-0030's redstone shape. Core machines get it by subclassing (`RedstoneControllable`). |
 | **Electric network** — supply area | `adapted` | energy pipes, Framed Superconductor | **Shape-only** (ADR-0036) | Cables are the distribution mechanism ADR-0036 and ADR-0057 refused. The Supply Area Pole stays core and speaks `EnergyApi` (public package). |
 | **Electric network** — wire reach | `adapted` | Energy Transmission Pole (`PowerPoleEntity`) | **Java** | Point-to-point, `poleConfig.minRange = 50` / `maxRange = 1000` (configurable), 1M RF/t, one output face — but a machine-core multiblock and a zipline (fact 5; ADR-0049). The reach is Native; the gesture and zipline are not. |
-| **Power generation** — steam engine | `planned` | Steam Engine | **Java** | `steamId` is configurable to `planetaryfactory:steam` and `steamToRfRatio` is configurable. But the engine's rate scales with speed up to `MAX_SPEED = 10`, and it returns **90% of the steam as water** (`WATER_RATIO`, `SteamEngineEntity:47,121`). Factorio's burns 30/s flat and returns nothing. |
-| **Power generation** — boiler | `planned` | Steam Boiler Addon on a generator | **Core** | Burns through `FuelRegistry` (fact 6); the core Boiler (ADR-0048) stays. |
+| **Power generation** — steam engine | `planned` | Steam Engine | **Java**, on `MultiblockGeneratorBlockEntity` | Oritech's engine is the wrong shape for Factorio's. It burns steam at a rate that follows how full its tank is, up to `MAX_SPEED = 10`, on an efficiency curve. It returns **90% of the steam as water** (`WATER_RATIO`, `SteamEngineEntity:47,121`). It chains up to 20 engines onto one master. Factorio's burns `fluid_usage_per_tick` 0.5 flat, for 900 kW, and returns nothing. `SteamEngineEntity` has a fixed type, so the core copies `tickMaster` onto `MultiblockGeneratorBlockEntity` (fact 9). The copy takes the flat rate, no water, no chaining, and a 3x5 footprint, and keeps `steamId` = `planetaryfactory:steam`. The model is free. **The ledger's four-step chain collapses to Factorio's two.** ADR-0048 gave the engine a **rotation** output instead of electricity, and argued it purely from ADR-0036's choice of Power Grid: an engine that fed a pole would route around the wire solver. Power Grid leaves under the hypothesis, so that argument goes with it. The engine emits FE into the Supply Area Pole, which is Factorio's own entity. That is an ADR-0048 amendment if the pivot is argued. |
+| **Power generation** — boiler | `planned` | `UpgradableGeneratorBlockEntity`'s steam mode | **Java**, optional | The Steam Boiler Addon only sets a flag. `getAdditionalStatFromAddon` sets `isProducingSteam`, and the steam logic lives in the generator base itself: a water-in/steam-out `boilerStorage`, and `produceEnergy` converting burn into steam (`UpgradableGeneratorBlockEntity:44,170-183`). A subclass sets the flag permanently and needs no addon. It needs three overrides. `tryConsumeInput` reads the pack's fuel table instead of `FuelRegistry` (fact 6). `produceEnergy` runs at Factorio's 60/s. `canFitEnergy` checks the steam tank, because as shipped steam mode returns `true` and voids steam into a full tank ("by design", `:163,174`), which breaks `BoilerCycleTest`'s stall rule. That is all reachable, but the core Boiler has already shipped with its checks (#224). Rebasing it buys Oritech's generator model and nothing mechanical. |
 | **Power generation** — solar | `planned` | Big Solar Panel | **Java** | `BigSolarPanelEntity`: on/off at sky light 12, scaled by core quality — Factorio's is a daylight curve. Energy per tick is config. |
 | **Power generation** — accumulator | `planned` | Portable / Large Energy Storage | **Native** | `smallEnergyStorage` / `largeEnergyStorage` capacity and rates are config; conditional on the joule constant (fact 1). |
 | **Nuclear fission** | `adapted` | Reactor multiblock: rods, reflectors, heat pipes, vents, absorbers | **Shape-only** (ADR-0033) | It outputs RF (`ReactorEnergyPortEntity`); ADR-0033's reactor emits Superheated Steam. **But see below**: it restores a sub-rule the ledger dropped by consequence. |
@@ -245,7 +269,8 @@ Superheated Steam through a port instead keeps ADR-0033 *and* regains the bonus.
 | **Spoilage** | `adapted` | — | **unchanged** | Respoiled stays. Whether it ticks inside Oritech inventories is `world-load (human)`. |
 | **Quality** | `blocked` | — | **not Oritech** | Oritech's "core quality" is a machine-core tier, not item quality. A name collision to avoid. |
 | **Recycling** | `planned` | Pulverizer `grinder/recycle/*` (three tag recipes) | **KubeJS** | Recipes can be generated into the `grinder` type, but the schema has no probability, so Factorio's 25% return must be **batched** (4 gears → 2 plates). That batching is itself an `adapted` notice. |
-| **Vulcanus: lava and calcite** | `planned` | Foundry (item alloying), Lava Generator, a Refinery lava recipe | **Core** | Oritech's Foundry has no fluid (`FoundryBlockEntity`, zero fluid references); Factorio's is molten metal. |
+| **Vulcanus: lava and calcite** — the foundry | `planned` | Foundry (2 in, 1 out, no fluid); Centrifuge as the fluid pattern | **Java**, on `MultiblockMachineEntity` | Oritech's Foundry is an 80-line class with no fluid (`FoundryBlockEntity`). Its fluidless-ness is not a limit of the base class. `CentrifugeBlockEntity:40-175` puts a fluid-capable machine on the same `MultiblockMachineEntity` base: a `SimpleInOutFluidStorage`, `FluidApi.BlockProvider`, and fluid-aware `canProceed`, `getRecipe` and `craftItem`. A core foundry copies that pattern, with the tank always present instead of addon-gated, on a recipe type of its own. Casting (fluid in, items out) and melting (items in, fluid out) fit the one-fluid schema. A recipe with two fluid inputs does not (fact 2). The corpus has no `metallurgy` recipe to count, because the extract is pruned to Terra and only `machine.json`'s category map names the foundry, so re-extract before sizing. **The model is free**: `models/foundry_block` (fact 9), scaled from Oritech's 2x2 to Factorio's 5x5. Whether a model scaled 2.5 times reads as a foundry is `world-load (human)`. |
+| **Vulcanus: lava and calcite** — lava as infinite | `planned` | Pump (treats only water as infinite) | **Core** | `PumpBlockEntity`'s infinite-fluid case is the single `isSame(Fluids.WATER)` test, and the class has a fixed type (fact 9). The Offshore Pump already does sited infinite extraction (ADR-0050). Letting it accept lava is the smaller change. |
 | **Fulgora: scrap and lightning** | `planned` | — | **not Oritech → core** | |
 | **Gleba: agriculture and nutrients** | `planned` | Frame gantry: Placer, Fertilizer, Destroyer + Crop Filter Addon; Bio Generator | **Java** | Plant-fertilise-harvest in an area is the agricultural tower's shape. The Destroyer path bypasses break events (fact 7) and the frame is built, not placed. The Biochamber is core. |
 | **Aquilo: cold and ammonia** | `planned` | Industrial Chiller (fluid → ice/snow/obsidian) | **not Oritech → core** | The freezing layer and heat pipes are ADR-0033's Gelida work. |
@@ -264,7 +289,7 @@ options, with costs:
 | option | what it means | Oritech cost | core cost |
 | --- | --- | --- | --- |
 | **(a) FE→SU bridge** | Create keeps belts, arms, trains and fluid pipes. One electric network (Oritech FE). A core block turns FE into rotation, so an inserter is electric in effect. | none | **Java**: one generating kinetic block on Create's API, drawing through `EnergyApi`. Replaces the role Power Grid's generator played in ADR-0048's chain. |
-| **(b) Two currencies** | As (a), but rotation comes from Create's own sources and the pack's Steam Engine. Inserters are not electric. | none | none, but a Factorio fidelity loss with an `adapted` notice. |
+| **(b) Two currencies** | As (a), but rotation comes from Create's own sources, such as water wheels and windmills. Inserters are not electric. | none | none, but a Factorio fidelity loss with an `adapted` notice. If the Steam Engine emits FE (see its row), it is no longer a rotation source, and (b) rests on Create's generators alone. |
 | **(c) Fluids to Oritech** | Oritech takes pipes, tanks and pumping; Create keeps items and trains. | Native (pipe capacity is config) | Re-plumbing the Offshore Pump and Boiler. Both pipe families speak NeoForge's fluid capability, so this choice is **independent** of (a) versus (b). |
 
 The joule-per-FE constant (fact 1) is a prerequisite of all three.
@@ -277,15 +302,24 @@ Counting the headline rows Oritech touches at all, cheapest level after splits:
 
 - **Native** — circuit network (Oritech machines), accumulator, tier-1 modules, research gating, attribute augments, asteroid crushing recipes, disabling Oritech's worldgen.
 - **KubeJS** — recycling (batched), planet-locked placement, survivor entries for every admitted Oritech recipe type.
-- **Java on Oritech** — assembling machines, chemical plant, centrifuge, electric furnace, oil processing, steam engine, solar, pole reach, module tiers 2–3, productivity, beacon, laser turret, equipment grid, the drone port across dimensions, the agricultural tower, and the reactor as a steam source.
-- **Shape-only** — finite ore, manual mining, trees, water, supply area, nuclear (as is), personal transport, logistic robots.
-- **Core, standalone** — burner machines, the electric drill, the pumpjack, the Vulcanus foundry.
+- **Java on Oritech** — assembling machines, chemical plant, centrifuge, electric furnace, oil processing, the electric drill and the pumpjack (both on `DeepDrillEntity`), steam engine, boiler (optional), solar, pole reach, module tiers 2–3, productivity, beacon, laser turret, equipment grid, the drone port across dimensions, the agricultural tower, the Vulcanus foundry, and the reactor as a steam source.
+- **Shape-only** — manual mining, trees, water, supply area, nuclear (as is), personal transport, logistic robots.
+- **Core, standalone** — burner machines, the ore patch itself (amount and placement), the crude well as data, lava as an infinite fluid.
 
 **The finding in one line:** Oritech carries the energy layer, the module system and most machine
 bodies, but no Factorio machine *as shipped*. It needs output locking, fixed per-tier speeds and a
 placement gesture, and each of those is one subclass. The hypothesis trades GregTech/MI's recipe
 chassis for Oritech's machine chassis. It does not remove the core's Java; it moves it onto Oritech's
 base classes. It **unblocks** Modules and beacons and reopens the reactor neighbour bonus.
+
+**Second pass, 2026-09-11.** Four rows were first marked Core without anyone reading the base classes:
+the electric drill, the pumpjack, the boiler and steam engine, and the foundry. Reading them moved all
+four to Java, and fact 9 is why. What stays core is **data a block must hold**: an ore amount, a
+well's yield, lava treated as infinite. Oritech has no block that holds a quantity. What moves is the
+**machine body**, which Oritech has for every one of the four. Two consequences sit outside Oritech:
+- GregTech's departure orphans the outfield ore veins and Terra's crude deposit, so both need a new
+  owner whatever else is decided.
+- Power Grid's departure takes ADR-0048's only argument for a rotation-emitting steam engine with it.
 
 ## Out of scope, noted
 
