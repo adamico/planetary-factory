@@ -94,6 +94,8 @@ config/spark/
 config/jei/
 config/chunky/tasks/
 config/InventoryHUD/
+# Sodium's hash of this machine's GPU and driver, rewritten on every launch.
+config/sodium-fingerprint.json
 config/justzoom/
 config/almostunified/debug.json
 config/emi.css

@@ -197,10 +197,6 @@ file = "config/respoiled-common.toml"
 hash = "138bdf68d8358d01320f8a5bb65d19b6fa881f3206eb95786b000254a4638b6e"
 
 [[files]]
-file = "config/sodium-fingerprint.json"
-hash = "a850302670edd37f1286fd1b4e8b1257b3bbfae575d7b3d406f29500954b32d3"
-
-[[files]]
 file = "config/sodium-mixins.properties"
 hash = "b627c4456e6fa0bc4b5f85e2f1cd949faedae3cb9afdaf2a5f52e6f3b6ae1f01"
 

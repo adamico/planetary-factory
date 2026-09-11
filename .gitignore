@@ -92,6 +92,8 @@ docs/scratch/
 **/*client*.json5
 **/*client*.properties
 config/InventoryHUD/
+# Sodium's hash of this machine's GPU and driver, rewritten on every launch.
+config/sodium-fingerprint.json
 config/justzoom/
 config/runelic.json
 config/sound_physics_remastered/sound_rates.properties
