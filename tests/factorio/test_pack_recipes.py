@@ -73,6 +73,8 @@ FELLING = ROOT / "mod/src/main/java/com/planetaryfactory/core/felling/TreeFellin
 PLACEMENT_SPECIES = {
     "trees_plains": ("oak",),
     "trees_birch_and_oak": ("oak", "birch"),
+    # 26.1's name for the same selector: oak by default, birch at 0.2, plus fallen logs of each.
+    "trees_birch_and_oak_leaf_litter": ("oak", "birch"),
     "trees_savanna": ("acacia",),
     "trees_sparse_jungle": ("jungle",),
     "trees_taiga": ("spruce",),

@@ -27,29 +27,12 @@ Which check a feature warrants — and whether it warrants one at all — is dec
 feature makes, not ad hoc per ticket. Six claims, six answers, and a content ticket names its check
 kind explicitly so that "no check" is a recorded decision. See `docs/testing/what-to-check.md`.
 
-### Worldgen check
-
-`scripts/worldgen-check.py` launches a fresh world and asserts the loaded ore vein, bedrock
-ore and worldgen layer registries against `tests/worldgen/expected.json`. A new body adds a
-fixture entry, not code. See `docs/testing/worldgen-registry-check.md`.
-
 ### Flora data check
 
 `tests/flora/test_flora_data.py` asserts Sapros's tree and surface data are internally consistent
 — features, loot tables, blockstates, textures and lang against what is actually registered, plus
 which marshland carries which tree and that no stromatolite drops ore — with no game launch. Run it
 after any edit to the trees, the stromatolites or the five biomes.
-
-### Machine registration check
-
-`tests/pack/test_machine_assets.py` asserts the machines `kubejs/startup_scripts/machines.js`
-registers still agree with everything that names them: the registered `setMaxIOSize` against the
-corpus envelope, `data/pack/category-map.json`'s `recipe_type` against what the script actually
-creates, each machine's lang key against the id its builder produces, and — for the multiblock,
-whose `kubejs:` namespace GregTech's model provider does not serve — every hop from blockstate to
-model to texture. The two builders land in different namespaces, so the lang assertion is not
-cosmetic. Run it after editing that script, the category map or the machine lang files. Whether a
-machine's GUI and pattern behave is a world load, not a static check.
 
 ### Furnace ladder check
 
@@ -164,17 +147,6 @@ an overlapping jigsaw child silently, so this failure ships as "two patches inst
 some seeds and nothing in a log. Run it after any edit to `scripts/build-terra-start.py`; it reads
 the generated `.nbt` files, so it also catches forgetting to re-run the generator.
 
-### Vein indicator check
-
-`tests/worldgen/test_vein_indicators.py` asserts every authored vein's surface indicator can
-resolve. The field is an `Either<BlockState, Material>` and both sides fail only at world creation,
-as `Failed to load registries` on the screen the player is sat in front of: a bare string is read
-as a *material*, so `minecraft:cobblestone` there is an unknown registry key; and a material that
-exists but has no surface rock — `gtceu:stone` is one — parses and then throws "No surface rock
-registered" a layer later. Neither is visible from our own files, so the check reads the GTCEu jar:
-the materials GregTech's own veins indicate with are the ones that demonstrably have a rock. Run it
-after editing `scripts/build-terra-ore.py`. Both failure modes shipped once each before it existed.
-
 ### Ore amount checks
 
 An ore block carries an amount and a break draws one unit (ADR-0041). That is four checks, none of
@@ -286,51 +258,6 @@ that machine — so a machine landing later without a survivor entry fails
 check after editing either script, the category map or the emitted recipes; whether the sweep
 removed the right things in a running game is a world load, not a static check.
 
-### Grid recipe check
-
-`tests/factorio/test_grid_recipes.py` covers Create: Power Grid's recipes, re-authored onto the
-pack's Assembling Machine because ADR-0034's sweep removes the mod's own and 84 of its 112 sit on
-surfaces no block here executes (#172). `scripts/powergrid-recipe-convert.py` generates them from
-two committed inputs — `data/powergrid/recipe.json`, the extracted corpus, and
-`data/pack/grid-substitutions.json`, where every ingredient judgement lives with its reason.
-Nothing is decided in the script, and an ingredient in neither the `keep` nor the `substitute`
-table is a hard failure: under a default-deny sweep a vanilla item is not obtainable just because
-it is vanilla, and half of Power Grid's ingredients are zinc-bearing against an alphabet ADR-0021
-closed. The check also asserts one hand recipe per item and no cycles over the **union** the
-Personal Assembler loads, which `test_hand_resolver.py` cannot see — it reads only the Factorio
-corpus. Note that this converter, `factorio-recipe-convert.py` and `create-recipe-convert.py` share
-an output directory and each leaves the others' subtrees alone; run all three checks after touching
-any. Whether the sweep kept the recipes in a running game is a world load. See
-`docs/testing/grid-recipe-check.md`.
-
-### Create kinetic recipe check
-
-`tests/factorio/test_create_recipes.py` covers Create's own kinetic line — shaft, cogwheels,
-gearboxes, water wheels, chute, funnel and tunnel — re-authored onto the pack's Assembling Machine
-because ADR-0034's sweep removes Create's own and all 653 of its grid recipes sit on the vanilla
-grid or the Mechanical Crafter, neither of which this pack executes. Two scripts, both committed:
-`create-recipe-extract.py` dumps the corpus from the pinned jar into `data/create/recipe.json`, and
-`create-recipe-convert.py` emits `recipe/assembling/create/` from it plus
-`data/pack/create-substitutions.json`.
-
-The one structural difference from the grid line: this converter is **closure-driven**. The
-substitutions file names WANTED ROOTS and the converter walks the transitive closure, so adding a
-kinetic component is one string there rather than a hand-written recipe file per ingredient it
-drags in — which is the failure it was written against, ten hand-authored files that had drifted
-from each other on the same substitution. A corpus row nothing converts is therefore normal here
-and nowhere else in the repo.
-
-The check asserts the closure is *closed* (every wanted root arrived, every substitution fired),
-that counts survive the conversion, one hand recipe per item — Create's `*_from_conversion` pairs
-are orientation swaps that craft directly here, so they are skipped rather than duplicated into EMI
-— and that every `{"tag": ...}` names a tag that exists — `create:cogwheel` and `create:belt_connector` are items, not tags, and a tag that
-does not exist matches nothing with no error in any log. Note that `create:shaft` and
-`create:cogwheel` were substituted away by `grid-substitutions.json` and are now `keep`: they are
-functional BLOCKS, and a recipe calling for a shaft means the shaft, not a rod that costs the same.
-Whether the sweep kept these recipes in a running game is a world load. Whether a water wheel
-then turns is Create's own business and not this pack's to check.
-See `docs/testing/create-recipe-check.md`.
-
 ### Recipe duplication check
 
 `tests/factorio/test_recipe_duplication.py` asserts no item is made by two emitted recipes unless
@@ -341,9 +268,8 @@ item. Two routes to one block fails no schema, appears in no log and loads perfe
 the player as two EMI entries for the same thing, and if both are `factorio_category: crafting` the
 Personal Assembler's resolver has no cost model to choose between them. It shipped once, when
 Create's two gearbox conversions and the large cogwheel's second route were emitted alongside the
-direct recipes they duplicate and every subtree-local check passed. Four items legitimately have a
-second route — Factorio's three solid-fuel oils and the three Power Grid conversion pairs, each of
-which is the only route to its counterpart — and each is a row with its reason.
+direct recipes they duplicate and every subtree-local check passed. One item legitimately has a
+second route — Factorio's three solid-fuel oils — and that is a row with its reason.
 
 It also holds the **file-path invariant**, which is the other way one recipe becomes two entries and
 the one nothing else can see: a GT recipe's first path component must equal its recipe type's path.
@@ -353,9 +279,8 @@ first `/` of the id and `GTRecipeBuilder.save` puts the type's path back on (#87
 manager as BOTH `planetaryfactory:grid/copper_coil` and `planetaryfactory:assembling/copper_coil`.
 The file is valid, the sweep keeps it, and `ServerEvents.recipes` runs BEFORE the re-registration,
 so even a probe inside the recipe event sees one recipe; only EMI shows the two. That is why
-`grid/`, `create/` and the hand-written `pack/` all sit INSIDE `assembling/` — the Factorio
-converter had the rule from #87 and the other three subtrees did not, so it shipped 91 duplicate
-entries. `planetaryfactory:smelting` is the pack's own class, not a GTRecipe, so its four recipes
+the hand-written `pack/` sits INSIDE `assembling/` — the Factorio converter had the rule from #87
+and the other subtrees did not, so it shipped 91 duplicate entries. `planetaryfactory:smelting` is the pack's own class, not a GTRecipe, so its four recipes
 are not cloned and stay flat; that exemption is `FLAT_TYPES`, recorded rather than assumed.
 
 Run it after any converter change. It does not assert the routes are balanced; costing is a

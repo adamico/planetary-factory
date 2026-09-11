@@ -20,19 +20,18 @@ Provenance and regeneration notes are in `data/factorio/README.md`.
 | Script | Produces | Notes |
 |---|---|---|
 | `factorio-recipe-extract.py` | `data/factorio/recipe.json` | The recipe corpus every emitted pack recipe is generated from. |
-| `factorio-machine-extract.py` | crafting-machine + fluid-container prototypes | Speeds, IO sizes, the envelope `test_machine_assets.py` checks against. |
+| `factorio-machine-extract.py` | crafting-machine + fluid-container prototypes | Speeds and IO sizes. |
 | `factorio-tech-extract.py` | `data/factorio/technology.json` | Space Age tech tree; `researchd.js` takes its shape from this (ADR-0022). |
 | `factorio-resource-extract.py` | resource patch amounts | How much ore a patch holds; feeds the starting-total derivation (ADR-0041). |
 
 ## Recipe conversion (corpus → `kubejs/data/planetaryfactory/recipe/`)
 
-Share one output directory; each leaves the other's subtree alone. Run **both**
-checks after touching either.
+Writes everything under that directory except the hand-written `assembling/pack/` and
+`assembling/sapling/` subtrees, which it leaves alone.
 
 | Script | Reads | Writes |
 |---|---|---|
 | `factorio-recipe-convert.py` | corpus, `data/pack/category-map.json`, `subgroup-owner.json`, `data/pack/item-map.json`, `recipe-overrides.json` | `recipe/` (Factorio-derived) |
-| `powergrid-recipe-convert.py` | `data/powergrid/recipe.json`, corpus, `data/pack/grid-substitutions.json` | `recipe/` (Create: Power Grid, re-authored — #172) |
 
 **This is the script to re-run after editing `data/pack/item-map.json`.** A
 Factorio name with no item-map row is a hard failure; an `undecided`/`not_emitted`
@@ -60,8 +59,7 @@ fuels are nothing on Terra. `tests/factorio/test_fuel_convert.py` is the check.
 | `build-terra-start.py` | spawn-anchored starting area `.nbt` templates (ADR-0019, #84) |
 | `nbt.py` | *library* — minimal NBT writer used by `build-terra-start.py` |
 
-Checks: `worldgen-check.py` (fresh-world registry assert), plus
-`tests/worldgen/test_start_geometry.py` and `test_vein_indicators.py`.
+Check: `tests/worldgen/test_start_geometry.py`.
 
 ## Ore blocks (ADR-0041)
 

@@ -35,11 +35,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent.parent
 EMITTED = ROOT / "kubejs/data/planetaryfactory/recipe"
-# Subtrees of EMITTED written by a different converter, with a different input table.
-# `create/` is `scripts/create-recipe-convert.py`'s, whose names come from Create's own registry
-# rather than from `item-map.json` -- a kinetic component has no Factorio prototype to map from,
-# so requiring a row here would be requiring one that cannot exist.
-FOREIGN_SUBTREES = ("assembling/grid", "assembling/pack", "assembling/create", "assembling/sapling")
+# Subtrees of EMITTED this converter does not write, each held by a check of its own.
+FOREIGN_SUBTREES = ("assembling/pack", "assembling/sapling")
 STARTUP = ROOT / "kubejs/startup_scripts"
 MOD = ROOT / "mod/src/main/java/com/planetaryfactory/core"
 PF_BLOCKS = MOD / "PFBlocks.java"
@@ -233,15 +230,8 @@ def check_emitted(items, recipe_types, failures):
     #
     # `recipe/pack/` is ADR-0039's exception to ADR-0031: the two Engineer's Pick recipes are
     # hand-written because Factorio has no mining-tool prototype for the corpus to author, so their
-    # items have no Factorio name and no item-map row either -- by construction, exactly as
-    # Power Grid's do not. `tests/factorio/test_pack_recipes.py` holds that subtree to its own
-    # rules.
-    #
-    # `recipe/grid/` is not this converter's output: it is Create: Power Grid's line, re-authored
-    # by `scripts/powergrid-recipe-convert.py` against `data/pack/grid-substitutions.json` (#172).
-    # Its items are Power Grid's and Create's, which have no Factorio name and so no item-map row
-    # by construction. `tests/factorio/test_grid_recipes.py` is what holds that subtree to its own
-    # table; scanning it here would report every one of its items as an unmapped name.
+    # items have no Factorio name and no item-map row either, by construction.
+    # `tests/factorio/test_pack_recipes.py` holds that subtree to its own rules.
     for path in sorted(EMITTED.rglob("*.json")):
         if any(path.relative_to(EMITTED).as_posix().startswith(s + "/")
                for s in FOREIGN_SUBTREES):

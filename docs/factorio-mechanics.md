@@ -115,8 +115,8 @@ text and commits to no jar; **`pack` is admissible as a candidate only with a na
 - **owner**: ADR-0007, ADR-0019, ADR-0020, ADR-0021, ADR-0041, ADR-0045
 
 Terra deals one ore shape: a filled disc of a single ore block, one deep, flush with the terrain
-surface, at Factorio's own spacing, asserted by `scripts/worldgen-check.py` against
-`tests/worldgen/expected.json`. **ADR-0045 deletes Terra's buried veins entirely** — they were
+surface, at Factorio's own spacing. `scripts/worldgen-check.py` asserted it against GregTech's
+registries and left with GregTech (ADR-0060), so nothing asserts it on 26.1.2. **ADR-0045 deletes Terra's buried veins entirely** — they were
 ADR-0019's leftover default rather than a decision, and ADR-0043's surface-working rig made keeping
 them a demand for the digging gesture ADR-0019 removed the caves for. Ignus and Sapros are unaffected.
 *This entry described GregTech ore veins in chunk-aligned disc patches, retargeted onto the pack's own

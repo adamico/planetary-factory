@@ -51,7 +51,7 @@ do not read the fixture check's "a new body adds data, not code" rule as coverin
 Factorio's, which multiplies the blockstate and model count per machine and changes it again every
 time a height row is re-judged. The blockstate/model/texture/lang/loot hop-walking is therefore
 switched off for pack machines for the duration of the Modern Industrialization migration -- it was
-five near-identical hand-written walks across `test_machine_assets.py`, `test_furnace_assets.py`,
+five near-identical hand-written walks across `test_machine_assets.py` (since deleted), `test_furnace_assets.py`,
 `test_boiler_assets.py`, `test_pump_assets.py` and `test_ore_assets.py`, and re-authoring all five on
 every footprint change buys nothing while the shapes are still moving.
 
@@ -70,9 +70,10 @@ oversight.
 
 A registry that loaded is not a world that contains anything. Ore veins, bedrock deposits,
 worldgen layers and biomes all have a state in which they parse, register, and are then never
-placed. `scripts/worldgen-check.py` launches the pack into a fresh world and asserts against what
-the game actually loaded and, for biomes, actually located. See
-[the worldgen registry check](./worldgen-registry-check.md).
+placed. The check is a launch into a fresh world that asserts against what the game actually
+loaded and, for biomes, actually located. **It has no harness on 26.1.2:** `scripts/worldgen-check.py`
+asserted GregTech's vein, deposit and layer registries through a GregTech-era KubeJS dump, and it
+left with GregTech (ADR-0060). The kind stands; the harness is rebuilt when a body next needs it.
 
 **A fixture row is unconditional.** Every body-level worldgen fact gets one — there is no
 judgement call about whether a given vein is important enough. The launch happens regardless and
@@ -89,9 +90,9 @@ delivery. `#97`'s widened form, which has to see a *surviving stock* grid recipe
 pack-emitted one, is a world load for the same reason.
 
 **That check kind has a name: a world-load recipe-manager assertion.** It is the fixture check's
-harness pointed at a different registry — `scripts/worldgen-check.py` already launches a world and
-recovers a dump written by a KubeJS script, so asserting the loaded `RecipeManager` is an extra
-section in that dump rather than a second harness. It is named here so that a ticket needing it
+harness pointed at a different registry — a harness that launches a world and recovers a dump
+written by a KubeJS script can assert the loaded `RecipeManager` as an extra section in that dump
+rather than as a second harness. It is named here so that a ticket needing it
 finds a kind rather than inventing one.
 
 **No such assertion is built, and what each removal gets is decided per claim.** A recipe-manager

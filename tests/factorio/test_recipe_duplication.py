@@ -2,7 +2,7 @@
 """Assert no item is made by two recipes unless a decision says it is.
 
 Every other recipe check in this directory owns ONE subtree and reads ONE input table: the Factorio
-converter's, the grid converter's, the Create converter's, the hand-written pack subtree's. That is
+converter's, the hand-written pack subtree's, the sapling subtree's. That is
 the right shape for asking "did this converter do its job", and it is blind to the one question
 none of them can ask -- whether two converters, or one converter twice, made the same item.
 
@@ -64,17 +64,6 @@ MULTI_ROUTE = {
         "Factorio's own three routes -- heavy oil, light oil and petroleum gas each make solid "
         "fuel, and which one is worth running is the whole point of the oil line. ADR-0031 says "
         "the corpus authors what it contains, and it contains all three."),
-    "powergrid:generator_commutator": (
-        "Direct, plus `generator_commutator_from_conversion`. The conversion is kept because it "
-        "is the ONLY route to `powergrid:generator_vertical_commutator`, its other output side "
-        "of the pair -- dropping it would make that block uncraftable. See `machine_only` in "
-        "data/pack/grid-substitutions.json (#172)."),
-    "powergrid:generator_housing": (
-        "Direct, plus `generator_housing_from_conversion`, kept for the same reason: the "
-        "conversion is the only route to `powergrid:vertical_generator_housing`."),
-    "powergrid:voltage_gauge": (
-        "Direct, plus `voltage_gauge_from_conversion`, kept for the same reason: the conversion "
-        "is the only route to `powergrid:current_gauge`."),
 }
 
 failures = []
