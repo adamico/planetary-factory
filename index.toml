@@ -57,10 +57,6 @@ file = "config/fml.toml"
 hash = "a0f514105297d5080fbe87b149b0839159e6166cc35e761bff1b5e40a4e02f11"
 
 [[files]]
-file = "config/ftbchunks-client.json5"
-hash = "ed57b3b99a0b5193d5cbfd75f05ebd3979233391637239a61b6222682f01bc44"
-
-[[files]]
 file = "config/ftbchunks-world.json5"
 hash = "898d58521fd81d7267cd6957bd5a54538543225960cd8dbaa78f415515e606dc"
 
@@ -69,40 +65,24 @@ file = "config/ftbchunks-world.snbt"
 hash = "73345c2e0fcad604296129df0e3e764643968e96d177f949eefd2e8e0b4bc780"
 
 [[files]]
-file = "config/ftblibrary-client.json5"
-hash = "4e15b94e47c7569eca3063c9584452f40013b6cc41780295ca6556e0cc0c5254"
-
-[[files]]
-file = "config/ftbquests-client.json5"
-hash = "ae95219b21b54d3d2efa14e06f936a2de6d44f1ca4fa88fe8afe6ff17aa8b08c"
-
-[[files]]
 file = "config/ftbquests/quests/chapter_groups.json5"
 hash = "1d3e3bbaf4217ac4414362faba91a7d11d5b9a2c5ea040579d985bec6a8a1517"
 
 [[files]]
-file = "config/ftbquests/quests/chapter_groups.snbt"
-hash = "e57d8311aec9f524911ed1313cabf138bb7fa5a2d3ba985a00a2a267ff35ef78"
+file = "config/ftbquests/quests/chapters/introduction.json5"
+hash = "3f6066cf4fb643ec25e62f7e32a60374c350c3f41d95142b7697ea978bcd5917"
 
 [[files]]
-file = "config/ftbquests/quests/chapters/introduction.snbt"
-hash = "be67bb4355ee04c1a1e4b01a1ac0c77bc4621affeb9cc1c67e4e83a0bfbbf526"
-
-[[files]]
-file = "config/ftbquests/quests/chapters/raw.snbt"
-hash = "0aed940b21bd652b046fb4995f357c58ee62bda9a18aeae9cdfeb2bba0134414"
+file = "config/ftbquests/quests/chapters/raw.json5"
+hash = "c760cf672835f3ffabffe1bae2499ad6d0adf35786225abbe5ffc270203fa37e"
 
 [[files]]
 file = "config/ftbquests/quests/data.json5"
-hash = "cc44f23da962e50f59fd00114686a78fc7837d9376b21d05dd88b667aeb6de15"
+hash = "ffaa9976400b2d2acf73011b6cecd5269ca1963cb550324e9091f9203155433f"
 
 [[files]]
-file = "config/ftbquests/quests/data.snbt"
-hash = "da77e416b557850f5cb1ab68d71de78f9fbc3cf3845e50cdb4dba3a8164f6e7f"
-
-[[files]]
-file = "config/ftbquests/quests/lang/en_us.snbt"
-hash = "e7d25391d17121d2b45b35cd0276d730525c0749e9299a4e4ef0e2fc4155deaa"
+file = "config/ftbquests/quests/lang/en_us/quests.json5"
+hash = "fc43fb91e20b909a1707014e7e9b9ac6997571265d0fa145664770a3e83fff63"
 
 [[files]]
 file = "config/ftbteams-server.json5"
