@@ -1,11 +1,4 @@
 {
-  "_comment": [
-    "Terra's terrain (ADR-0019). Flat by construction: final_density is a y gradient plus",
-    "a shallow relief noise, so the vanilla cave tree is referenced by nothing rather than",
-    "edited. Aquifers are off; all surface water comes from terrain dipping below sea level,",
-    "which is why RELIEF in scripts/build-terra-worldgen.py is load-bearing. Generated --",
-    "edit the script, not this file."
-  ],
   "aquifers_enabled": false,
   "default_block": {
     "Name": "minecraft:stone"
@@ -26,8 +19,8 @@
   },
   "noise_router": {
     "barrier": {
-      "noise": "minecraft:aquifer_barrier",
       "type": "minecraft:noise",
+      "noise": "minecraft:aquifer_barrier",
       "xz_scale": 1.0,
       "y_scale": 0.5
     },
@@ -77,59 +70,65 @@
       }
     },
     "fluid_level_floodedness": {
-      "noise": "minecraft:aquifer_fluid_level_floodedness",
       "type": "minecraft:noise",
+      "noise": "minecraft:aquifer_fluid_level_floodedness",
       "xz_scale": 1.0,
       "y_scale": 0.67
     },
     "fluid_level_spread": {
-      "noise": "minecraft:aquifer_fluid_level_spread",
       "type": "minecraft:noise",
+      "noise": "minecraft:aquifer_fluid_level_spread",
       "xz_scale": 1.0,
       "y_scale": 0.7142857142857143
     },
-    "initial_density_without_jaggedness": {
-      "type": "minecraft:add",
-      "argument1": {
-        "type": "minecraft:y_clamped_gradient",
-        "from_y": 55,
-        "to_y": 79,
-        "from_value": 1.0,
-        "to_value": -1.0
-      },
-      "argument2": {
-        "type": "minecraft:mul",
-        "argument1": 0.55,
-        "argument2": {
-          "type": "minecraft:noise",
-          "noise": "minecraft:continentalness",
-          "xz_scale": 0.22,
-          "y_scale": 0.0
-        }
-      }
-    },
     "lava": {
-      "noise": "minecraft:aquifer_lava",
       "type": "minecraft:noise",
+      "noise": "minecraft:aquifer_lava",
       "xz_scale": 1.0,
       "y_scale": 1.0
     },
+    "preliminary_surface_level": {
+      "type": "minecraft:find_top_surface",
+      "density": {
+        "type": "minecraft:add",
+        "argument1": {
+          "type": "minecraft:y_clamped_gradient",
+          "from_y": 55,
+          "to_y": 79,
+          "from_value": 1.0,
+          "to_value": -1.0
+        },
+        "argument2": {
+          "type": "minecraft:mul",
+          "argument1": 0.55,
+          "argument2": {
+            "type": "minecraft:noise",
+            "noise": "minecraft:continentalness",
+            "xz_scale": 0.22,
+            "y_scale": 0.0
+          }
+        }
+      },
+      "lower_bound": 0,
+      "upper_bound": 192,
+      "cell_height": 8
+    },
     "ridges": "minecraft:overworld/ridges",
     "temperature": {
+      "type": "minecraft:shifted_noise",
       "noise": "minecraft:temperature",
       "shift_x": "minecraft:shift_x",
       "shift_y": 0.0,
       "shift_z": "minecraft:shift_z",
-      "type": "minecraft:shifted_noise",
       "xz_scale": 0.25,
       "y_scale": 0.0
     },
     "vegetation": {
+      "type": "minecraft:shifted_noise",
       "noise": "minecraft:vegetation",
       "shift_x": "minecraft:shift_x",
       "shift_y": 0.0,
       "shift_z": "minecraft:shift_z",
-      "type": "minecraft:shifted_noise",
       "xz_scale": 0.25,
       "y_scale": 0.0
     },
@@ -378,5 +377,12 @@
         }
       }
     ]
-  }
+  },
+  "_comment": [
+    "Terra's terrain (ADR-0019). Flat by construction: final_density is a y gradient plus",
+    "a shallow relief noise, so the vanilla cave tree is referenced by nothing rather than",
+    "edited. Aquifers are off; all surface water comes from terrain dipping below sea level,",
+    "which is why RELIEF in scripts/build-terra-worldgen.py is load-bearing. Generated --",
+    "edit the script, not this file."
+  ]
 }

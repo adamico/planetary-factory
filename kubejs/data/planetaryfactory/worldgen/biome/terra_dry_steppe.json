@@ -3,7 +3,7 @@
   "has_precipitation": false,
   "temperature": 1.2,
   "downfall": 0.0,
-  "carvers": {},
+  "carvers": [],
   "features": [
     [],
     [],
@@ -94,16 +94,10 @@
     "water_ambient": [],
     "misc": []
   },
+  "attributes": {
+    "minecraft:visual/sky_color": "#78a7ff"
+  },
   "effects": {
-    "fog_color": 12638463,
-    "sky_color": 7907327,
-    "water_color": 4159204,
-    "water_fog_color": 329011,
-    "mood_sound": {
-      "sound": "minecraft:ambient.cave",
-      "tick_delay": 6000,
-      "block_search_extent": 8,
-      "offset": 2.0
-    }
+    "water_color": "#3f76e4"
   }
 }

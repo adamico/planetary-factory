@@ -12,11 +12,25 @@ Re-run after editing the palette or the terrain constants; it overwrites its out
 
 import json
 import os
+import zipfile
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
 MC = os.path.join(ROOT, "kubejs", "data", "minecraft")
 PF = os.path.join(ROOT, "kubejs", "data", "planetaryfactory")
-SAPROS = os.path.join(PF, "worldgen", "noise_settings", "sapros.json")
+
+# Terra's noise settings and dimension type start from vanilla's own, read out of the game jar
+# the instance launches. Minecraft rewrites both formats between versions -- 26.1 moved every
+# dimension-type flag into `attributes` and replaced the router's
+# `initial_density_without_jaggedness` with `preliminary_surface_level` -- so a template copied
+# into this repo is a template for the version it was copied from. The install sits two levels
+# above the instance, as in scripts/launch.py.
+MC_VERSION = "26.1.2"
+GAME_JAR = os.path.join(ROOT, "..", "..", "Install", "versions", MC_VERSION, MC_VERSION + ".jar")
+
+
+def vanilla(path):
+    with zipfile.ZipFile(GAME_JAR) as jar:
+        return json.loads(jar.read("data/minecraft/" + path))
 
 # The column. Both the dimension type and the noise settings' own `noise` block carry these;
 # a disagreement writes outside the chunk's section array.
@@ -79,7 +93,7 @@ GRADIENT = {
 
 
 def build_noise_settings():
-    """Terra's noise settings, from Sapros's -- the pack's proven overworld-shaped router.
+    """Terra's noise settings, from vanilla's overworld.
 
     Four things change: the column, aquifers off (the fluid picker degenerates to a flat
     global water table, which is what a cave-free world wants), stone as the default block,
@@ -87,7 +101,7 @@ def build_noise_settings():
     left in the registry and simply referenced by nothing -- ADR-0019 is explicit that the
     cave tree is not edited.
     """
-    d = json.load(open(SAPROS))
+    d = vanilla("worldgen/noise_settings/overworld.json")
     d["_comment"] = [
         "Terra's terrain (ADR-0019). Flat by construction: final_density is a y gradient plus",
         "a shallow relief noise, so the vanilla cave tree is referenced by nothing rather than",
@@ -117,7 +131,17 @@ def build_noise_settings():
         "to_value": -1.5,
     }
     r["final_density"] = add(GRADIENT, OFFSET)
-    r["initial_density_without_jaggedness"] = add(GRADIENT, mul(RELIEF, noise("minecraft:continentalness", 0.22)))
+    # The surface estimate aquifers and surface rules read: the highest y, stepping down in
+    # cells, where this density turns positive. It is final_density without the cliff, as the
+    # 1.21 router's `initial_density_without_jaggedness` was; vanilla's own reaches up to 320,
+    # which is above Terra's ceiling.
+    r["preliminary_surface_level"] = {
+        "type": "minecraft:find_top_surface",
+        "density": add(GRADIENT, mul(RELIEF, noise("minecraft:continentalness", 0.22))),
+        "lower_bound": MIN_Y,
+        "upper_bound": MIN_Y + HEIGHT,
+        "cell_height": 8,
+    }
     # Ore veins are the GregTech vein system's job on Terra, not the router's.
     r["vein_toggle"] = 0.0
     r["vein_ridged"] = 0.0
@@ -162,12 +186,12 @@ PALETTE = [
 
 VEGETATION = {
     "terra_grassland": ["minecraft:trees_plains", "minecraft:flower_plains", "minecraft:patch_grass_plain"],
-    "terra_woodland": ["minecraft:trees_birch_and_oak", "minecraft:flower_default", "minecraft:patch_grass_forest"],
+    "terra_woodland": ["minecraft:trees_birch_and_oak_leaf_litter","minecraft:flower_default", "minecraft:patch_grass_forest"],
     "terra_dry_steppe": ["minecraft:trees_savanna", "minecraft:patch_grass_savanna", "minecraft:patch_dead_bush"],
     "terra_desert": ["minecraft:patch_cactus_desert", "minecraft:patch_dead_bush_2", "minecraft:patch_sugar_cane_desert"],
     "terra_red_desert": ["minecraft:patch_dead_bush_badlands", "minecraft:patch_cactus_decorated"],
     "terra_shore": ["minecraft:patch_sugar_cane", "minecraft:patch_grass_plain"],
-    "terra_sea": ["minecraft:seagrass_simple", "minecraft:kelp_warm"],
+    "terra_sea": ["minecraft:seagrass_normal","minecraft:kelp_warm"],
 }
 
 MONSTERS = [
@@ -200,7 +224,7 @@ def build_biome(name, temp, hum, cont, eros, top, rain, temp_val):
         "has_precipitation": rain,
         "temperature": temp_val,
         "downfall": 0.4 if rain else 0.0,
-        "carvers": {},
+        "carvers": [],
         "features": features,
         "spawn_costs": {},
         "spawners": {
@@ -213,18 +237,11 @@ def build_biome(name, temp, hum, cont, eros, top, rain, temp_val):
             "water_ambient": [],
             "misc": [],
         },
-        "effects": {
-            "fog_color": 12638463,
-            "sky_color": 7907327,
-            "water_color": 4159204,
-            "water_fog_color": 329011,
-            "mood_sound": {
-                "sound": "minecraft:ambient.cave",
-                "tick_delay": 6000,
-                "block_search_extent": 8,
-                "offset": 2.0,
-            },
-        },
+        # Vanilla plains' colours. On 26.1 the fog colour, water fog and cave mood sound are
+        # the overworld dimension type's attributes, which a biome inherits unless it says
+        # otherwise; only the sky and the water are still stated per biome.
+        "attributes": {"minecraft:visual/sky_color": "#78a7ff"},
+        "effects": {"water_color": "#3f76e4"},
     }
 
 
@@ -349,26 +366,12 @@ def build_dimension():
 
 
 def main():
-    write(os.path.join(MC, "dimension_type", "overworld.json"), {
-        "_comment": "ADR-0019: Terra's column is 0..192. These numbers must match the `noise` block in worldgen/noise_settings/overworld.json.",
-        "ultrawarm": False,
-        "natural": True,
-        "piglin_safe": False,
-        "respawn_anchor_works": False,
-        "bed_works": True,
-        "has_raids": True,
-        "has_skylight": True,
-        "has_ceiling": False,
-        "effects": "minecraft:overworld",
-        "coordinate_scale": 1.0,
-        "ambient_light": 0.0,
-        "infiniburn": "#minecraft:infiniburn_overworld",
-        "min_y": MIN_Y,
-        "height": HEIGHT,
-        "logical_height": HEIGHT,
-        "monster_spawn_block_light_limit": 0,
-        "monster_spawn_light_level": {"type": "minecraft:uniform", "min_inclusive": 0, "max_inclusive": 7},
-    })
+    # Vanilla's overworld type with Terra's column. Everything else -- beds, raids, respawn
+    # anchors, sky, fog -- is vanilla's, as it was when this file was spelled out by hand.
+    dim_type = {"_comment": "ADR-0019: Terra's column is 0..192. These numbers must match the `noise` block in worldgen/noise_settings/overworld.json."}
+    dim_type.update(vanilla("dimension_type/overworld.json"))
+    dim_type.update(min_y=MIN_Y, height=HEIGHT, logical_height=HEIGHT)
+    write(os.path.join(MC, "dimension_type", "overworld.json"), dim_type)
 
     write(os.path.join(MC, "worldgen", "noise_settings", "overworld.json"), build_noise_settings())
     write(os.path.join(MC, "dimension", "overworld.json"), build_dimension())
