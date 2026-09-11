@@ -47,6 +47,25 @@ and needs no JVM.
 writing the assertion. This is the opposite of the fixture row below, and the difference is real —
 do not read the fixture check's "a new body adds data, not code" rule as covering both.
 
+**SUSPENDED for pack machines, until the machine set settles.** ADR-0059 makes a machine's footprint
+Factorio's, which multiplies the blockstate and model count per machine and changes it again every
+time a height row is re-judged. The blockstate/model/texture/lang/loot hop-walking is therefore
+switched off for pack machines for the duration of the Modern Industrialization migration -- it was
+five near-identical hand-written walks across `test_machine_assets.py`, `test_furnace_assets.py`,
+`test_boiler_assets.py`, `test_pump_assets.py` and `test_ore_assets.py`, and re-authoring all five on
+every footprint change buys nothing while the shapes are still moving.
+
+This is a suspension of the mechanical half only. **The judgement assertions stay** -- the ones no
+generic walker could make and which are the reason those files exist: the Boiler's independent
+60 mB/s derivation from the corpus, the Offshore Pump's refusal-message lang key read out of
+`OffshorePumpItem`, the ore blocks' `c:ores` membership, each machine's lang key against the id its
+builder produces.
+
+**The trigger to reinstate is the migration's world load**, at which point the machine set is fixed
+and the hops come back as ONE generic check enumerating every block the mod registers, not as five.
+Until then a missing texture reaches a player, and that is a known, dated cost rather than an
+oversight.
+
 ### This is emitted into a world
 
 A registry that loaded is not a world that contains anything. Ore veins, bedrock deposits,
