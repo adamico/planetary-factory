@@ -58,7 +58,7 @@ PF = os.path.join(ROOT, "kubejs", "data", "planetaryfactory")
 STRUCTURES = os.path.join(PF, "structure")
 WORLDGEN = os.path.join(PF, "worldgen")
 
-DATA_VERSION = 3955  # 1.21.1, the version electro_ruin_1.nbt already carries.
+DATA_VERSION = 4790  # 26.1.2, world_version in the client jar's version.json.
 
 # The patch outlines are generated, so they need a seed to be reproducible: rerunning this
 # script must not churn nine binary files for no reason. The variety a player sees comes from

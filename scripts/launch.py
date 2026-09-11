@@ -9,10 +9,11 @@ in offline mode, which is enough for singleplayer.
 import contextlib, json, os, re, subprocess, sys, uuid
 from pathlib import Path
 
-INSTALL = Path.home() / "Documents/curseforge/minecraft/Install"
 INSTANCE = Path(__file__).resolve().parent.parent
-VERSION = "neoforge-21.1.248"
-JAVA = INSTALL / "java/java-runtime-delta/Contents/Home/bin/java"
+# CurseForge keeps Install/ beside Instances/ under whatever root it is pointed at.
+INSTALL = INSTANCE.parent.parent / "Install"
+VERSION = "neoforge-26.1.2.109"
+JAVA = INSTALL / "java/java-runtime-epsilon/Contents/Home/bin/java"
 LIBS = INSTALL / "libraries"
 FML_CONFIG = INSTANCE / "config/fml.toml"
 
@@ -85,10 +86,9 @@ def main():
             seen.add(p)
             classpath.append(str(p))
     # NeoForge resolves the Minecraft jars itself out of libraryDirectory; putting
-    # versions/1.21.1/1.21.1.jar on the classpath too makes it a second module
+    # versions/26.1.2/26.1.2.jar on the classpath too makes it a second module
     # exporting net.minecraft and the module layer fails to resolve.
     classpath.append(str(INSTALL / f"versions/{VERSION}/{VERSION}.jar"))
-    classpath.append(str(LIBS / "net/minecraft/client/1.21.1-20240808.144430/client-1.21.1-20240808.144430-extra.jar"))
 
     subs = {
         "library_directory": str(LIBS),
