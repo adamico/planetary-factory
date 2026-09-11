@@ -1,14 +1,9 @@
 {
   "quality": {
-    "weather_quality": "DEFAULT",
-    "leaves_quality": "DEFAULT",
-    "enable_vignette": true,
-    "use_closest_point_entity_sort": false
-  },
-  "advanced": {
-    "enable_memory_tracing": false,
-    "use_advanced_staging_buffers": true,
-    "cpu_render_ahead_limit": 3
+    "hidden_fluid_culling": true,
+    "improved_fluid_shaping": false,
+    "use_closest_point_entity_sort": false,
+    "pixel_filtering_mode": "NEAREST"
   },
   "performance": {
     "chunk_builder_threads": 0,
@@ -20,11 +15,17 @@
     "use_no_error_g_l_context": true,
     "quad_splitting_mode": "SAFE"
   },
-  "notifications": {
-    "has_cleared_donation_button": false,
-    "has_seen_donation_prompt": false
+  "advanced": {
+    "enable_memory_tracing": false,
+    "use_advanced_staging_buffers": true,
+    "cpu_render_ahead_limit": 3
   },
   "debug": {
     "terrain_sorting_enabled": true
+  },
+  "notifications": {
+    "has_cleared_donation_button": false,
+    "has_seen_donation_prompt": false,
+    "has_edited_fullscreen_option": true
   }
 }

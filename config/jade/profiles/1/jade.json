@@ -1,6 +1,5 @@
 {
-  "enableProfiles": false,
-  "profileIndex": 0,
+  "name": "@jade.profile_preset.accessibility",
   "general": {
     "displayTooltip": true,
     "displayBlocks": true,
@@ -25,9 +24,9 @@
     "overlayAnchorX": 0.5,
     "overlayAnchorY": 0.0,
     "autoScaleThreshold": 0.4,
-    "alpha": 0.7,
+    "alpha": 1.0,
     "iconMode": "TOP",
-    "animation": true,
+    "animation": false,
     "disappearingDelay": 0.0
   },
   "formatting": {
@@ -39,7 +38,7 @@
   "accessibility": {
     "enableTextToSpeech": false,
     "ttsMode": "TOGGLE",
-    "enableAccessibilityPlugin": false,
+    "enableAccessibilityPlugin": true,
     "textBackgroundOpacity": 0.0,
     "flipMainHand": false,
     "narrateKeys": false
@@ -122,26 +121,15 @@
       "block_states": false,
       "distance": false,
       "object_name": true,
-      "block_face": false,
+      "block_face": true,
       "coordinates": false,
       "registry_name": "OFF",
       "block_properties": false,
       "loot_table": false,
-      "mod_name": "ON"
+      "mod_name": "OFF"
     },
     "balm": {
       "jade": true
     }
-  },
-  "history": {
-    "previewOverlay": true,
-    "hintOverlayToggle": true,
-    "hintNarratorToggle": true,
-    "accessibilityModMemory": false,
-    "themesHash": -825076755,
-    "usersHash": [
-      -1387239599,
-      -1247297955
-    ]
   }
 }

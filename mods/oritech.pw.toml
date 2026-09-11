@@ -1,0 +1,13 @@
+name = "Oritech"
+filename = "oritech-2.0.0-exp6.jar"
+side = "both"
+
+[download]
+hash-format = "sha1"
+hash = "edfa0c5b694522d714e456ea31f1066343d21372"
+mode = "metadata:curseforge"
+
+[update]
+[update.curseforge]
+file-id = 8780393
+project-id = 1030830

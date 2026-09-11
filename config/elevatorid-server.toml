@@ -5,7 +5,7 @@
 	# Default: 384
 	# Range: 3 ~ 4064
 	range = 384
-	#Elevator activation range
+	#Elevator activation range, increasing it can help with jump boost effects
 	# Default: 6
 	# Range: 1 ~ 64
 	activationRange = 6

@@ -1,13 +1,13 @@
 name = "KubeJS"
-filename = "kubejs-neoforge-2101.7.1-build.181.jar"
+filename = "kubejs-neoforge-26.1.2-8.0.6.jar"
 side = "both"
 
 [download]
 hash-format = "sha1"
-hash = "be525f7d4d8d71a18b07718352035b3e59e50ebd"
+hash = "e469ecf3baca6a50e89a73089aeaf19afa5015b3"
 mode = "metadata:curseforge"
 
 [update]
 [update.curseforge]
-file-id = 5810100
+file-id = 8843756
 project-id = 238086

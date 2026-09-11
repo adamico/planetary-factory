@@ -1,0 +1,13 @@
+name = "Simple Conveyor Belts"
+filename = "belts-neoforge-2.0.0-exp1.jar"
+side = "both"
+
+[download]
+hash-format = "sha1"
+hash = "81b0ca410e07749011a6abbf53db8b30763653df"
+mode = "metadata:curseforge"
+
+[update]
+[update.curseforge]
+file-id = 8535880
+project-id = 1292980

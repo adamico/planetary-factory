@@ -1,6 +1,4 @@
 {
-  "enableProfiles": false,
-  "profileIndex": 0,
   "general": {
     "displayTooltip": true,
     "displayBlocks": true,
@@ -132,16 +130,5 @@
     "balm": {
       "jade": true
     }
-  },
-  "history": {
-    "previewOverlay": true,
-    "hintOverlayToggle": true,
-    "hintNarratorToggle": true,
-    "accessibilityModMemory": false,
-    "themesHash": -825076755,
-    "usersHash": [
-      -1387239599,
-      -1247297955
-    ]
   }
 }
